@@ -18,4 +18,5 @@ let json2reps = objekt |- List.hd |- function (x,y) -> (x, int y)
 
 let json2adj = objekt |- List.map (fun (x,y) -> (int_of_string x,json2reps y)) |- hash_of_list
 
-let json2graph = List.map (fun (user,s) -> (user, s |> json_of_string |> json2adj)) |- hash_of_list
+(* point-free couldn't be generalized *)
+let json2graph x = x |> List.map (fun (user,s) -> (user, s |> json_of_string |> json2adj)) |> hash_of_list
