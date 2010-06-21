@@ -14,8 +14,8 @@ let () =
           | w::x::_ ->       (w, x,  None,       Some 10000)
           | _ -> failwith "need a file name for the cabinet and a base to save"
         in
-  let ext = ".bin.zip" in
-  let graphFile = saveBase ^ ".graph" ^ ext in
+  let ext = ".marsh" in
+  let graphFile = saveBase ^ ".ogr" ^ ext in
   leprintfln ("reading graph from cabinet: %s "
     ^^ "\n  saving graph in %s,"
     ^^ "\n  maxElems: %s, progress: %s")
