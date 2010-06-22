@@ -5,6 +5,8 @@ module H=Hashtbl
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
 
+let hash_of_list x = x |> List.enum |> H.of_enum
+
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
 let hashMergeWith f h1 h2 =

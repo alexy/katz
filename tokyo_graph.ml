@@ -1,11 +1,13 @@
 open Batteries_uni
 open Tokyo_cabinet
 open Utils
+open Graph
 
 (* This proved innecessary since HDB.cstr_t = string in fact already:
    let string_of_cstr = Tokyo_common.Cstr_string.of_cstr *)
 
-let fetchGraph fileName maxElems progress = 
+let fetchGraph : string -> int option -> int option -> graph = 
+  fun fileName maxElems progress ->
   let tc = HDB.new_ () in
   HDB.open_ tc ~omode:[Oreader] fileName;
   HDB.iterinit tc;
