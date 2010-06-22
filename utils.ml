@@ -1,10 +1,14 @@
-open Batteries_uni
 open Printf
+(* if we open Printf after Batteries, we get leprintf all screwed up! *)
+open Batteries_uni
 module H=Hashtbl
 
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
 
+(* this is slow since it doesn't specify a possibly large initial length
+   instead, we can have an optional parameter and first H.create with that,
+   and then List.iter ... H.add *)
 let hash_of_list x = x |> List.enum |> H.of_enum
 
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"

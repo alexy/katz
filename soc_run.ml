@@ -1,3 +1,10 @@
+(* TODO 
+	currently we H.fold amd List.fold_left everywhere although
+	H.iter and List.iter is possible with Hashtbl; can do that and measure.
+	The current style allows to replace with pure Map later with fewer changes.
+*)
+
+
 open   Batteries_uni
 open   Graph
 open   Option
@@ -96,7 +103,7 @@ let socUserDaySum sgraph day user =
       match dr_ with
         | None -> 0.
         | Some dr ->
-        	leprintf "user: %s, dr size: %d" user (H.length dr);
+        	(* leprintf "user: %s, dr size: %d" user (H.length dr); *)
             let step to' num res = 
               let toBal = H.find_default bal to' 0 in
               if toBal >= 0 then 0.
