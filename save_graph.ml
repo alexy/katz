@@ -6,7 +6,7 @@ open Utils
 let some_int si = Some (int_of_string si)
 
 let () =
-  let args = Sys.argv |> Array.to_list |> List.tl in
+  let args = getArgs in
   let (fileName,saveBase,maxElems,progress) = 
         match args with 
           | w::x::y::z::_ -> (w, x,  some_int y, some_int z)
