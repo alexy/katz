@@ -2,6 +2,19 @@
 	currently we H.fold amd List.fold_left everywhere although
 	H.iter and List.iter is possible with Hashtbl; can do that and measure.
 	The current style allows to replace with pure Map later with fewer changes.
+	
+	We also update records even though when their mutable field is changed,
+	seems we don't have to.   I.e. instead of
+	
+	List.iter (fun user -> H.add ustats user ...) newUsers;
+	sgraph
+	
+	-- we do:
+	
+	let ustats' = List.fold_left (fun user res -> H.add ustats res user ...; res) newUsers ustats in
+	{ sgraph with ustatsSG = ustats' }
+	
+	-- preserving Haskell style; the question is, is it efficient?
 *)
 
 
