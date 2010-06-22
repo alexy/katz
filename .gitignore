@@ -2,5 +2,6 @@
 *.cmx
 *.cmi
 *.o
+*.opt
 save_graph
-save_graph.opt
+sc
