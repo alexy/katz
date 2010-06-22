@@ -100,16 +100,17 @@ let getSocCap ustats user =
   match H.find_option ustats user with
     | Some stats -> stats.socUS
     | _ -> 0.
+    
+type termsStat = (float * float * float) option
 
-
-let socUserDaySum sgraph day user =
-  let {drepsSG =dreps; dmentsSG =dments; ustatsSG =ustats} = sgraph in
-  let stats = H.find ustats user in
+(* updates stats in the original ustats! *)
+let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph day user stats -> 
+  let {drepsSG=dreps;dmentsSG=dments;ustatsSG=ustats} = sgraph in
   let dr_ = getUserDay user day dreps in
   let dm_ = getUserDay user day dments in
   if not (is_some dr_ || is_some dm_) then
-    (None, stats)
-  else begin (* begin..end extraneous around the let chain? *)
+    None
+  else (* begin..end extraneous around the let chain? *)
     let {socUS =soc; dayUS =day; insUS =ins; outsUS =outs; totUS =tot; balUS =bal} = stats in
     
     let outSum =
@@ -150,26 +151,21 @@ let socUserDaySum sgraph day user =
 
     let terms = (outSum, inSumBack, inSumAll) in
 
-    let addMaps      = hashMergeWith (+) in
-    let subtractMaps = hashMergeWith (-) in
+    (* hashMergeWithImp changes the first hashtbl given to it with the second *)
+    let addMaps      = hashMergeWithImp (+) in
+    let subtractMaps = hashMergeWithImp (-) in 
 
-    let ins'  = match dr_ with | Some dr -> addMaps ins dr  | _ -> ins in
-    let outs' = match dm_ with | Some dm -> addMaps outs dm | _ -> outs in
-	
-    let (tot', bal') =
-      match (dr_, dm_) with
-        | (Some dr, None) -> (addMaps tot dr, addMaps bal dr)
-        | (None, Some dm) -> (addMaps tot dm, subtractMaps bal dm)
-        | (Some dr, Some dm) ->
-          let t = addMaps tot dm      |> addMaps dr in
-          let b = subtractMaps bal dm |> addMaps dr in
-          (t,b) 
-        | (None,None) -> failwith "gotta have dr or dm here"  
-          in
-
-    let stats' = {stats with insUS= ins'; outsUS= outs'; totUS= tot'; balUS= bal'} in
-    (Some terms, stats')
-  end
+     (* flux suggested this HOF to simplify match delineation: *)
+    let call_some v f = match v with None -> () | Some v -> f v in
+    call_some dr_ (addMaps ins);
+    call_some dm_ (addMaps outs);
+    begin match (dr_, dm_) with
+      | (Some dr, None) ->     addMaps tot dr; addMaps bal dr 
+      | (None, Some dm) ->     addMaps tot dm; subtractMaps bal dm 
+      | (Some dr, Some dm) ->  addMaps tot dm ; addMaps tot dr;
+                                    subtractMaps bal dm ; addMaps bal dr 
+      | (None,None) -> () end; (* should never be reached in this top-level if's branch *)
+    Some terms
 
 
 let socDay sgraph params day =
@@ -180,12 +176,12 @@ let socDay sgraph params day =
     let dcaps  = sgraph.dcapsSG in *)
 
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
-  let termsStats = H.map (fun user _ -> socUserDaySum sgraph day user) ustats in
-  let sumTerms   = termsStats |> H.values |> Enum.map fst |> enumCatMaybes in
+  let termsStats = H.map (socUserDaySum sgraph day) ustats in
+  let sumTerms   = termsStats |> H.values |> enumCatMaybes in
   let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
-  let tick _ (numers,stats)  = 
+  let tick : user -> userStats -> termsStat -> userStats = fun _ stats numers ->
     let soc = stats.socUS in
     let soc' = 
           match numers with
@@ -200,17 +196,15 @@ let socDay sgraph params day =
     let stats' = {stats with socUS = soc'} in
     stats' in
     
-  let ustats' : uStats = H.map tick termsStats in
+  hashMapWithImp tick ustats termsStats;
   
-  let updateUser user stats res =
+  let updateUser dcaps user stats  =
     let soc = stats.socUS in
-    let caps  = H.find_default res user [] in
+    let caps  = H.find_default dcaps user [] in
     let caps' = (day,soc)::caps in
-    H.replace res user caps';
-    res in
+    H.replace dcaps user caps' in
 
-  let dcaps' = H.fold updateUser ustats' dcaps in
-  { sgraph with ustatsSG= ustats'; dcapsSG= dcaps'}
+  H.iter (updateUser dcaps) ustats
   
 
 let socRun dreps dments opts =
@@ -227,17 +221,14 @@ let socRun dreps dments opts =
     leprintfln "doing days from %d to %d" firstDay lastDay;
     
     (* inject the users first appearing in this cycle *)
-    let tick sgraph day =
-      let nus = newUserStats socInit day in
+    let tick day =
       let ustats = sgraph.ustatsSG in
       let newUsers = H.find dstarts day in
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
-      (* TODO: will newUS be copied upon each new insertion? *)
-      let ustats' = List.fold_left (fun res user -> H.add ustats user nus; res)
-      	 ustats newUsers in
-      leprintfln "now got %d" (H.length ustats'); 
-      let sgraph' = {sgraph with ustatsSG = ustats'} in 
-      socDay sgraph' params day
-    in
+      List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
+      leprintfln "now got %d" (H.length ustats);
+      socDay sgraph params day in
+      
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
-    Enum.fold tick sgraph theDays
+    Enum.iter tick theDays;
+    sgraph
