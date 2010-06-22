@@ -1,5 +1,5 @@
-open Printf
 open Batteries_uni
+open Printf
 module H=Hashtbl
 
 let leprintf   format = eprintf (format ^^ "%!")

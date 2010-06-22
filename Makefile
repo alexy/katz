@@ -1,6 +1,6 @@
 SAVE_GRAPH=save_graph
 SC=sc
-#DEBUG=-g
+DEBUG=-g
 PACKAGES=batteries,tokyo_cabinet,json-wheel
 
 all: $(SAVE_GRAPH) $(SAVE_GRAPH).opt $(SC) $(SC).opt
@@ -30,4 +30,7 @@ $(SC):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo graph.cmo s
 
 $(SC).opt: utils.cmx json_graph.cmx tokyo_graph.cmx binary_graph.cmx graph.cmx soc_run.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
+
+clean:
+	rm -f *.cmi *.cmo *.cmx *.o *.opt sc save_graph
 

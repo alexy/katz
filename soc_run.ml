@@ -2,7 +2,7 @@ open   Batteries_uni
 open   Graph
 open   Option
 module H=Hashtbl
-open Utils
+open   Utils
 
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
@@ -71,8 +71,8 @@ let safeDivide3 (x,y,z) (x',y',z') =
   let c = safeDivide z z' in
   (a,b,c)
 
-let getUserDay user day m =
-      match H.find_option m user with
+let getUserDay usr day m =
+      match H.find_option m usr with
         | Some m' -> H.find_option m' day
         | None -> None
 
@@ -96,6 +96,7 @@ let socUserDaySum sgraph day user =
       match dr_ with
         | None -> 0.
         | Some dr ->
+        	leprintf "user: %s, dr size: %d" user (H.length dr);
             let step to' num res = 
               let toBal = H.find_default bal to' 0 in
               if toBal >= 0 then 0.
@@ -134,7 +135,7 @@ let socUserDaySum sgraph day user =
 
     let ins'  = match dr_ with | Some dr -> addMaps ins dr  | _ -> ins in
     let outs' = match dm_ with | Some dm -> addMaps outs dm | _ -> outs in
-
+	
     let (tot', bal') =
       match (dr_, dm_) with
         | (Some dr, None) -> (addMaps tot dr, addMaps bal dr)
@@ -158,6 +159,7 @@ let socDay sgraph params day =
     let ustats = sgraph.ustatsSG in
     let dcaps  = sgraph.dcapsSG in *)
 
+  (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (fun user _ -> socUserDaySum sgraph day user) ustats in
   let sumTerms   = termsStats |> H.values |> Enum.map fst |> enumCatMaybes in
   let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
@@ -209,13 +211,13 @@ let socRun dreps dments opts =
       let nus = newUserStats socInit day in
       let ustats = sgraph.ustatsSG in
       let newUsers = H.find dstarts day in
-      leprintf "adding %d users on day %d" (List.length newUsers) day;
+      leprintfln "adding %d users on day %d" (List.length newUsers) day;
       (* TODO: will newUS be copied upon each new insertion? *)
-      List.iter (fun user -> H.add ustats user nus) newUsers;
-      leprintfln "now got %d" (H.length ustats); 
-      (* let sgraph' = {sgraph with ustatsSG = ustats'} in 
-         TODO: will the mutable field be updated in the encompassing sgraph record?*)
-      socDay sgraph params day
+      let ustats' = List.fold_left (fun res user -> H.add ustats user nus; res)
+      	 ustats newUsers in
+      leprintfln "now got %d" (H.length ustats'); 
+      let sgraph' = {sgraph with ustatsSG = ustats'} in 
+      socDay sgraph' params day
     in
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     Enum.fold tick sgraph theDays

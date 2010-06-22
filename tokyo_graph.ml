@@ -1,5 +1,5 @@
-open Tokyo_cabinet
 open Batteries_uni
+open Tokyo_cabinet
 open Utils
 
 (* This proved innecessary since HDB.cstr_t = string in fact already:
