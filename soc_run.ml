@@ -186,7 +186,7 @@ let socDay sgraph params day =
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
   let tick : user -> userStats -> termsStat -> userStats = fun user stats numers ->
-    let soc = stats.socUS in
+    let soc = trace_nan ("socDay tick soc"^user) stats.socUS in
     let soc' = 
           match numers with
             | Some numers ->
@@ -194,8 +194,9 @@ let socDay sgraph params day =
                    safeDivide3 numers norms
               in
               alpha *. soc +. (1. -. alpha) *.
-                (beta *. outs' +. (1. -. beta) *.
-                  (gamma *. insBack' +. (1. -. gamma) *. insAll'))
+                (beta *. (trace_nan ("socDay tick outs':"^user) outs') +. (1. -. beta) *.
+                  (gamma *. (trace_nan ("socDay tick insBack':"^user) insBack') +. (1. -. gamma) *.
+                    trace_nan ("socDay tick insAll':"^user) insAll'))
             | None -> alpha *. soc in
     let stats' = {stats with socUS = trace_nan ("socDay tick soc', user:"^user) soc'} in
     stats' in
