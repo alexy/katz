@@ -163,7 +163,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
       | (Some dr, None) ->     addMaps tot dr; addMaps bal dr 
       | (None, Some dm) ->     addMaps tot dm; subtractMaps bal dm 
       | (Some dr, Some dm) ->  addMaps tot dm ; addMaps tot dr;
-                                    subtractMaps bal dm ; addMaps bal dr 
+                               subtractMaps bal dm ; addMaps bal dr 
       | (None,None) -> () end; (* should never be reached in this top-level if's branch *)
     Some terms
 
@@ -210,7 +210,7 @@ let socDay sgraph params day =
 let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
-    let orderN  = 1000000 in
+    let orderN  = 4000000 in
     let dcaps   = H.create orderN in
     let ustats  = H.create orderN in
     let sgraph  = {drepsSG=dreps; dmentsSG=dments; dcapsSG=dcaps; ustatsSG=ustats} in
