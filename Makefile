@@ -8,6 +8,8 @@ all: $(SAVE_GRAPH) $(SAVE_GRAPH).opt $(SC) $(SC).opt
 
 binary_graph.ml tokyo_graph.ml json_graph.ml: utils.ml
 
+%.cmo %.cmx: %.cmi
+
 %.cmo: %.ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -c $^ -o $@
 

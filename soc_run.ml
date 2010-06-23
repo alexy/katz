@@ -26,7 +26,7 @@ open   Utils
 
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
-let emptyTalk () = H.create 100
+let emptyTalk () : talkBalance = H.create 10
 
 type userStats = {
     socUS  : float;
