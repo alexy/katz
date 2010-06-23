@@ -14,11 +14,11 @@ let hash_of_list x = x |> List.enum |> H.of_enum
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
 let hashMergeWith f h1 h2 =
-  H.fold (fun k v1 res -> 
+  H.fold (fun k v2 res ->
     let _ = match H.find_option res k with
-    | Some v2 -> H.replace res k (f v1 v2)
-    | _ -> H.add res k v1 in
-    res) h1 h2
+    | Some v1 -> H.replace res k (f v1 v2)
+    | _ -> H.add res k v2 in
+    res) h2 h1
     
 let hashMapWith f h1 h2 =
   H.map (fun k v1 ->
