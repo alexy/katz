@@ -24,6 +24,8 @@ open   Option
 module H=Hashtbl
 open   Utils
 
+let trace_nan msg v = if classify_float v = FP_nan then failwith ("nan: "^msg) else v
+
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
 let emptyTalk : talkBalance = H.create 10
@@ -47,7 +49,7 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                       socInitSR : float; maxDaysSR : int option }
                       
 let optSocRun : socRun = 
-  { alphaSR = 0.00001; betaSR = 0.5; gammaSR = 0.5; 
+  { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; maxDaysSR = None }
 
 type sGraph = 
@@ -181,7 +183,7 @@ let socDay sgraph params day =
   let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
-  let tick : user -> userStats -> termsStat -> userStats = fun _ stats numers ->
+  let tick : user -> userStats -> termsStat -> userStats = fun user stats numers ->
     let soc = stats.socUS in
     let soc' = 
           match numers with
@@ -193,7 +195,7 @@ let socDay sgraph params day =
                 (beta *. outs' +. (1. -. beta) *.
                   (gamma *. insBack' +. (1. -. gamma) *. insAll'))
             | None -> alpha *. soc in
-    let stats' = {stats with socUS = soc'} in
+    let stats' = {stats with socUS = trace_nan ("socDay tick soc', user:"^user) soc'} in
     stats' in
     
   hashMapWithImp tick ustats termsStats;
@@ -210,7 +212,7 @@ let socDay sgraph params day =
 let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
-    let orderN  = 4000000 in
+    let orderN  = 5000000 in
     let dcaps   = H.create orderN in
     let ustats  = H.create orderN in
     let sgraph  = {drepsSG=dreps; dmentsSG=dments; dcapsSG=dcaps; ustatsSG=ustats} in
