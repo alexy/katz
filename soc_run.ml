@@ -25,6 +25,7 @@ module H=Hashtbl
 open   Utils
 
 let trace_nan msg v = if classify_float v = FP_nan then failwith ("nan: "^msg) else v
+let trace_nan3 msg (a,b,c) = (trace_nan (msg^":a") a, trace_nan (msg^":b") b, trace_nan (msg^":c") c)
 
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
@@ -182,7 +183,7 @@ let socDay sgraph params day =
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (socUserDaySum sgraph day) ustats in
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
-  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
+  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms |> trace_nan3 "norms" in
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
   let tick : user -> userStats -> termsStat -> userStats = fun user stats numers ->
@@ -191,12 +192,11 @@ let socDay sgraph params day =
           match numers with
             | Some numers ->
               let (outs', insBack', insAll') =
-                   safeDivide3 numers norms
+                   safeDivide3 (trace_nan3 ("numers, user:"^user) numers) norms
               in
               alpha *. soc +. (1. -. alpha) *.
-                (beta *. (trace_nan ("socDay tick outs':"^user) outs') +. (1. -. beta) *.
-                  (gamma *. (trace_nan ("socDay tick insBack':"^user) insBack') +. (1. -. gamma) *.
-                    trace_nan ("socDay tick insAll':"^user) insAll'))
+                (beta *. outs' +. (1. -. beta) *.
+                  (gamma *. insBack') +. (1. -. gamma) *. insAll')
             | None -> alpha *. soc in
     let stats' = {stats with socUS = trace_nan ("socDay tick soc', user:"^user) soc'} in
     stats' in
