@@ -16,11 +16,11 @@ let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
 (* updates h1! *)
 let hashMergeWith f h1 h2 =
-  H.fold (fun k v1 res -> 
+  H.fold (fun k v2 res -> 
     let _ = match H.find_option res k with
-    | Some v2 -> H.replace res k (f v1 v2)
-    | _ -> H.add res k v1 in
-    res) h1 h2
+    | Some v1 -> H.replace res k (f v1 v2)
+    | _ -> H.add res k v2 in
+    res) h2 h1
 
 (* updates h1! no pure pretenses, no carrying res around *)
 let hashMergeWithImp f h1 h2 =
