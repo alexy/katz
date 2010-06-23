@@ -224,6 +224,9 @@ let socRun dreps dments opts =
     let dstarts = H.fold (fun user (d1,d2) res -> 
         let users = H.find_default res d1 [] in H.replace res d1 (user::users); res) dranges (H.create 100000) in    
     let (firstDay,lastDay) = H.fold (fun _ v res -> minMax2 v res) dranges (dranges |> hashFirst |> snd) in
+    let lastDay = match opts.maxDaysSR with
+      | None -> lastDay
+      | Some n -> min lastDay (firstDay + n - 1) in
     leprintfln "doing days from %d to %d" firstDay lastDay;
     
     (* inject the users first appearing in this cycle *)
