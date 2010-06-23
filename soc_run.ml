@@ -151,7 +151,9 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                 in  
                 H.fold step dm (0.,0.) in
 
-    let terms = (outSum, inSumBack, inSumAll) in
+    let terms = (trace_nan ("outSum for "^user) outSum, 
+                 trace_nan ("inSumBack for "^user) inSumBack, 
+                 trace_nan ("inSumAll for "^user) inSumAll) in
 
     (* hashMergeWithImp changes the first hashtbl given to it with the second *)
     let addMaps      = hashMergeWithImp (+) in
