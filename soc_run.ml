@@ -26,7 +26,7 @@ open   Utils
 
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
-let emptyTalk () : talkBalance = H.create 10
+let emptyTalk : talkBalance = H.create 10
 
 type userStats = {
     socUS  : float;
@@ -38,8 +38,8 @@ type userStats = {
 
 let newUserStats soc day = 
   {socUS = soc; dayUS = day;
-  insUS = emptyTalk (); outsUS = emptyTalk (); 
-  totUS = emptyTalk (); balUS = emptyTalk () }
+  insUS = H.copy emptyTalk; outsUS = H.copy emptyTalk; 
+  totUS = H.copy emptyTalk; balUS =  H.copy emptyTalk }
 
 type uStats = (user,userStats) H.t
 
