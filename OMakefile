@@ -1,6 +1,8 @@
 NATIVE_ENABLED = true
-# OCAMLFLAGS   += -warn-error a
-OCAMLOPTFLAGS = -inline 100
+DEBUG=-g
+WARN_ERROR=-warn-error a
+OCAMLFLAGS    += $(DEBUG) $(WARN_ERROR)
+OCAMLOPTFLAGS = $(DEBUG) # -inline 100
 USE_OCAMLFIND = true
 
 OCAMLPACKS[] =
