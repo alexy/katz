@@ -151,12 +151,12 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
             | None -> (0.,0.)
             | Some dm ->
                 let step to' num (backSum,allSum) =
-                  let toBal = H.find_default bal to' 0 in
                   let toSoc = getSocCap ustats to' in
                   if toSoc == 0. then (0.,0.)
                   else begin
                     let toTot = H.find_default tot to' 1 in
                     let allTerm  = float (num * toTot) *. toSoc in
+                    let toBal = H.find_default bal to' 0 in
                     let backTerm = if toBal <= 0 then 0. else float toBal *. allTerm in
                     (backSum +. backTerm,allSum +. allTerm)
                   end
@@ -176,10 +176,10 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
     call_some dr_ (addMaps ins);
     call_some dm_ (addMaps outs);
     begin match (dr_, dm_) with
-      | (Some dr, None) ->     addMaps tot dr; addMaps bal dr 
+      | (Some dr, None) ->     addMaps tot dr; addMaps      bal dr 
       | (None, Some dm) ->     addMaps tot dm; subtractMaps bal dm 
-      | (Some dr, Some dm) ->  addMaps tot dm ; addMaps tot dr;
-                               subtractMaps bal dm ; addMaps bal dr 
+      | (Some dr, Some dm) ->  addMaps tot dr; addMaps      tot dm;
+                               addMaps bal dr; subtractMaps bal dm
       | (None,None) -> () end; (* should never be reached in this top-level if's branch *)
     Some terms
 
@@ -194,10 +194,12 @@ let socDay sgraph params day =
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (socUserDaySum sgraph day) ustats in
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
-  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
+  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
+                        (0.,0.,0.) sumTerms in
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
-  let tick : user -> userStats -> termsStat -> userStats = fun user stats numers ->
+  let tick : user -> userStats -> termsStat -> userStats = 
+    fun user stats numers ->
     let soc = stats.socUS in
     let soc' = 
           match numers with
@@ -207,7 +209,7 @@ let socDay sgraph params day =
               in
               alpha *. soc +. (1. -. alpha) *.
                 (beta *. outs' +. (1. -. beta) *.
-                  (gamma *. insBack') +. (1. -. gamma) *. insAll')
+                  ((gamma *. insBack') +. (1. -. gamma) *. insAll'))
             | None -> alpha *. soc in
     let stats' = {stats with socUS = soc'} in
     stats' in
