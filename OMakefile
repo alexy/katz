@@ -18,7 +18,6 @@ OBJECTS[] =
 	binary_graph
 	soc_run
 	save_graph
-	sc
 	
 OCamlProgram(sc, $(OBJECTS))
 

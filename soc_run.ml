@@ -209,7 +209,7 @@ let socDay sgraph params day =
               in
               alpha *. soc +. (1. -. alpha) *.
                 (beta *. outs' +. (1. -. beta) *.
-                  ((gamma *. insBack') +. (1. -. gamma) *. insAll'))
+                  (gamma *. insBack' +. (1. -. gamma) *. insAll'))
             | None -> alpha *. soc in
     let stats' = {stats with socUS = soc'} in
     stats' in
