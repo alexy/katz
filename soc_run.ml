@@ -23,10 +23,7 @@ open   Graph
 open   Option
 module H=Hashtbl
 open   Utils
-
-let trace_nan msg v = if classify_float v = FP_nan then failwith ("nan: "^msg) else v
-let trace_nan3 msg (a,b,c) = (trace_nan (msg^":a") a, trace_nan (msg^":b") b, trace_nan (msg^":c") c)
-
+	
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
 let emptyTalk : talkBalance = H.create 10
@@ -86,7 +83,21 @@ let dayRanges dreps =
     H.filter_map doDays dreps
     
 
-let safeDivide x y = if y == 0. then x (* really?  or 0? *) else x /. y
+
+(* let safeDivide x y = if y = 0. then x else x /. y *)
+let safeDivide x y = let res = x /. y in
+	match classify_float res with
+		| FP_nan | FP_infinite -> x
+		| _ -> res
+
+
+(* let safeDivide x y = let res = if y == 0. then x else x /. y in
+	let show what = Printf.sprintf "%s in safeDivide => x: %e, y: %e, res: %e, y == 0.: %B" 
+		what x y res (y==0.) in
+	begin match classify_float res with
+		| FP_nan -> failwith (show "nan")
+		| FP_infinite -> failwith (show "infinite")
+		| _ -> res end *)
 
 let safeDivide3 (x,y,z) (x',y',z') =
   let a = safeDivide x x' in
@@ -152,9 +163,9 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                 in  
                 H.fold step dm (0.,0.) in
 
-    let terms = (trace_nan ("outSum for "^user) outSum, 
-                 trace_nan ("inSumBack for "^user) inSumBack, 
-                 trace_nan ("inSumAll for "^user) inSumAll) in
+    let terms = (outSum, 
+                 inSumBack, 
+                 inSumAll) in
 
     (* hashMergeWithImp changes the first hashtbl given to it with the second *)
     let addMaps      = hashMergeWithImp (+) in
@@ -183,22 +194,22 @@ let socDay sgraph params day =
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (socUserDaySum sgraph day) ustats in
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
-  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms |> trace_nan3 "norms" in
+  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
   let tick : user -> userStats -> termsStat -> userStats = fun user stats numers ->
-    let soc = trace_nan ("socDay tick soc"^user) stats.socUS in
+    let soc = stats.socUS in
     let soc' = 
           match numers with
             | Some numers ->
               let (outs', insBack', insAll') =
-                   safeDivide3 (trace_nan3 ("numers, user:"^user) numers) norms
+                   safeDivide3 numers norms 
               in
               alpha *. soc +. (1. -. alpha) *.
                 (beta *. outs' +. (1. -. beta) *.
                   (gamma *. insBack') +. (1. -. gamma) *. insAll')
             | None -> alpha *. soc in
-    let stats' = {stats with socUS = trace_nan ("socDay tick soc', user:"^user) soc'} in
+    let stats' = {stats with socUS = soc'} in
     stats' in
     
   hashMapWithImp tick ustats termsStats;

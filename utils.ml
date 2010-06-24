@@ -50,3 +50,10 @@ let enumCatMaybes xs = xs |> Enum.filter Option.is_some |> Enum.map Option.get
 let getArgs = Sys.argv |> Array.to_list |> List.tl
 
 let option_of_list x = x |> List.enum |> Option.of_enum
+
+let trace_nan msg v = let what = classify_float v in 
+	match what with
+		| FP_nan -> failwith ("nan: "^msg)
+		| FP_infinite -> failwith ("inf: "^msg)
+		| _ -> v
+	
