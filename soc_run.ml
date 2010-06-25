@@ -87,7 +87,7 @@ let dayRanges dreps =
 (* let safeDivide x y = if y = 0. then x else x /. y *)
 let safeDivide x y = let res = x /. y in
 	match classify_float res with
-		| FP_nan | FP_infinite -> x
+		| FP_nan | FP_infinite -> 0. (* or x? *)
 		| _ -> res
 
 
@@ -141,7 +141,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                   else
                     let toTot = H.find_default tot to' 1 in
                     let term = float (num * toBal * toTot) *. toSoc in
-                    res +. term
+                    res -. term (* the term is negative, so we sum positive *)
               end
             in
             H.fold step dr 0. in
