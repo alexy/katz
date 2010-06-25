@@ -142,6 +142,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                   else
                     let toTot = H.find_default tot to' 1 in
                     let term = float (num * toBal * toTot) *. toSoc in
+                    if day = 1 && term < 0. then leprintfln "user %s, outSum < 0 = %F" user term else ();
                     res -. term (* the term is negative, so we sum positive *)
               end
             in
@@ -216,7 +217,7 @@ let socDay sgraph params day =
     let stats' = {stats with socUS = soc'} in
     stats' in
     
-  hashMapWithImp tick ustats termsStats;
+  hashUpdateWithImp tick ustats termsStats;
   
   let updateUser dcaps user stats  =
     let soc = stats.socUS in

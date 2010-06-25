@@ -34,7 +34,8 @@ let hashMapWith f h1 h2 =
     let v2 = H.find h2 k in
     f k v1 v2) h1
 
-let hashMapWithImp f h1 h2 =
+(* updates the first map h1! *)
+let hashUpdateWithImp f h1 h2 =
   H.iter (fun k v2 ->
     let v1 = H.find h1 k in
     let v = f k v1 v2 in
