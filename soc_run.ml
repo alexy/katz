@@ -126,7 +126,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
     None
   else (* begin..end extraneous around the let chain? *)
     (* NB: don't match dayUS=day, it will shadow the day parameter! *)
-    let {socUS =soc; (* insUS =ins; outsUS =outs; *) totUS =tot; balUS =bal} = stats in
+    let {socUS =soc; insUS =ins; outsUS =outs; totUS =tot; balUS =bal} = stats in
     
     let outSum =
       match dr_ with
