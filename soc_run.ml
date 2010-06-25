@@ -194,8 +194,9 @@ let socDay sgraph params day =
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (socUserDaySum sgraph day) ustats in
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
-  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
+  let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
                         (0.,0.,0.) sumTerms in
+  leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
   let tick : user -> userStats -> termsStat -> userStats = 
