@@ -28,6 +28,12 @@ let hashMergeWithImp f h1 h2 =
     match H.find_option h1 k with
     | Some v1 -> H.replace h1 k (f v1 v2)
     | _ -> H.add h1 k v2) h2
+
+let hashMergeWithDefImp f def h1 h2 =
+  H.iter (fun k v2 -> 
+    match H.find_option h1 k with
+    | Some v1 -> H.replace h1 k (f v1 v2)
+    | _ -> H.add h1 k (f def v2)) h2
     
 let hashMapWith f h1 h2 =
   H.map (fun k v1 ->

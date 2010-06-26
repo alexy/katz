@@ -117,6 +117,12 @@ let getSocCap ustats user =
     
 type termsStat = (float * float * float) option
 
+(* hashMergeWithImp changes the first hashtbl given to it with the second *)
+let addMaps      = hashMergeWithImp (+)
+(* this was a cause of a subtle bug where in hashMergeWithImp 
+   we added positive balance for yinteo and geokotophia *)
+let subtractMaps = hashMergeWithDefImp (-) 0
+
 (* updates stats in the original ustats! *)
 let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph day user stats -> 
   let {drepsSG=dreps;dmentsSG=dments;ustatsSG=ustats} = sgraph in
@@ -135,14 +141,13 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
         	(* leprintf "user: %s, dr size: %d" user (H.length dr); *)
             let step to' num res = 
               let toBal = H.find_default bal to' 0 in
-              if toBal >= 0 then 0.
+              if toBal >= 0 then res
               else begin (* although else binds closer, good to demarcate *)
                 let toSoc = getSocCap ustats to' in
-                  if toSoc == 0. then 0.
+                  if toSoc = 0. then res
                   else
                     let toTot = H.find_default tot to' 1 in
                     let term = float (num * toBal * toTot) *. toSoc in
-                    if day = 1 && term < 0. then leprintfln "user %s, outSum < 0 = %F" user term else ();
                     res -. term (* the term is negative, so we sum positive *)
               end
             in
@@ -152,9 +157,9 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
           match dm_ with
             | None -> (0.,0.)
             | Some dm ->
-                let step to' num (backSum,allSum) =
+                let step to' num ((backSum,allSum) as res) =
                   let toSoc = getSocCap ustats to' in
-                  if toSoc == 0. then (0.,0.)
+                  if toSoc = 0. then res
                   else begin
                     let toTot = H.find_default tot to' 1 in
                     let allTerm  = float (num * toTot) *. toSoc in
@@ -168,10 +173,6 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
     let terms = (outSum, 
                  inSumBack, 
                  inSumAll) in
-
-    (* hashMergeWithImp changes the first hashtbl given to it with the second *)
-    let addMaps      = hashMergeWithImp (+) in
-    let subtractMaps = hashMergeWithImp (-) in 
 
      (* flux suggested this HOF to simplify match delineation: *)
     let call_some v f = match v with None -> () | Some v -> f v in
