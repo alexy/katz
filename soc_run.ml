@@ -245,7 +245,7 @@ let socRun dreps dments opts =
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
       | Some n -> min lastDay (firstDay + n - 1) in
-    leprintfln "doing days from %d to %d" firstDay lastDay;
+    leprintfln "%d total users, doing days from %d to %d" (H.length dranges) firstDay lastDay;
     
     (* inject the users first appearing in this cycle *)
     let tick day =
