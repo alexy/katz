@@ -177,9 +177,9 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                  inSumAll) in
 
      (* flux suggested this HOF to simplify match delineation: *)
-    let call_some v f = match v with None -> () | Some v -> f v in
-    call_some dr_ (addMaps ins);
-    call_some dm_ (addMaps outs);
+    let call_some f v = match v with None -> () | Some v -> f v in
+    call_some (addMaps ins)  dr_;
+    call_some (addMaps outs) dm_;
     begin match (dr_, dm_) with
       | (Some dr, None) ->     addMaps tot dr; addMaps      bal dr 
       | (None, Some dm) ->     addMaps tot dm; subtractMaps bal dm 
