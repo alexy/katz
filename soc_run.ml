@@ -23,10 +23,10 @@ open   Graph
 open   Option
 module H=Hashtbl
 open   Utils
-
+	
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
-let emptyTalk () = H.create 100
+let emptyTalk : talkBalance = H.create 10
 
 type userStats = {
     socUS  : float;
@@ -38,8 +38,8 @@ type userStats = {
 
 let newUserStats soc day = 
   {socUS = soc; dayUS = day;
-  insUS = emptyTalk (); outsUS = emptyTalk (); 
-  totUS = emptyTalk (); balUS = emptyTalk () }
+  insUS = H.copy emptyTalk; outsUS = H.copy emptyTalk; 
+  totUS = H.copy emptyTalk; balUS =  H.copy emptyTalk }
 
 type uStats = (user,userStats) H.t
 
@@ -47,7 +47,7 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                       socInitSR : float; maxDaysSR : int option }
                       
 let optSocRun : socRun = 
-  { alphaSR = 0.00001; betaSR = 0.5; gammaSR = 0.5; 
+  { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; maxDaysSR = None }
 
 type sGraph = 
@@ -83,7 +83,21 @@ let dayRanges dreps =
     H.filter_map doDays dreps
     
 
-let safeDivide x y = if y == 0. then x (* really?  or 0? *) else x /. y
+
+(* let safeDivide x y = if y = 0. then x else x /. y *)
+let safeDivide x y = let res = x /. y in
+	match classify_float res with
+		| FP_nan | FP_infinite -> 0. (* or x? *)
+		| _ -> res
+
+
+(* let safeDivide x y = let res = if y == 0. then x else x /. y in
+	let show what = Printf.sprintf "%s in safeDivide => x: %e, y: %e, res: %e, y == 0.: %B" 
+		what x y res (y==0.) in
+	begin match classify_float res with
+		| FP_nan -> failwith (show "nan")
+		| FP_infinite -> failwith (show "infinite")
+		| _ -> res end *)
 
 let safeDivide3 (x,y,z) (x',y',z') =
   let a = safeDivide x x' in
@@ -100,17 +114,25 @@ let getSocCap ustats user =
   match H.find_option ustats user with
     | Some stats -> stats.socUS
     | _ -> 0.
+    
+type termsStat = (float * float * float) option
 
+(* hashMergeWithImp changes the first hashtbl given to it with the second *)
+let addMaps      = hashMergeWithImp (+)
+(* this was a cause of a subtle bug where in hashMergeWithImp 
+   we added positive balance for yinteo and geokotophia *)
+let subtractMaps = hashMergeWithDefImp (-) 0
 
-let socUserDaySum sgraph day user =
-  let {drepsSG =dreps; dmentsSG =dments; ustatsSG =ustats} = sgraph in
-  let stats = H.find ustats user in
+(* updates stats in the original ustats! *)
+let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph day user stats -> 
+  let {drepsSG=dreps;dmentsSG=dments;ustatsSG=ustats} = sgraph in
   let dr_ = getUserDay user day dreps in
   let dm_ = getUserDay user day dments in
   if not (is_some dr_ || is_some dm_) then
-    (None, stats)
-  else begin (* begin..end extraneous around the let chain? *)
-    let {socUS =soc; dayUS =day; insUS =ins; outsUS =outs; totUS =tot; balUS =bal} = stats in
+    None
+  else (* begin..end extraneous around the let chain? *)
+    (* NB: don't match dayUS=day, it will shadow the day parameter! *)
+    let {socUS =soc; insUS =ins; outsUS =outs; totUS =tot; balUS =bal} = stats in
     
     let outSum =
       match dr_ with
@@ -119,14 +141,15 @@ let socUserDaySum sgraph day user =
         	(* leprintf "user: %s, dr size: %d" user (H.length dr); *)
             let step to' num res = 
               let toBal = H.find_default bal to' 0 in
-              if toBal >= 0 then 0.
+              if toBal >= 0 then res
               else begin (* although else binds closer, good to demarcate *)
                 let toSoc = getSocCap ustats to' in
-                  if toSoc == 0. then 0.
+                  if toSoc = 0. then res
                   else
-                    let toTot = H.find_default tot to' 1 in
-                    let term = float (num * toBal * toTot) *. toSoc in
-                    res +. term
+                    let toOut = H.find_default outs to' 1 in
+                    let toTot = H.find_default tot  to' 1 in
+                    let term = float (num * toOut * toBal * toTot) *. toSoc in
+                    res -. term (* the term is negative, so we sum positive *)
               end
             in
             H.fold step dr 0. in
@@ -135,41 +158,35 @@ let socUserDaySum sgraph day user =
           match dm_ with
             | None -> (0.,0.)
             | Some dm ->
-                let step to' num (backSum,allSum) =
-                  let toBal = H.find_default bal to' 0 in
+                let step to' num ((backSum,allSum) as res) =
                   let toSoc = getSocCap ustats to' in
-                  if toSoc == 0. then (0.,0.)
+                  if toSoc = 0. then res
                   else begin
+                    let toIn  = H.find_default ins to' 1 in
                     let toTot = H.find_default tot to' 1 in
-                    let allTerm  = float (num * toTot) *. toSoc in
+                    let allTerm  = float (num * toIn * toTot) *. toSoc in
+                    let toBal = H.find_default bal to' 0 in
                     let backTerm = if toBal <= 0 then 0. else float toBal *. allTerm in
                     (backSum +. backTerm,allSum +. allTerm)
                   end
                 in  
                 H.fold step dm (0.,0.) in
 
-    let terms = (outSum, inSumBack, inSumAll) in
+    let terms = (outSum, 
+                 inSumBack, 
+                 inSumAll) in
 
-    let addMaps      = hashMergeWith (+) in
-    let subtractMaps = hashMergeWith (-) in
-
-    let ins'  = match dr_ with | Some dr -> addMaps ins dr  | _ -> ins in
-    let outs' = match dm_ with | Some dm -> addMaps outs dm | _ -> outs in
-	
-    let (tot', bal') =
-      match (dr_, dm_) with
-        | (Some dr, None) -> (addMaps tot dr, addMaps bal dr)
-        | (None, Some dm) -> (addMaps tot dm, subtractMaps bal dm)
-        | (Some dr, Some dm) ->
-          let t = addMaps tot dm      |> addMaps dr in
-          let b = subtractMaps bal dm |> addMaps dr in
-          (t,b) 
-        | (None,None) -> failwith "gotta have dr or dm here"  
-          in
-
-    let stats' = {stats with insUS= ins'; outsUS= outs'; totUS= tot'; balUS= bal'} in
-    (Some terms, stats')
-  end
+     (* flux suggested this HOF to simplify match delineation: *)
+    let call_some f v = match v with None -> () | Some v -> f v in
+    call_some (addMaps ins)  dr_;
+    call_some (addMaps outs) dm_;
+    begin match (dr_, dm_) with
+      | (Some dr, None) ->     addMaps tot dr; addMaps      bal dr 
+      | (None, Some dm) ->     addMaps tot dm; subtractMaps bal dm 
+      | (Some dr, Some dm) ->  addMaps tot dr; addMaps      tot dm;
+                               addMaps bal dr; subtractMaps bal dm
+      | (None,None) -> () end; (* should never be reached in this top-level if's branch *)
+    Some terms
 
 
 let socDay sgraph params day =
@@ -180,18 +197,21 @@ let socDay sgraph params day =
     let dcaps  = sgraph.dcapsSG in *)
 
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
-  let termsStats = H.map (fun user _ -> socUserDaySum sgraph day user) ustats in
-  let sumTerms   = termsStats |> H.values |> Enum.map fst |> enumCatMaybes in
-  let norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) (0.,0.,0.) sumTerms in
+  let termsStats = H.map (socUserDaySum sgraph day) ustats in
+  let sumTerms   = termsStats |> H.values |> enumCatMaybes in
+  let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
+                        (0.,0.,0.) sumTerms in
+  leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
 
   (* : user -> ((float * float * float) option * userStats) -> userStats *)
-  let tick _ (numers,stats)  = 
+  let tick : user -> userStats -> termsStat -> userStats = 
+    fun user stats numers ->
     let soc = stats.socUS in
     let soc' = 
           match numers with
             | Some numers ->
               let (outs', insBack', insAll') =
-                   safeDivide3 numers norms
+                   safeDivide3 numers norms 
               in
               alpha *. soc +. (1. -. alpha) *.
                 (beta *. outs' +. (1. -. beta) *.
@@ -200,23 +220,21 @@ let socDay sgraph params day =
     let stats' = {stats with socUS = soc'} in
     stats' in
     
-  let ustats' : uStats = H.map tick termsStats in
+  hashUpdateWithImp tick ustats termsStats;
   
-  let updateUser user stats res =
+  let updateUser dcaps user stats  =
     let soc = stats.socUS in
-    let caps  = H.find_default res user [] in
+    let caps  = H.find_default dcaps user [] in
     let caps' = (day,soc)::caps in
-    H.replace res user caps';
-    res in
+    H.replace dcaps user caps' in
 
-  let dcaps' = H.fold updateUser ustats' dcaps in
-  { sgraph with ustatsSG= ustats'; dcapsSG= dcaps'}
+  H.iter (updateUser dcaps) ustats
   
 
 let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
-    let orderN  = 1000000 in
+    let orderN  = 5000000 in
     let dcaps   = H.create orderN in
     let ustats  = H.create orderN in
     let sgraph  = {drepsSG=dreps; dmentsSG=dments; dcapsSG=dcaps; ustatsSG=ustats} in
@@ -227,20 +245,17 @@ let socRun dreps dments opts =
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
       | Some n -> min lastDay (firstDay + n - 1) in
-    leprintfln "doing days from %d to %d" firstDay lastDay;
+    leprintfln "%d total users, doing days from %d to %d" (H.length dranges) firstDay lastDay;
     
     (* inject the users first appearing in this cycle *)
-    let tick sgraph day =
-      let nus = newUserStats socInit day in
+    let tick day =
       let ustats = sgraph.ustatsSG in
       let newUsers = H.find dstarts day in
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
-      (* TODO: will newUS be copied upon each new insertion? *)
-      let ustats' = List.fold_left (fun res user -> H.add ustats user nus; res)
-      	 ustats newUsers in
-      leprintfln "now got %d" (H.length ustats'); 
-      let sgraph' = {sgraph with ustatsSG = ustats'} in 
-      socDay sgraph' params day
-    in
+      List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
+      leprintfln "now got %d" (H.length ustats);
+      socDay sgraph params day in
+      
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
-    Enum.fold tick sgraph theDays
+    Enum.iter tick theDays;
+    sgraph

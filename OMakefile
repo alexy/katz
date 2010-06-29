@@ -1,0 +1,29 @@
+NATIVE_ENABLED = true
+DEBUG=-g
+WARN_ERROR=-warn-error a
+OCAMLFLAGS    += $(DEBUG) $(WARN_ERROR)
+OCAMLOPTFLAGS = $(DEBUG) # -inline 100
+USE_OCAMLFIND = true
+
+OCAMLPACKS[] =
+	batteries
+	tokyo_cabinet
+	json-wheel
+
+OBJECTS[] =
+	utils
+	graph
+	json_graph
+	tokyo_graph
+	binary_graph
+	soc_run
+	save_graph
+	
+OCamlProgram(sc, $(OBJECTS))
+
+.DEFAULT: sc
+
+.PHONY: clean
+
+clean:
+	rm -f $(filter-proper-targets $(ls R, .)) *.s
