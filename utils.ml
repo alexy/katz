@@ -64,3 +64,20 @@ let trace_nan msg v = let what = classify_float v in
 		| FP_infinite -> failwith ("inf: "^msg)
 		| _ -> v
 	
+(* Sys.time gives CPU time *)
+
+type timings = float list
+
+let getTiming msg =
+  let t = Sys.time () in
+  match msg with
+    | Some s -> leprintfln "%s%f" s t; t
+    | _ -> t
+
+let show_float_list_meat l =
+  let l's = List.map string_of_float l in
+  (String.concat ";" l's)
+  
+let show_float_list l =
+  let meat = show_float_list_meat l in
+  sprintf "[%s]" meat

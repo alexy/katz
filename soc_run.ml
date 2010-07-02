@@ -23,6 +23,7 @@ open   Graph
 open   Option
 module H=Hashtbl
 open   Utils
+open   Printf (* sprintf *)
 	
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
@@ -248,14 +249,17 @@ let socRun dreps dments opts =
     leprintfln "%d total users, doing days from %d to %d" (H.length dranges) firstDay lastDay;
     
     (* inject the users first appearing in this cycle *)
-    let tick day =
+    let tick ts day =
       let ustats = sgraph.ustatsSG in
       let newUsers = H.find dstarts day in
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
       leprintfln "now got %d" (H.length ustats);
-      socDay sgraph params day in
+      socDay sgraph params day;
+      let t = Some (sprintf "day %d timing: " day) |> getTiming in
+      t::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
-    Enum.iter tick theDays;
-    sgraph
+    (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
+    let timings = Enum.fold tick [] theDays in
+    (sgraph,timings)
