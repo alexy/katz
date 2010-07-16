@@ -1,4 +1,5 @@
 SAVE_GRAPH=save_graph
+INVERT_GRAPH=invert_graph
 SC=sc
 LOOK=look
 #DEBUG=-g
@@ -20,8 +21,11 @@ binary_graph.ml tokyo_graph.ml json_graph.ml: utils.ml
 
 $(SAVE_GRAPH):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo  $(SAVE_GRAPH).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
-        
+
 $(SAVE_GRAPH).opt: utils.cmx json_graph.cmx tokyo_graph.cmx binary_graph.cmx  $(SAVE_GRAPH).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(INVERT_GRAPH).opt: utils.cmx invert.cmx binary_graph.cmx graph.cmx $(INVERT_GRAPH).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(LOOK):      utils.cmo binary_graph.cmo $(LOOK).ml
@@ -40,6 +44,8 @@ tokyo_graph.cmx: json_graph.cmx graph.cmx
 
 soc_run.cmo: utils.cmo graph.cmo
 soc_run.cmx: utils.cmx graph.cmx
+
+invert.cmx: utils.cmx graph.cmx
 
 $(SC):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo graph.cmo soc_run.cmo $(SC).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@

@@ -81,3 +81,5 @@ let show_float_list_meat l =
 let show_float_list l =
   let meat = show_float_list_meat l in
   sprintf "[%s]" meat
+
+let some_int si = Some (int_of_string si)

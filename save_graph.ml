@@ -3,8 +3,6 @@ open Tokyo_graph
 open Binary_graph
 open Utils 
 
-let some_int si = Some (int_of_string si)
-
 let () =
   let args = getArgs in
   let (fileName,saveBase,maxElems,progress) = 
