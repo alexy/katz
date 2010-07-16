@@ -17,6 +17,6 @@ let () =
     ^^ "\n  saving inverted graph in %s")
     fromName toName;
   let original : graph = loadData fromName in
-  let inverted : graph = invert1  original in
+  let inverted : graph = invert2  original in
   leprintfln "well, let's save it now, shall we?";
   saveData inverted toName

@@ -19,6 +19,26 @@ let invert1 : graph -> graph = fun g ->
 		 H.add to_reps from num) reps) days) g;
    res
 
+(* @kaustuv: find_option is implemented with the exception and makes one more allocation *)
+let invert2 g =
+  let res = H.create (H.length g) in
+  H.iter begin fun f days ->
+    H.iter begin fun day reps ->
+      H.iter begin fun t num -> 
+        let t_days = begin
+          try H.find res t
+          with Not_found -> let x = H.create 10 in H.add res t x ; x
+        end in
+        let t_reps = begin
+          try H.find t_days day
+          with Not_found -> let x = H.create 10 in H.add t_days day x ; x
+        end in
+        H.add t_reps f num
+      end reps
+    end days
+  end g ;
+  res
+
 (*					    
 let invert2 : graph -> graph = fun g ->
   let res = H.enum g in
