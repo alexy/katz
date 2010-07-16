@@ -19,7 +19,8 @@ let invert1 : graph -> graph = fun g ->
 		 H.add to_reps from num) reps) days) g;
    res
 
-(* @kaustuv: find_option is implemented with the exception and makes one more allocation *)
+(* @kaustuv: find_option is implemented with the exception anyways 
+   and makes one more extra allocation *)
 let invert2 g =
   let res = H.create (H.length g) in
   H.iter begin fun f days ->

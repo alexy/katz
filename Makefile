@@ -47,10 +47,10 @@ soc_run.cmx: utils.cmx graph.cmx
 
 invert.cmx: utils.cmx graph.cmx
 
-$(SC):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo graph.cmo soc_run.cmo $(SC).ml
+$(SC):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo graph.cmo soc_run.cmo invert.cmo $(SC).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SC).opt: utils.cmx json_graph.cmx tokyo_graph.cmx binary_graph.cmx graph.cmx soc_run.cmx $(SC).cmx
+$(SC).opt: utils.cmx json_graph.cmx tokyo_graph.cmx binary_graph.cmx graph.cmx soc_run.cmx invert.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 clean:

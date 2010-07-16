@@ -3,6 +3,7 @@ open Utils
 open Printf (* sprintf *)
 open Graph
 open Soc_run
+open Invert
 
 let suffix = String.ends_with
 
@@ -22,18 +23,19 @@ let loadAnyGraph : string -> (graph * timings) =
 let () = 
   let args = getArgs in
   match args with
-  | drepsName::dmentsName::saveName::restArgs -> begin
-    leprintfln "reading graph from %s and %s, saving dcaps in %s" drepsName dmentsName saveName;
+  | drepsName::saveName::restArgs -> begin
+    leprintfln "reading graph from %s, saving dcaps in %s" drepsName saveName;
     let maxDays = restArgs |> List.map int_of_string |> option_of_list in
-    let (dreps,t0) = loadAnyGraph drepsName in
+    let (dreps,tLoad) = loadAnyGraph drepsName in
     leprintfln "loaded %s, %d" drepsName (H.length dreps);
-    let (dments,t1) = loadAnyGraph dmentsName in
-    leprintfln "loaded %s, %d" dmentsName (H.length dments);
-    let ({dcapsSG =dcaps},t2) = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in
+    let dments = invert2 dreps in
+    let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
+    leprintfln "dments has length %d" (H.length dments);
+    let ({dcapsSG =dcaps},tSocRun) = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in
     leprintfln "computed sgraph, now saving dcaps in %s" saveName;
     Binary_graph.saveData dcaps saveName;
-    let t3 =  Some "saved dcaps timing: " |> getTiming in
-    let ts = List.rev (t3::t2@t1@t0) in
+    let tSaving =  Some "saved dcaps timing: " |> getTiming in
+    let ts = List.rev (tSaving::tSocRun@[tInvert]@tLoad) in
     printf "timings: %s\n" (show_float_list ts);
   end
-  | _ -> leprintf "usage: sc dreps dments save-to"
+  | _ -> leprintf "usage: sc drepsName dcapsName"
