@@ -149,7 +149,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                   else
                     let toOut = H.find_default outs to' 1 in
                     let toTot = H.find_default tot  to' 1 in
-                    let term = float (num * toBal * toTot) *. toSoc /. float toOut in
+                    let term = float (num * toBal * toOut) *. toSoc /. float toTot in
                     res -. term (* the term is negative, so we sum positive *)
               end
             in
@@ -165,7 +165,7 @@ let socUserDaySum : sGraph -> day -> user -> userStats -> termsStat = fun sgraph
                   else begin
                     let toIn  = H.find_default ins to' 1 in
                     let toTot = H.find_default tot to' 1 in
-                    let allTerm  = float (num * toTot) *. toSoc /. float toIn in
+                    let allTerm  = float (num * toIn) *. toSoc /. float toTot in
                     let toBal = H.find_default bal to' 0 in
                     let backTerm = if toBal <= 0 then 0. else float toBal *. allTerm in
                     (backSum +. backTerm,allSum +. allTerm)
