@@ -1,7 +1,7 @@
 FunData Twitter Shootout -- OCaml
 =================================
 
-This is the OCaml version of the [http://github.com/alexy/fundata1](Functional Data Shootout #1), implementing the Karmic Social Capital (KSC) on Twitter Communication Graph.  The _fundata1_ repository contains all the necessary documentation about the shootout and data itself.  Here we'll provide some implementation notes specific to OCaml.
+This is the OCaml version of the [http://github.com/alexy/fundata1](Functional Data Shootout #1), implementing the Karmic Social Capital (KSC) on Twitter Communication Graph.  The _fundata1_ repository contains all the necessary documentation about the shootout and data itself.  Here we'll provide some implementation notes specific to [clams -- the OCaml implementation of fundata1](http://github.com/alexy/clams).
 
 
 Building
