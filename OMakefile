@@ -18,10 +18,11 @@ OBJECTS[] =
 	binary_graph
 	soc_run
 	save_graph
+	days
 	
 OCamlProgram(sc, $(OBJECTS))
 
-.DEFAULT: sc
+.DEFAULT: days
 
 .PHONY: clean
 
