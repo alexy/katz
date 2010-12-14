@@ -20,11 +20,11 @@ let by_day: graph -> days = fun g ->
     H.iter begin fun day reps ->
       H.iter begin fun t num ->
          
-          let (reps,ments) = res.(day) in
+          let (ureps,ments) = res.(day) in
 
           let ff = begin
-            try H.find reps f 
-            with Not_found -> let x = H.create repsN in H.add reps f x; x
+            try H.find ureps f 
+            with Not_found -> let x = H.create repsN in H.add ureps f x; x
           end in
           let ft = H.find_default ff t 0 in
           H.replace ff f (ft + num);
