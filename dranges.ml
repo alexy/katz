@@ -41,7 +41,7 @@ type starts = users array
 
 let startsArray dreps dments =
   let (dstarts,(firstDay,lastDay)) = startsRange dreps dments in
-  let a : starts = Array.create lastDay [] in
+  let a : starts = Array.create (succ lastDay) [] in
   H.iter begin fun day users -> 
     a.(day) <- users end dstarts;
   a
