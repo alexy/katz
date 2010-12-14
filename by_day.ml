@@ -27,14 +27,14 @@ let by_day: graph -> days = fun g ->
             with Not_found -> let x = H.create repsN in H.add ureps f x; x
           end in
           let ft = H.find_default ff t 0 in
-          H.replace ff f (ft + num);
+          H.replace ff t (ft + num);
 
           let tt = begin
             try H.find ments t
             with Not_found -> let x = H.create repsN in H.add ments t x; x
           end in
           let tf = H.find_default tt f 0 in
-          H.replace tt t (tf + num)
+          H.replace tt f (tf + num)
 
       end reps
     end days
