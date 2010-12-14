@@ -13,8 +13,8 @@ let by_day: graph -> days = fun g ->
   let usersN = 1000000 in
   let repsN = 10 in
   
-  let newReps : user_user = H.create usersN in
-  let res = Array.init daysN (fun _ -> (newReps, newReps)) in
+  let newReps : int -> user_user = fun usersN -> H.create usersN in
+  let res = Array.init daysN (fun _ -> (newReps usersN, newReps usersN)) in
 
   H.iter begin fun f days ->
     H.iter begin fun day reps ->
