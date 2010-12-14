@@ -54,6 +54,8 @@ tokyo_graph.cmx: json_graph.cmx graph.cmx
 soc_run.cmo: dranges.cmo utils.cmo graph.cmo
 soc_run.cmx: dranges.cmx utils.cmx graph.cmx
 
+sc.cmx save_starts.cmx: dranges.cmx
+
 invert.cmx by_day.cmx: utils.cmx graph.cmx
 
 $(SC):     utils.cmo json_graph.cmo tokyo_graph.cmo binary_graph.cmo load_graph.cmo graph.cmo dranges.cmo soc_run.cmo invert.cmo $(SC).ml

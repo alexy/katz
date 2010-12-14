@@ -16,12 +16,14 @@ let () =
     let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
     leprintfln "dments has length %d" (H.length dments);  
       
-    let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
+    let dstarts : Dranges.starts = Dranges.startsArray dreps dments in
     let tStarts = Some "computed dstarts, timing: " |> getTiming in
-    leprintfln "dstarts has length %d, firstDay %d, lastDay %d" (H.length dstarts) firstDay lastDay;
-    leprintfln "now saving byday in %s" saveName;
+    leprintfln "dstarts has length %d" (Array.length dstarts);
+
+    leprintfln "now saving dstarts in %s" saveName;
     Binary_graph.saveData dstarts saveName;
-    let tSaving =  Some "saved byday timing: " |> getTiming in
+    let tSaving =  Some "saved dstarts timing: " |> getTiming in
+
     let ts = List.rev (tSaving::tStarts::tInvert::tLoad) in
     printf "timings: %s\n" (show_float_list ts);
   end

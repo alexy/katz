@@ -31,6 +31,17 @@ let dayRanges dreps =
 let startsRange dreps dments =    
     let dranges = hashMergeWith minMax2 (dayRanges dreps) (dayRanges dments) in
     let dstarts = H.fold (fun user (d1,d2) res -> 
-        let users = H.find_default res d1 [] in H.replace res d1 (user::users); res) dranges (H.create 100000) in    
+        let users = H.find_default res d1 [] in H.replace res d1 (user::users); res) 
+        dranges (H.create 100000) in    
     let firstLast = H.fold (fun _ v res -> minMax2 v res) dranges (dranges |> hashFirst |> snd) in
     (dstarts,firstLast)
+    
+type users = Graph.user list
+type starts = users array
+
+let startsArray dreps dments =
+  let (dstarts,(firstDay,lastDay)) = startsRange dreps dments in
+  let a : starts = Array.create lastDay [] in
+  H.iter begin fun day users -> 
+    a.(day) <- users end dstarts;
+  a
