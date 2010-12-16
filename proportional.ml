@@ -15,7 +15,7 @@ let rangeLists: By_day.user_int_stream -> (user array * int array) =
     let tot' = tot + v' in
     let uv' = (u,tot') in
     (tot',uv'::res)
-  end [("zeroKatzLazarsfeldWattsDodds",0)] uvals in
+  end (0,[("zeroKatzLazarsfeldWattsDodds",0)]) uvals in
   (* this is Utils.unzip body without rev's, as we have ranges in rev from 
      the first fold! *)
   (* unzip with reverse *)

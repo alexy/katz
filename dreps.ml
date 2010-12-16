@@ -8,7 +8,8 @@ let userDays: graph -> user -> adjlist =
   try H.find g user
   with Not_found -> let x = H.create daysN in H.add g user x ; x
     
-let userDay g user day =
+let userDay: graph -> user -> day -> reps =
+  fun g user day ->
   let days = userDays g user in
   try H.find days day
   with Not_found -> let x = H.create repsN in H.add days day x ; x
