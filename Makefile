@@ -64,8 +64,8 @@ $(SC).opt: h.cmx graph.cmx utils.cmx common.cmx json_graph.cmx tokyo_graph.cmx b
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 lib: h.cmo graph.cmo utils.cmo common.cmo binary_graph.cmo by_day.cmo dranges.cmo
-  ocamlfind ocamlc -a -o lib.cma $* 
-  
+	ocamlfind ocamlc -a -o lib.cma $*
+
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt sc save_graph
 
