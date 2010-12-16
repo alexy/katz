@@ -1,7 +1,4 @@
-open Batteries_uni
-open Utils
-open Printf (* sprintf *)
-open Graph
+open Common
   
 let () = 
   let args = getArgs in

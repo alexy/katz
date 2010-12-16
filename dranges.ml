@@ -1,6 +1,4 @@
-open Batteries_uni
-open Utils
-module H=Hashtbl
+open Common
 
 let minMax1 (oldMin, oldMax) x =
   let newMin = min oldMin x in

@@ -1,10 +1,14 @@
-open Batteries_uni
+open Common
 open Graph
-
-module H=Hashtbl
 
 type user_user = (user,reps) Hashtbl.t
 type days = (user_user * user_user) array
+type nedges_nusers = int * int
+type user_nums = (user, nedges_nusers) Hashtbl.t
+type day_edgenums = (user_nums * user_nums) array
+type user_int = (user * int)
+type user_ints = user_int list
+type user_int_stream = (user * int) Enum.t
 
 let by_day: graph -> days = fun g ->
 
@@ -26,18 +30,37 @@ let by_day: graph -> days = fun g ->
             try H.find ureps f 
             with Not_found -> let x = H.create repsN in H.add ureps f x; x
           end in
-          let ft = H.find_default ff t 0 in
-          H.replace ff t (ft + num);
+          hashAdd ff t num;
 
           let tt = begin
             try H.find ments t
             with Not_found -> let x = H.create repsN in H.add ments t x; x
           end in
-          let tf = H.find_default tt f 0 in
-          H.replace tt f (tf + num)
+          hashAdd tt f num
 
       end reps
     end days
-  end g ;
-  
+  end g ;  
   res
+
+
+let numRepsTwits: user_user -> user_nums =
+  fun h -> 
+  H.map begin fun k1 v1 -> 
+    let nedges = H.fold (fun k2 v2 res -> res + v2) v1 0 in
+    let nusers = H.length v1 in
+    (nedges,nusers)
+  end h
+  
+let dayEdgenums: days -> day_edgenums = 
+  fun a ->
+  A.map (fun (r,m) -> (numRepsTwits r, numRepsTwits m)) a
+
+
+(* these are not used for now
+let numUserEdges: day_edgenums -> user_ints =
+    fun enums -> A.enum enums |> L.of_enum |> L.map (fun (k,(v,_)) -> (k,v))
+    
+let numUserUsers: day_edgenums -> user_ints =
+    fun enums -> A.enum enums |> L.of_enum |> L.map (fun (k,(_,v)) -> (k,v))
+ *)

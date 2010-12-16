@@ -18,13 +18,9 @@
 *)
 
 
-open   Batteries_uni
-open   Graph
-open   Option
-module H=Hashtbl
-open   Utils
-open   Printf (* sprintf *)
-	
+open Common
+open Option
+
 type dCaps = (user,(int * float) list) H.t
 type talkBalance = (user,int) H.t
 let emptyTalk : talkBalance = H.create 10

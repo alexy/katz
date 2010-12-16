@@ -1,7 +1,7 @@
 open Printf
 (* if we open Printf after Batteries, we get leprintf all screwed up! *)
 open Batteries_uni
-module H=Hashtbl
+open H
 
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
@@ -13,6 +13,14 @@ let hash_of_list x = x |> List.enum |> H.of_enum
 let list_of_hash h = h |> H.enum |> List.of_enum
 
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
+
+let hashInc h k =
+  let v = H.find_default h k 0 in
+  H.replace h k (succ v)
+
+let hashAdd h k n =
+  let v = H.find_default h k 0 in
+  H.replace h k (v+n)
 
 (* updates h1! *)
 let hashMergeWith f h1 h2 =
@@ -83,3 +91,8 @@ let show_float_list l =
   sprintf "[%s]" meat
 
 let some_int si = Some (int_of_string si)
+
+(* what about using fold_right without revs? *)
+let unzip : ('a * 'b) list -> ('a list * 'b list) = fun l ->
+  let (xs,ys) = List.fold_left (fun (xs,ys) (x,y) -> (x::xs,y::ys)) ([],[]) l in
+  (List.rev xs,List.rev ys)
