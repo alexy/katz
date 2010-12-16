@@ -12,6 +12,9 @@ let leprintfln format = eprintf (format ^^ "\n%!")
 let hash_of_list x = x |> List.enum |> H.of_enum
 let list_of_hash h = h |> H.enum |> List.of_enum
 
+let hashList = hash_of_list
+let listHash = list_of_hash
+
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
 let hashInc h k =

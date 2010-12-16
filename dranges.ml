@@ -1,5 +1,8 @@
 open Common
 
+type users = Graph.user list
+type starts = users array
+
 let minMax1 (oldMin, oldMax) x =
   let newMin = min oldMin x in
   let newMax = max oldMax x in
@@ -34,9 +37,6 @@ let startsRange dreps dments =
     let firstLast = H.fold (fun _ v res -> minMax2 v res) dranges (dranges |> hashFirst |> snd) in
     (dstarts,firstLast)
     
-type users = Graph.user list
-type starts = users array
-
 let startsArray dreps dments =
   let (dstarts,(firstDay,lastDay)) = startsRange dreps dments in
   let a : starts = Array.create (succ lastDay) [] in
