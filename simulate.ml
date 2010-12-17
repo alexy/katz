@@ -5,10 +5,12 @@ let simulate dstarts denums =
   let usersN = 5000000 in
   let ereps: graph = H.create usersN in (* dreps to be *)
   let users: reps  = H.create usersN in (* sets of users already existing, with total edges so far *)
+  let edgeCount = ref 0 in
   A.iteri begin fun day (newUsers: user list) ->
     (* we iterate over newUsers twice:
        add new users to the existing ones *)
     L.iter (fun user -> H.add users user 0) newUsers;
+    leprintf "day %d, total users: %d" day (H.length users);
     let usersNums = H.enum users in
     let (anames,avals) = Proportional.rangeLists usersNums in
     (* we increment the last, maximum value of the range array 
@@ -29,10 +31,12 @@ let simulate dstarts denums =
           match n' with 
           | None -> ()
           | Some n -> 
-            let toUser = anames.(n) in
-            hashInc fromDay toUser 
+            let toUser = anames.(n) in begin
+              hashInc fromDay toUser;
+              incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
+            end (* new edge *)  
         end (E.range 1 ~until:numEdges)
-      end (* have edges *)
+      end (* numEdges > 0 *)
     end (By_day.numUserEdges denums.(day))
   end dstarts;
   ereps
