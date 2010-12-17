@@ -10,7 +10,7 @@ let simulate dstarts denums =
     (* we iterate over newUsers twice:
        add new users to the existing ones *)
     L.iter (fun user -> H.add users user 0) newUsers;
-    leprintf "day %d, total users: %d" day (H.length users);
+    leprintfln "\nday %d, total users: %d" day (H.length users);
     let usersNums = H.enum users in
     let (anames,avals) = Proportional.rangeLists usersNums in
     (* we increment the last, maximum value of the range array 

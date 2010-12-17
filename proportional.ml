@@ -36,8 +36,9 @@ let justGreater a x =
       else begin
         let mI = (fI + uI) / 2 in
         let mV = a.(mI) in
-        if x <= mV then aux fI fV mI mV
-                   else aux mI mV uI uV
+        if x = mV then Some mI
+        else if x < mV then aux fI fV mI mV
+                       else aux mI mV uI uV
       end in
       aux fromIndex fromValue uptoIndex uptoValue
   
