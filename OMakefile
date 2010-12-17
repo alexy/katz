@@ -11,18 +11,22 @@ OCAMLPACKS[] =
 	json-wheel
 
 OBJECTS[] =
+	h
 	utils
 	graph
+	common
 	json_graph
 	tokyo_graph
 	binary_graph
-	soc_run
-	save_graph
-	days
+	by_day
+	dranges
+	dreps
+	proportional
+	simulate
 	
-OCamlProgram(sc, $(OBJECTS))
+OCamlProgram(dosim, $(OBJECTS))
 
-.DEFAULT: days
+.DEFAULT: dosim
 
 .PHONY: clean
 

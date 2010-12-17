@@ -28,3 +28,11 @@ let addEdge g fromUser toUser day =
     let count = H.find_default reps toUser 0 in
     H.replace reps toUser (succ count)
 
+let dayNums g user = 
+  try 
+    let u = H.find g user in 
+    H.map begin fun day reps -> 
+      let num = H.fold (fun tgt num res -> (res + num)) reps 0 in
+      (day,num) end u 
+      |> H.enum |> List.of_enum 
+  with Not_found -> []

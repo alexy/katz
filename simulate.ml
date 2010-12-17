@@ -4,7 +4,7 @@ let simulate dstarts denums =
   assert (A.length dstarts = A.length denums);
   let usersN = 5000000 in
   let ereps: graph = H.create usersN in (* dreps to be *)
-  let users: reps = H.create usersN in (* sets of users already existing, with total edges so far *)
+  let users: reps  = H.create usersN in (* sets of users already existing, with total edges so far *)
   A.iteri begin fun day (newUsers: user list) ->
     (* we iterate over newUsers twice:
        add new users to the existing ones *)
@@ -20,17 +20,19 @@ let simulate dstarts denums =
     let bound = avals.((A.length avals)-1)+1 in
     
     (* grow new edges *)
-    L.iter begin fun (fromUser: user) ->
-      let numEdges = H.find_default (fst denums.(day)) fromUser (0,0) |> fst in
-      let fromDay = Dreps.userDay ereps fromUser day in
-      E.iter begin fun _ ->
-        let n' = Proportional.pick avals bound in
-        match n' with 
-        | None -> ()
-        | Some n -> 
-          let toUser = anames.(n) in
-          hashInc fromDay toUser 
-      end (E.range 1 ~until:numEdges)
-    end newUsers
+    E.iter begin fun (fromUser,numEdges) ->
+      (* should we smooth here as well? *)
+      if numEdges > 0 then begin
+        let fromDay = Dreps.userDay ereps fromUser day in
+        E.iter begin fun _ ->
+          let n' = Proportional.pick avals bound in
+          match n' with 
+          | None -> ()
+          | Some n -> 
+            let toUser = anames.(n) in
+            hashInc fromDay toUser 
+        end (E.range 1 ~until:numEdges)
+      end (* have edges *)
+    end (By_day.numUserEdges denums.(day))
   end dstarts;
   ereps

@@ -1,7 +1,7 @@
 open Common
 
 (* choose members of a hash at random proportionally to their value *)
-let rangeLists: By_day.user_int_stream -> (user array * int array) =
+let rangeLists: By_day.user_ints -> (user array * int array) =
   fun uvals ->
   (* first, I wanted to work with enums, but then decided to keep lists inside...
      otherwise, here's how I'd prepend a 0 valued pair to the input stream:

@@ -39,7 +39,7 @@ invert.cmx by_day.cmx: utils.cmx graph.cmx
 simulate.cmx: dreps.cmx proportional.cmx
 
 lib: h.cmo graph.cmo utils.cmo common.cmo binary_graph.cmo by_day.cmo dranges.cmo
-	ocamlfind ocamlc -a -o lib.cma $*
+	ocamlfind ocamlc -a -o lib.cma $^
 
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt

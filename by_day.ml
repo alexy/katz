@@ -1,14 +1,14 @@
 open Common
 open Graph
 
-type user_user = (user,reps) Hashtbl.t
-type days = (user_user * user_user) array
-type nedges_nusers = int * int
-type user_nums = (user, nedges_nusers) Hashtbl.t
-type day_edgenums = (user_nums * user_nums) array
-type user_int = (user * int)
-type user_ints = user_int list
-type user_int_stream = (user * int) Enum.t
+type user_user     = (user,reps) Hashtbl.t
+type days          = (user_user * user_user) array
+type int_int       = int * int
+type denums        = (user * int_int) array
+type user_nums     = (user, int_int) Hashtbl.t
+type day_edgenums  = (user_nums * user_nums) array
+type user_int      = user * int
+type user_ints     = user_int Enum.t
 
 let by_day: graph -> days = fun g ->
 
@@ -57,10 +57,8 @@ let dayEdgenums: days -> day_edgenums =
   A.map (fun (r,m) -> (numRepsTwits r, numRepsTwits m)) a
 
 
-(* these are not used for now
-let numUserEdges: day_edgenums -> user_ints =
-    fun enums -> A.enum enums |> L.of_enum |> L.map (fun (k,(v,_)) -> (k,v))
+let numUserEdges: denums -> user_ints =
+    fun denums -> A.enum denums |> E.map (fun (k,(v,_)) -> (k,v))
     
-let numUserUsers: day_edgenums -> user_ints =
-    fun enums -> A.enum enums |> L.of_enum |> L.map (fun (k,(_,v)) -> (k,v))
- *)
+let numUserUsers: denums -> user_ints =
+    fun denums -> A.enum denums |> E.map (fun (k,(_,v)) -> (k,v))
