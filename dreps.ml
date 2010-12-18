@@ -37,3 +37,11 @@ let dayNums: graph -> user -> (day * int) list =
       (day,num) 
     end |> List.of_enum 
   with Not_found -> []
+  
+let userTotals: graph -> reps =
+  fun g ->
+  H.map begin fun user days ->
+    H.fold begin fun _ reps res ->
+      H.fold (fun _ num res -> res + num) reps 0
+    end days 0
+  end g

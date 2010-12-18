@@ -5,8 +5,18 @@ let usersN = 5000000
 let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
   assert (A.length dstarts = A.length denums);
   (* sets of users already existing, with total edges so far *)
-  let users: reps  = H.create usersN in 
-  let (ereps,firstDay) = dreps_day in
+  let ((ereps,firstDay), (users: reps)) = 
+    begin match dreps_day with
+    | (dreps,_) when (H.is_empty dreps) -> 
+        let users = H.create usersN in
+        (dreps_day, users)
+    | (dreps,theDay) (* when theDay > 0 *) -> 
+        let before = H.map begin fun user days -> 
+          H.filteri (fun day _ -> day < theDay) days
+        end dreps in
+        let users = Dreps.userTotals dreps in
+        ((before,theDay),users) 
+    end in
   let edgeCount = ref 0 in
   let lastDay = (A.length dstarts) - 1 in
 

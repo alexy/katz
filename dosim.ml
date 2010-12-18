@@ -18,7 +18,7 @@ let () =
           Simulate.simulate dstarts denums
         | drepsName::day'::[] -> begin
           let day = int_of_string day' in
-          leprintf "based on %s through day %d" drepsName day;
+          leprintfln "based on %s through day %d" drepsName day;
           let dreps: graph = loadData drepsName in
           let dreps_day = (dreps,day) in
           Simulate.simulate ~dreps_day dstarts denums
