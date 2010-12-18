@@ -14,7 +14,9 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
         let before = H.map begin fun user days -> 
           H.filteri (fun day _ -> day < theDay) days
         end dreps in
-        let users = Dreps.userTotals dreps in
+        (* by outgoing, not by mentions:
+          let users = Dreps.userTotals dreps in *)
+        let users = By_day.userTotalMentions denums theDay in
         ((before,theDay),users) 
     end in
   let edgeCount = ref 0 in

@@ -63,3 +63,7 @@ let numUserEdges: user_nums_pair -> user_ints =
     
 let numUserUsers: user_nums_pair -> user_ints =
     fun enums -> enums |> fst |> H.enum |> E.map (fun (k,(_,v)) -> (k,v))
+    
+let userTotalMentions: day_edgenums -> day -> reps =
+  fun denums day ->
+    denums.(day) |> snd |> H.map (fun user (nedges,nusers) -> nedges)
