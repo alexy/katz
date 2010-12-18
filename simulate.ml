@@ -17,9 +17,9 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
         (* by outgoing, not by mentions:
           let users = Dreps.userTotals dreps in *)
         leprintf "inverting time-limited dreps... ";
-        let dments = Invert.invert2 dreps in
+        let bments = Invert.invert2 before in
         leprintfln "done";
-        let users = Dreps.userTotals dments in
+        let users = Dreps.userTotals bments in
         ((before,theDay),users) 
       end in
   let edgeCount = ref 0 in
