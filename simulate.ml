@@ -16,6 +16,13 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
         end dreps in
         (* by outgoing, not by mentions:
           let users = Dreps.userTotals dreps in *)
+        (* instead of computing a reduced dments here
+           from the reduced dreps each time, we can
+           precompute cumulative mentions upto each day
+           and read it here; 
+           similarly, we can load any daily values,
+           such as karmic social capital, for 
+           general preferential attachment *)
         leprintf "inverting time-limited dreps... ";
         let bments = Invert.invert2 before in
         leprintfln "done";
@@ -29,7 +36,8 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
   E.iter begin fun day ->
     let newUsers = dstarts.(day) in
     L.iter (fun user -> H.add users user 0) newUsers;
-    leprintfln "\nday %d, total users: %d" day (H.length users);
+    leprintfln "\nday %d, total repliers: %d, mentioners: %d" 
+      day (H.length ereps) (H.length users);
     let usersNums = H.enum users in
     let (anames,avals) = Proportional.rangeLists usersNums in
     (* we increment the last, maximum value of the range array 
