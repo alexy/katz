@@ -20,7 +20,9 @@ let () =
           let day = int_of_string day' in
           leprintfln "based on %s through day %d" drepsName day;
           let dreps: graph = loadData drepsName in
-          let dreps_day = (dreps,day) in
+          leprintfln "inverting...";
+          let dments = Invert.invert2 dreps in
+          let dreps_day = (dments,day) in
           Simulate.simulate ~dreps_day dstarts denums
         end
         | _ -> failwith "dreps usage: dosim dstartsName denumsName erepsName drepsName day"

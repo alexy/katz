@@ -71,5 +71,5 @@ $(SC):     h.cmo graph.cmo utils.cmo common.cmo json_graph.cmo tokyo_graph.cmo b
 $(SC).opt: h.cmx graph.cmx utils.cmx common.cmx json_graph.cmx tokyo_graph.cmx binary_graph.cmx load_graph.cmx common.cmx graph.cmx dranges.cmx soc_run.cmx invert.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SIM).opt: h.cmx graph.cmx utils.cmx common.cmx binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx simulate.cmx $(SIM).cmx
+$(SIM).opt: h.cmx graph.cmx utils.cmx common.cmx binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIM).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

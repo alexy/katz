@@ -47,6 +47,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
           | Some n -> 
             let toUser = anames.(n) in begin
               hashInc fromDay toUser;
+              hashInc users toUser;
               incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
             end (* new edge *)  
         end (E.range 1 ~until:numEdges)
