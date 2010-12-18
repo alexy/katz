@@ -2,17 +2,28 @@ open Common
 open Binary_graph
 
 let () =
-    let args = getArgs in
+  let args = getArgs in
   match args with
-  | dstartsName::denumsName::erepsName::restArgs -> begin
-    leprintfln "reading dstarts from %s and dnums from %s, saving ereps in %s" dstartsName denumsName erepsName;
+    | dstartsName::denumsName::erepsName::restArgs -> 
+      begin
+      leprintfln "reading dstarts from %s and dnums from %s, saving ereps in %s" 
+        dstartsName denumsName erepsName;
     
-    let dstarts: Dranges.starts     = loadData dstartsName in
-    let denums: By_day.day_edgenums = loadData denumsName in
-    
-    let ereps = Simulate.simulate dstarts denums in
-    saveData ereps erepsName
-  end
-  | _ -> leprintf "usage: save_starts dstartsName dnumsName simrepsName"
+      let dstarts: Dranges.starts     = loadData dstartsName in
+      let denums: By_day.day_edgenums = loadData denumsName in
 
-  
+      let ereps = 
+        match restArgs with
+        | [] -> 
+          Simulate.simulate dstarts denums
+        | drepsName::day'::[] -> begin
+          let day = int_of_string day' in
+          leprintf "based on %s through day %d" drepsName day;
+          let dreps: graph = loadData drepsName in
+          let dreps_day = (dreps,day) in
+          Simulate.simulate ~dreps_day dstarts denums
+        end
+        | _ -> failwith "dreps usage: dosim dstartsName denumsName erepsName drepsName day"
+      in saveData ereps erepsName
+      end
+  | _ -> failwith "usage: dosim dstartsName dnumsName erepsName [drepsName day]"
