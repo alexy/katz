@@ -6,19 +6,22 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
   assert (A.length dstarts = A.length denums);
   (* sets of users already existing, with total edges so far *)
   let ((ereps,firstDay), (users: reps)) = 
-    begin match dreps_day with
+    match dreps_day with
     | (dreps,_) when (H.is_empty dreps) -> 
         let users = H.create usersN in
         (dreps_day, users)
-    | (dreps,theDay) (* when theDay > 0 *) -> 
+    | (dreps,theDay) (* when theDay > 0 *) -> begin
         let before = H.map begin fun user days -> 
           H.filteri (fun day _ -> day < theDay) days
         end dreps in
         (* by outgoing, not by mentions:
           let users = Dreps.userTotals dreps in *)
-        let users = By_day.userTotalMentions denums theDay in
+        leprintf "inverting time-limited dreps... ";
+        let dments = Invert.invert2 dreps in
+        leprintfln "done";
+        let users = Dreps.userTotals dments in
         ((before,theDay),users) 
-    end in
+      end in
   let edgeCount = ref 0 in
   let lastDay = (A.length dstarts) - 1 in
 

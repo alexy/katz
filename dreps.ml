@@ -45,3 +45,5 @@ let userTotals: graph -> reps =
       H.fold (fun _ num res -> res + num) reps 0
     end days 0
   end g
+  
+(* let userCumTotals: graph -> (user,(int,int) Hashtbl.t) Hashtbl.t *)
