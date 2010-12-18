@@ -16,7 +16,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums =
         end dreps 
         (* leaving empty repliers is OK, they'll be filled,
         but obscures growth obervations *)
-        |> H.filteri (fun _ days ->  not (H.is_empty days)) in
+        |> H.filter (fun days ->  not (H.is_empty days)) in
         (* by outgoing, not by mentions:
           let users = Dreps.userTotals dreps in *)
         (* instead of computing a reduced dments here
