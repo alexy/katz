@@ -1,8 +1,8 @@
 open Common
 
 (* choose members of a hash at random proportionally to their value *)
-let rangeLists: By_day.user_ints -> (user array * int array) =
-  fun uvals ->
+let rangeLists =
+  fun add smooth zero uvals ->
   (* first, I wanted to work with enums, but then decided to keep lists inside...
      otherwise, here's how I'd prepend a 0 valued pair to the input stream:
      let uvals0 = E.append (L.enum [("zeroKatzLazarsfeldWattsDodds",0)]) uvals 
@@ -11,11 +11,11 @@ let rangeLists: By_day.user_ints -> (user array * int array) =
      Array.of_enum
    *)
   let (_,ranges) = E.fold begin fun (tot,res) (u,v) -> 
-    let v' = if v > 0 then v else 1 in (* +1 smoothing *)
-    let tot' = tot + v' in
+    let v' = if v > zero then v else smooth in (* +1 smoothing *)
+    let tot' = add tot v' in
     let uv' = (u,tot') in
     (tot',uv'::res)
-  end (0,[("zeroKatzLazarsfeldWattsDodds",0)]) uvals in
+  end (zero,[("zeroKatzLazarsfeldWattsDodds",zero)]) uvals in
   (* this is Utils.unzip body without rev's, as we have ranges in rev from 
      the first fold! *)
   (* unzip with reverse *)
@@ -45,8 +45,18 @@ let justGreater a x =
 (* bound is precomputed as maximum of a,
    i.e. a's last element, plus 1
    NB: can be an optional parameter *)
-let pick a bound =
+let pickInt a bound =
   (* a |> A.length |> pred |> A.get a, or
     A.backwards |> Enum.peek |> Option.get *)
   let r = Random.int bound in
   justGreater a r
+
+let pickReal a bound =
+  let r = Random.float bound in
+  justGreater a r
+
+(* NB doesn't type:
+let pick isReal a bound =
+  if isReal then pickReal a bound
+  else pickInt a bound
+ *)  

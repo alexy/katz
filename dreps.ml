@@ -1,5 +1,7 @@
 open Common
 
+type daily_ints = (user,(int,int) Hashtbl.t) Hashtbl.t
+
 let daysN = 10
 let repsN = 10
 
@@ -46,4 +48,17 @@ let userTotals: graph -> reps =
     end days 0
   end g
   
-(* let userCumTotals: graph -> (user,(int,int) Hashtbl.t) Hashtbl.t *)
+let userDailyTotals: graph -> daily_ints =
+  fun g ->
+  g |> H.map begin fun user days ->
+      let a = H.enum days |> A.of_enum in
+      A.sort (fun (day1,_) (day2,_) -> compare day1 day2) a;
+      let e = E.empty () in
+      let n = 0 in
+      A.iter begin fun (day,reps) ->
+        let n = n + (H.length reps) in
+        E.push e (day,n)
+      end a;
+      H.of_enum e
+    end
+        
