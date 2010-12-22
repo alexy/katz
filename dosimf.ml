@@ -14,7 +14,7 @@ let () =
       let dstarts: Dranges.starts       = loadData dstartsName in
       let denums:  By_day.day_edgenums  = loadData denumsName in
 
-      let duvals = Some (By_day.dayUserReals udvals) in
+      let duvals = By_day.dayUserReals udvals in
       
       let ereps = 
         match restArgs with
