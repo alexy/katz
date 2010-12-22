@@ -2,7 +2,7 @@ open Common
 
 let usersN = 5000000
 
-let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums ?duvals =
+let simulate ?(dreps_day=(H.create usersN,0)) ?duvals dstarts denums =
   assert (A.length dstarts = A.length denums);
   let realVals = Option.is_some duvals in
   (* sets of users already existing, with total edges so far *)

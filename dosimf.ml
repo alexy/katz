@@ -19,7 +19,7 @@ let () =
       let ereps = 
         match restArgs with
         | [] -> 
-          Simulate.simulate dstarts denums ~duvals
+          Simulate.simulate ~duvals dstarts denums
         | drepsName::day'::[] -> begin
           let day = int_of_string day' in
           leprintfln "based on %s through day %d" drepsName day;
