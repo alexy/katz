@@ -9,8 +9,11 @@ PACKAGES=batteries,tokyo_cabinet,json-wheel
 BYDAY=save_days
 STARTS=save_starts
 SIM=dosim
+SIMF=dosimf
 
-all: $(SAVE_GRAPH).opt $(SC) $(SC).opt $(LOOK) $(LOOK).opt $(BYDAY).opt $(STARTS).opt $(SIM).opt
+all: $(SIM).opt $(SIMF).opt
+  
+all.opt: $(SAVE_GRAPH).opt $(SC) $(SC).opt $(LOOK) $(LOOK).opt $(BYDAY).opt $(STARTS).opt $(SIM).opt
 
 load_graph.ml binary_graph.ml tokyo_graph.ml json_graph.ml: common.ml
 
@@ -72,4 +75,7 @@ $(SC).opt: h.cmx graph.cmx utils.cmx common.cmx json_graph.cmx tokyo_graph.cmx b
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SIM).opt: h.cmx graph.cmx utils.cmx common.cmx binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIM).cmx
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SIMF).opt: h.cmx graph.cmx utils.cmx common.cmx binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIMF).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

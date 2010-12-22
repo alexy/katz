@@ -48,7 +48,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) dstarts denums ~duvals =
        or we can modularize Proportional better, making them store names
        and return those names directly *)
     let (anames,ivals,ibound,avals,abound) = match duvals with
-    | Some dv -> let (ns,vs) = Proportional.rangeLists (+.) 1e-35 0. (H.enum dv) in
+    | Some dv -> let (ns,vs) = Proportional.rangeLists (+.) 1e-35 0. (H.enum dv.(day)) in
                  let b = vs.((A.length vs)-1) in
                  let dummyIntArray = A.create 0 0 in
                  let dummyBound = 0 in

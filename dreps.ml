@@ -61,4 +61,3 @@ let userDailyTotals: graph -> daily_ints =
       end a;
       H.of_enum e
     end
-        
