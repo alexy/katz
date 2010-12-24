@@ -4,15 +4,20 @@ open Binary_graph
 let () =
   let args = getArgs in
   match args with
-    | dcapsName::rankName::restArgs -> 
+    | dcapsName::restArgs -> 
       begin
-      leprintfln "reading dcaps from %s, saving ranked ones in %s" 
-        dcapsName rankName;
+        
+      let dranksName = "dranks-" ^ dcapsName in
+      let aranksName = "aranks-" ^ dcapsName in
+      
+      leprintfln "reading dcaps from %s, saving user ranks in %s, daily ranks in %s" 
+        dcapsName dranksName aranksName;
     
       let dcaps: By_day.user_day_reals = loadData dcapsName in
-      let dranks = Cranks.dranks dcaps in
+      let (dranks, aranks) = Cranks.daranks dcaps in
       
-      saveData dranks rankName
+      saveData dranks dranksName;
+      saveData aranks aranksName
       
     end
       

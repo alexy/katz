@@ -47,7 +47,16 @@ let rankHash: By_day.user_reals -> ranked_users =
      and handle NaNs a lá Soc_run *)
   A.sort (fun (k1,_) (k2,_) -> compare k2 k1) a;
   A.enum a |> E.map (fun (_,users) -> users)
-  
+
+(* first, we can save the array of daily rankings as is,
+   converting daily enums to lists for ease of inspectopn *)
+let aranks: By_day.user_day_reals-> day_rank_users =
+  fun dcaps ->
+  let byday = By_day.dayUserReals dcaps in
+  A.map (rankHash |- L.of_enum) byday
+
+(* then, we rewrite dcaps as dranks, 
+   replacing capitals with ranks, processing enums directly *)
 let dranks: By_day.user_day_reals -> user_day_ranks =
   fun dcaps ->
   let byday  = By_day.dayUserReals dcaps in
@@ -63,7 +72,19 @@ let dranks: By_day.user_day_reals -> user_day_ranks =
   end ranked;
   res
        
-let aranks: By_day.user_day_reals-> day_rank_users =
+(* here. we return both aranks and dranks, so we convert enums to lists
+   right away *)
+let daranks: By_day.user_day_reals -> user_day_ranks * day_rank_users =
   fun dcaps ->
-  let byday = By_day.dayUserReals dcaps in
-  A.map (rankHash |- L.of_enum) byday
+  let byday  = By_day.dayUserReals dcaps in
+  let ranked = A.map (rankHash |- L.of_enum) byday in
+  let res = H.create (H.length dcaps) in
+  A.iteri begin fun day eusers ->
+    L.iteri begin fun i users ->
+      L.iter begin fun user ->
+        let days = H.find_default res user [] in
+        H.replace res user ((day,i)::days)
+      end users
+    end eusers
+  end ranked;
+  (res, ranked)
