@@ -17,9 +17,9 @@ type user_day_reals = (user, day_reals) Hashtbl.t
 type user_reals     = (user, real) Hashtbl.t
 type day_user_reals = user_reals array
 
-let daysN = 35
+let daysN  = 35
 let usersN = 1000000
-let repsN = 10
+let repsN  = 10
 
 let by_day: graph -> days = fun g ->
 

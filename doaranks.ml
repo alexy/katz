@@ -10,9 +10,9 @@ let () =
         dcapsName rankName;
     
       let dcaps: By_day.user_day_reals = loadData dcapsName in
-      let dranks = Cranks.dranks dcaps in
+      let aranks = Cranks.aranks dcaps in
       
-      saveData dranks rankName
+      saveData aranks rankName
       
     end
       

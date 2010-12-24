@@ -10,7 +10,8 @@ BYDAY=save_days
 STARTS=save_starts
 SIM=dosim
 SIMF=dosimf
-CAPS=capsan
+CRANKS=docranks
+ARANKS=doaranks
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -84,5 +85,8 @@ $(SIM).opt: lib.cmxa binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx invert.cm
 $(SIMF).opt: lib.cmxa binary_graph.cmx by_day.cmx dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIMF).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(CAPS).opt: lib.cmxa $(CAPS).ml
+$(CRANKS).opt: lib.cmxa by_day.cmx binary_graph.cmx cranks.cmx $(CRANKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(ARANKS).opt: lib.cmxa by_day.cmx binary_graph.cmx cranks.cmx $(ARANKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

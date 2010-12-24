@@ -27,22 +27,26 @@ let matureCapsTC ?(days=5) dcaps toName =
 
  *)
  
-type day_rank_users = ((user list) list) array
+type rank = int
+type users = user list
+type day_rank_users = (users list) array
 type day_ranks = (day * rank) list
 type user_day_ranks = (user, day_ranks) Hashtbl.t
- 
-let rankHash hl =
+type ranked_users = users Enum.t
+
+let rankHash: By_day.user_reals -> ranked_users =  
+  fun hl ->
   let r = H.create (H.length hl) in
   H.iter begin fun k v ->
     let ks = H.find_default r v [] in
-    H.replace w k::ks
-  end;
+    H.replace r v (k::ks)
+  end hl;
   let a = H.enum r |> A.of_enum in
   (* sort descending
      NB for floats, we may choose equality within an epsilon,
      and handle NaNs a lá Soc_run *)
   A.sort (fun (k1,_) (k2,_) -> compare k2 k1) a;
-  A.enum a |> E.filter (fun (_,users) -> users)
+  A.enum a |> E.map (fun (_,users) -> users)
   
 let dranks: By_day.user_day_reals -> user_day_ranks =
   fun dcaps ->
@@ -53,12 +57,13 @@ let dranks: By_day.user_day_reals -> user_day_ranks =
     E.iteri begin fun i users ->
       L.iter begin fun user ->
         let days = H.find_default res user [] in
-        H.replace res user (day,i)::days
+        H.replace res user ((day,i)::days)
       end users
     end eusers
-  end ranked
+  end ranked;
+  res
        
 let aranks: By_day.user_day_reals-> day_rank_users =
   fun dcaps ->
   let byday = By_day.dayUserReals dcaps in
-  A.map (rankHash | L.of_enum) byday
+  A.map (rankHash |- L.of_enum) byday
