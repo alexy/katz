@@ -7,3 +7,8 @@ save_graph
 sc
 look
 *.cma
+*.a
+*.cmxa
+*.lock
+*.omc
+.omakedb
