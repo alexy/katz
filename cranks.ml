@@ -27,6 +27,9 @@ let matureCapsTC ?(days=5) dcaps toName =
 
  *)
  
+ 
+open By_day
+ 
 type rank = int
 type users = user list
 type day_rank_users = (users list) array
@@ -34,7 +37,22 @@ type day_ranks = (day * rank) list
 type user_day_ranks = (user, day_ranks) Hashtbl.t
 type ranked_users = users Enum.t
 
-let rankHash: By_day.user_reals -> ranked_users =  
+(* ensure we only work with the mature values, replace immature ones,
+  younger than maturity days, by minimum *)
+let matureDayUserReals: int -> float -> user_day_reals -> day_user_reals =
+  fun maturity minimum dcaps ->
+
+  let res = Array.init daysN (fun _ -> H.create usersN) in
+
+  H.iter begin fun user days ->
+    L.iteri (fun i (day,x) -> 
+      let c = if i > maturity then x else minimum in
+      H.add res.(day) user c) days        
+  end dcaps;  
+  res
+      
+
+let rankHash: user_reals -> ranked_users =  
   fun hl ->
   let r = H.create (H.length hl) in
   H.iter begin fun k v ->
@@ -50,16 +68,16 @@ let rankHash: By_day.user_reals -> ranked_users =
 
 (* first, we can save the array of daily rankings as is,
    converting daily enums to lists for ease of inspectopn *)
-let aranks: By_day.user_day_reals-> day_rank_users =
-  fun dcaps ->
-  let byday = By_day.dayUserReals dcaps in
+let aranks: int -> float -> user_day_reals -> day_rank_users =
+  fun maturity minimum dcaps ->
+  let byday = matureDayUserReals maturity minimum dcaps in
   A.map (rankHash |- L.of_enum) byday
 
 (* then, we rewrite dcaps as dranks, 
    replacing capitals with ranks, processing enums directly *)
-let dranks: By_day.user_day_reals -> user_day_ranks =
-  fun dcaps ->
-  let byday  = By_day.dayUserReals dcaps in
+let dranks: int -> float -> user_day_reals -> user_day_ranks =
+  fun maturity minimum dcaps ->
+  let byday  = matureDayUserReals maturity minimum dcaps in
   let ranked = A.map rankHash byday in
   let res = H.create (H.length dcaps) in
   A.iteri begin fun day eusers ->
@@ -74,9 +92,9 @@ let dranks: By_day.user_day_reals -> user_day_ranks =
        
 (* here. we return both aranks and dranks, so we convert enums to lists
    right away *)
-let daranks: By_day.user_day_reals -> user_day_ranks * day_rank_users =
-  fun dcaps ->
-  let byday  = By_day.dayUserReals dcaps in
+let daranks: int -> float -> user_day_reals -> user_day_ranks * day_rank_users =
+  fun maturity minimum dcaps ->
+  let byday  = matureDayUserReals maturity minimum dcaps in
   let ranked = A.map (rankHash |- L.of_enum) byday in
   let res = H.create (H.length dcaps) in
   A.iteri begin fun day eusers ->
