@@ -20,7 +20,7 @@ let () =
     
     leprintfln "reading dcaps from %s, saving user ranks in %s, daily ranks in %s" 
       dcapsName dranksName aranksName;
-    leprintfln "any social capital with maturity less than %d days becomes %f" 
+    leprintfln "any social capital with maturity less than %d days becomes %e" 
       maturity minimum;
       
     let dcaps: By_day.user_day_reals = loadData dcapsName in

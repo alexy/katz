@@ -45,9 +45,12 @@ let matureDayUserReals: int -> float -> user_day_reals -> day_user_reals =
   let res = Array.init daysN (fun _ -> H.create usersN) in
 
   H.iter begin fun user days ->
-    L.iteri (fun i (day,x) -> 
-      let c = if i > maturity then x else minimum in
-      H.add res.(day) user c) days        
+    let ordered = L.rev days in
+    let day0 = ordered |> L.hd |> fst in
+    L.iter begin fun (day,x) -> 
+      let c = if (day - day0) >= maturity then x else minimum in
+      H.add res.(day) user c
+      end ordered 
   end dcaps;  
   res
       
