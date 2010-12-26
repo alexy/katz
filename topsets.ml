@@ -11,15 +11,19 @@ let buckets ranks =
       | users::userLists ->
         let chunkSize = L.length users in
         let newBucket = L.append lastBucket users in
-        let newSize = bucketFill + chunkSize in
-        if newSize < bucketSize 
+        let newFill = bucketFill + chunkSize in
+        if newFill < bucketSize 
         then
-          aux (res,newBucket) bucketSize newSize userLists
+          aux (res,newBucket) bucketSize newFill userLists
         else
           aux (newBucket::res,[]) (bucketSize*10) 0 userLists
-      | _ -> let res = if L.length lastBucket = 0 then lastBucket::res else res in
+      | _ -> let res = if L.length lastBucket > 0 then lastBucket::res else res in
         L.rev res |> L.map (L.enum |- S.of_enum)
-  in aux ([],[]) 10 0 ranks
+  in 
+  let res = aux ([],[]) 10 0 ranks in
+  leprintf "buckets size: %d" (L.length res);
+  List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
+  res
 
 
 let bucketChangeRates bs1 bs2 =
