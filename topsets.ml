@@ -32,11 +32,13 @@ let bucketChangeRates bs1 bs2 =
   in
   aux bs1 bs2 []
   
-let bucketDynamics aranks =
+let bucketDynamics: Cranks.day_rank_users -> rates = 
+  fun aranks ->
   let bucks = A.map buckets aranks in 
   let bucksEnd  = pred (A.length bucks) in
   let bucksRest = A.sub bucks 1 bucksEnd in
   A.fold_left begin fun (res,prevBucks) bucks ->
     let rates = bucketChangeRates prevBucks bucks in
+    leprintf ".";
     (rates::res, bucks)
   end ([],bucks.(0)) bucksRest |> fst |> L.rev
