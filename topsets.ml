@@ -6,19 +6,18 @@ module S=Set.StringSet
 let floatSize = S.cardinal |- float
      
 let buckets ranks = 
-  let rec aux rankedUserLists bucketSize lastBucket res =
-    match rankedUserLists with
-      | users::userLists ->
-        let newBucket = A.append lastBucket (A.of_list users) in
-        if (A.length newBucket) < bucketSize 
-        then
-          aux userLists bucketSize newBucket res
-        else
-          aux userLists (bucketSize*10) (A.create 0 "") (newBucket::res)  
-      | _ -> let res = if A.length lastBucket > 0 then lastBucket::res else res in
-        L.rev res |> L.map (A.enum |- S.of_enum)
+  let aux (res,lastBucket,bucketSize) users =
+    let newBucket = A.append lastBucket (A.of_list users) in
+    if (A.length newBucket) < bucketSize 
+      then
+        (res, newBucket, bucketSize )
+      else
+        (newBucket::res, (A.create 0 ""),  (bucketSize*10))  
   in 
-  let res = aux ranks 10 (A.create 0 "") [] in
+  let (res,lastBucket,_) = L.fold_left aux ([],(A.create 0 ""),10) ranks in   
+  let res = if (A.length lastBucket) > 0 then lastBucket::res else res in
+  let res = L.rev res |> L.map (A.enum |- S.of_enum) in
+  
   leprintf "buckets size: %d " (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
   leprintfln "";
