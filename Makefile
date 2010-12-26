@@ -12,6 +12,7 @@ SIM=dosim
 SIMF=dosimf
 CRANKS=docranks
 ARANKS=doaranks
+RATES=dorates
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -89,4 +90,7 @@ $(CRANKS).opt: lib.cmxa by_day.cmx binary_graph.cmx cranks.cmx $(CRANKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(ARANKS).opt: lib.cmxa by_day.cmx binary_graph.cmx cranks.cmx $(ARANKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(RATES).opt: lib.cmxa binary_graph.cmx by_day.cmx cranks.cmx topsets.cmx $(RATES).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
