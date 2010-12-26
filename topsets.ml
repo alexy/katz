@@ -4,24 +4,23 @@ type rates = (float list) list
      
 module S=Set.StringSet
 let floatSize = S.cardinal |- float
+let set_of_list = L.enum |- S.of_enum
      
 let buckets ranks = 
-  let rec aux (res,lastBucket) bucketSize bucketFill rankedUserLists =
+  let rec aux (res,lastBucket) bucketSize rankedUserLists =
     match rankedUserLists with
       | users::userLists ->
-        let chunkSize = L.length users in
-        let newBucket = L.append lastBucket users in
-        let newFill = bucketFill + chunkSize in
-        if newFill < bucketSize 
+        let newBucket = S.union lastBucket (set_of_list users) in
+        if (S.cardinal newBucket) < bucketSize 
         then
-          aux (res,newBucket) bucketSize newFill userLists
+          aux (res,newBucket) bucketSize userLists
         else
-          aux (newBucket::res,[]) (bucketSize*10) 0 userLists
-      | _ -> let res = if L.length lastBucket > 0 then lastBucket::res else res in
-        L.rev res |> L.map (L.enum |- S.of_enum)
+          aux (newBucket::res,S.empty) (bucketSize*10) userLists
+      | _ -> let res = if S.cardinal lastBucket > 0 then lastBucket::res else res in
+        L.rev res
   in 
-  let res = aux ([],[]) 10 0 ranks in
-  leprintf "buckets size: %d" (L.length res);
+  let res = aux ([],S.empty) 10 ranks in
+  leprintf "buckets size: %d " (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
   leprintfln "";
   res
