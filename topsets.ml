@@ -4,17 +4,28 @@ type rates = (float list) list
      
 module S=Set.StringSet
 let floatSize = S.cardinal |- float
-     
+         
 let buckets ranks = 
-  let aux (res,lastBucket,bucketSize) users =
-    let newBucket = A.append lastBucket (A.of_list users) in
-    if (A.length newBucket) < bucketSize 
-      then
-        (res, newBucket, bucketSize )
+  let aux (res, bucket, used, bucketSize) users =
+    let usersLength = L.length users in
+    let newUsed = used + usersLength in
+    if newUsed < bucketSize 
+      then begin
+        L.iteri (fun i x -> bucket.(used+i) <- x) users;
+        (res, bucket, newUsed, bucketSize)
+      end
       else
-        (newBucket::res, (A.create 0 ""),  (bucketSize*10))  
+      let power10 n start res =
+        let rec exceed n acc res =
+          if acc > n then (acc,res)
+          else exceed n (acc*10) ([||]::res) in
+          exceed n start res in
+      let (newBucketSize,res) = power10 usersLength (bucketSize*10) (bucket::res) in
+      let newBucket = A.append (A.of_list users) 
+        (A.create (newBucketSize - usersLength) "") in
+      (res, newBucket, usersLength, newBucketSize)  
   in 
-  let (res,lastBucket,_) = L.fold_left aux ([],(A.create 0 ""),10) ranks in   
+  let (res, lastBucket, _, _) = L.fold_left aux ([], A.create 10 "", 0, 10) ranks in   
   let res = if (A.length lastBucket) > 0 then lastBucket::res else res in
   let res = L.rev res |> L.map (A.enum |- S.of_enum) in
   
