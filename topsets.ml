@@ -23,6 +23,7 @@ let buckets ranks =
   let res = aux ([],[]) 10 0 ranks in
   leprintf "buckets size: %d" (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
+  leprintfln "";
   res
 
 
