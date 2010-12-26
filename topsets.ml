@@ -7,19 +7,19 @@ let floatSize = S.cardinal |- float
 let set_of_list = L.enum |- S.of_enum
      
 let buckets ranks = 
-  let rec aux (res,lastBucket) bucketSize rankedUserLists =
+  let rec aux rankedUserLists bucketSize lastBucket res =
     match rankedUserLists with
       | users::userLists ->
         let newBucket = S.union lastBucket (set_of_list users) in
         if (S.cardinal newBucket) < bucketSize 
         then
-          aux (res,newBucket) bucketSize userLists
+          aux userLists bucketSize newBucket res
         else
-          aux (newBucket::res,S.empty) (bucketSize*10) userLists
+          aux userLists (bucketSize*10) S.empty (newBucket::res)  
       | _ -> let res = if S.cardinal lastBucket > 0 then lastBucket::res else res in
         L.rev res
   in 
-  let res = aux ([],S.empty) 10 ranks in
+  let res = aux ranks 10 S.empty [] in
   leprintf "buckets size: %d " (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
   leprintfln "";
