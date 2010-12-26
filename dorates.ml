@@ -3,13 +3,13 @@ open Binary_graph
 
 let () =
   let args = getArgs in
-  let (aranksName,ratesName) =
+  let (aranksName,ratesPrefix) =
   match args with
-    | aranksName::ratesName::restArgs -> (aranksName,ratesName)
-    | _ -> failwith "usage: dorates aranks rates"
+    | aranksName::ratesPrefix::restArgs -> (aranksName,ratesPrefix)
+    | _ -> failwith "usage: dorates aranksName ratesPrefix"
   in
-  leprintfln "reading aranks from %s , saving rates in %s" 
-  aranksName ratesName;
+  leprintfln "reading aranks from %s , saving rates with prefix %s" 
+  aranksName ratesPrefix;
 
   let aranks: Cranks.day_rank_users = loadData aranksName in
 
@@ -22,6 +22,8 @@ let () =
       (* this works in repl under batteries, but p is not defined in compilation!
       http://dutherenverseauborddelatable.wordpress.com/2009/04/06/ocaml-batteries-included-beta-1/       
       Print.printf p"%{float list}\n" rate
+      TODO: add, to ocamlfind,
+      -syntax camlp4 -package batteries.syntax
       *)
       begin
       L.iter (printf " %f") rate;
@@ -31,4 +33,4 @@ let () =
       leprintfln "rate has wrongfully enormous length %d" (L.length rate)
   end rates;
   
-  saveData rates ratesName
+  saveData rates (ratesPrefix^aranksName)

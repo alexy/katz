@@ -27,6 +27,8 @@ let buckets ranks =
   in 
   let (res, lastBucket, _, _) = L.fold_left aux ([], A.create 10 "", 0, 10) ranks in   
   let res = if (A.length lastBucket) > 0 then lastBucket::res else res in
+  (* TODO: either carry used size for each bucket and A.sub before
+     converting to the set, or simply subtract "" form the set! *)
   let res = L.rev res |> L.map (A.enum |- S.of_enum) in
   
   leprintf "buckets size: %d " (L.length res);
