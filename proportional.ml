@@ -24,23 +24,39 @@ let rangeLists =
   (A.of_list ul, A.of_list il)
   
   
-(* find the first element greater than x in a sorted array a *)
-let justGreater a x =
-    let fromIndex = 0 in
-    let uptoIndex = (A.length a) - 1 in
-    let fromValue = a.(fromIndex) in
-    let uptoValue = a.(uptoIndex) in
-    let rec aux fI fV uI uV =
-      if x < fV || x > uV then None
-      else if fV < x && x <= uV && (succ fI) >= uI then Some uI 
-      else begin
-        let mI = (fI + uI) / 2 in
-        let mV = a.(mI) in
-        if x = mV then Some mI
-        else if x < mV then aux fI fV mI mV
-                       else aux mI mV uI uV
-      end in
-      aux fromIndex fromValue uptoIndex uptoValue
+(* find the first element greater or equal than x in a sorted array a *)
+  
+let binarySearch aux a ?from ?upto x =
+  let fromIndex = match from with Some x -> x | _ -> 0 in
+  let uptoIndex = match upto with Some x -> x | _ -> (A.length a) - 1 in
+  let fromValue = a.(fromIndex) in
+  let uptoValue = a.(uptoIndex) in
+  aux fromIndex fromValue uptoIndex uptoValue
+
+let rec findGreaterOrEqual fI fV uI uV =
+  if x < fV || x > uV then None
+  else if fV < x && x <= uV && (succ fI) >= uI then Some uI 
+  else begin
+    let mI = (fI + uI) / 2 in
+    let mV = a.(mI) in
+    if x = mV then Some mI
+    else if x < mV then aux fI fV mI mV
+                   else aux mI mV uI uV
+  end in
+  aux fromIndex fromValue uptoIndex uptoValue
+
+let rec findGreater fI fV uI uV =
+  if x >= uV then None
+  else if fV <= x && x < uV && (succ fI) >= uI then Some uI 
+  else begin
+    let mI = (fI + uI) / 2 in
+    let mV = a.(mI) in
+    if x < mV then aux fI fV mI mV
+              else aux mI mV uI uV
+  end
+
+let justGE       = binarySearch findGreaterOrEqual
+let justGreater  = binarySearch findGreater
   
 (* bound is precomputed as maximum of a,
    i.e. a's last element, plus 1
@@ -49,11 +65,11 @@ let pickInt a bound =
   (* a |> A.length |> pred |> A.get a, or
     A.backwards |> Enum.peek |> Option.get *)
   let r = Random.int bound in
-  justGreater a r
+  justGE a r
 
 let pickReal a bound =
   let r = Random.float bound in
-  justGreater a r
+  justGE a r
 
 (* NB doesn't type:
 let pick isReal a bound =
