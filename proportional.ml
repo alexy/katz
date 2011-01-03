@@ -31,32 +31,34 @@ let binarySearch aux a ?from ?upto x =
   let uptoIndex = match upto with Some x -> x | _ -> (A.length a) - 1 in
   let fromValue = a.(fromIndex) in
   let uptoValue = a.(uptoIndex) in
-  aux fromIndex fromValue uptoIndex uptoValue
+  aux a fromIndex fromValue uptoIndex uptoValue x
 
-let rec findGreaterOrEqual fI fV uI uV =
-  if x < fV || x > uV then None
-  else if fV < x && x <= uV && (succ fI) >= uI then Some uI 
-  else begin
-    let mI = (fI + uI) / 2 in
-    let mV = a.(mI) in
-    if x = mV then Some mI
-    else if x < mV then aux fI fV mI mV
-                   else aux mI mV uI uV
-  end in
-  aux fromIndex fromValue uptoIndex uptoValue
+let rec findGreaterOrEqual a fI fV uI uV x =
+  if x < fV || x > uV 
+    then None
+    else if fV < x && x <= uV && (succ fI) >= uI 
+      then Some uI 
+      else 
+        let mI = (fI + uI) / 2 in
+        let mV = a.(mI) in
+        if x = mV 
+          then Some mI
+          else if x < mV 
+            then findGreaterOrEqual a fI fV mI mV x
+            else findGreaterOrEqual a mI mV uI uV x
 
-let rec findGreater fI fV uI uV =
+let rec findGreater a fI fV uI uV x =
   if x >= uV then None
   else if fV <= x && x < uV && (succ fI) >= uI then Some uI 
   else begin
     let mI = (fI + uI) / 2 in
     let mV = a.(mI) in
-    if x < mV then aux fI fV mI mV
-              else aux mI mV uI uV
+    if x < mV then findGreater a fI fV mI mV x
+              else findGreater a mI mV uI uV x
   end
 
-let justGE       = binarySearch findGreaterOrEqual
-let justGreater  = binarySearch findGreater
+let justGE      a = binarySearch findGreaterOrEqual a
+let justGreater a = binarySearch findGreater        a
   
 (* bound is precomputed as maximum of a,
    i.e. a's last element, plus 1

@@ -4,8 +4,8 @@ open By_day
 type caps = float list
 type day_caps = caps array
 
-let matureDayCaps: int -> float -> user_day_reals -> day_caps =
-  fun maturity minimum dcaps ->
+let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
+  fun maturity minimum ?(sort=false) dcaps ->
 
   let res = Array.create daysN ([]: caps) in
 
@@ -15,12 +15,17 @@ let matureDayCaps: int -> float -> user_day_reals -> day_caps =
     L.iter begin fun (day,x) -> 
       let c = if (day - day0) >= maturity then x else minimum in
       res.(day) <- c::res.(day)
-      end ordered 
-  end dcaps;  
+      end ordered;
+  end dcaps;
+  if sort 
+  then
+    A.iteri (fun i e -> res.(i)  <- L.sort e) res
+  else ();
   res
 
-(* TODO this is iterative, while we can binsearch everything *)
-let bucketize a =
+(* NB now that we store caps ascending, bucketize1 doesn't work as is,
+   can be rewritten to scan from the right though... *)
+let bucketize1 a =
   (* let a = A.of_list caps in *)
   let len = A.length a in
   (* A.sort (fun x y -> compare y x) a; *)
@@ -41,7 +46,7 @@ let bucketize2 a =
   let under = log10 a.(1) |> floor |> ( ** ) 10. in
 
   let rec aux from bound acc =
-    match justGreater a ~from bound with
+    match Proportional.justGreater a ~from bound with
     | Some i when i < iLast -> 
         aux (succ i) (bound*.10.) (i::acc) 
     | _ -> (bound,acc) in
