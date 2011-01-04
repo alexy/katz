@@ -1,8 +1,10 @@
 open Common
 open By_day
 
-type caps = float list
-type day_caps = caps array
+type caps            = float list
+type day_caps        = caps array
+type log_buckets     = float * (float list)
+type day_log_buckets = log_buckets array
 
 let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
   fun maturity minimum ?(sort=false) dcaps ->
@@ -26,23 +28,24 @@ let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
 (* NB now that we store caps ascending, bucketize1 doesn't work as is,
    can be rewritten to scan from the right though... *)
 let bucketize1 a =
-  (* let a = A.of_list caps in *)
-  let len = A.length a in
-  (* A.sort (fun x y -> compare y x) a; *)
-  let under = log10 a.(0) |> int_of_float |> pred |> float_of_int |> ( ** ) 10. in
-  let (res,_,i) = A.fold_left begin fun (res,bound,i) x ->
+  let len = L.length a in
+  (* A.sort (fun x y -> compare y x) a; -- we have a sorted list *)
+  let desc = L.backwards a in
+  let under = E.peek desc |> Option.get |> 
+      log10 |> int_of_float |> pred |> float_of_int |> ( ** ) 10. in
+  let (res,_,i) = E.fold begin fun (res,bound,i) x ->
     if x >= bound 
     then (res, bound, succ i)
     else (i::res, bound /. 10., succ i)
-  end ([], under, 0) a in
+  end ([], under, 0) desc in
   let res = i::res |> L.map (fun x -> len - x) in
   (under,res)
   
-let bucketize2 a =
-  (* let a = A.of_list caps in *)
+let bucketize2 l =
+  let a = A.of_list l in
   let len   = A.length a in
   let iLast = pred len in 
-  (* A.sort compare a; *)
+  (* A.sort compare a; -- already sorted ascending *)
   let under = log10 a.(1) |> floor |> ( ** ) 10. in
 
   let rec aux from bound acc =
