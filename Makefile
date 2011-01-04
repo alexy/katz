@@ -15,6 +15,7 @@ ARANKS=doaranks
 RATES=dorates
 SCAPS=save_caps
 BUCKS=dobucks
+BLENS=doblens
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -101,4 +102,7 @@ $(SCAPS).opt: lib.cmxa binary_graph.cmx by_day.cmx proportional.cmx dcaps.cmx $(
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(BUCKS).opt: lib.cmxa binary_graph.cmx by_day.cmx proportional.cmx dcaps.cmx $(BUCKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(BLENS).opt: lib.cmxa binary_graph.cmx by_day.cmx proportional.cmx dcaps.cmx $(BLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

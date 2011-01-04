@@ -79,3 +79,16 @@ let bucketize2 l =
       (lastBound,len)::acc |> L.rev in
   aux 0 under [(under,0)] 
   
+  
+let bucket_lens: day_log_buckets -> day_log_buckets =
+  fun bucks -> 
+    A.map begin fun day ->
+      let start = L.hd day in
+      let startList = [start] in
+      let prev = snd start in
+      L.fold_left begin fun (res,prev) (x,i) -> 
+        ((x,i-prev)::res,i)
+      end (startList,prev) (L.tl day)
+      |> fst
+    end bucks
+  

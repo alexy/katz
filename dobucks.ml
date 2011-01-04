@@ -6,7 +6,7 @@ let () =
   let jcapsName =
   match args with
     | jcapsName::restArgs -> jcapsName
-    | _ -> failwith "usage: dobucks jcapsName bucksName"      
+    | _ -> failwith "usage: dobucks jcapsName"      
   in  
 
   let bucksName = "lb-"^jcapsName in
