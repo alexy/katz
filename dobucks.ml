@@ -14,6 +14,6 @@ let () =
     jcapsName bucksName;
 
   let jcaps:  Dcaps.day_caps = loadData jcapsName in
-  let bucks = A.map Dcaps.bucketize2 jcaps in
+  let bucks = A.map Dcaps.bucketize1 jcaps in
   
   saveData bucks bucksName
