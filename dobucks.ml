@@ -3,12 +3,13 @@ open Binary_graph
 
 let () =
   let args = getArgs in
-  let (jcapsName,bucksName) =
+  let jcapsName =
   match args with
-    | jcapsName::bucksName::restArgs -> (jcapsName,bucksName)
+    | jcapsName::restArgs -> jcapsName
     | _ -> failwith "usage: dobucks jcapsName bucksName"      
   in  
 
+  let bucksName = "lb-"^jcapsName in
   leprintfln "reading jcaps from %s, saving buckets in %s" 
     jcapsName bucksName;
 
