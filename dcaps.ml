@@ -3,7 +3,7 @@ open By_day
 
 type caps            = float list
 type day_caps        = caps array
-type log_buckets     = float * ((float * int) list)
+type log_buckets     = (float * int) list
 type day_log_buckets = log_buckets array
 
 let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
