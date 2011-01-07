@@ -2,7 +2,7 @@ open Common
 open Load_graph
 open Soc_run_skew
 
-(* TODO option *)
+(* TODO optionize *)
 let by_mass = true
   
 let () = 
@@ -16,7 +16,7 @@ let () =
     let dments = Invert.invert2 dreps in
     let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
     leprintfln "dments has length %d" (H.length dments);
-    let ({dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in
+    let ({dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dreps dments {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass} in
     leprintfln "computed sgraph, now saving dcaps in %s" saveName;
     (* saveData dcaps saveName; *)
     saveData dskews saveName;
