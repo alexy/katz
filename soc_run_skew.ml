@@ -203,14 +203,14 @@ let socDay sgraph params day =
        we may then finally optimize data structure by sharing inverted pairs...
      *)
 
-    let rewards_contributions = H.map begin fun mentioner nments -> 
-      let nreps = H.find_default outs mentioner 0 in
-      (nreps,nments) 
-    end ins |> H.values |> A.of_enum in
-
     let stats' = 
-    if A.length rewards_contributions = 0 then stats'
+    if H.length ins = 0 then stats'
     else begin
+      let rewards_contributions = H.map begin fun mentioner nments -> 
+        let nreps = H.find_default outs mentioner 0 in
+        (nreps,nments) 
+      end ins |> H.values |> A.of_enum in
+
       A.sort (fun (_,x) (_,y) -> compare y x) rewards_contributions;
       let rewards, contributions = Utils.array_split rewards_contributions in
       let skew'  = Skew.skew ~by_mass ~skew_times rewards contributions in

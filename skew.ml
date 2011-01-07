@@ -53,9 +53,12 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
       else begin
         let al = sum_range ~from ~upto:left a in
         let ar = sum_range ~from:m ~upto a in
-        let r = if ar > 0 then (float al) /. (float ar) else (-1.) in
-        if i < skew_times then aux ~have_sum:al from left (succ i) (r::res)
-        else res
+        if al = 0 && ar = 0 then res 
+        else begin 
+          let r = if ar > 0 then (float al) /. (float ar) else (-1.) in
+          if i < skew_times then aux ~have_sum:al from left (succ i) (r::res)
+          else res
+        end
       end
     | _ -> res
   end in
