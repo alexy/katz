@@ -3,7 +3,7 @@ open Load_graph
 open Soc_run_skew
 
 (* TODO option *)
-let by_mass = false
+let by_mass = true
   
 let () = 
   let args = getArgs in

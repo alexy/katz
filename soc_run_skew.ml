@@ -197,18 +197,25 @@ let socDay sgraph params day =
                 (beta *. outs' +. (1. -. beta) *.
                   (gamma *. insBack' +. (1. -. gamma) *. insAll'))
             | None -> alpha *. soc in
+    let stats' = {stats with socUS = soc'} in
+    
     (* TODO we might just keep the pairs as yet anotehr hastbatle;
        we may then finally optimize data structure by sharing inverted pairs...
      *)
+
     let rewards_contributions = H.map begin fun mentioner nments -> 
       let nreps = H.find_default outs mentioner 0 in
       (nreps,nments) 
     end ins |> H.values |> A.of_enum in
-    A.sort (fun (_,x) (_,y) -> compare y x) rewards_contributions;
-    let rewards, contributions = Utils.array_split rewards_contributions in
-    let skew'  = Skew.skew ~by_mass ~skew_times rewards contributions in
-    
-    let stats' = {stats with socUS = soc'; skewUS = skew'} in
+
+    let stats' = 
+    if A.length rewards_contributions = 0 then stats'
+    else begin
+      A.sort (fun (_,x) (_,y) -> compare y x) rewards_contributions;
+      let rewards, contributions = Utils.array_split rewards_contributions in
+      let skew'  = Skew.skew ~by_mass ~skew_times rewards contributions in
+      {stats' with skewUS = skew'}
+    end in
     stats' in
     
   hashUpdateWithImp tick ustats termsStats;
@@ -218,9 +225,11 @@ let socDay sgraph params day =
     let caps  = H.find_default dcaps user [] in
     let caps' = (day,soc)::caps in
     H.replace dcaps user caps';
-    let skews  = H.find_default dskews user [] in
-    let skews' = (day,skew)::skews in
-    H.replace dskews user skews' in
+    if skew = []  then ()
+    else
+      let skews  = H.find_default dskews user [] in
+      let skews' = (day,skew)::skews in
+      H.replace dskews user skews' in
 
   H.iter (updateUser dcaps dskews) ustats
   
