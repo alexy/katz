@@ -99,3 +99,25 @@ let some_int si = Some (int_of_string si)
 let unzip : ('a * 'b) list -> ('a list * 'b list) = fun l ->
   let (xs,ys) = List.fold_left (fun (xs,ys) (x,y) -> (x::xs,y::ys)) ([],[]) l in
   (List.rev xs,List.rev ys)
+
+ (* TODO parameterize 0 and + 
+    handle out of bounds from or upto
+    e.g. use actuals
+  *)
+ 
+ let sum_range ?from ?upto a =
+ let from' = match from with
+ | Some n -> n
+ | _ -> 0 in
+ let upto' = match upto with
+ | Some n -> n
+ | _ -> A.length a - 1 in
+ E.fold begin fun res i ->
+   res + a.(i) 
+ end 0 (E.range from' ~until:upto')
+
+(* thelema *)
+let array_split a = 
+  let len = A.length a in
+  Array.init len (Array.get a |- fst), 
+  Array.init len (Array.get a |- snd)    

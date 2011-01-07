@@ -3,3 +3,4 @@ include Printf
 include Utils
 include Graph
 include H
+include Binary_graph
