@@ -1,6 +1,8 @@
 open Common
 
-type daily_ints = (user,(int,int) Hashtbl.t) Hashtbl.t
+type daily_ints  = (user,(int,int) H.t) H.t
+type users_total = (user, int) H.t
+type pair_totals = (user, users_total) H.t
 
 let daysN = 10
 let repsN = 10
@@ -61,3 +63,14 @@ let userDailyTotals: graph -> daily_ints =
       end a;
       H.of_enum e
     end
+
+let userUser: adjlist -> users_total =
+  fun days ->
+    let res = H.create repsN in
+    H.iter begin fun _ reps ->
+      H.iter begin fun user num ->
+        let rep = H.find_default res user 0 in
+        H.replace res user (rep+num)
+      end reps
+    end days;
+    res

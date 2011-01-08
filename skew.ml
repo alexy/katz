@@ -27,12 +27,10 @@ let gather from upto limit a =
   aux from 0
       
 
-let midpoint by_mass have_sum from upto a =
+let midpoint by_mass from upto a =
  if by_mass 
  then begin
-   let total = match have_sum with
-   | Some s -> s
-   | _ -> sum_range ~from ~upto a in
+   let total = sum_range ~from ~upto a in
    let middle = total / 2 in
    gather from upto middle a
  end
@@ -42,11 +40,11 @@ let midpoint by_mass have_sum from upto a =
    
  
 let skew ?(by_mass=false) ?(skew_times=4) a b =
-  let rec aux ?have_sum from upto i res =
+  let rec aux from upto i res =
     if from + 1 >= upto then res
     (* if from >= upto then res *)
     else begin
-    match midpoint by_mass have_sum from upto b with
+    match midpoint by_mass from upto b with
     | Some (_,m) when m > 0 ->
       let left = pred m in
       if from >= left || left > upto then res
@@ -56,7 +54,7 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
         if al = 0 && ar = 0 then res 
         else begin 
           let r = if ar > 0 then (float al) /. (float ar) else (-1.) in
-          if i < skew_times then aux ~have_sum:al from left (succ i) (r::res)
+          if i < skew_times then aux from left (succ i) (r::res)
           else res
         end
       end
