@@ -14,9 +14,10 @@ CRANKS=docranks
 ARANKS=doaranks
 RATES=dorates
 SCAPS=save_caps
-BUCKS=dobucks
+CBUCKS=dobucks
 BLENS=doblens
 SKEW=sk
+RBUCKS=save_rbucks
 VOLS=dovols
 
 all: $(SIM).opt $(SIMF).opt
@@ -104,7 +105,10 @@ $(RATES).opt: lib.cmxa cranks.cmx topsets.cmx $(RATES).ml
 $(SCAPS).opt: lib.cmxa $(SCAPS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(BUCKS).opt: lib.cmxa $(BUCKS).ml
+$(CBUCKS).opt: lib.cmxa $(CBUCKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(RBUCKS).opt: lib.cmxa topsets.cmx $(RBUCKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(BLENS).opt: lib.cmxa $(BLENS).ml
