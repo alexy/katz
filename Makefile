@@ -17,6 +17,7 @@ SCAPS=save_caps
 BUCKS=dobucks
 BLENS=doblens
 SKEW=sk
+VOLS=dovols
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -111,3 +112,7 @@ $(BLENS).opt: lib.cmxa $(BLENS).ml
 
 $(SKEW).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx load_graph.cmx dranges.cmx skew.cmx soc_run_skew.cmx invert.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
