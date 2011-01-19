@@ -50,6 +50,8 @@ sc.cmx save_starts.cmx: dranges.cmx
 invert.cmx by_day.cmx: utils.cmx graph.cmx
 
 simulate.cmx: dreps.cmx proportional.cmx
+  
+topsets.cmx: cranks.cmx
 
 lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo by_day.cmo dranges.cmo proportional.cmo dcaps.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
