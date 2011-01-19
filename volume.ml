@@ -18,7 +18,7 @@ let bucket_volumes: By_day.day_edgenums -> Cranks.day_rank_users -> bucket_volum
      let bucket_totals = 
      L.map begin fun userset ->
        Topsets.S.fold begin fun user res ->
-         res + (dnums --> user)
+         res + (H.find_default dnums user 0)
        end userset 0
      end buckets in
      assert (L.sum bucket_totals = totals.(day));
