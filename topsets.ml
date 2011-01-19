@@ -1,11 +1,13 @@
 open Common
 
 type rates = (float list) list
-     
 module S=Set.StringSet
 let floatSize = S.cardinal |- float
-         
-let buckets ranks = 
+type buckets = S.t list
+type day_buckets = buckets array
+          
+let buckets: Cranks.rank_users -> buckets =
+  fun ranks ->
   let aux (res, bucket, used, bucketSize) users =
     let usersLength = L.length users in
     let newUsed = used + usersLength in

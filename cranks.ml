@@ -32,7 +32,8 @@ open By_day
  
 type rank = int
 type users = user list
-type day_rank_users = (users list) array
+type rank_users = users list
+type day_rank_users = rank_users array
 type day_ranks = (day * rank) list
 type user_day_ranks = (user, day_ranks) Hashtbl.t
 type ranked_users = users Enum.t
