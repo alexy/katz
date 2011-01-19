@@ -31,7 +31,7 @@ let buckets: Cranks.rank_users -> buckets =
   let res = if (A.length lastBucket) > 0 then lastBucket::res else res in
   (* TODO: either carry used size for each bucket and A.sub before
      converting to the set, or simply subtract "" form the set! *)
-  let res = L.rev res |> L.map (A.enum |- S.of_enum) in
+  let res = L.rev res |> L.map (A.enum |- S.of_enum |- S.remove "") in
   
   leprintf "buckets size: %d " (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
