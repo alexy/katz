@@ -27,12 +27,20 @@ let bucket_volumes: By_day.day_user_ints -> Topsets.day_buckets -> bucket_volume
      begin match sum_buckets = totals.(day) with
      | true -> ()
      | false -> 
-       let bucket_users     = L.fold_left S.union S.empty buckets in
-       let bucket_user_num  = S.cardinal bucket_users in
-       let denums_users_num = H.keys dnums |> E.count in
+       let bucket_users        = L.fold_left S.union S.empty buckets in
+       let bucket_user_num     = S.cardinal bucket_users in
+       let denums_users        = H.keys dnums |> S.of_enum in
+       let denums_users_num    = S.cardinal bucket_users in
+       let denums_not_buckets  = S.diff denums_users bucket_users in
+       let denums_not_buckets_num = S.cardinal denums_not_buckets in
+       let buckets_not_denums  = S.diff bucket_users denums_users in
+       let buckets_not_denums_num = S.cardinal buckets_not_denums in
        failwith (sprintf ("sum bucket_totals, %d /= %d, denums total for the day %d\n"^^
-                         "total bucket users: %d, total denums users: %d")
-       sum_buckets totals.(day) day bucket_user_num denums_users_num)
+                         "total bucket users: %d, total denums users: %d\n"^^
+                         "denums not in buckets: %d, buckets not in denums: %d")
+       sum_buckets totals.(day) day 
+       bucket_user_num denums_users_num 
+       denums_not_buckets_num buckets_not_denums_num)
      end;
      bucket_totals
   end bucks
