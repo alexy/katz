@@ -20,7 +20,7 @@ let () =
   let bucks: Topsets.day_buckets  = loadData bucksName in
   
   let repsOrMents = if byMents then snd else fst in
-  let rnums = A.map (fst |- (H.map (fun _ x -> repsOrMents x))) denums in
+  let rnums = A.map (repsOrMents |- (H.map (fun _ x -> fst x))) denums in
 
   let vols = Volume.bucket_volumes rnums bucks in
   
