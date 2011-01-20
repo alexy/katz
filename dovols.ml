@@ -12,7 +12,7 @@ let () =
     | _ -> failwith "usage: volume denumsName bucksName"      
   in  
 
-  let volsName = "vols-"^bucksName in
+  let volsName = (if byMents then "m" else "r")^"vols-"^bucksName in
   leprintfln "reading denums from %s, using %s, bucks from %s, saving volumes in %s" 
     denumsName (if byMents then "mentions" else "replies") bucksName volsName;
 
