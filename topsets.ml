@@ -11,7 +11,7 @@ let buckets: Cranks.rank_users -> buckets =
   let aux (res, bucket, used, bucketSize) users =
     let usersLength = L.length users in
     let newUsed = used + usersLength in
-    if newUsed < bucketSize 
+    if newUsed <= bucketSize 
       then begin
         L.iteri (fun i x -> bucket.(used+i) <- x) users;
         (res, bucket, newUsed, bucketSize)
