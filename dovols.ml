@@ -5,22 +5,21 @@ open Common
 
 let () =
   let args = getArgs in
-  let denumsName,bucksName,byMents =
+  let dnumsName,bucksName,byMents =
   match args with
-    | denumsName::bucksName::"m"::restArgs -> denumsName,bucksName,true
-    | denumsName::bucksName::restArgs -> denumsName,bucksName,false
-    | _ -> failwith "usage: volume denumsName bucksName"      
+    | dnumsName::bucksName::"m"::restArgs -> dnumsName,bucksName,true
+    | dnumsName::bucksName::restArgs -> dnumsName,bucksName,false
+    | _ -> failwith "usage: volume dnumsName bucksName"      
   in  
 
   let volsName = (if byMents then "m" else "r")^"vols-"^bucksName in
-  leprintfln "reading denums from %s, using %s, bucks from %s, saving volumes in %s" 
-    denumsName (if byMents then "mentions" else "replies") bucksName volsName;
+  leprintfln "reading dnums from %s, using %s, bucks from %s, saving volumes in %s" 
+    dnumsName (if byMents then "mentions" else "replies") bucksName volsName;
 
-  let denums: By_day.day_edgenums = loadData denumsName in
-  let bucks: Topsets.day_buckets  = loadData bucksName in
+  let dnums: By_day.day_rep_nums = loadData dnumsName in
+  let bucks: Topsets.day_buckets = loadData bucksName in
   
-  let repsOrMents = if byMents then snd else fst in
-  let rnums = A.map (repsOrMents |- (H.map (fun _ x -> fst x))) denums in
+  let rnums = A.map (H.map (fun _ x -> fst x)) dnums in
 
   let vols = Volume.bucket_volumes rnums bucks in
   
