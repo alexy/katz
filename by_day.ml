@@ -7,6 +7,8 @@ type int_int        = int * int
 type denums         = (user * int_int) array
 type user_nums      = (user, int_int) Hashtbl.t
 type user_nums_pair = user_nums * user_nums
+type day_rep_nums   = user_nums array
+type day_re_me      = day_rep_nums * day_rep_nums
 type day_edgenums   = user_nums_pair array
 type user_int       = user * int
 type user_ints      = user_int Enum.t
@@ -66,6 +68,10 @@ let dayEdgenums: days -> day_edgenums =
   fun a ->
   A.map (fun (r,m) -> (numRepsTwits r, numRepsTwits m)) a
 
+let day_re_me: days -> day_re_me =
+  fun a ->
+  let de = dayEdgenums a in
+  array_split de
 
 let numUserEdges: user_nums_pair -> user_ints =
     fun enums -> enums |> fst |> H.enum |> E.map (fun (k,(v,_)) -> (k,v))
