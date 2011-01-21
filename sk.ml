@@ -12,6 +12,7 @@ let () =
   | drepsName::restArgs -> (drepsName,restArgs)
   | _ -> failwith "usage: sk drepsName"
   in
+  let capsName = "caps-"^drepsName in
   let skewName = "skew-"^drepsName in
   leprintfln "reading graph from %s, saving dskews in %s" drepsName skewName;
   let maxDays = restArgs |> List.map int_of_string |> option_of_list in
@@ -22,9 +23,10 @@ let () =
   leprintfln "dments has length %d" (H.length dments);
   let ({dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = 
     socRun dreps dments {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass} in
-  leprintfln "computed sgraph, now saving dskews in %s" skewName;
-  (* saveData dcaps saveName; *)
+  leprintfln "computed sgraph, now saving dcaps in %s and dskews in %s" capsName skewName;
+  saveData dcaps  capsName;
+  let tSavingDCaps  =  Some "saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
-  let tSaving =  Some "saved dskews timing: " |> getTiming in
-  let ts = List.rev (tSaving::tSocRun@[tInvert]@tLoad) in
+  let tSavingDSkews =  Some "saved dskews timing: " |> getTiming in
+  let ts = List.rev (tSavingDSkews::tSavingDCaps::tSocRun@[tInvert]@tLoad) in
   printf "timings: %s\n" (show_float_list ts);

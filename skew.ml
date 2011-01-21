@@ -66,11 +66,11 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
   L.rev res
 
 
-let test_skew () =
+(* let test_skew () =
   let b  = [|8;7;6;5;2;3;1;1|] in
   let a1 = [|5;10;6;7;4;3;2;1|] in
   let a2 = [|10;9;8;7;6;5;4;3|] in
   let a3 = [|3;4;5;6;7;8;9;10|] in
   let a4 = [|8;7;6;5;4;3;2;1|] in
   let a5 = [|1;2;3;4;5;6;7;8|] in
-  skew a1 b
+  skew a1 b *)

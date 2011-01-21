@@ -1,5 +1,4 @@
 open Common
-open Binary_graph
 
 let () =
   let args = getArgs in
