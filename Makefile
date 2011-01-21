@@ -20,6 +20,7 @@ SKEW=sk
 RBUCKS=save_rbucks
 VOLS=dovols
 SAVE_REME=save_reme
+OVERLAPS=doverlaps
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -123,4 +124,6 @@ $(SKEW).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx load_graph.cmx dranges.cmx 
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-  
+
+$(OVERLAPS).opt: lib.cmxa topsets.cmx $(OVERLAPS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

@@ -50,9 +50,8 @@ let bucketChangeRates bs1 bs2 =
   in
   aux bs1 bs2 []
   
-let bucketDynamics: Cranks.day_rank_users -> rates = 
-  fun aranks ->
-  let bucks = A.map buckets aranks in 
+let bucketDynamics: day_buckets -> rates = 
+  fun bucks ->
   let bucksEnd  = pred (A.length bucks) in
   let bucksRest = A.sub bucks 1 bucksEnd in
   A.fold_left begin fun (res,prevBucks) bucks ->
@@ -60,3 +59,9 @@ let bucketDynamics: Cranks.day_rank_users -> rates =
     leprintf ".";
     (rates::res, bucks)
   end ([],bucks.(0)) bucksRest |> fst |> L.rev
+  
+let bucketOverlaps: day_buckets -> day_buckets -> rates =
+  fun b1 b2 ->
+  A.map2 begin fun db1 db2 ->
+      bucketChangeRates db1 db2
+  end b1 b2 |> list_of_array

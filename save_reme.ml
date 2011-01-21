@@ -12,7 +12,7 @@ let () =
   let derepsName,demensName = "nr-"^drepsName,"nm-"^drepsName in
   leprintfln "reading graph from %s, saving dereps in %s and demens in %s" 
     drepsName derepsName demensName;
-  let dreps = loadData drepsName in
+  let dreps: graph = loadData drepsName in
   leprintfln "loaded %s, %d" drepsName (H.length dreps);
   
   let (byday: days) = by_day dreps in

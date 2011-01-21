@@ -120,4 +120,7 @@ let unzip : ('a * 'b) list -> ('a list * 'b list) = fun l ->
 let array_split a = 
   let len = A.length a in
   Array.init len (Array.get a |- fst), 
-  Array.init len (Array.get a |- snd)    
+  Array.init len (Array.get a |- snd)
+  
+let list_of_array a =
+  A.enum a |> List.of_enum

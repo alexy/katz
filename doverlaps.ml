@@ -2,17 +2,18 @@ open Common
 
 let () =
   let args = getArgs in
-  let (bucksName,ratesPrefix) =
+  let (b1Name,b2Name,saveName) =
   match args with
-    | bucksName::ratesPrefix::restArgs -> (bucksName,ratesPrefix)
-    | _ -> failwith "usage: dorates bucksName ratesPrefix"
+    | b1Name::b2Name::saveName::restArgs -> (b1Name,b2Name,saveName)
+    | _ -> failwith "usage: doverlaps b1Name b2Name saveName"
   in
-  leprintfln "reading bucks from %s , saving rates with prefix %s" 
-  bucksName ratesPrefix;
+  leprintfln "reading buckets from %s and %s, saving overlaps in %s" 
+  b1Name b2Name saveName;
 
-  let bucks: Topsets.day_buckets = loadData bucksName in
+  let b1: Topsets.day_buckets = loadData b1Name in
+  let b2: Topsets.day_buckets = loadData b2Name in
 
-  let rates = Topsets.bucketDynamics bucks in
+  let rates = Topsets.bucketOverlaps b1 b2 in
   leprintfln "";
   
   L.iter begin fun rate ->
@@ -32,4 +33,4 @@ let () =
       leprintfln "rate has wrongfully enormous length %d" (L.length rate)
   end rates;
   
-  saveData rates (ratesPrefix^aranksName)
+  saveData rates saveName
