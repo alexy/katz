@@ -10,6 +10,7 @@ BYDAY=save_days
 STARTS=save_starts
 SIM=dosim
 SIMF=dosimf
+SIMU=dosimu
 CRANKS=docranks
 ARANKS=doaranks
 RATES=dorates
@@ -55,10 +56,10 @@ simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
 
-lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo by_day.cmo dranges.cmo proportional.cmo dcaps.cmo
+lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 
-lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx common.cmx by_day.cmx dranges.cmx proportional.cmx dcaps.cmx
+lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx common.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx
 	ocamlfind ocamlopt -a -o lib.cmxa $^
 
 clean:
@@ -92,10 +93,13 @@ $(SAVE_REME).opt: lib.cmxa $(SAVE_REME).ml
 $(STARTS).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx binary_graph.cmx load_graph.cmx dranges.cmx invert.cmx $(STARTS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SIM).opt: lib.cmxa dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIM).cmx
+$(SIM).opt:  lib.cmxa invert.cmx simulate.cmx $(SIM).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SIMF).opt: lib.cmxa dranges.cmx dreps.cmx invert.cmx proportional.cmx simulate.cmx $(SIMF).cmx
+$(SIMF).opt: lib.cmxa invert.cmx simulate.cmx $(SIMF).cmx
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SIMU).opt: lib.cmxa invert.cmx simulate.cmx $(SIMU).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(CRANKS).opt: lib.cmxa cranks.cmx $(CRANKS).ml

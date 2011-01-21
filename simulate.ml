@@ -2,7 +2,7 @@ open Common
 
 let usersN = 5000000
 
-let simulate ?(dreps_day=(H.create usersN,0)) ?duvals dstarts denums =
+let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
   assert (A.length dstarts = A.length denums);
   let realVals = Option.is_some duvals in
   (* sets of users already existing, with total edges so far *)
@@ -40,8 +40,9 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals dstarts denums =
   E.iter begin fun day ->
     let newUsers = dstarts.(day) in
     L.iter (fun user -> H.add users user 0) newUsers;
+    let numUsers = H.length users in
     leprintfln "\nday %d, total repliers: %d, mentioners: %d" 
-      day (H.length ereps) (H.length users);
+      day (H.length ereps) numUsers;
     (* TODO this is really a lazy way to have a union of in/float array
        we can wrap the whole simulate into a functor with int/float as 
        a parameter type to0 do it for reals... or integers, properly;
@@ -64,16 +65,23 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals dstarts denums =
                  let dummyFloatArray = A.create 0 0. in
                  let dummyBound = 0. in
                  (ns,vs,b,dummyFloatArray,dummyBound)
-    in    
+    in 
+
     (* grow new edges *)
     E.iter begin fun (fromUser,numEdges) ->
       (* should we smooth here as well? *)
       if numEdges > 0 then begin
         let fromDay = Dreps.userDay ereps fromUser day in
         E.iter begin fun _ ->
-          let n' = if realVals
-            then Proportional.pickReal avals abound 
-            else Proportional.pickInt  ivals ibound
+          let n' = 
+            match uniform with
+            (* since anames is padded with a dummy 0th element, 
+               we pick 1-based when uniform-direct *)
+            | Some _ -> Some (Random.int numUsers |> succ)
+            | _ ->
+            if realVals
+              then Proportional.pickReal avals abound 
+              else Proportional.pickInt  ivals ibound
           in
           match n' with 
           | None -> ()
