@@ -32,4 +32,4 @@ let () =
       leprintfln "rate has wrongfully enormous length %d" (L.length rate)
   end rates;
   
-  saveData rates (ratesPrefix^aranksName)
+  saveData rates (ratesPrefix^bucksName)
