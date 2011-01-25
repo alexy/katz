@@ -283,10 +283,10 @@ let socRun: Dranges.starts -> By_day.day_rep_nums -> socRun -> sGraph * timings 
       leprintfln "now got %d" (H.length ustats);
       
       begin match initDay with
-      | Some before when day < before -> 
+      | Some before when day < before -> ()
+      | _ ->
         let props = Dcaps.mature_caps minCapDays minCap dcaps |> H.enum in
         Simulate.growEdges fromNums.(day) props minCap dreps dments day
-      | _ -> ()
       end;
     
       socDay sgraph params day;
