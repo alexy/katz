@@ -6,10 +6,13 @@ let by_mass = true
   
 let () = 
   let args = getArgs in
-  let (dstartsName,drnumsName,saveBase,restArgs) =
+  let (dstartsName,drnumsName,saveBase,dreps',day') =
   match args with
-  | dstartsName::drnumsName::saveBase::restArgs -> (dstartsName,drnumsName,saveBase,restArgs)
-  | _ -> failwith "usage: sg dtartsName drnumsName saveBase"
+  | dstartsName::drnumsName::saveBase::dreps'::day'::[] -> 
+      (dstartsName,drnumsName,saveBase,Some dreps',Some day')
+  | dstartsName::drnumsName::saveBase::[] -> 
+      (dstartsName,drnumsName,saveBase,None,None)
+  | _ -> failwith "usage: sg dtartsName drnumsName saveBase [drepsName initDay]"
   in
   let drepsName  = "dreps-"^saveBase in
   let dmentsName = "dments-"^saveBase in
@@ -17,22 +20,22 @@ let () =
   let skewName   = "skew-"^saveBase  in
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
-  let maxDays = restArgs |> List.map int_of_string |> option_of_list in
+  (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
   
   let dstarts: Dranges.starts     = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
   let drnums: By_day.day_rep_nums = loadData drnumsName in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
-  let (initDrepsO,initDayO) = match restArgs with
-  | drepsName::day'::[] ->
-          let day = int_of_string day' in
+  let (initDrepsO,initDayO) = match dreps' with
+  | Some drepsName ->
+          let day = day' |> Option.get |> int_of_string in
           leprintfln "based on %s through day %d" drepsName day;
           let dreps: graph = loadData drepsName in
           (Some dreps, Some day)
   | _ -> (None, None) in
   
-  let opts = {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass;
+  let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= by_mass;
                              initDrepsSR= initDrepsO; initDaySR= initDayO} in
   let ({drepsSG =dreps; dmentsSG =dments;
     dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
