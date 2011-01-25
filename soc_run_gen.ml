@@ -250,21 +250,22 @@ let socRun: Dranges.starts -> By_day.day_rep_nums -> socRun -> sGraph * timings 
     let dcaps   = H.create orderN in
     let dskews  = H.create orderN in
     let ustats  = H.create orderN in
-    let (dreps,dments,firstDay) = 
+    let dreps,dments = 
     match initDreps with
     | Some dreps ->
       (* when initDreps is Some, initDay must be Some *)
-      let theDay = Option.get initDay in
-      let breps = Dreps.before dreps theDay |> 
+      let beforeDay = Option.get initDay in
+      let breps = Dreps.before dreps beforeDay |> 
         H.filter (fun days ->  not (H.is_empty days)) in
       let bments = Invert.invert2 breps in
-      (breps,bments,theDay)
-    | _ -> (H.create orderN, H.create orderN,0) in
+      breps,bments
+    | _ -> H.create orderN,H.create orderN in
 
     let sgraph = {drepsSG=dreps; dmentsSG=dments; 
       dcapsSG=dcaps; dskewsSG=dskews; ustatsSG=ustats} in
 
     (* for simple dstarts from dreps always starting at day 0 *)
+    let firstDay = 0 in
     let lastDay = A.length dstarts - 1 in
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
@@ -280,8 +281,14 @@ let socRun: Dranges.starts -> By_day.day_rep_nums -> socRun -> sGraph * timings 
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
       leprintfln "now got %d" (H.length ustats);
-      let props = Dcaps.mature_caps minCapDays minCap dcaps |> H.enum in
-      Simulate.growEdges fromNums.(day) props minCap dreps dments day;
+      
+      begin match initDay with
+      | Some before when day < before -> 
+        let props = Dcaps.mature_caps minCapDays minCap dcaps |> H.enum in
+        Simulate.growEdges fromNums.(day) props minCap dreps dments day
+      | _ -> ()
+      end;
+    
       socDay sgraph params day;
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       t::ts in
