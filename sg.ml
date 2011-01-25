@@ -24,9 +24,18 @@ let () =
   let drnums: By_day.day_rep_nums = loadData drnumsName in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
+  let (initDrepsO,initDayO) = match restArgs with
+  | drepsName::day'::[] ->
+          let day = int_of_string day' in
+          leprintfln "based on %s through day %d" drepsName day;
+          let dreps: graph = loadData drepsName in
+          (Some dreps, Some day)
+  | _ -> (None, None) in
+  
+  let opts = {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass;
+                             initDrepsSR= initDrepsO; initDaySR= initDayO} in
   let ({drepsSG =dreps; dmentsSG =dments;
-    dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = 
-    socRun dstarts drnums {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass} in
+    dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
   leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     drepsName dmentsName capsName skewName;
   saveData dreps  drepsName;

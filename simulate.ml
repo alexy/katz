@@ -13,12 +13,10 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
         let users = H.create usersN in
         (dreps_day, users)
     | (dreps,theDay) (* when theDay > 0 *) -> begin
-        let before = H.map begin fun user days -> 
-          H.filteri (fun day _ -> day < theDay) days
-        end dreps 
+        let before = Dreps.before dreps theDay |> 
         (* leaving empty repliers is OK, they'll be filled,
         but obscures growth obervations *)
-        |> H.filter (fun days ->  not (H.is_empty days)) in
+        H.filter (fun days ->  not (H.is_empty days)) in
         (* by outgoing, not by mentions:
           let users = Dreps.userTotals dreps in *)
         (* instead of computing a reduced dments here

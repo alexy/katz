@@ -48,12 +48,14 @@ type uStats = (user,userStats) H.t
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 socInitSR : float; byMassSR : bool; skewTimesSR : int;
                 minCapDaysSR : int; minCapSR : float;
+                initDrepsSR : graph option; initDaySR : int option;
                 maxDaysSR : int option }
                       
 let optSocRun : socRun = 
   { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; byMassSR = false; skewTimesSR = 8;
-    minCapDaysSR = 7; minCapSR = 1e-35; 
+    minCapDaysSR = 7; minCapSR = 1e-35;
+    initDrepsSR = None; initDaySR = None; 
     maxDaysSR = None }
 
 type sGraph = 
@@ -242,19 +244,28 @@ let socRun: Dranges.starts -> By_day.day_rep_nums -> socRun -> sGraph * timings 
     fun dstarts drnums opts ->
     let params  = paramSC opts in
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in
-    let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap} = opts in
+    let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap; 
+         initDrepsSR =initDreps; initDaySR =initDay} = opts in
     let orderN  = 5000000 in
     let dcaps   = H.create orderN in
     let dskews  = H.create orderN in
     let ustats  = H.create orderN in
-    let dreps   = H.create orderN in
-    let dments  = H.create orderN in
-    let sgraph  = {drepsSG=dreps; dmentsSG=dments; 
+    let (dreps,dments,firstDay) = 
+    match initDreps with
+    | Some dreps ->
+      (* when initDreps is Some, initDay must be Some *)
+      let theDay = Option.get initDay in
+      let breps = Dreps.before dreps theDay |> 
+        H.filter (fun days ->  not (H.is_empty days)) in
+      let bments = Invert.invert2 breps in
+      (breps,bments,theDay)
+    | _ -> (H.create orderN, H.create orderN,0) in
+
+    let sgraph = {drepsSG=dreps; dmentsSG=dments; 
       dcapsSG=dcaps; dskewsSG=dskews; ustatsSG=ustats} in
 
     (* for simple dstarts from dreps always starting at day 0 *)
-    let firstDay,lastDay = 0,A.length dstarts - 1 in
-
+    let lastDay = A.length dstarts - 1 in
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
       | Some n -> min lastDay (firstDay + n - 1) in

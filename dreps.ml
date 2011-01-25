@@ -74,3 +74,8 @@ let userUser: adjlist -> users_total =
       end reps
     end days;
     res
+    
+let before dreps theDay = 
+  H.map begin fun user days -> 
+    H.filteri (fun day _ -> day < theDay) days
+  end dreps 
