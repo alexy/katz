@@ -1,6 +1,7 @@
 open Common
 
 let usersN = 5000000
+let daysN  = 10
 
 let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
   assert (A.length dstarts = A.length denums);
@@ -49,6 +50,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
        or we can modularize Proportional better, making them store names
        and return those names directly *)
     let (anames,ivals,ibound,avals,abound) = match duvals with
+    (* TODO parameterize 1e-35 *)
     | Some dv -> let (ns,vs) = Proportional.rangeLists (+.) 1e-35 0. (H.enum dv.(day)) in
                  let b = vs.((A.length vs)-1) in
                  let dummyIntArray = A.create 0 0 in
@@ -96,3 +98,31 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
     end (By_day.numUserEdges denums.(day))
   end (E.range firstDay ~until:lastDay); (* dstarts *)
   ereps
+
+
+(* called from soc_run_gen, a version of the above without integers
+   given an sgraph with social capitals form previous cycle,
+   grow the given number of edges in this cycle,
+   attaching preferentially according to the current capital distribution *)
+   
+let growEdges userNEdges props smooth dreps dments day =
+   let (anames,avals) = Proportional.rangeLists (+.) smooth 0. props in
+   let abound = array_last avals in
+   let edgeCount = ref 0 in
+   H.iter begin fun fromUser numEdges ->
+      if numEdges > 0 then begin
+        let fromDay = Dreps.userDay dreps fromUser day in
+        E.iter begin fun _ ->
+        let n' =  Proportional.pickReal avals abound in
+          match n' with 
+          | None -> ()
+          | Some n -> 
+            let toUser = anames.(n) in begin
+              hashInc fromDay toUser;
+              let toDay = Dreps.userDay dments toUser day in
+              hashInc toDay fromUser;
+              incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
+            end (* new edge *)  
+        end (E.range 1 ~until:numEdges)
+      end (* numEdges > 0 *)
+    end userNEdges 

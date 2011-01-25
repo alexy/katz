@@ -6,8 +6,9 @@ type day_caps        = caps array
 type log_buckets     = (float * int) list
 type day_log_buckets = log_buckets array
 
+(* normalizes dcaps throughout *)
 let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
-  fun maturity minimum ?(sort=false) dcaps ->
+  fun mindays mincap ?(sort=false) dcaps ->
 
   let res = Array.create daysN ([]: caps) in
 
@@ -15,7 +16,7 @@ let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
     let ordered = L.rev days in
     let day0 = ordered |> L.hd |> fst in
     L.iter begin fun (day,x) -> 
-      let c = if (day - day0) >= maturity then x else minimum in
+      let c = if (day - day0) >= mindays then x else mincap in
       res.(day) <- c::res.(day)
       end ordered;
   end dcaps;
@@ -24,6 +25,16 @@ let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
     A.iteri (fun i e -> res.(i)  <- L.sort e) res
   else ();
   res
+  
+(* create a real-valued list for users to attach proportionally,
+   normalizes just the last cap and returns the last ones only *)
+let mature_caps minDays minCap dcaps =
+  H.map begin fun user caps ->
+    if L.length caps < minDays then minCap
+    else L.hd caps |> snd
+  end dcaps
+  
+
 
 (* TODO throw exception if  *)
 let rec underBound x bound =

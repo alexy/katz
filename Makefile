@@ -18,6 +18,7 @@ SCAPS=save_caps
 CBUCKS=dobucks
 BLENS=doblens
 SKEW=sk
+SGEN=sg
 RBUCKS=save_rbucks
 VOLS=dovols
 SAVE_REME=save_reme
@@ -60,7 +61,14 @@ lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo by_day.cmo dranges.cm
 	ocamlfind ocamlc -a -o lib.cma $^
 
 lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx common.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx
-	ocamlfind ocamlopt -a -o lib.cmxa $^
+	ocamlfind ocamlopt -a -o $@ $^
+
+anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
+	ocamlfind ocamlc -a -o $@ $^
+  
+anygraph.cmxa: json_graph.cmx tokyo_graph.cmx load_graph.cmx
+	ocamlfind ocamlopt -a -o $@ $^
+  
 
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt
@@ -72,10 +80,10 @@ $(SAVE_GRAPH).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx binary_graph.cmx $(SA
 $(INVERT_GRAPH).opt: lib.cmxa invert.cmx $(INVERT_GRAPH).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ common.cmx -o $@
 
-$(SC):     lib.cma json_graph.cmo tokyo_graph.cmo binary_graph.cmo load_graph.cmo graph.cmo dranges.cmo soc_run.cmo invert.cmo $(SC).ml
+$(SC):     lib.cma anygraph.cma graph.cmo soc_run.cmo invert.cmo $(SC).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SC).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx load_graph.cmx dranges.cmx soc_run.cmx invert.cmx $(SC).cmx
+$(SC).opt: lib.cmxa anygraph.cmxa soc_run.cmx invert.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(LOOK):      lib.cma binary_graph.cmo $(LOOK).ml
@@ -123,7 +131,10 @@ $(RBUCKS).opt: lib.cmxa topsets.cmx $(RBUCKS).ml
 $(BLENS).opt: lib.cmxa $(BLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx load_graph.cmx dranges.cmx skew.cmx soc_run_skew.cmx invert.cmx $(SKEW).cmx
+$(SKEW).opt: lib.cmxa anygraph.cmx skew.cmx soc_run_skew.cmx invert.cmx $(SKEW).cmx
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SGEN).opt: lib.cmxa skew.cmx invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml

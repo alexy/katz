@@ -24,6 +24,13 @@ let hashInc h k =
 let hashAdd h k n =
   let v = H.find_default h k 0 in
   H.replace h k (v+n)
+  
+let hashFindsert h k default =
+  try 
+    H.find h k
+  with Not_found ->
+    H.add h k default;
+    H.find h k
 
 (* updates h1! *)
 let hashMergeWith f h1 h2 =
@@ -124,3 +131,7 @@ let array_split a =
   
 let list_of_array a =
   A.enum a |> List.of_enum
+  
+let array_last a =
+  a.(A.length a - 1)
+  (* A.length a |> pred |> A.get a *)

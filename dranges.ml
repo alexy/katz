@@ -43,3 +43,8 @@ let startsArray dreps dments =
   H.iter begin fun day users -> 
     a.(day) <- users end dstarts;
   a
+  
+let startsArrayTotalUsers dstarts =
+  A.fold_left begin fun res users ->
+    res + L.length users
+  end 0 dstarts
