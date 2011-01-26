@@ -41,8 +41,8 @@ let buckets: Cranks.rank_users -> buckets =
 
 let bucketChangeRates bs1 bs2 =
   let rec aux bs1 bs2 acc = 
-    match (bs1,bs2) with
-    | (b1::bs1,b2::bs2) -> 
+    match bs1,bs2 with
+    | b1::bs1,b2::bs2 -> 
       let inter = S.inter b1 b2 in
       let stayRate = (floatSize inter) /. (floatSize b1) in
       aux bs1 bs2 (stayRate::acc)
@@ -69,13 +69,39 @@ let bucketOverlapRates: day_buckets -> day_buckets -> rates =
   end b1 b2 |> list_of_array
   
   
-let bucketOverlapSets: day_buckets -> day_buckets -> day_buckets =
+let bucketOverlapSetsRatios: day_buckets -> day_buckets -> day_buckets * rates * rates =
   fun b1 b2 ->
-  let rec aux xx yy acc =
+  let rec aux xx yy acc_set acc_inx acc_iny =
     match xx,yy with
-    | x::xs,y::ys -> aux xs ys ((S.inter x y)::acc)
-    | _ -> L.rev acc 
+    | x::xs,y::ys -> 
+        let inter = S.inter x y in
+        let inx = (floatSize inter) /. (floatSize x) in
+        let iny = (floatSize inter) /. (floatSize y) in
+      aux xs ys (inter::acc_set) (inx::acc_inx) (iny::acc_iny)
+    | _ ->(L.rev acc_set,L.rev acc_inx,L.rev acc_iny)
     in
-  A.map2 begin fun db1 db2 ->
-      aux db1 db2 [] 
-  end b1 b2
+  let a3 = A.map2 begin fun db1 db2 ->
+      aux db1 db2 [] [] []
+  end b1 b2 in
+  let os,ox,oy = array_split3 a3 in
+  os, list_of_array ox, list_of_array oy
+  
+
+let show_rates rates =
+  L.iter begin fun rate ->
+    if (L.length rate) < 50 
+    then
+      (* this works in repl under batteries, but p is not defined in compilation!
+      http://dutherenverseauborddelatable.wordpress.com/2009/04/06/ocaml-batteries-included-beta-1/       
+      Print.printf p"%{float list}\n" rate
+      TODO: add, to ocamlfind,
+      -syntax camlp4 -package batteries.syntax
+      *)
+      begin
+      L.iter (printf " %f") rate;
+      printf "\n"
+      end
+    else
+      leprintfln "rate has wrongfully enormous length %d" (L.length rate)
+  end rates
+  

@@ -131,6 +131,16 @@ let array_split a =
   let len = A.length a in
   Array.init len (Array.get a |- fst), 
   Array.init len (Array.get a |- snd)
+
+let fst3 (x,_,_) = x
+let snd3 (_,y,_) = y
+let trd3 (_,_,z) = z
+
+let array_split3 a = 
+  let len = A.length a in
+  Array.init len (Array.get a |- fst3), 
+  Array.init len (Array.get a |- snd3),
+  Array.init len (Array.get a |- trd3)
   
 let list_of_array a =
   A.enum a |> List.of_enum
