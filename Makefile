@@ -24,6 +24,7 @@ VOLS=dovols
 SAVE_REME=save_reme
 OVERLAPS=doverlaps
 OVERSETS=doversets
+STAY=dostay
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -146,3 +147,7 @@ $(OVERLAPS).opt: lib.cmxa topsets.cmx $(OVERLAPS).ml
 
 $(OVERSETS).opt: lib.cmxa topsets.cmx $(OVERSETS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
