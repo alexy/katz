@@ -2,13 +2,15 @@ open Common
 
 let () =
   let args = getArgs in
-  let (bucksName,ratesPrefix) =
+  let bucksName =
   match args with
-    | bucksName::ratesPrefix::restArgs -> (bucksName,ratesPrefix)
-    | _ -> failwith "usage: dorates bucksName ratesPrefix"
+    | bucksName::restArgs -> bucksName
+    | _ -> failwith "usage: dorates bucksName"
   in
-  leprintfln "reading bucks from %s , saving rates with prefix %s" 
-  bucksName ratesPrefix;
+  
+  let saveName = "rates-"^bucksName in
+  leprintfln "reading bucks from %s , saving rates in %s" 
+  bucksName saveName;
 
   let bucks: Topsets.day_buckets = loadData bucksName in
 
@@ -32,4 +34,4 @@ let () =
       leprintfln "rate has wrongfully enormous length %d" (L.length rate)
   end rates;
   
-  saveData rates (ratesPrefix^bucksName)
+  saveData rates saveName
