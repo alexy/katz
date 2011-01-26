@@ -1,5 +1,4 @@
 open Common
-open Binary_graph
 
 (* we need to serialize float to Cstr ourselves so
    that R will be able to read it back

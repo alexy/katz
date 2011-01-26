@@ -17,12 +17,12 @@ let buckets: Cranks.rank_users -> buckets =
         (res, bucket, newUsed, bucketSize)
       end
       else
-      let power10 n start res =
+      let pwr10 n start res =
         let rec exceed n acc res =
           if acc > n then (acc,res)
           else exceed n (acc*10) ([||]::res) in
           exceed n start res in
-      let (newBucketSize,res) = power10 usersLength (bucketSize*10) (bucket::res) in
+      let (newBucketSize,res) = pwr10 usersLength (bucketSize*10) (bucket::res) in
       let newBucket = A.append (A.of_list users) 
         (A.create (newBucketSize - usersLength) "") in
       (res, newBucket, usersLength, newBucketSize)  
@@ -49,6 +49,7 @@ let bucketChangeRates bs1 bs2 =
     | _ -> L.rev acc
   in
   aux bs1 bs2 []
+
   
 let bucketDynamics: day_buckets -> rates = 
   fun bucks ->
@@ -60,8 +61,21 @@ let bucketDynamics: day_buckets -> rates =
     (rates::res, bucks)
   end ([],bucks.(0)) bucksRest |> fst |> L.rev
   
-let bucketOverlaps: day_buckets -> day_buckets -> rates =
+  
+let bucketOverlapRates: day_buckets -> day_buckets -> rates =
   fun b1 b2 ->
   A.map2 begin fun db1 db2 ->
       bucketChangeRates db1 db2
   end b1 b2 |> list_of_array
+  
+  
+let bucketOverlapSets: day_buckets -> day_buckets -> day_buckets =
+  fun b1 b2 ->
+  let rec aux xx yy acc =
+    match xx,yy with
+    | x::xs,y::ys -> aux xs ys ((S.inter x y)::acc)
+    | _ -> L.rev acc 
+    in
+  A.map2 begin fun db1 db2 ->
+      aux db1 db2 [] 
+  end b1 b2

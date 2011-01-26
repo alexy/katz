@@ -4,8 +4,8 @@ type daily_ints  = (user,(int,int) H.t) H.t
 type users_total = (user, int) H.t
 type pair_totals = (user, users_total) H.t
 
-let daysN = 10
-let repsN = 10
+let daysN = Constants.daysN
+let repsN = Constants.repsN
 
 let userDays: graph -> user -> adjlist =
   fun g user ->
@@ -79,3 +79,10 @@ let before dreps theDay =
   H.map begin fun user days -> 
     H.filteri (fun day _ -> day < theDay) days
   end dreps 
+
+(* from soc_run family *)
+let getUserDay usr day m =
+      match H.find_option m usr with
+        | Some m' -> H.find_option m' day
+        | None -> None
+

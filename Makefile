@@ -23,6 +23,7 @@ RBUCKS=save_rbucks
 VOLS=dovols
 SAVE_REME=save_reme
 OVERLAPS=doverlaps
+OVERSETS=doversets
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -57,10 +58,10 @@ simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
 
-lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo
+lib: h.cmo graph.cmo utils.cmo binary_graph.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 
-lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx common.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx
+lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
 anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
@@ -131,14 +132,17 @@ $(RBUCKS).opt: lib.cmxa topsets.cmx $(RBUCKS).ml
 $(BLENS).opt: lib.cmxa $(BLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).opt: lib.cmxa anygraph.cmx skew.cmx soc_run_skew.cmx invert.cmx $(SKEW).cmx
+$(SKEW).opt: lib.cmxa anygraph.cmxa soc_run_skew.cmx invert.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SGEN).opt: lib.cmxa skew.cmx invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).cmx
+$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(OVERLAPS).opt: lib.cmxa topsets.cmx $(OVERLAPS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(OVERSETS).opt: lib.cmxa topsets.cmx $(OVERSETS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

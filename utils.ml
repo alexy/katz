@@ -15,6 +15,9 @@ let list_of_hash h = h |> H.enum |> List.of_enum
 let hashList = hash_of_list
 let listHash = list_of_hash
 
+let array_of_hash h = H.enum h |> A.of_enum
+let arrayHash = array_of_hash
+
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
 let hashInc h k =
@@ -135,3 +138,30 @@ let list_of_array a =
 let array_last a =
   a.(A.length a - 1)
   (* A.length a |> pred |> A.get a *)
+  
+(* let safeDivide x y = if y = 0. then x else x /. y *)
+let safeDivide x y = let res = x /. y in
+	match classify_float res with
+		| FP_nan | FP_infinite -> 0. (* or x? *)
+		| _ -> res
+
+(* hashMergeWithImp changes the first hashtbl given to it with the second 
+   we have to add x as a point for OCaml compiler to see these as functions *)
+let addMaps x     = hashMergeWithImp (+) x
+(* this was a cause of a subtle bug where in hashMergeWithImp 
+   we added positive balance for yinteo and geokotophia *)
+let subtractMaps x = hashMergeWithDefImp (-) 0 x
+
+let power10 times = E.fold ( * ) 1 (E.repeat ~times 10)
+(* thelema -- fails for times = 0:
+   E.repeat ~times 10 |> E.reduce ( * ) 
+  
+   OCaml doesn't take scientific notation for integers:
+   ("1e" ^ string_of_int times) |> float_of_string |> int_of_float  
+ *)
+
+let schwartzSortIntHashDesc: ('a,int) H.t -> ('a * int) array =
+  fun h ->
+  let a = array_of_hash h in
+  A.sort begin fun (_,x) (_,y) -> compare y x end a;
+  a
