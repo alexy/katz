@@ -15,7 +15,7 @@ let () =
   leprintfln "reading aranks from %s, saving buckets in %s" 
     aranksName bucksName;
 
-  let aranks: Cranks.day_rank_users = loadData aranksName in
+  let aranks: day_rank_users = loadData aranksName in
   
   let bucks = A.map Topsets.buckets aranks in
   

@@ -1,10 +1,6 @@
-open Batteries_uni
-open Utils
-open Printf (* sprintf *)
-open Graph
+open Common
 open Load_graph
 open Soc_run
-open Invert
 
   
 let () = 
@@ -15,7 +11,7 @@ let () =
     let maxDays = restArgs |> List.map int_of_string |> option_of_list in
     let (dreps,tLoad) = loadAnyGraph drepsName in
     leprintfln "loaded %s, %d" drepsName (H.length dreps);
-    let dments = invert2 dreps in
+    let dments = Invert.invert2 dreps in
     let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
     leprintfln "dments has length %d" (H.length dments);
     let ({dcapsSG =dcaps},tSocRun) = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in

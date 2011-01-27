@@ -1,5 +1,4 @@
 open Common
-open Binary_graph
 
 let () =
   let args = getArgs in
@@ -13,7 +12,7 @@ let () =
   leprintfln "reading buckets from %s, saving lengths in %s" 
     bucksName lensName;
 
-  let bucks:  Dcaps.day_log_buckets = loadData bucksName in
+  let bucks:  day_log_buckets = loadData bucksName in
   let lens =  Dcaps.bucket_lens bucks in
   
   saveData lens lensName

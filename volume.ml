@@ -1,11 +1,6 @@
 open Common
-open H.Infix
 
-module S=Topsets.S
-
-type bucket_volumes = (int list) array
-
-let bucket_volumes: By_day.day_user_ints -> Topsets.day_buckets -> bucket_volumes =
+let bucket_volumes: day_user_ints -> day_buckets -> bucket_volumes =
   fun rnums bucks ->
   assert (A.length rnums = A.length bucks);
   let totals = 

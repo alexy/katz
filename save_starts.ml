@@ -13,7 +13,7 @@ let () =
     let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
     leprintfln "dments has length %d" (H.length dments);  
       
-    let dstarts : Dranges.starts = Dranges.startsArray dreps dments in
+    let dstarts : starts = Dranges.startsArray dreps dments in
     let tStarts = Some "computed dstarts, timing: " |> getTiming in
     leprintfln "dstarts has length %d" (Array.length dstarts);
 

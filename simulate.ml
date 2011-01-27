@@ -1,7 +1,7 @@
 open Common
 
-let usersN = 5000000
-let daysN  = 10
+let usersN = Constants.usersN
+let daysN  = Constants.daysN
 
 let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
   assert (A.length dstarts = A.length denums);

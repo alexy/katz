@@ -12,7 +12,7 @@ let () =
   leprintfln "reading bucks from %s , saving rates in %s" 
   bucksName saveName;
 
-  let bucks: Topsets.day_buckets = loadData bucksName in
+  let bucks: day_buckets = loadData bucksName in
 
   let rates = Topsets.bucketDynamics bucks in
   leprintfln "";

@@ -27,22 +27,12 @@ let matureCapsTC ?(days=5) dcaps toName =
  *)
  
  
-open By_day
- 
-type rank = int
-type users = user list
-type rank_users = users list
-type day_rank_users = rank_users array
-type day_ranks = (day * rank) list
-type user_day_ranks = (user, day_ranks) Hashtbl.t
-type ranked_users = users Enum.t
-
 (* ensure we only work with the mature values, replace immature ones,
   younger than maturity days, by minimum *)
 let matureDayUserReals: int -> float -> user_day_reals -> day_user_reals =
   fun maturity minimum dcaps ->
 
-  let res = Array.init daysN (fun _ -> H.create usersN) in
+  let res = Array.init Constants.daysTotal (fun _ -> H.create Constants.usersDaily) in
 
   H.iter begin fun user days ->
     let ordered = L.rev days in

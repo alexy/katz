@@ -22,9 +22,9 @@ let () =
     dstartsName drnumsName drepsName dmentsName capsName skewName;
   (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
   
-  let dstarts: Dranges.starts     = loadData dstartsName in
+  let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
-  let drnums: By_day.day_rep_nums = loadData drnumsName in
+  let drnums: day_rep_nums = loadData drnumsName in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
   let (initDrepsO,initDayO) = match dreps' with

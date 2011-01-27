@@ -41,7 +41,7 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g;
 
 
 
-let socRun: Dranges.starts -> By_day.day_rep_nums -> socRun -> sGraph * timings =
+let socRun: starts -> day_rep_nums -> socRun -> sGraph * timings =
     fun dstarts drnums opts ->
     let params  = paramSC opts in
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in

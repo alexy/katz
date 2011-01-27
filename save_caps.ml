@@ -1,5 +1,4 @@
 open Common
-open Binary_graph
 
 let () =
   let args = getArgs in
@@ -22,7 +21,7 @@ let () =
     leprintfln "reading dcaps from %s, saving caps in %s" 
       dcapsName capsName;
       
-    let dcaps: By_day.user_day_reals = loadData dcapsName in
+    let dcaps: user_day_reals = loadData dcapsName in
     let caps = Dcaps.mature_day_caps maturity minimum ~sort dcaps in
     
     saveData caps capsName;

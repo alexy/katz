@@ -1,36 +1,15 @@
 open Common
-open Graph
 
-type user_user      = (user,reps) Hashtbl.t
-type days           = (user_user * user_user) array
-type int_int        = int * int
-type denums         = (user * int_int) array
-type user_nums      = (user, int_int) Hashtbl.t
-type user_nums_pair = user_nums * user_nums
-type day_rep_nums   = user_nums array
-type day_re_me      = day_rep_nums * day_rep_nums
-type day_edgenums   = user_nums_pair array
-type user_int       = user * int
-type user_ints      = user_int Enum.t
-type user_hints     = (user,int) H.t
-type day_user_ints  = user_hints array
-type real           = float
-type day_real       = day * float
-type day_reals      = day_real list
-type user_day_reals = (user, day_reals) Hashtbl.t
-type user_reals     = (user, real) Hashtbl.t
-type day_user_reals = user_reals array
-
-let daysN  = 35
-let usersN = 1000000
-let repsN  = 10
+let daysTotal  = Constants.daysTotal
+let usersDaily = Constants.usersDaily
+let repsN      = Constants.repsN
 
 let by_day: graph -> days = fun g ->
 
   (* 35 days, we know -- or have to scan all days *)
   
-  let newReps : int -> user_user = fun usersN -> H.create usersN in
-  let res = Array.init daysN (fun _ -> (newReps usersN, newReps usersN)) in
+  let newReps : int -> user_user = fun usersDaily -> H.create usersDaily in
+  let res = Array.init daysTotal (fun _ -> (newReps usersDaily, newReps usersDaily)) in
 
   H.iter begin fun f days ->
     H.iter begin fun day reps ->
@@ -73,10 +52,10 @@ let day_re_me: days -> day_re_me =
   let de = dayEdgenums a in
   array_split de
 
-let numUserEdges: user_nums_pair -> user_ints =
+let numUserEdges: user_nums_pair -> user_ints_enum =
     fun enums -> enums |> fst |> H.enum |> E.map (fun (k,(v,_)) -> (k,v))
     
-let numUserUsers: user_nums_pair -> user_ints =
+let numUserUsers: user_nums_pair -> user_ints_enum =
     fun enums -> enums |> fst |> H.enum |> E.map (fun (k,(_,v)) -> (k,v))
     
 let userTotalMentions: day_edgenums -> day -> reps =
@@ -87,7 +66,7 @@ let userTotalMentions: day_edgenums -> day -> reps =
    and replace immature SC with a smoothing default, which is tricky to compute *)
 let dayUserReals: user_day_reals -> day_user_reals =
   fun c ->
-  let res = Array.init daysN (fun _ -> H.create usersN) in
+  let res = Array.init daysTotal (fun _ -> H.create usersDaily) in
 
   H.iter begin fun user days ->
     L.iter (fun (day,x) -> H.replace res.(day) user x) days        

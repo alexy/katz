@@ -6,7 +6,7 @@ let column_print oc x = fprintf oc "%5.2f" x
   
 type tex = TeX | AllTeX | Plain
 
-let print_table oc tex rates =
+let print_table oc tex name rates =
   let anyTeX,allTeX = 
   match tex with
   | AllTeX -> true,true
@@ -23,7 +23,7 @@ let print_table oc tex rates =
   if anyTeX then
     fprintf oc "
   \\begin{table}
-	\\caption{TODO-STORY}
+	\\caption{%s}
 	\\label{table:TODO-LABEL}
 	\\centering
 	\\begin{tabular}{|c|c|c|c|c|c|c|c|}
@@ -31,7 +31,7 @@ let print_table oc tex rates =
 	\\emph{day} & 1 & 10 & 100 & 1,000 & 10,000 & 100,000 & 1,000,000 \\\\
 	\\hline
 	\\hline	
-" else ();
+" name else ();
   
   L.iteri begin fun day rs ->
     fprintf oc "%d" (day+7) ;
@@ -65,15 +65,16 @@ let () =
   | _ -> failwith "texrates ratesName [tex|alltex]"
   in
   
-  let suffix,what = match tex with | TeX | AllTeX _ -> "tex","latex" | _ -> "txt","text" in
-    let replaced,saveName = String.replace ratesName "mlb" suffix in
+  let suffix,what = match tex with | TeX | AllTeX _ -> ".tex","latex" | _ -> ".txt","text" in
+    let replaced,saveBase = String.replace ratesName ".mlb" "" in
     assert replaced;
+    let saveName = saveBase^suffix in
     leprintfln "reading rates from %s, writing %s to %s"
       ratesName what saveName;
   
-  let rates : Topsets.rates = loadData ratesName in
+  let rates : rates = loadData ratesName in
 
   let oc = open_out saveName in
-  print_table oc     tex rates; close_out oc;
-  print_table stdout tex rates
+  print_table oc     tex saveBase rates; close_out oc;
+  print_table stdout tex saveBase rates
   

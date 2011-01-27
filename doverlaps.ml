@@ -10,8 +10,8 @@ let () =
   leprintfln "reading buckets from %s and %s, saving overlaps in %s" 
   b1Name b2Name saveName;
 
-  let b1: Topsets.day_buckets = loadData b1Name in
-  let b2: Topsets.day_buckets = loadData b2Name in
+  let b1: day_buckets = loadData b1Name in
+  let b2: day_buckets = loadData b2Name in
 
   let rates = Topsets.bucketOverlapRates b1 b2 in
   leprintfln "";

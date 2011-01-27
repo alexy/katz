@@ -1,9 +1,5 @@
 open Common
 
-type daily_ints  = (user,(int,int) H.t) H.t
-type users_total = (user, int) H.t
-type pair_totals = (user, users_total) H.t
-
 let daysN = Constants.daysN
 let repsN = Constants.repsN
 

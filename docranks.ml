@@ -22,7 +22,7 @@ let () =
     leprintfln "any social capital with maturity less than %d days becomes %e" 
       maturity minimum;
       
-    let dcaps: By_day.user_day_reals = loadData dcapsName in
+    let dcaps: user_day_reals = loadData dcapsName in
     let (dranks, aranks) = Cranks.daranks maturity minimum dcaps in
     
     saveData dranks dranksName;

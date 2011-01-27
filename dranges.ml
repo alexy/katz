@@ -1,8 +1,5 @@
 open Common
 
-type users = Graph.user list
-type starts = users array
-
 let minMax1 (oldMin, oldMax) x =
   let newMin = min oldMin x in
   let newMax = max oldMax x in
