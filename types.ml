@@ -73,5 +73,3 @@ type skew   = float list
 type dskews = (user,(int * skew)  list) H.t
 
 type talkBalance = (user,int) H.t
-
-type timings = float list

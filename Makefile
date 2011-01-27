@@ -88,10 +88,10 @@ $(SC):     lib.cma anygraph.cma graph.cmo soc_run.cmo invert.cmo $(SC).ml
 $(SC).opt: lib.cmxa anygraph.cmxa soc_run.cmx invert.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(LOOK):      lib.cma binary_graph.cmo $(LOOK).ml
+$(LOOK):      lib.cma $(LOOK).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(LOOK).opt:  lib.cmxa binary_graph.cmx $(LOOK).ml
+$(LOOK).opt:  lib.cmxa $(LOOK).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(BYDAY).opt: lib.cmxa json_graph.cmx tokyo_graph.cmx load_graph.cmx $(BYDAY).ml

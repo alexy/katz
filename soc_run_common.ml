@@ -50,7 +50,7 @@ ulfdoz left the chat room. (Ping timeout: 276 seconds)
 		
 type sGraph = 
   {drepsSG : graph; dmentsSG : graph; 
-   dcapsSG : dCaps; dskewsSG : dSkews;
+   dcapsSG : dcaps; dskewsSG : dskews;
    ustatsSG : uStats}
 
 let safeDivide3 (x,y,z) (x',y',z') =

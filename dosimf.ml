@@ -8,7 +8,7 @@ let () =
       leprintfln "reading duvals from %s, dstarts from %s and dnums from %s, saving floating ereps in %s" 
         duvalsName dstartsName denumsName erepsName;
     
-      (* user_day_reals <=> Soc_run.dCaps *)
+      (* user_day_reals <=> Soc_run.dcaps *)
       let udvals:  user_day_reals = loadData duvalsName in
       let dstarts: starts         = loadData dstartsName in
       let denums:  day_edgenums   = loadData denumsName in
