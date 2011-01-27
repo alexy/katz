@@ -8,9 +8,10 @@ let () =
     | b1Name::b2Name::saveBase::restArgs -> (b1Name,b2Name,saveBase)
     | _ -> failwith "usage: doverlaps b1Name b2Name saveBase"
   in
-  let osetsName = "overs-"^saveBase in
-  let overxName = "overx-"^saveBase in
-  let overyName = "overy-"^saveBase in
+  let saveSuffix = saveBase^".mlb" in
+  let osetsName  = "overs-"^saveSuffix in
+  let overxName  = "overx-"^saveSuffix in
+  let overyName  = "overy-"^saveSuffix in
   
   leprintfln "reading buckets from %s and %s, saving bucket overlaps in %s, fraction to left in %s, to right in %s" 
   b1Name b2Name osetsName overxName overyName;

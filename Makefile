@@ -25,6 +25,7 @@ SAVE_REME=save_reme
 OVERLAPS=doverlaps
 OVERSETS=doversets
 STAY=dostay
+TEX=texrates
 
 all: $(SIM).opt $(SIMF).opt
   
@@ -136,7 +137,7 @@ $(BLENS).opt: lib.cmxa $(BLENS).ml
 $(SKEW).opt: lib.cmxa anygraph.cmxa soc_run_skew.cmx invert.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).cmx
+$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
@@ -151,3 +152,6 @@ $(OVERSETS).opt: lib.cmxa topsets.cmx $(OVERSETS).ml
 $(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
+$(TEX).opt: lib.cmxa topsets.cmx $(TEX).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
