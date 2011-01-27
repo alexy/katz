@@ -1,12 +1,6 @@
 open Common
 let getUserDay = Dreps.getUserDay
 
-type dCaps  = (user, (int * float) list) H.t
-
-type skew   = float list
-type dSkews = (user,(int * skew)  list) H.t
-
-type talkBalance = (user,int) H.t
 let emptyTalk : talkBalance = H.create Constants.repsN
 
 type userStats = {
@@ -66,8 +60,6 @@ let safeDivide3 (x,y,z) (x',y',z') =
   (a,b,c)
 
 type termsStat = (float * float * float) option
-
-type timings = float list
 
 let getSocCap ustats user =
   match H.find_option ustats user with
