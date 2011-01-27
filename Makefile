@@ -30,7 +30,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF
 
 all: $(ALL:%=%.opt)
 
-common.cmx: binary_graph.cmx h.cmx utils.cmx types.cmx
+common.cmx: binary_graph.cmx h.cmx utils.cmx t.cmx
 load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
 
 %.opt: common.cmx
@@ -59,10 +59,10 @@ simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
 
-lib: h.cmo graph.cmo utils.cmo binary_graph.cmo types.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo soc_run_common.cmo
+lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 
-lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx types.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx soc_run_common.cmx
+lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
 anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
