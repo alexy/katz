@@ -73,3 +73,8 @@ type skew   = float list
 type dskews = (user,(int * skew)  list) H.t
 
 type talkBalance = (user,int) H.t
+
+(* bucket power *)
+
+type b2b = (int list) list
+type day_b2b = b2b array

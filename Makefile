@@ -25,6 +25,7 @@ OVERLAPS=doverlaps
 OVERSETS=doversets
 STAY=dostay
 TEX=texrates
+B2B=dob2bs
 
 ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX)
 
@@ -149,5 +150,8 @@ $(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(TEX).opt: lib.cmxa topsets.cmx $(TEX).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
+$(B2B).opt: lib.cmxa bucket_power.cmx $(B2B).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   

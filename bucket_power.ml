@@ -15,3 +15,37 @@ let staying bucks =
       
       
 (* let stay_over  *)
+
+
+let findUserBucket user buckets =
+  let bucketSeq = L.backwards buckets in
+  let totalBuckets = L.length buckets in
+  let rec aux i =
+    match E.get bucketSeq with
+    | Some bucket when S.mem user bucket -> Some i
+    | Some _ -> aux (pred i)
+    | None -> None in
+  aux (pred totalBuckets)
+
+
+let b2b dreps bucks =
+  A.mapi begin fun day buckets ->
+    let numBuckets = L.length buckets in
+    L.map begin fun bucket ->
+      let toBuckets = A.create numBuckets (ref 0) in
+
+      S.iter begin fun user -> 
+        match Dreps.getUserDay user day dreps with
+        | None -> ()
+        | Some reps -> 
+          H.iter begin fun toUser num ->
+            match findUserBucket toUser buckets with
+            | Some i -> incr toBuckets.(i)
+            | None -> leprintf "ERROR: user %s is not found in any bucket on day %d!" user day
+          end reps
+      end bucket;
+
+      A.to_list toBuckets |> 
+      L.map (!)
+    end buckets;
+  end bucks
