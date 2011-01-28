@@ -29,7 +29,6 @@ let mature_caps minDays minCap dcaps =
   end dcaps
   
 
-
 (* TODO throw exception if  *)
 let rec underBound x bound =
   if x <= 0. || bound < x then bound

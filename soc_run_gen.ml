@@ -77,7 +77,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sGraph * timings =
     
     (* inject the users first appearing in this cycle *)
     let tick ts day =
-      let {drepsSG =dreps; dmentsSG =dments; dcapsSG =dcaps; ustatsSG =ustats} = sgraph in
+      let {drepsSG =dreps; dmentsSG =dments; ustatsSG =ustats} = sgraph in
       let newUsers = dstarts.(day) in
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
@@ -86,7 +86,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sGraph * timings =
       begin match initDay with
       | Some before when day < before -> ()
       | _ ->
-        let props = Dcaps.mature_caps minCapDays minCap dcaps |> H.enum in
+        let props = mature_caps minCapDays minCap ustats day |> H.enum in
         Simulate.growEdges fromNums.(day) props minCap dreps dments day
       end;
     
