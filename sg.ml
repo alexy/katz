@@ -14,10 +14,11 @@ let () =
       (dstartsName,drnumsName,saveBase,None,None)
   | _ -> failwith "usage: sg dtartsName drnumsName saveBase [drepsName initDay]"
   in
-  let drepsName  = "dreps-"^saveBase in
-  let dmentsName = "dments-"^saveBase in
-  let capsName   = "caps-"^saveBase in
-  let skewName   = "skew-"^saveBase  in
+  let saveSuffix = saveBase^".mlb" in
+  let drepsName  = "dreps-"^saveSuffix in
+  let dmentsName = "dments-"^saveSuffix in
+  let capsName   = "caps-"^saveSuffix in
+  let skewName   = "skew-"^saveSuffix  in
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
   (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
