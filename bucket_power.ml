@@ -32,7 +32,7 @@ let b2b dreps bucks =
   A.mapi begin fun day buckets ->
     let numBuckets = L.length buckets in
     L.map begin fun bucket ->
-      let toBuckets = A.create numBuckets (ref 0) in
+      let toBuckets = A.init numBuckets (fun _ -> ref 0) in
 
       S.iter begin fun user -> 
         match Dreps.getUserDay user day dreps with
