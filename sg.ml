@@ -37,7 +37,8 @@ let () =
   | _ -> (None, None) in
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= by_mass;
-                             initDrepsSR= initDrepsO; initDaySR= initDayO} in
+                             initDrepsSR= initDrepsO; initDaySR= initDayO;
+                             minCapSR=1e-7} in
   let ({drepsSG =dreps; dmentsSG =dments;
     dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
   leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
