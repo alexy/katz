@@ -8,24 +8,14 @@ open Common
 
 let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starrank =
   fun dreps dcapsh maturity ->
+    
   
   H.map begin fun user days ->
     H.fold begin fun day reps dsranks ->
       let rcaps = 
       H.fold begin fun urep num rcaps ->
-        match Dreps.getUserDay urep day dcapsh with
-        | Some c -> 
-          let c = 
-          begin 
-          match maturity with
-          | Some (startsh,minDays,minCap) -> 
-            let firstDay = startsh --> user in
-            if day - firstDay > minDays 
-              then c
-              else minCap
-          | _ -> c
-          end in 
-          (c,num)::rcaps
+        match Dcaps.matureUserDay maturity urep day dcapsh with
+        | Some c -> (c,num)::rcaps
         | None -> rcaps
       end reps [] in
       
@@ -42,7 +32,7 @@ let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starr
       if n = 0 then dsranks
       else
         let audiences = s /. float n in
-        match Dreps.getUserDay user day dcapsh with
+        match Dcaps.matureUserDay maturity user day dcapsh with
         | Some my when audiences > 0. -> 
             let srank = my /. audiences in
             (day,(srank,audiences))::dsranks

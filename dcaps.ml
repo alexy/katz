@@ -111,3 +111,18 @@ let dcaps_hash: dcaps -> dcaps_hash * starts_hash =
       | _ -> None
     end dcaps in
     hcaps,starts
+    
+
+let matureUserDay maturity user day dcapsh =
+  match Dreps.getUserDay user day dcapsh with
+  | Some c -> 
+    let c = begin 
+    match maturity with
+    | Some (startsh,minDays,minCap) -> 
+      let firstDay = startsh --> user in
+      if day - firstDay > minDays 
+        then c
+        else minCap
+    | _ -> c
+    end in Some c
+  | _ -> None
