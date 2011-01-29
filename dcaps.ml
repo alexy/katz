@@ -99,7 +99,6 @@ let bucket_lens: day_log_buckets -> day_log_buckets =
   
 let dcaps_hash: dcaps -> dcaps_hash * starts_hash =
   fun dcaps ->
-    let starts = H.create Constants.usersN in
     let hcaps = 
     H.map begin fun _ daycaps ->
       L.enum daycaps |> H.of_enum 

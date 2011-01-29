@@ -26,7 +26,7 @@ let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starr
       end reps |> H.values *)
       
       let (s,n) = 
-      L.fold_left begin fun (c,num) (csum,numtotal) ->
+      L.fold_left begin fun (csum,numtotal) (c,num) ->
         csum +. c *. (float num), numtotal+num
       end (0.,0) rcaps in
       if n = 0 then dsranks
