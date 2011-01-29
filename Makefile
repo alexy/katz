@@ -5,7 +5,7 @@ LOOK=look
 #DEBUG=-g
 #PROFILE=-p
 OPTFLAGS=-inline 100 $(PROFILE)
-PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel
+PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt
 BYDAY=save_days
 STARTS=save_starts
 SIM=dosim
@@ -26,6 +26,7 @@ OVERSETS=doversets
 STAY=dostay
 TEX=texrates
 B2B=dob2bs
+OPT=opt
 
 ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B)
 
@@ -153,5 +154,8 @@ $(TEX).opt: lib.cmxa topsets.cmx $(TEX).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
 $(B2B).opt: lib.cmxa bucket_power.cmx $(B2B).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
+$(OPT).opt: $(OPT).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
