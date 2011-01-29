@@ -27,8 +27,9 @@ STAY=dostay
 TEX=texrates
 B2B=dob2bs
 OPT=opt
+STARS=dosranks
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B) $(STARS)
 
 all: $(ALL:%=%.opt)
 
@@ -159,3 +160,5 @@ $(B2B).opt: lib.cmxa bucket_power.cmx $(B2B).ml
 $(OPT).opt: $(OPT).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
+$(STARS).opt: lib.cmxa starrank.cmx $(STARS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

@@ -2,6 +2,10 @@ open Batteries_uni
 open H
 open Graph
 
+(* synonyms *)
+
+type dreps = graph
+
 (* by_day *)
 
 type user_user      = (user,reps) H.t
@@ -70,7 +74,7 @@ type bucket_volumes = (int list) array
 type dcaps  = (user, (int * float) list) H.t
 
 type skew   = float list
-type dskews = (user,(int * skew)  list) H.t
+type dskews = (user, (int * skew)  list) H.t
 
 type talkBalance = (user,int) H.t
 
@@ -78,3 +82,9 @@ type talkBalance = (user,int) H.t
 
 type b2b = (int list) list
 type day_b2b = b2b array
+
+(* starrank *)
+
+type dcaps_hash = (user,(day,float) H.t) H.t
+type srank      = float * float
+type starrank   = (user, (day * srank) list) H.t

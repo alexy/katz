@@ -77,7 +77,8 @@ let before dreps theDay =
   end dreps 
 
 (* from soc_run family *)
-let getUserDay usr day m =
+let getUserDay: user -> int -> 'a =
+  fun usr day m ->
       match H.find_option m usr with
         | Some m' -> H.find_option m' day
         | None -> None

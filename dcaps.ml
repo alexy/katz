@@ -96,3 +96,14 @@ let bucket_lens: day_log_buckets -> day_log_buckets =
       |> fst
     end bucks
   
+  
+let dcaps_hash: dcaps -> dcaps_hash =
+  fun dcaps ->
+    H.map begin fun _ daycaps ->
+      let h = H.create Constants.repsN in
+      L.iter begin fun day_cap ->
+        h <-- day_cap
+      end daycaps;
+      h
+    end dcaps
+
