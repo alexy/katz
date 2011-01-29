@@ -3,14 +3,29 @@
    
 open Common
    
-let starrank: dreps -> dcaps_hash -> starrank =
-  fun dreps dcapsh ->
+   (* TODO this is daily rank for that day's audience only;
+      cumulative would require audeince aggregation up to the day *)
+
+let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starrank =
+  fun dreps dcapsh maturity ->
+  
   H.map begin fun user days ->
     H.fold begin fun day reps dsranks ->
       let rcaps = 
       H.fold begin fun urep num rcaps ->
         match Dreps.getUserDay urep day dcapsh with
-        | Some c -> (c,num)::rcaps
+        | Some c -> 
+          let c = 
+          begin 
+          match maturity with
+          | Some (startsh,minDays,minCap) -> 
+            let firstDay = startsh --> user in
+            if day - firstDay > minDays 
+              then c
+              else minCap
+          | _ -> c
+          end in 
+          (c,num)::rcaps
         | None -> rcaps
       end reps [] in
       

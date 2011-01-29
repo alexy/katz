@@ -97,13 +97,17 @@ let bucket_lens: day_log_buckets -> day_log_buckets =
     end bucks
   
   
-let dcaps_hash: dcaps -> dcaps_hash =
+let dcaps_hash: dcaps -> dcaps_hash * starts_hash =
   fun dcaps ->
+    let starts = H.create Constants.usersN in
+    let hcaps = 
     H.map begin fun _ daycaps ->
-      let h = H.create Constants.repsN in
-      L.iter begin fun day_cap ->
-        h <-- day_cap
-      end daycaps;
-      h
-    end dcaps
-
+      L.enum daycaps |> H.of_enum 
+    end dcaps in 
+    let starts = 
+    H.filter_map begin fun _ daycaps ->
+      match daycaps with
+      | (day,_)::_ -> Some day
+      | _ -> None
+    end dcaps in
+    hcaps,starts
