@@ -106,9 +106,7 @@ let dcaps_hash: dcaps -> dcaps_hash * starts_hash =
     end dcaps in 
     let starts = 
     H.filter_map begin fun _ daycaps ->
-      match daycaps with
-      | (day,_)::_ -> Some day
-      | _ -> None
+      L.backwards daycaps |> E.map fst |> E.peek
     end dcaps in
     hcaps,starts
     
