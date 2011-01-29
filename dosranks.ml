@@ -24,9 +24,10 @@ let () =
 
   let starsName = "stars-"^dcapsName in
   leprintfln "reading dreps from %s, dcaps from %s, storing stars in %s" drepsName dcapsName starsName;
-  match minDaysO with
+  begin match minDaysO with
   | Some minDays -> leprintfln "applying minCap %e for maturities less than %d days" !minCap minDays
-  | _ -> begin leprintfln "not using maturity at all" end;
+  | _ -> leprintfln "not using maturity at all" 
+  end;
 
   let dreps: dreps = loadData drepsName in
   let dcaps: dcaps = loadData dcapsName in
