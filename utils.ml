@@ -2,6 +2,7 @@ open Printf
 (* if we open Printf after Batteries, we get leprintf all screwed up! *)
 open Batteries_uni
 open H
+open Getopt
 
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
@@ -175,3 +176,9 @@ let schwartzSortIntHashDesc: ('a,int) H.t -> ('a * int) array =
   let a = array_of_hash h in
   A.sort begin fun (_,x) (_,y) -> compare y x end a;
   a
+
+let getOptArgs specs =
+  let restArgsE = E.empty () in
+  let pushArg a = E.push restArgsE a in
+  parse_cmdline specs pushArg;
+  L.of_enum restArgsE |> L.rev

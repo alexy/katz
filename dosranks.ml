@@ -4,17 +4,15 @@ open Common
 open Getopt
 
 let minDaysO = Some 7
-let minCap = ref 1e-35
+let minCap   = ref 1e-35
+let mark     = ref ""
 let specs =
 [
   ('c',"mincap",None,Some (fun x -> minCap := float_of_string x))
 ]
 
 let () =
-  let restArgsE = E.empty () in
-  let pushArg a = E.push restArgsE a in
-  parse_cmdline specs pushArg;
-  let args = L.of_enum restArgsE |> L.rev in
+  let args = getOptArgs specs in
 
   let drepsName,dcapsName =
   match args with
@@ -22,7 +20,7 @@ let () =
     | _ -> failwith "usage: dosranks drepsName dcapsName"      
   in  
 
-  let starsName = "stars-"^drepsName in
+  let starsName = "stars-"^(!mark)^drepsName in
   leprintfln "reading dreps from %s, dcaps from %s, storing stars in %s" drepsName dcapsName starsName;
   begin match minDaysO with
   | Some minDays -> leprintfln "applying minCap %e for maturities less than %d days" !minCap minDays

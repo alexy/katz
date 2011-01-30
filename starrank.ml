@@ -35,7 +35,7 @@ let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starr
         match Dcaps.matureUserDay maturity user day dcapsh with
         | Some my when audiences > 0. -> 
             let srank = my /. audiences in
-            (day,(srank,audiences))::dsranks
+            (day,(my,srank,audiences))::dsranks
         | _ -> dsranks        
     end days []
   end dreps
@@ -52,18 +52,22 @@ let starbucks: day_buckets -> starrank_hash -> day_starbucks =
   fun bucks srankh ->
   A.mapi begin fun day buckets ->
     L.map begin fun bucket ->
-      let stars,auds,n = 
-      S.fold begin fun user ((stars,auds,n) as res) ->
+      let my,stars,auds,n = 
+      S.fold begin fun user ((my,stars,auds,n) as res) ->
         match Dreps.getUserDay user day srankh with
-        | Some (s,a) -> s::stars,a::auds,succ n
+        | Some (m,s,a) -> m::my,s::stars,a::auds,succ n
         | _ -> res
-      end bucket ([],[],0) in
-      if n = 0 then ((0.,0.),(0.,0.))
+      end bucket ([],[],[],0) in
+      if n = 0 then ((0.,0.,0.),(0.,0.,0.))
       else let total = float n in
-      let averages = (L.fsum stars) /. total, (L.fsum auds) /. total in
-      let astars = A.of_list stars 
+      let averages = 
+        (L.fsum my) /. total, 
+        (L.fsum stars) /. total, 
+        (L.fsum auds) /. total in
+      let amy    = A.of_list my
+      and astars = A.of_list stars 
       and aauds  = A.of_list auds in
-      let medians = Mathy.median astars, Mathy.median aauds in
+      let medians = Mathy.median amy, Mathy.median astars, Mathy.median aauds in
       averages,medians
     end buckets
   end bucks

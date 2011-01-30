@@ -1,9 +1,16 @@
 (* compute starbucks *)
    
 open Common
+open Getopt
+
+let mark  = ref ""
+let specs =
+[
+  ('k',"mark",None,Some (fun x -> mark := x))
+]
 
 let () =
-  let args = getArgs in
+  let args = getOptArgs specs in
 
   let bucksName,starsName =
   match args with
@@ -11,7 +18,7 @@ let () =
     | _ -> failwith "usage: dostarbucks  bucksName starsName"      
   in  
 
-  let sbucksName = "sbucks-"^starsName in
+  let sbucksName = "sbucks-"^(!mark)^starsName in
   leprintfln "reading bucks from %s, starrank from %s, storing starbucks in %s" bucksName starsName sbucksName;
 
   let bucks: day_buckets = loadData bucksName in
