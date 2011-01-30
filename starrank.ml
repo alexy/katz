@@ -52,14 +52,18 @@ let starbucks: day_buckets -> starrank_hash -> day_starbucks =
   fun bucks srankh ->
   A.mapi begin fun day buckets ->
     L.map begin fun bucket ->
-      let ssum,asum,n = 
-      S.fold begin fun user ((ssum,asum,n) as res) ->
+      let stars,auds,n = 
+      S.fold begin fun user ((stars,auds,n) as res) ->
         match Dreps.getUserDay user day srankh with
-        | Some (star,auds) -> ssum+.star,asum+.auds,succ n
+        | Some (s,a) -> s::stars,a::auds,succ n
         | _ -> res
-      end bucket (0.,0.,0) in
-      if n = 0 then (0.,0.)
+      end bucket ([],[],0) in
+      if n = 0 then ((0.,0.),(0.,0.))
       else let total = float n in
-      ssum /. total, asum /. total
+      let averages = (L.fsum stars) /. total, (L.fsum auds) /. total in
+      let astars = A.of_list stars 
+      and aauds  = A.of_list auds in
+      let medians = Mathy.median astars, Mathy.median aauds in
+      averages,medians
     end buckets
   end bucks
