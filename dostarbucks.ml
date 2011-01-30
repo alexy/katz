@@ -11,7 +11,7 @@ let () =
     | _ -> failwith "usage: dostarbucks  bucksName starsName"      
   in  
 
-  let sbucksName = "sbucks-"^bucksName in
+  let sbucksName = "sbucks-"^starsName in
   leprintfln "reading bucks from %s, starrank from %s, storing starbucks in %s" bucksName starsName sbucksName;
 
   let bucks: day_buckets = loadData bucksName in

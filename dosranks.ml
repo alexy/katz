@@ -22,7 +22,7 @@ let () =
     | _ -> failwith "usage: dosranks drepsName dcapsName"      
   in  
 
-  let starsName = "stars-"^dcapsName in
+  let starsName = "stars-"^drepsName in
   leprintfln "reading dreps from %s, dcaps from %s, storing stars in %s" drepsName dcapsName starsName;
   begin match minDaysO with
   | Some minDays -> leprintfln "applying minCap %e for maturities less than %d days" !minCap minDays
