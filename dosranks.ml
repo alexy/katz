@@ -8,7 +8,8 @@ let minCap   = ref 1e-35
 let mark     = ref ""
 let specs =
 [
-  ('c',"mincap",None,Some (fun x -> minCap := float_of_string x))
+  ('c',"mincap",None,Some (fun x -> minCap := float_of_string x));
+  ('k',"mark",  None,Some (fun x -> mark := x))
 ]
 
 let () =
