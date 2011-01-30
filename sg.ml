@@ -1,11 +1,24 @@
 open Common
 open Soc_run_gen
+open Getopt
 
-(* TODO optionize *)
-let by_mass = true
+let byMass   = ref true
+let minDays  = ref 7
+let minCap   = ref 1e-35
+let mark     = ref ""
+
+let specs =
+[
+  ('c',"mincap",None,Some (fun x -> minCap := float_of_string x));
+  ('k',"mark",  None,Some (fun x -> mark := x));
+  ('u',"byusers",(set byMass false),None);
+  (noshort,"immature",(set minDays 0),None);
+  ('d',"mindays",None,Some (fun n -> minDays := int_of_string n))
+]
   
 let () = 
-  let args = getArgs in
+  let args = getOptArgs specs in
+  
   let (dstartsName,drnumsName,saveBase,dreps',day') =
   match args with
   | dstartsName::drnumsName::saveBase::dreps'::day'::[] -> 
@@ -22,6 +35,7 @@ let () =
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
   (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
+  leprintfln "options: byMass=%b, minDays=%d, minCap=%e" !byMass !minDays !minCap;
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
@@ -36,12 +50,11 @@ let () =
           (Some dreps, Some day)
   | _ -> (None, None) in
   
-  let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= by_mass;
+  let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= !byMass;
                              initDrepsSR= initDrepsO; initDaySR= initDayO;
- (* up from 1e-35, more chances to attach here *)
-                             minCapSR=1e-7;
+                             minCapSR= (!minCap);
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
-                             minCapDaysSR=0}
+                             minCapDaysSR= (!minDays)}
                              in
   let ({drepsSG =dreps; dmentsSG =dments;
     dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
