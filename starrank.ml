@@ -39,3 +39,27 @@ let starrank: dreps -> dcaps_hash -> (starts_hash * int * float) option -> starr
         | _ -> dsranks        
     end days []
   end dreps
+  
+  
+let starrank_hash: starrank -> starrank_hash =
+  fun srank ->
+  H.map begin fun _ v ->
+    L.enum v |> H.of_enum
+  end srank
+  
+  
+let starbucks: day_buckets -> starrank_hash -> day_starbucks =
+  fun bucks srankh ->
+  A.mapi begin fun day buckets ->
+    L.map begin fun bucket ->
+      let ssum,asum,n = 
+      S.fold begin fun user ((ssum,asum,n) as res) ->
+        match Dreps.getUserDay user day srankh with
+        | Some (star,auds) -> ssum+.star,asum+.auds,succ n
+        | _ -> res
+      end bucket (0.,0.,0) in
+      if n = 0 then (0.,0.)
+      else let total = float n in
+      ssum /. total, asum /. total
+    end buckets
+  end bucks

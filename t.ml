@@ -85,7 +85,10 @@ type day_b2b = b2b array
 
 (* starrank *)
 
-type dcaps_hash  = (user,(day,float) H.t) H.t
-type starts_hash = (user,day) H.t
-type srank       = float * float
-type starrank    = (user, (day * srank) list) H.t
+type dcaps_hash    = (user,(day,float) H.t) H.t
+type starts_hash   = (user,day) H.t
+type srank         = float * float
+type starrank      = (user, (day * srank) list) H.t
+type starrank_hash = (user,(day,srank) H.t) H.t 
+type starbucks     = (float * float) list
+type day_starbucks = starbucks array
