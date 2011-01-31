@@ -182,3 +182,7 @@ let getOptArgs specs =
   let pushArg a = E.push restArgsE a in
   parse_cmdline specs pushArg;
   L.of_enum restArgsE |> L.rev
+
+let show_equals m n =
+  let eqsign = if m = n then "=" else "/=" in
+  sprintf "%d %s %d" m eqsign n

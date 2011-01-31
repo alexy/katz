@@ -21,6 +21,7 @@ type user_int       = user * int
 type user_ints_enum = user_int E.t
 type user_ints_hash = (user,int) H.t
 type day_user_ints  = user_ints_hash array
+type day_user_nums  = user_nums array
 type real           = float
 type day_real       = day * float
 type day_reals      = day_real list
@@ -67,7 +68,7 @@ type starts = users array
 
 (* volume *)
 
-type bucket_volumes = (int list) array
+type bucket_volumes = (int_int list) array
 
 (* soc_run_common *)
 

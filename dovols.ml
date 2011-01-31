@@ -2,6 +2,13 @@
    each class bucket pushes *)
    
 open Common
+open Getopt
+
+let check_sums = ref true
+let specs =
+[
+  (noshort,"nocheck",(set check_sums false),None)
+]
 
 let () =
   let args = getArgs in
@@ -19,8 +26,6 @@ let () =
   let dnums: day_rep_nums = loadData dnumsName in
   let bucks: day_buckets  = loadData bucksName in
   
-  let rnums = A.map (H.map (fun _ x -> fst x)) dnums in
-
-  let vols = Volume.bucket_volumes rnums bucks in
+  let vols = Volume.bucket_volumes !check_sums dnums bucks in
   
   saveData vols volsName
