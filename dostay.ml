@@ -14,6 +14,6 @@ let () =
 
   let bucks: day_buckets = loadData bucksName in
 
-  let stays = Bucket_power.staying bucks in
+  let stays: staying = Bucket_power.staying bucks in
   
   saveData stays saveName

@@ -35,6 +35,6 @@ let () =
   let maturity = match minDaysO with
   | Some minDays -> Some (startsh,minDays,!minCap)
   | _ -> None in
-  let stars = Starrank.starrank dreps dcapsh maturity in
+  let stars: starrank = Starrank.starrank dreps dcapsh maturity in
   
   saveData stars starsName

@@ -24,7 +24,7 @@ let () =
   let bucks: day_buckets = loadData bucksName in
   let stars: starrank    = loadData starsName in
   
-  let srankh             = Starrank.starrank_hash stars in
-  let sbucks             = Starrank.starbucks bucks srankh in
+  let srankh                = Starrank.starrank_hash stars in
+  let sbucks: day_starbucks = Starrank.starbucks bucks srankh in
   
   saveData sbucks sbucksName

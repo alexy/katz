@@ -18,7 +18,7 @@ let () =
       let dstarts: starts       = loadData dstartsName in
       let denums:  day_edgenums = loadData denumsName in
 
-      let ereps = 
+      let ereps: graph = 
         match restArgs with
         | [] -> 
           Simulate.simulate ~uniform dstarts denums

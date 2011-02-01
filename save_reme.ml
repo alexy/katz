@@ -18,7 +18,7 @@ let () =
   let (byday: days) = by_day dreps in
   leprintfln "byday has length %d" (Array.length byday);
   
-  let dereps, demens = day_re_me byday in
+  let (dereps: day_rep_nums), (demens: day_rep_nums) = day_re_me byday in
   leprintfln "now saving dereps in %s, demens in %s" derepsName demensName;
   saveData dereps derepsName;
   saveData demens demensName;

@@ -4,17 +4,17 @@ open Common
 (* Float.print would do, but it doesn't control for precision *)
 let column_print oc x = fprintf oc "%5.2f" x
   
-type tex = TeX | AllTeX | Plain
+type tex = TeX | DocTeX | Plain
 
 let print_table oc tex name rates =
-  let anyTeX,allTeX = 
+  let anyTeX,docTeX = 
   match tex with
-  | AllTeX -> true,true
+  | DocTeX -> true,true
   | TeX    -> true,false
   | _      -> false,false
   in
 
-  if allTeX then
+  if docTeX then
     fprintf oc "
 \\documentclass{article}
 \\begin{document}    
@@ -22,34 +22,29 @@ let print_table oc tex name rates =
 
   if anyTeX then
     fprintf oc "
-  \\begin{table}
-	\\caption{%s}
-	\\label{table:TODO-LABEL}
-	\\centering
-	\\begin{tabular}{|c|c|c|c|c|c|c|c|}
-	\\hline
-	\\emph{day} & 1 & 10 & 100 & 1,000 & 10,000 & 100,000 & 1,000,000 \\\\
-	\\hline
-	\\hline	
-" name else ();
+\\resizebox{\\linewidth}{!}{
+\\begin{tabular}{|cccccccc|}
+\\toprule
+\\emph{day} & 10 & 100 & 1K & 10K & 100K & 1M & 10M \\\\
+\\midrule
+" else ();
   
   L.iteri begin fun day rs ->
     fprintf oc "%d" (day+7) ;
-    if anyTeX then begin
-      L.print ~first:" & "~sep:" & " ~last:"\\\\\n" column_print oc rs;
-      fprintf oc "\\hline\n"
-      end
+    if anyTeX then
+      L.print ~first:" & "~sep:" & " ~last:"\\\\\n" column_print oc rs
     else
       L.print ~first:"" ~sep:" " ~last:"\n" column_print oc rs
   end (rates |> L.take 34 |> L.drop 7);
   
   if anyTeX then
     fprintf oc "
-\\end{tabular}
-\\end{table}
-" else ();
+\\end{tabular}}
+\\label{table:%s}
+\\caption{%s}
+" name name else ();
 
-  if allTeX then
+  if docTeX then
     fprintf oc "
 \\end{document}    
 " else ()
@@ -59,13 +54,13 @@ let () =
   let args = getArgs in
   let ratesName,tex =
   match args with
-  | x::"alltex"::_ -> x,AllTeX
+  | x::"alltex"::_ -> x,DocTeX
   | x::"tex"::_    -> x,TeX
   | x::[]          -> x,Plain
   | _ -> failwith "texrates ratesName [tex|alltex]"
   in
   
-  let suffix,what = match tex with | TeX | AllTeX _ -> ".tex","latex" | _ -> ".txt","text" in
+  let suffix,what = match tex with | TeX | DocTeX _ -> ".tex","latex" | _ -> ".txt","text" in
     let replaced,saveBase = String.replace ratesName ".mlb" "" in
     assert replaced;
     let saveName = saveBase^suffix in

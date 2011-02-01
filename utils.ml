@@ -186,3 +186,7 @@ let getOptArgs specs =
 let show_equals m n =
   let eqsign = if m = n then "=" else "/=" in
   sprintf "%d %s %d" m eqsign n
+  
+let hash_split h =
+  H.map (fun _ xy -> fst xy) h,
+  H.map (fun _ xy -> snd xy) h

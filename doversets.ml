@@ -19,7 +19,7 @@ let () =
   let b1: day_buckets = loadData b1Name in
   let b2: day_buckets = loadData b2Name in
 
-  let osets,overx,overy = bucketOverlapSetsRatios b1 b2 in
+  let (osets:day_buckets),(overx:rates),(overy:rates) = bucketOverlapSetsRatios b1 b2 in
   
   leprintfln "-- overx: --";
   show_rates overx;

@@ -20,6 +20,7 @@ SKEW=sk
 SGEN=sg
 RBUCKS=save_rbucks
 VOLS=dovols
+VOLS2=dovols2
 SAVE_REME=save_reme
 OVERLAPS=doverlaps
 OVERSETS=doversets
@@ -142,6 +143,9 @@ $(SGEN).opt: lib.cmxa invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(VOLS2).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS2).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(OVERLAPS).opt: lib.cmxa topsets.cmx $(OVERLAPS).ml

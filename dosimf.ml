@@ -15,7 +15,7 @@ let () =
 
       let duvals = By_day.dayUserReals udvals in
       
-      let ereps = 
+      let ereps: graph = 
         match restArgs with
         | [] -> 
           Simulate.simulate ~duvals dstarts denums

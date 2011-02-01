@@ -17,6 +17,6 @@ let () =
 
   let aranks: day_rank_users = loadData aranksName in
   
-  let bucks = A.map Topsets.buckets aranks in
+  let bucks: day_buckets = A.map Topsets.buckets aranks in
   
   saveData bucks bucksName

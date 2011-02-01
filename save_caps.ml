@@ -22,6 +22,6 @@ let () =
       dcapsName capsName;
       
     let dcaps: user_day_reals = loadData dcapsName in
-    let caps = Dcaps.mature_day_caps maturity minimum ~sort dcaps in
+    let caps: day_caps = Dcaps.mature_day_caps maturity minimum ~sort dcaps in
     
     saveData caps capsName;

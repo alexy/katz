@@ -15,12 +15,12 @@ let () =
     leprintfln "byday has length %d" (Array.length byday);
 
     leprintfln "now saving byday in %s" edgeName;
-    Binary_graph.saveData byday edgeName;
+    saveData byday edgeName;
     let tEdge =  Some "saved byday timing: " |> getTiming in
     
     let nums : day_edgenums = dayEdgenums byday in
     leprintfln "now saving nums in %s" numsName;
-    Binary_graph.saveData nums numsName;
+    saveData nums numsName;
     let tNums =  Some "computed and saved nums timing: " |> getTiming in
     
     let ts = List.rev (tNums::tEdge::tByday::tLoad) in

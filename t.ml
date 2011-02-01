@@ -11,6 +11,7 @@ type dreps = graph
 type user_user      = (user,reps) H.t
 type days           = (user_user * user_user) array
 type int_int        = int * int
+type int_int_pair   = int_int * int_int
 type denums         = (user * int_int) array
 type user_nums      = (user, int_int) H.t
 type user_nums_pair = user_nums * user_nums
@@ -68,7 +69,9 @@ type starts = users array
 
 (* volume *)
 
-type bucket_volumes = (int_int list) array
+type bucket_volumes  = (int list) array
+type bucket_volumes2 = (int_int list) array
+type bucket_volumes4 = (int_int_pair list) array
 
 (* soc_run_common *)
 

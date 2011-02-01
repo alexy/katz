@@ -13,7 +13,7 @@ let () =
   let b1: day_buckets = loadData b1Name in
   let b2: day_buckets = loadData b2Name in
 
-  let rates = Topsets.bucketOverlapRates b1 b2 in
+  let rates: rates = Topsets.bucketOverlapRates b1 b2 in
   leprintfln "";
   
   L.iter begin fun rate ->

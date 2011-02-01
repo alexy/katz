@@ -26,6 +26,6 @@ let () =
   let dnums: day_rep_nums = loadData dnumsName in
   let bucks: day_buckets  = loadData bucksName in
   
-  let vols = Volume.bucket_volumes !check_sums dnums bucks in
+  let vols: bucket_volumes2 = Volume.bucket_volumes2 !check_sums dnums bucks in
   
   saveData vols volsName

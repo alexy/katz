@@ -29,7 +29,7 @@ let () =
 
   let stays: staying = loadData staysName in
   
-  let usrs,nums = Bucket_power.stay_over stays !days in
+  let (usrs : staying),(nums : staying_totals) = Bucket_power.stay_over stays !days in
   
   saveData usrs stovUsrsName;
   saveData nums stovNumsName;
