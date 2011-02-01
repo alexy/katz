@@ -1,29 +1,37 @@
 open Common
+open Getopt
 open By_day
   
-let () = 
-  let args = getArgs in
-  match args with
-  | drepsName::edgeName::numsName::restArgs -> begin
-    leprintfln "reading graph from %s, saving byday edges in %s and edge nums in %s" drepsName edgeName numsName;
-    let maxDays = restArgs |> List.map int_of_string |> option_of_list in
-    let (dreps,tLoad) = Load_graph.loadAnyGraph drepsName in
-    leprintfln "loaded %s, %d" drepsName (H.length dreps);
-    
-    let (byday: days) = by_day dreps in
-    let tByday = Some "sliced dreps by day, timing: " |> getTiming in
-    leprintfln "byday has length %d" (Array.length byday);
+let saveEdges = ref true
+let saveNums  = ref true
+let specs =
+[
+  ('e',"noedges",(set saveEdges false), None);
+  ('n',"nonums", (set saveNums  false), None)
+]
 
-    leprintfln "now saving byday in %s" edgeName;
-    saveData byday edgeName;
-    let tEdge =  Some "saved byday timing: " |> getTiming in
-    
+let () = 
+  let args = getOptArgs specs in
+
+  let drepsName = 
+  match args with
+  | drepsName::restArgs -> drepsName
+  | _ -> failwith "usage: save_days drepsName"
+  in
+   
+  let edgeName = "byday-"^drepsName in
+  let numsName = "denums-"^drepsName in
+  leprintfln "reading graph from %s, saving byday edges in %s and edge nums in %s" drepsName edgeName numsName;
+
+  let dreps = loadData drepsName in
+  leprintfln "loaded %s, %d" drepsName (H.length dreps);
+  
+  let (byday: days) = by_day dreps in
+  leprintfln "byday has length %d" (Array.length byday);
+
+  if !saveEdges then saveData byday edgeName else ();
+  
+  if !saveNums then
     let nums : day_edgenums = dayEdgenums byday in
-    leprintfln "now saving nums in %s" numsName;
-    saveData nums numsName;
-    let tNums =  Some "computed and saved nums timing: " |> getTiming in
-    
-    let ts = List.rev (tNums::tEdge::tByday::tLoad) in
-    printf "timings: %s\n" (show_float_list ts);
-  end
-  | _ -> leprintf "usage: save_days drepsName bydayName"
+    saveData nums numsName
+  else ()
