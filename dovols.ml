@@ -4,10 +4,10 @@
 open Common
 open Getopt
 
-let check_sums = ref true
+let checkSums = ref true
 let specs =
 [
-  (noshort,"nocheck",(set check_sums false),None)
+  (noshort,"nocheck",(set checkSums false),None)
 ]
 
 let () =
@@ -26,6 +26,6 @@ let () =
   let dnums: day_rep_nums = loadData dnumsName in
   let bucks: day_buckets  = loadData bucksName in
   
-  let vols: bucket_volumes2 = Volume.bucket_volumes2 !check_sums dnums bucks in
+  let vols: bucket_volumes2 = Volume.bucket_volumes2 !checkSums dnums bucks in
   
   saveData vols volsName
