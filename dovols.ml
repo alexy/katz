@@ -11,7 +11,8 @@ let specs =
 ]
 
 let () =
-  let args = getArgs in
+  let args = getOptArgs specs in
+  
   let dnumsName,bucksName,byMents =
   match args with
     | dnumsName::bucksName::"m"::restArgs -> dnumsName,bucksName,true

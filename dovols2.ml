@@ -13,7 +13,8 @@ let specs =
 ]
 
 let () =
-  let args = getArgs in
+  let args = getOptArgs specs in
+  
   let denumsName,bucksName =
   match args with
     | denumsName::bucksName::restArgs -> denumsName,bucksName
