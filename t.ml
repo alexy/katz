@@ -19,7 +19,7 @@ type day_re_me      = day_rep_nums * day_rep_nums
 type day_edgenums   = user_nums_pair array
 type user_int       = user * int
 type user_ints_enum = user_int E.t
-type user_ints_hash = (user,int) H.t
+type user_ints_hash = (user,int) H.t (* users_total below *)
 type day_user_ints  = user_ints_hash array
 type day_user_nums  = user_nums array
 type real           = float
@@ -81,7 +81,9 @@ type talkBalance = (user,int) H.t
 
 (* bucket power *)
 
-type b2b = (int list) list
+type staying            = user_int array array
+type staying_totals     = int array
+type b2b     = (int list) list
 type day_b2b = b2b array
 
 (* starrank *)

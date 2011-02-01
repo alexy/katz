@@ -25,6 +25,7 @@ let bucket_volumes: bool -> day_user_nums -> day_buckets -> bucket_volumes =
      let usum_buckets = bucket_totals |> L.map snd |> L.sum in
      let tsum_dnums,usum_dnums = totals.(day) in
      
+     if check_sums then
      begin match tsum_buckets = tsum_dnums, 
                  usum_buckets = usum_dnums with
      | true,true -> ()
@@ -46,7 +47,8 @@ let bucket_volumes: bool -> day_user_nums -> day_buckets -> bucket_volumes =
                  bucket_user_num denums_users_num 
                  denums_not_buckets_num buckets_not_denums_num 
        end
-     end;
+     end
+     else ();
      bucket_totals
   end bucks
   

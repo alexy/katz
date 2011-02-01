@@ -29,8 +29,9 @@ B2B=dob2bs
 OPT=opt
 STARS=dosranks
 SBUCKS=dostarbucks
+STOV=dostayovers
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B) $(STARS) $(SBUCKS)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B) $(STARS) $(SBUCKS) $(STOV)
 
 all: $(ALL:%=%.opt)
 
@@ -165,5 +166,8 @@ $(STARS).opt: lib.cmxa starrank.cmx $(STARS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SBUCKS).opt: lib.cmxa starrank.cmx $(SBUCKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
+$(STOV).opt: lib.cmxa bucket_power.cmx $(STOV).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   

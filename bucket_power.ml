@@ -1,7 +1,9 @@
 open Common
 
-let staying bucks =
-  let a = A.init 7 (fun i -> let n = power10 i in H.create n) in
+let staying: day_buckets -> staying = 
+  fun bucks ->
+  let maxBuckets = A.map L.length bucks |> A.max in
+  let a = A.init maxBuckets (power10 |- H.create) in
   A.iteri begin fun day buckets ->
     L.iteri begin fun i bucket ->
       S.iter begin fun user ->
@@ -13,9 +15,6 @@ let staying bucks =
     schwartzSortIntHashDesc h
   end a
       
-      
-(* let stay_over  *)
-
 
 let findUserBucket user buckets =
   let bucketSeq = L.backwards buckets in
@@ -49,3 +48,14 @@ let b2b dreps bucks =
       L.map (!)
     end buckets;
   end bucks
+  
+  
+let stay_over: staying -> int -> staying * staying_totals =
+  fun stay n ->
+  A.map begin fun bucket ->
+    A.filter begin fun (_,count) -> 
+      count >= n
+    end bucket |> 
+    fun x -> x,A.length x
+  end stay |> array_split 
+   
