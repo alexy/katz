@@ -32,4 +32,6 @@ let () =
   let usrs,nums = Bucket_power.stay_over stays !days in
   
   saveData usrs stovUsrsName;
-  saveData nums stovNumsName
+  saveData nums stovNumsName;
+  
+  A.print ~last:"]\n" Int.print stdout nums
