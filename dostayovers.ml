@@ -34,4 +34,4 @@ let () =
   saveData usrs stovUsrsName;
   saveData nums stovNumsName;
   
-  A.print ~last:"]\n" Int.print stdout nums
+  A.print ~last:"|]\n" Int.print stdout nums
