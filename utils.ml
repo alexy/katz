@@ -190,3 +190,6 @@ let show_equals m n =
 let hash_split h =
   H.map (fun _ xy -> fst xy) h,
   H.map (fun _ xy -> snd xy) h
+  
+let array_hash_split a = A.map hash_split a |> array_split
+let array_list_split a = A.map L.split a |> array_split

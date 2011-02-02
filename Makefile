@@ -25,14 +25,15 @@ SAVE_REME=save_reme
 OVERLAPS=doverlaps
 OVERSETS=doversets
 STAY=dostay
-TEX=texrates
+TEXR=texrates
 B2B=dob2bs
 OPT=opt
 STARS=dosranks
 SBUCKS=dostarbucks
 STOV=dostayovers
+TEXV=texvols
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEX) $(B2B) $(STARS) $(SBUCKS) $(STOV)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV)
 
 all: $(ALL:%=%.opt)
 
@@ -157,7 +158,7 @@ $(OVERSETS).opt: lib.cmxa topsets.cmx $(OVERSETS).ml
 $(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(TEX).opt: lib.cmxa topsets.cmx $(TEX).ml
+$(TEXR).opt: lib.cmxa topsets.cmx teX.cmx $(TEXR).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
 $(B2B).opt: lib.cmxa bucket_power.cmx $(B2B).ml
@@ -173,5 +174,8 @@ $(SBUCKS).opt: lib.cmxa starrank.cmx $(SBUCKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
 $(STOV).opt: lib.cmxa bucket_power.cmx $(STOV).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
+$(TEXV).opt: lib.cmxa topsets.cmx teX.cmx $(TEXV).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   

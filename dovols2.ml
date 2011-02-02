@@ -31,9 +31,7 @@ let () =
   let reps,ments = array_split denums in
   
   let vr,vm = 
-  if !by1 then
-    let array_hash_split a = A.map hash_split a |> array_split in
-    
+  if !by1 then    
     let re,ru = array_hash_split reps  in
     let me,mu = array_hash_split ments in
   
