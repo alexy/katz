@@ -2,13 +2,13 @@ open Common
 open Getopt
 open TeX
 
-(* tabulate a vols4 data as 4 tables *)
+(* tabulate a b2b data as 4 tables *)
 
 let latex'     = ref false
 let tableDoc'  = ref false
 let matrix'    = ref false
 let matrixDoc' = ref false
-let normalize' = ref false
+let absNorm'   = ref false
 let outDir'    = ref ""
 let verbose'   = ref false
 
@@ -17,8 +17,8 @@ let specs =
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
   ('m',"matrix",    (set matrix'    true), None);
-  ('d',"mdoc",      (set matrixDoc' true), None);  
-  ('n',"normalize", (set normalize' true), None);
+  ('d',"mdoc",      (set matrixDoc' true), None);
+  ('a',"absNorm",   (set absNorm'   true), None); 
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
   ('v',"verbose",   (set verbose'   true), None)
 ]
@@ -27,38 +27,38 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   normalize,   outDir,    verbose =
-      !latex', !tableDoc', !matrix', !matrixDoc', !normalize', !outDir',  !verbose' in  	
+  let latex,   tableDoc,   matrix,   matrixDoc,   absNorm,   outDir,    verbose =
+      !latex', !tableDoc', !matrix', !matrixDoc', !absNorm', !outDir',  !verbose' in  	
   
   let tex = texParams latex tableDoc in  
   
-  let vols4Name = 
+  let b2bName = 
   match args with
   | x::[] -> x
-  | _ -> failwith "usage: texvols [-tTmd] vols4Name"
+  | _ -> failwith "usage: texvols [-tTmd] b2bName"
   in
 
   let suffix,asWhat = match tex with | TeX | DocTeX _ -> "tex","latex" | _ -> "txt","text" in
-  let replaced,saveBase = String.replace vols4Name ".mlb" "" in
+  let replaced,saveBase = String.replace b2bName ".mlb" "" in
   assert replaced;
-  let normStr = if normalize then "norm" else "int" in
+  let normStr = if absNorm then "abs" else "rel" in
   let saveSuffix = sprintf "%s-%s.%s" normStr saveBase suffix in
   let outDir = if String.is_empty outDir then suffix else outDir in
   
-  let prefixes   = ["re";"ru";"me";"mu"] in
+  let roguePrefix = if absNorm then "srel" else "sabs" in
+  let prefixes    = ["befo";"self";"aftr";roguePrefix] in
   let dirPrefixes = L.map ((^) (outDir^"/")) prefixes in
-  let tableNames = L.map (flip (^) saveSuffix) dirPrefixes in
-  leprintf "splitting %s as %s into " vols4Name asWhat; 
+  let tableNames  = L.map (flip (^) saveSuffix) dirPrefixes in
+  leprintf "splitting %s as %s into " b2bName asWhat; 
   L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames;
+    
+  let b2bs: day_b2b = loadData b2bName in
+  let before,self,after,rogue = 
+    Bucket_power.b2b_ratios absNorm b2bs in
   
-  let als_list x = (array_list_split |- fun (a,b) -> A.to_list a, A.to_list b) x in
+  let tables: rates list = [before;self;after;rogue] in
   
-  let vols4: bucket_volumes4 = loadData vols4Name in
-  let (re,ru),(me,mu) = array_list_split vols4 |> 
-    fun (v,w) -> als_list v, als_list w in
-  let tables = [re;ru;me;mu] in
-  
-  printIntTables tex ~normalize ~verbose tables tableNames;
+  printFloatTables tex ~verbose tables tableNames;
 
   if matrix then begin
     let includeNames = L.map (flip (^) saveBase) prefixes in

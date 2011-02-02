@@ -3,22 +3,22 @@ open Common
 open Getopt
 open TeX
 
-let latex     = ref false
-let tableDoc  = ref false
-let verbose   = ref false
+let latex'     = ref false
+let tableDoc'  = ref false
+let verbose'   = ref false
 
 let specs =
 [
-  ('t',"tex",   (set latex     true),None);
-  ('T',"tdoc",  (set tableDoc  true),None);
-  ('v',"verbose",(set verbose  true),None)
+  ('t',"tex",   (set latex'     true),None);
+  ('T',"tdoc",  (set tableDoc'  true),None);
+  ('v',"verbose",(set verbose'  true),None)
 ]
 
-(* Float.print would do, but it doesn't control for precision *)
-let floatPrint oc x = fprintf oc "%5.2f" x
-  
 let () =
   let args = getOptArgs specs in
+  
+  let latex,   tableDoc,   verbose = 
+      !latex', !tableDoc', !verbose' in
   
   let tex = texParams latex tableDoc in
   
@@ -38,6 +38,9 @@ let () =
   let rates : rates = loadData ratesName in
 
   let oc = open_out saveName in
-  print_table oc     tex saveBase floatPrint rates; close_out oc;
-  if !verbose then print_table stdout tex saveBase floatPrint rates else ()
+  printTable oc tex saveBase floatPrint rates; 
+  close_out oc;
+  if verbose then 
+    printTable stdout tex saveBase floatPrint rates 
+  else ()
   

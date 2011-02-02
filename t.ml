@@ -35,6 +35,7 @@ type day_user_reals = user_reals array
 module S=Set.StringSet
 let floatSize = S.cardinal |- float
 
+(* (float list) list <=> float list list *)
 type rates          = (float list) list
 type buckets        = S.t list
 type day_buckets    = buckets array
@@ -84,10 +85,13 @@ type talkBalance = (user,int) H.t
 
 (* bucket power *)
 
-type staying            = user_int array array
-type staying_totals     = int array
-type b2b     = (int list) list
-type day_b2b = b2b array
+type staying        = user_int array array
+type staying_totals = int array
+type b2b            = (int list) list
+type day_b2b        = b2b array
+type int_rates      = int list list
+type float4         = float * float * float * float
+type rates4         = rates * rates * rates * rates
 
 (* starrank *)
 
@@ -99,3 +103,7 @@ type starrank      = (user, (day * srank) list) H.t
 type starrank_hash = (user,(day,srank) H.t) H.t
 type starbucks     = (float_triple * float_triple) list
 type day_starbucks = starbucks array
+
+(* general *)
+
+type 'a tuple4 = 'a * 'a * 'a * 'a

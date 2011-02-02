@@ -27,7 +27,8 @@ let findUserBucket user buckets =
   aux (pred totalBuckets)
 
 
-let b2b dreps bucks =
+let b2b: dreps -> day_buckets -> day_b2b =
+  fun dreps bucks ->
   A.mapi begin fun day buckets ->
     let numBuckets = L.length buckets in
     L.map begin fun bucket ->
@@ -59,3 +60,29 @@ let stay_over: staying -> int -> staying * staying_totals =
     fun x -> x,A.length x
   end stay |> array_split 
    
+
+let b2b_ratio norm l =
+  let x = L.sum l |> float in
+  x /. norm
+  
+let carve4: ('a tuple4 -> 'a) -> float4 list list -> rates =
+  fun carveOne quads -> L.map (L.map carveOne) quads
+  
+let b2b_ratios: bool -> day_b2b -> rates4 =
+  fun toFullDay b2bs ->
+  let r4 = b2bs |> A.to_list |> L.map begin fun b2b ->
+    let dayNorm = L.fold_left (fun res tobs -> res + L.sum tobs) 0 b2b
+      |> float in       
+    L.mapi begin fun i tobs ->
+      let bucketNorm = L.sum tobs |> float in
+      let before,selfRest = L.split_at i tobs in
+      let self,after  = L.split_at (succ i) selfRest in
+      let total3,rogueTotal = 
+        if toFullDay then dayNorm,bucketNorm 
+                     else bucketNorm,dayNorm in 
+      b2b_ratio total3 before, b2b_ratio total3 self, 
+      b2b_ratio total3 after,  b2b_ratio rogueTotal self
+    end b2b
+  end in
+  carve4 fst4 r4, carve4 snd4 r4, carve4 trd4 r4, carve4 frh4 r4
+  

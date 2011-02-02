@@ -134,8 +134,13 @@ let array_split a =
   Array.init len (Array.get a |- snd)
 
 let fst3 (x,_,_) = x
-let snd3 (_,y,_) = y
-let trd3 (_,_,z) = z
+let snd3 (_,x,_) = x
+let trd3 (_,_,x) = x
+
+let fst4 (x,_,_,_) = x
+let snd4 (_,x,_,_) = x
+let trd4 (_,_,x,_) = x
+let frh4 (_,_,_,x) = x
 
 let array_split3 a = 
   let len = A.length a in
@@ -193,3 +198,8 @@ let hash_split h =
   
 let array_hash_split a = A.map hash_split a |> array_split
 let array_list_split a = A.map L.split a |> array_split
+
+let may_normalize norm x = 
+  match norm with
+  | Some y when y <> 0. -> x /. y
+  | _ -> x
