@@ -2,6 +2,13 @@ open Common
 
 type tex = TeX | DocTeX | Plain
 
+let texParams tex doc =
+  match !tex,!doc with
+  | true,true  -> DocTeX
+  | true,false -> TeX
+  | _          -> Plain
+  
+
 let print_table oc tex name printOne elems =
   let anyTeX,docTeX = 
   match tex with
@@ -44,3 +51,54 @@ let print_table oc tex name printOne elems =
     fprintf oc "
 \\end{document}    
 " else ()
+
+
+(* let print_table oc tex name printOne elems =
+  let table_string = 
+    sprint_table tex name printOne elems in
+  String.print oc table_string *)
+
+
+let tables2x2 tableNames =
+  match tableNames with
+  | t1::t2::t3::t4::[] ->
+  sprintf "
+\\begin{document}
+
+\\begin{table}
+\\centering
+
+\\minipage{0.50\\textwidth}
+\\include{%s}
+\\endminipage\\hfill%%
+%%
+\\minipage{0.50\\textwidth}
+\\include{%s}
+\\endminipage
+
+\\bigskip
+
+\\minipage{0.50\\textwidth}
+\\include{%s}
+\\endminipage\\hfill%%
+%%
+\\minipage{0.50\\textwidth}
+\\include{%s}
+\\endminipage
+
+\\end{table}" t1 t2 t3 t4
+  | _ -> failwith "four_tables needs a list of four strings"
+
+
+let texDocument s =
+  sprintf "
+\\documentclass{article}
+\\usepackage{booktabs,graphicx}
+%s
+\\end{document}" s
+
+
+let print_matrix oc doc tableNames =
+  let mats = tables2x2 tableNames in
+  let s = if doc then texDocument mats else mats in
+  String.print oc s
