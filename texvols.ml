@@ -42,7 +42,8 @@ let _ =
   let replaced,saveBase = String.replace vols4Name ".mlb" "" in
   assert replaced;
   let normStr = if normalize then "norm" else "int" in
-  let saveSuffix = sprintf "-%s-%s.%s" normStr saveBase suffix in
+  let saveInfix = sprintf "-%s-%s" normStr saveBase in
+  let saveSuffix = sprintf "%s.%s" saveInfix suffix in
   let outDir = if String.is_empty outDir then suffix else outDir in
   
   let prefixes   = ["re";"ru";"me";"mu"] in
@@ -68,7 +69,7 @@ let _ =
     
 
   if matrix then begin
-    let includeNames = L.map (flip (^) saveBase) prefixes in
+    let includeNames = L.map (flip (^) saveInfix) prefixes in
     let matrixName = sprintf "%s/4x4-%s-%s.tex" outDir normStr saveBase in
   
     printShowMatrix matrixDoc ~verbose matrixName includeNames
