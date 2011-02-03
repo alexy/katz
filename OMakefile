@@ -9,24 +9,32 @@ OCAMLPACKS[] =
 	batteries
 	tokyo_cabinet
 	json-wheel
+	getopt
 
 OBJECTS[] =
 	h
 	utils
 	graph
 	common
+	t
+	constants
 	json_graph
 	tokyo_graph
 	binary_graph
+	invert
 	by_day
 	dranges
 	dreps
 	proportional
 	simulate
+	skew
+	soc_run_common
+	soc_run_gen
+	sg
 	
-OCamlProgram(dosim, $(OBJECTS))
+OCamlProgram(sg, $(OBJECTS))
 
-.DEFAULT: dosim
+.DEFAULT: sg
 
 .PHONY: clean
 

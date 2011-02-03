@@ -2,11 +2,17 @@ open Common
 
 type tex = TeX | DocTeX | Plain
 
-let texParams tex doc =
-  match tex,doc with
+let texParams isTeX isDoc =
+  let tex =
+  match isTeX,isDoc with
   | true,true  -> DocTeX
   | true,false -> TeX
-  | _          -> Plain
+  | _          -> Plain in
+  let suffix,asWhat = 
+  match tex with 
+  | TeX | DocTeX _ -> "tex","latex" 
+  | _ -> "txt","text" in
+  tex,suffix,asWhat
 
   
 (* Float.print would do, but it doesn't control for precision *)
@@ -154,7 +160,7 @@ let printMatrix oc doc tableNames =
   String.print oc s
   
 
-let printShowMatrix matrixDoc ?(verbose=false) matrixName includeNames =
+let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   let docKind = if matrixDoc then "document" else "tabular" in
   leprintf "saving %s matrix in %s" docKind matrixName;
   L.print ~first:", including " ~sep:", " ~last:"\n" String.print stderr includeNames;
@@ -216,8 +222,9 @@ let printShowTable: tex -> ?verbose:bool ->
 
 
 (* TODO this binds to Int.print, doesn't take floatPrint anymore -- why?
-
-let printShowTable: tex -> ?verbose:bool -> 
+   OCaml 3.12 allows full polymorphic specification 'a 'b 'c.
+   
+let printShowTable: 'a 'b 'c. tex -> ?verbose:bool -> 
   ~printOne:('a BatInnerIO.output -> 'b -> unit) ->
   'c list list -> string -> unit =
   fun tex ?(verbose=false) ?(printOne=Int.print) table tableName ->
@@ -242,3 +249,33 @@ let printShowTables: tex -> ?verbose:bool ->
     else () *)
     printShowTable tex ~verbose printOne table tableName
   end tables tableNames
+
+let suffixWhat tex =
+  (suffix,saveBase)
+  
+
+let showDir dir =
+  if String.is_empty dir 
+    then "locally"
+    else let slash = match trailingChar dir with
+      | Some '/' -> "" 
+      | -> "/" in
+      sprintf "to %s%s" dir slash
+      
+
+let saveBase ?(mark="") suffix inName =      
+  let replaced,saveBase = String.replace inName ".mlb" "" in
+  assert replaced;
+
+  let daMark  = if String.is_empty mark then "" else "-"^mark in
+  let infiks  = sprintf "%s%s" daMark saveBase in
+  let suffiks = sprint "%s.%s" inf suffix in
+  infiks, suffiks
+  
+let listNames saveSuffix prefixes = 
+  L.map (flip (^) saveSuffix) prefixes
+  
+let reportTableNames inName asWhat outDir tableNames =
+  leprintf "splitting %s as %s %s, new tables:" inName asWhat (showDir outDir); 
+  L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames;
+

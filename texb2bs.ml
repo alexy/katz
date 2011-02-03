@@ -30,7 +30,9 @@ let _ =
   let latex,   tableDoc,   matrix,   matrixDoc,   absNorm,   outDir,    verbose =
       !latex', !tableDoc', !matrix', !matrixDoc', !absNorm', !outDir',  !verbose' in  	
   
-  let tex = texParams latex tableDoc in  
+  let tex,suffix,asWhat = texParams latex tableDoc in  
+  let outDir = if String.is_empty outDir then suffix else outDir in
+  let mark = if absNorm then "abs" else "rel" in
   
   let b2bName = 
   match args with
@@ -38,20 +40,15 @@ let _ =
   | _ -> failwith "usage: texvols [-tTmd] b2bName"
   in
 
-  let suffix,asWhat = match tex with | TeX | DocTeX _ -> "tex","latex" | _ -> "txt","text" in
-  let replaced,saveBase = String.replace b2bName ".mlb" "" in
-  assert replaced;
-  let normStr = if absNorm then "abs" else "rel" in
-  let saveInfix = sprintf "-%s-%s" normStr saveBase in
-  let saveSuffix = sprintf "%s.%s" saveInfix suffix in
-  let outDir = if String.is_empty outDir then suffix else outDir in
+
+  let saveInfix, saveSuffix = saveBase ~mark suffix vols4Name in  
   
   let roguePrefix = if absNorm then "srel" else "sabs" in
   let prefixes    = ["befo";"self";"aftr";roguePrefix] in
-  let dirPrefixes = L.map ((^) (outDir^"/")) prefixes in
-  let tableNames  = L.map (flip (^) saveSuffix) dirPrefixes in
-  leprintf "splitting %s as %s into " b2bName asWhat; 
-  L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames;
+  
+  let tableNames = listNames saveSuffix prefixes in
+  reportNames vols4Name asWhat outDir tableNames;
+
     
   let b2bs: day_b2b = loadData b2bName in
   let before,self,after,rogue = 
@@ -59,13 +56,11 @@ let _ =
   
   let tables: rates list = [before;self;after;rogue] in
   
-  (* printFloatTables tex ~verbose tables tableNames; *)
-  printShowTables tex ~verbose floatPrint tables tableNames;
+  printShowTables tex ~verbose floatPrint tables outDir tableNames;
 
   if matrix then begin
-    let includeNames = L.map (flip (^) saveInfix) prefixes in
-    let matrixName = sprintf "%s/4x4-%s-%s.tex" outDir normStr saveBase in
-  
-    printShowMatrix matrixDoc ~verbose matrixName includeNames
+    let includeNames = listNames saveInfix prefixes in
+    let matrixName   = sprintf "4x4%s" saveSuffix in  
+    printShowMatrix matrixDoc ~verbose outDir matrixName includeNames
   end
   else ()

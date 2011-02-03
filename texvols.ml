@@ -30,48 +30,44 @@ let _ =
   let latex,   tableDoc,   matrix,   matrixDoc,   normalize,   outDir,    verbose =
       !latex', !tableDoc', !matrix', !matrixDoc', !normalize', !outDir',  !verbose' in  	
   
-  let tex = texParams latex tableDoc in  
+  let tex,suffix,asWhat = texParams latex tableDoc in  
+  let outDir = if String.is_empty outDir then suffix else outDir in
+  let mark = if normalize then "norm" else "int" in
   
   let vols4Name = 
   match args with
   | x::[] -> x
   | _ -> failwith "usage: texvols [-tTmd] vols4Name"
   in
+  
 
-  let suffix,asWhat = match tex with | TeX | DocTeX _ -> "tex","latex" | _ -> "txt","text" in
-  let replaced,saveBase = String.replace vols4Name ".mlb" "" in
-  assert replaced;
-  let normStr = if normalize then "norm" else "int" in
-  let saveInfix = sprintf "-%s-%s" normStr saveBase in
-  let saveSuffix = sprintf "%s.%s" saveInfix suffix in
-  let outDir = if String.is_empty outDir then suffix else outDir in
+  let saveInfix, saveSuffix = saveBase ~mark suffix vols4Name in  
   
   let prefixes   = ["re";"ru";"me";"mu"] in
-  let dirPrefixes = L.map ((^) (outDir^"/")) prefixes in
-  let tableNames = L.map (flip (^) saveSuffix) dirPrefixes in
-  leprintf "splitting %s as %s into " vols4Name asWhat; 
-  L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames;
+  
+  let tableNames = listNames saveSuffix prefixes in
+  reportNames vols4Name asWhat outDir tableNames;
+  
   
   let als_list x = (array_list_split |- fun (a,b) -> A.to_list a, A.to_list b) x in
   
   let vols4: bucket_volumes4 = loadData vols4Name in
+  
   let (re,ru),(me,mu) = array_list_split vols4 |> 
     fun (v,w) -> als_list v, als_list w in
   let tables = [re;ru;me;mu] in
   
-  (* printIntTables tex ~normalize ~verbose tables tableNames; *)
   
   if normalize then
     let normalTables = L.map normalizeIntTable tables in
-    printShowTables tex ~verbose floatPrint normalTables tableNames
+    printShowTables tex ~verbose floatPrint normalTables outDir tableNames
   else
-    printShowTables tex ~verbose Int.print  tables       tableNames;
+    printShowTables tex ~verbose Int.print  tables       outDir tableNames;
     
 
   if matrix then begin
-    let includeNames = L.map (flip (^) saveInfix) prefixes in
-    let matrixName = sprintf "%s/4x4-%s-%s.tex" outDir normStr saveBase in
-  
-    printShowMatrix matrixDoc ~verbose matrixName includeNames
+    let includeNames = listNames saveInfix prefixes in
+    let matrixName   = sprintf "4x4%s" saveSuffix in  
+    printShowMatrix matrixDoc ~verbose outDir matrixName includeNames
   end
   else ()
