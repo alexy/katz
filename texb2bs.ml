@@ -42,7 +42,7 @@ let _ =
   let replaced,saveBase = String.replace b2bName ".mlb" "" in
   assert replaced;
   let normStr = if absNorm then "abs" else "rel" in
-  let saveSuffix = sprintf "%s-%s.%s" normStr saveBase suffix in
+  let saveSuffix = sprintf "-%s-%s.%s" normStr saveBase suffix in
   let outDir = if String.is_empty outDir then suffix else outDir in
   
   let roguePrefix = if absNorm then "srel" else "sabs" in
@@ -58,11 +58,12 @@ let _ =
   
   let tables: rates list = [before;self;after;rogue] in
   
-  printFloatTables tex ~verbose tables tableNames;
+  (* printFloatTables tex ~verbose tables tableNames; *)
+  printShowTables tex ~verbose floatPrint tables tableNames;
 
   if matrix then begin
     let includeNames = L.map (flip (^) saveBase) prefixes in
-    let matrixName = sprintf "4x4-%s-%s.tex" normStr saveBase in
+    let matrixName = sprintf "%s/4x4-%s-%s.tex" outDir normStr saveBase in
   
     printShowMatrix matrixDoc ~verbose matrixName includeNames
   end

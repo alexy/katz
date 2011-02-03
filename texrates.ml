@@ -37,10 +37,11 @@ let () =
   
   let rates : rates = loadData ratesName in
 
-  let oc = open_out saveName in
-  printTable oc tex saveBase floatPrint rates; 
+  (* let oc = open_out saveName in
+  printTable oc tex floatPrint rates saveBase; 
   close_out oc;
   if verbose then 
-    printTable stdout tex saveBase floatPrint rates 
-  else ()
-  
+    printTable stdout tex floatPrint rates saveBase
+  else () *)
+
+  printShowTable tex ~verbose floatPrint rates saveBase

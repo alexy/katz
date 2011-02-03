@@ -60,13 +60,6 @@ let stay_over: staying -> int -> staying * staying_totals =
     fun x -> x,A.length x
   end stay |> array_split 
    
-
-let b2b_ratio norm l =
-  let x = L.sum l |> float in
-  x /. norm
-  
-let carve4: ('a tuple4 -> 'a) -> float4 list list -> rates =
-  fun carveOne quads -> L.map (L.map carveOne) quads
   
 let b2b_ratios: bool -> day_b2b -> rates4 =
   fun toFullDay b2bs ->
@@ -76,13 +69,13 @@ let b2b_ratios: bool -> day_b2b -> rates4 =
     L.mapi begin fun i tobs ->
       let bucketNorm = L.sum tobs |> float in
       let before,selfRest = L.split_at i tobs in
-      let self,after  = L.split_at (succ i) selfRest in
+      let self,after  = L.split_at 1 selfRest in
       let total3,rogueTotal = 
         if toFullDay then dayNorm,bucketNorm 
                      else bucketNorm,dayNorm in 
-      b2b_ratio total3 before, b2b_ratio total3 self, 
-      b2b_ratio total3 after,  b2b_ratio rogueTotal self
+      list_norm total3 before, list_norm total3 self, 
+      list_norm total3 after,  list_norm rogueTotal self
     end b2b
   end in
-  carve4 fst4 r4, carve4 snd4 r4, carve4 trd4 r4, carve4 frh4 r4
+  carveTL fst4 r4, carveTL snd4 r4, carveTL trd4 r4, carveTL frh4 r4
   

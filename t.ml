@@ -101,7 +101,7 @@ type float_triple  = float * float * float
 type srank         = float_triple
 type starrank      = (user, (day * srank) list) H.t
 type starrank_hash = (user,(day,srank) H.t) H.t
-type starbucks     = (float_triple * float_triple) list
+type starbucks     = (float_triple * float_triple) list (* averages * medians *)
 type day_starbucks = starbucks array
 
 (* general *)

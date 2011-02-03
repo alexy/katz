@@ -36,7 +36,7 @@ let normalizeFloatTable: rates -> rates =
 	end table
 
   
-let printTable oc tex name printOne table =
+let printTable oc tex printOne table name =
   let anyTeX,docTeX = 
   match tex with
   | DocTeX -> true,true
@@ -91,21 +91,32 @@ let printIntTable: 'a BatInnerIO.output -> tex -> ?normalize:bool ->
   fun oc tex ?(normalize=false) table name ->
 	if normalize then
 		let ft = normalizeIntTable table in
-		printTable oc	tex name floatPrint ft		
+		printTable oc	tex floatPrint ft	name	
 	else 
-		printTable oc tex name Int.print table
+		printTable oc tex Int.print table name
 
 
 let printFloatTable: 'a BatInnerIO.output -> tex -> ?normalize:bool ->
   'c list list -> string -> unit =
   fun oc tex ?(normalize=false) table name ->
 	let ft = if normalize then normalizeFloatTable table else table in
-	printTable oc	tex name floatPrint ft		
+	printTable oc	tex floatPrint ft	name
 
 
 let tables2x2 tableNames =
   match tableNames with
-  | t1::t2::t3::t4::[] ->
+  | t1::t2::t3::rest -> 
+  let t4block = 
+  match rest with
+  | t4::[] ->
+   sprintf "
+\\minipage{0.50\\textwidth}
+\\include{%s}
+\\endminipage
+" t4
+  | [] -> ""
+  | _ -> failwith "table2x2 takes either 3 or 4 names"
+  in
   sprintf "
 \\begin{document}
 
@@ -124,13 +135,8 @@ let tables2x2 tableNames =
 
 \\minipage{0.50\\textwidth}
 \\include{%s}
-\\endminipage\\hfill%%
-%%
-\\minipage{0.50\\textwidth}
-\\include{%s}
-\\endminipage
-
-\\end{table}" t1 t2 t3 t4
+\\endminipage\\hfill%%%s
+\\end{table}" t1 t2 t3 t4block
   | _ -> failwith "four_tables needs a list of four strings"
 
 
@@ -160,6 +166,16 @@ let printShowMatrix matrixDoc ?(verbose=false) matrixName includeNames =
   	printMatrix stdout matrixDoc includeNames 
   else ()
   
+  
+(* Originally, we had printAnyTable[s] ...?(printOne=Int.print)..., 
+   to be overridden with floatPrint for float tables.  Alas, the default value
+   typed the parameter as serving an int.
+   We then specialized {Int,Float}Tables, but then also got rid of the default
+   and generalized back as printShowTable[s] ...{Int.print,floatPrint}...
+   We commented out working original callers in tex<things> drivers. 
+   
+   https://gist.github.com/808895
+   *)
 
 let printIntTables: tex -> ?normalize:bool -> ?verbose:bool ->
   int list list list -> string list -> unit =
@@ -184,4 +200,45 @@ let printFloatTables: tex -> ?normalize:bool -> ?verbose:bool ->
     if verbose then 
     	printFloatTable stdout tex ~normalize table tableName 
     else ()
+  end tables tableNames
+  
+  
+let printShowTable: tex -> ?verbose:bool -> 
+  ('a BatInnerIO.output -> 'b -> unit) ->
+  'c list list -> string -> unit =
+  fun tex ?(verbose=false) printOne table tableName ->
+    let oc = open_out tableName in
+    printTable oc tex printOne table tableName; 
+    close_out oc;
+    if verbose then 
+    	printTable stdout tex printOne table tableName 
+   else ()
+
+
+(* TODO this binds to Int.print, doesn't take floatPrint anymore -- why?
+
+let printShowTable: tex -> ?verbose:bool -> 
+  ~printOne:('a BatInnerIO.output -> 'b -> unit) ->
+  'c list list -> string -> unit =
+  fun tex ?(verbose=false) ?(printOne=Int.print) table tableName ->
+    let oc = open_out tableName in
+    printTable oc tex printOne table tableName; 
+    close_out oc;
+    if verbose then 
+      printTable stdout tex printOne table tableName 
+   else () *)
+  
+  
+let printShowTables: tex -> ?verbose:bool -> 
+  ('a BatInnerIO.output -> 'b -> unit) ->
+  'c list list list -> string list -> unit =
+  fun tex ?(verbose=false) printOne tables tableNames ->
+  L.iter2 begin fun table tableName -> 
+    (* let oc = open_out tableName in
+    printTable oc tex printOne table tableName; 
+    close_out oc;
+    if verbose then 
+      printTable stdout tex printOne table tableName 
+    else () *)
+    printShowTable tex ~verbose printOne table tableName
   end tables tableNames

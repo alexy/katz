@@ -203,3 +203,13 @@ let may_normalize norm x =
   match norm with
   | Some y when y <> 0. -> x /. y
   | _ -> x
+
+let list_norm norm l =
+  let x = match l with
+  | _::_ -> L.sum l
+  | _ -> 0 in
+  (float x) /. norm
+  
+(* carve a given position from a tuple list list *)
+let carveTL (* : ('a tuple4 -> 'a) -> float4 list list -> rates *) =
+  fun carveOne tull -> L.map (L.map carveOne) tull
