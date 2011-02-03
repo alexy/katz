@@ -41,13 +41,13 @@ let _ =
   in
 
 
-  let saveInfix, saveSuffix = saveBase ~mark suffix vols4Name in  
+  let saveInfix, saveSuffix = saveBase ~mark suffix b2bName in  
   
   let roguePrefix = if absNorm then "srel" else "sabs" in
   let prefixes    = ["befo";"self";"aftr";roguePrefix] in
   
   let tableNames = listNames saveSuffix prefixes in
-  reportNames vols4Name asWhat outDir tableNames;
+  reportTableNames b2bName asWhat outDir tableNames;
 
     
   let b2bs: day_b2b = loadData b2bName in

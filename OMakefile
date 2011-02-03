@@ -25,12 +25,16 @@ OBJECTS[] =
 	by_day
 	dranges
 	dreps
+	dcaps
 	proportional
 	simulate
 	skew
 	soc_run_common
 	soc_run_gen
 	sg
+	topsets
+	cranks
+	
 	
 OCamlProgram(sg, $(OBJECTS))
 

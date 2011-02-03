@@ -5,7 +5,7 @@ open TeX
 
 let latex'     = ref false
 let tableDoc'  = ref false
-let outDir     = ref ""
+let outDir'    = ref ""
 let verbose'   = ref false
 
 let specs =
@@ -19,8 +19,8 @@ let specs =
 let () =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   verbose = 
-      !latex', !tableDoc', !verbose' in
+  let latex,   tableDoc,   outDir,   verbose = 
+      !latex', !tableDoc', !outDir', !verbose' in
     
   let ratesName =
   match args with
@@ -30,10 +30,10 @@ let () =
   
   let tex,suffix,asWhat = texParams latex tableDoc in
 
-  let saveName = saveBase suffix ratesName in
+  let _,saveName = saveBase suffix ratesName in
   leprintfln "reading rates from %s, writing %s to %s %s"
     ratesName asWhat saveName (showDir outDir);
   
   let rates : rates = loadData ratesName in
 
-  printShowTable tex ~verbose floatPrint rates outDir saveBase
+  printShowTable tex ~verbose floatPrint rates outDir saveName

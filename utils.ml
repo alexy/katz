@@ -214,5 +214,6 @@ let list_norm norm l =
 let carveTL (* : ('a tuple4 -> 'a) -> float4 list list -> rates *) =
   fun carveOne tull -> L.map (L.map carveOne) tull
 
-trailingChar s =
+
+let trailingChar s =
   String.backwards s |> E.get

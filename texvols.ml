@@ -46,12 +46,12 @@ let _ =
   let prefixes   = ["re";"ru";"me";"mu"] in
   
   let tableNames = listNames saveSuffix prefixes in
-  reportNames vols4Name asWhat outDir tableNames;
+  reportTableNames vols4Name asWhat outDir tableNames;
   
-  
-  let als_list x = (array_list_split |- fun (a,b) -> A.to_list a, A.to_list b) x in
   
   let vols4: bucket_volumes4 = loadData vols4Name in
+  
+  let als_list x = (array_list_split |- fun (a,b) -> A.to_list a, A.to_list b) x in
   
   let (re,ru),(me,mu) = array_list_split vols4 |> 
     fun (v,w) -> als_list v, als_list w in

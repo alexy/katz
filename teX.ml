@@ -165,6 +165,7 @@ let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   leprintf "saving %s matrix in %s" docKind matrixName;
   L.print ~first:", including " ~sep:", " ~last:"\n" String.print stderr includeNames;
   
+  let pathName = sprintf "%s/%s" outDir matrixName in
   let oc = open_out matrixName in
   printMatrix oc matrixDoc includeNames; 
   close_out oc;
@@ -173,93 +174,34 @@ let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   else ()
   
   
-(* Originally, we had printAnyTable[s] ...?(printOne=Int.print)..., 
-   to be overridden with floatPrint for float tables.  Alas, the default value
-   typed the parameter as serving an int.
-   We then specialized {Int,Float}Tables, but then also got rid of the default
-   and generalized back as printShowTable[s] ...{Int.print,floatPrint}...
-   We commented out working original callers in tex<things> drivers. 
-   
-   https://gist.github.com/808895
-   *)
-
-let printIntTables: tex -> ?normalize:bool -> ?verbose:bool ->
-  int list list list -> string list -> unit =
-  fun tex ?(normalize=false) ?(verbose=false) tables tableNames ->
-  L.iter2 begin fun table tableName -> 
-    let oc = open_out tableName in
-    printIntTable oc tex ~normalize table tableName; 
-    close_out oc;
-    if verbose then 
-    	printIntTable stdout tex ~normalize table tableName 
-    else ()
-  end tables tableNames
-  
-
-let printFloatTables: tex -> ?normalize:bool -> ?verbose:bool ->
-  float list list list -> string list -> unit =
-  fun tex ?(normalize=false) ?(verbose=false) tables tableNames ->
-  L.iter2 begin fun table tableName -> 
-    let oc = open_out tableName in
-    printFloatTable oc tex ~normalize table tableName; 
-    close_out oc;
-    if verbose then 
-    	printFloatTable stdout tex ~normalize table tableName 
-    else ()
-  end tables tableNames
-  
-  
 let printShowTable: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list -> string -> unit =
-  fun tex ?(verbose=false) printOne table tableName ->
-    let oc = open_out tableName in
+  'c list list -> string -> string -> unit =
+  fun tex ?(verbose=false) printOne table outDir tableName ->
+    let pathName = sprintf "%s/%s" outDir tableName in
+    let oc = open_out pathName in
     printTable oc tex printOne table tableName; 
     close_out oc;
     if verbose then 
     	printTable stdout tex printOne table tableName 
    else ()
-
-
-(* TODO this binds to Int.print, doesn't take floatPrint anymore -- why?
-   OCaml 3.12 allows full polymorphic specification 'a 'b 'c.
-   
-let printShowTable: 'a 'b 'c. tex -> ?verbose:bool -> 
-  ~printOne:('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list -> string -> unit =
-  fun tex ?(verbose=false) ?(printOne=Int.print) table tableName ->
-    let oc = open_out tableName in
-    printTable oc tex printOne table tableName; 
-    close_out oc;
-    if verbose then 
-      printTable stdout tex printOne table tableName 
-   else () *)
   
   
 let printShowTables: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list list -> string list -> unit =
-  fun tex ?(verbose=false) printOne tables tableNames ->
+  'c list list list -> string -> string list -> unit =
+  fun tex ?(verbose=false) printOne tables outDir tableNames ->
   L.iter2 begin fun table tableName -> 
-    (* let oc = open_out tableName in
-    printTable oc tex printOne table tableName; 
-    close_out oc;
-    if verbose then 
-      printTable stdout tex printOne table tableName 
-    else () *)
-    printShowTable tex ~verbose printOne table tableName
+    printShowTable tex ~verbose printOne table outDir tableName
   end tables tableNames
 
-let suffixWhat tex =
-  (suffix,saveBase)
-  
 
 let showDir dir =
   if String.is_empty dir 
     then "locally"
     else let slash = match trailingChar dir with
       | Some '/' -> "" 
-      | -> "/" in
+      | _ -> "/" in
       sprintf "to %s%s" dir slash
       
 
@@ -269,7 +211,7 @@ let saveBase ?(mark="") suffix inName =
 
   let daMark  = if String.is_empty mark then "" else "-"^mark in
   let infiks  = sprintf "%s%s" daMark saveBase in
-  let suffiks = sprint "%s.%s" inf suffix in
+  let suffiks = sprintf "%s.%s" infiks suffix in
   infiks, suffiks
   
 let listNames saveSuffix prefixes = 
