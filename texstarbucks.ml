@@ -10,7 +10,10 @@ let matrix'    = ref false
 let matrixDoc' = ref false
 let averages'  = ref false
 let outDir'    = ref ""
-let drop'      = ref "rbucks-aranks-caps-"
+let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
+let masterLine'= ref true
+let drop'      = ref (Some "sbucks-stars-")
+let scientific'= ref true   (* stoggle cientific notation %e vs. %f *)
 let verbose'   = ref false
 
 let specs =
@@ -21,7 +24,11 @@ let specs =
   ('d',"mdoc",      (set matrixDoc' true), None);
   ('a',"averages",  (set averages'  true), None); 
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
-  ('x',"drop",      None, Some (fun x -> drop'   := x));
+  ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
+  ('L',"masterline",(set masterLine' (not !masterLine')),None);
+  ('x',"drop",      None, Some (fun x -> drop'   := Some x));
+  ('X',"nodrop",    (set drop' None),      None);
+  ('e',"scientific",(set scientific' (not !scientific')),None);
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -29,13 +36,15 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   averages,   outDir,   drop,   verbose =
-      !latex', !tableDoc', !matrix', !matrixDoc', !averages', !outDir', !drop', !verbose' in  	
+  let latex,   tableDoc,   matrix,   matrixDoc,   averages =   
+      !latex', !tableDoc', !matrix', !matrixDoc', !averages' in	
+  
+  let outDir,   inputPath,   masterLine,  drop,    scientific,   verbose =
+      !outDir', !inputPath', !masterLine', !drop', !scientific', !verbose' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
-  let mark = if averages then "avg" else "med" in
-  let drop = if String.is_empty drop then None else Some drop in
+  let mark = if averages then Some "avg" else Some "med" in
   
   let sbName = 
   match args with
@@ -44,7 +53,7 @@ let _ =
   in
 
  
-  let saveInfix, saveSuffix = saveBase ~mark suffix sbName in  
+  let saveInfix, saveSuffix = saveBase ~mark ~drop suffix sbName in  
 
   let prefixes    = ["self";"star";"auds"] in
 
@@ -57,13 +66,19 @@ let _ =
   let triples = carveTL carver (A.to_list sb) in
   let self,star,auds = 
     carveTL fst3 triples, carveTL snd3 triples, carveTL trd3 triples in
-  let tables: rates list = [self;star;auds] in
+  let tables: rates list = [self;auds;star] in
   
-  printShowTables tex ~verbose floatPrint tables outDir ~drop tableNames;
+  let realPrint = if scientific then sciencePrint else floatPrint in
+  
+  printShowTables tex ~verbose realPrint tables outDir tableNames;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in
     let matrixName   = sprintf "4x4%s" saveSuffix in    
-    printShowMatrix matrixDoc ~verbose outDir matrixName includeNames
+    printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName includeNames;
+    
+    if masterLine then
+      printShowMasterLine ~verbose outDir ~inputPath matrixName
+    else ()
   end
   else ()

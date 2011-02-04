@@ -79,3 +79,9 @@ let b2b_ratios: bool -> day_b2b -> rates4 =
   end in
   carveTL fst4 r4, carveTL snd4 r4, carveTL trd4 r4, carveTL frh4 r4
   
+  
+let bucket_lens: day_buckets -> int_rates =
+  fun bucks ->
+    A.to_list bucks |> L.map begin fun bucket ->
+      L.map S.cardinal bucket
+    end

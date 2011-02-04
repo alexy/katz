@@ -89,7 +89,7 @@ type staying        = user_int array array
 type staying_totals = int array
 type b2b            = (int list) list
 type day_b2b        = b2b array
-type int_rates      = int list list
+type int_rates      = int list list   (* TODO rename as: int_table *)
 type float4         = float * float * float * float
 type rates4         = rates * rates * rates * rates
 

@@ -16,8 +16,8 @@ let texParams isTeX isDoc =
 
   
 (* Float.print would do, but it doesn't control for precision *)
-let floatPrint oc x = fprintf oc "%5.2f" x
-
+let floatPrint   oc x = fprintf oc "%5.2f" x
+let sciencePrint oc x = fprintf oc "%5.2e" x
 
 (* TODO because of these differently typed normalize functions,
    we cannot unify printAnyTable out of print{Int,Float}Table,
@@ -92,34 +92,34 @@ let tables2x2 tableNames =
   let t4block = 
   match rest with
   | t4::[] ->
-   sprintf "
+   sprintf "\\hfill%%
 \\minipage{0.50\\textwidth}
-\\include{%s}
+\\input{%s}
 \\endminipage
 " t4
   | [] -> ""
   | _ -> failwith "table2x2 takes either 3 or 4 names"
   in
   sprintf "
-\\begin{document}
-
 \\begin{table}
 \\centering
 
 \\minipage{0.50\\textwidth}
-\\include{%s}
+\\input{%s}
 \\endminipage\\hfill%%
 %%
 \\minipage{0.50\\textwidth}
-\\include{%s}
+\\input{%s}
 \\endminipage
 
 \\bigskip
 
 \\minipage{0.50\\textwidth}
-\\include{%s}
-\\endminipage\\hfill%%%s
-\\end{table}" t1 t2 t3 t4block
+\\input{%s}
+\\endminipage%s
+\\end{table}
+\\FloatBarrier
+" t1 t2 t3 t4block
   | _ -> failwith "four_tables needs a list of four strings"
 
 
@@ -127,9 +127,12 @@ let texDocument s =
   sprintf "
 \\documentclass{article}
 \\usepackage{booktabs,graphicx}
+\\begin{document}
 %s
 \\end{document}" s
 
+
+let drop_tex x = dropText ".tex" x
 
 let printMatrix oc doc tableNames =
   let mats = tables2x2 tableNames in
@@ -137,7 +140,14 @@ let printMatrix oc doc tableNames =
   String.print oc s
   
 
-let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
+let mayPrependPath optPath x = match optPath with
+| Some path -> sprintf "%s/%s" path x
+| _ -> x
+
+
+let printShowMatrix matrixDoc ?(verbose=false) outDir ?(inputPath=None) matrixName includeNames =
+  let includeNames = L.map (mayPrependPath inputPath) includeNames in
+  
   let docKind = if matrixDoc then "document" else "tabular" in
   leprintf "saving %s matrix in %s" docKind matrixName;
   L.print ~first:", including " ~sep:", " ~last:"\n" String.print stderr includeNames;
@@ -151,6 +161,14 @@ let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   else ()
   
   
+let printShowMasterLine ?(verbose=false) outDir ?(inputPath=None) matrixName =
+  let pathName = sprintf "%s/line-%s" outDir matrixName in
+  let includeName = mayPrependPath inputPath (drop_tex matrixName) in
+  let theLine = sprintf "\\input{%s}\n" includeName in
+  let oc = open_out pathName in String.print oc theLine; close_out oc;
+  if verbose then String.print stdout theLine else ()
+  
+  
 let printShowTable: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
   'c list list -> string -> ?drop:string option -> string -> unit =
@@ -159,10 +177,10 @@ let printShowTable: tex -> ?verbose:bool ->
     
     let name = 
     match drop with
-    | Some infix -> dropText tableName infix
+    | Some infix -> dropText infix tableName
     | _ -> tableName
     in
-    let caption = dropText name ".tex" in
+    let caption = drop_tex name in
     let oc = open_out pathName in
     printTable oc tex printOne table caption tableName; 
     close_out oc;
@@ -189,11 +207,13 @@ let showDir dir =
       sprintf "to %s%s" dir slash
       
 
-let saveBase ?(mark="") suffix inName =      
+let saveBase ?(mark=None) ?(drop=None) suffix inName =      
   let replaced,saveBase = String.replace inName ".mlb" "" in
   assert replaced;
-
-  let daMark  = if String.is_empty mark then "" else "-"^mark in
+  let saveBase = match drop with 
+  | Some drop -> dropText drop saveBase
+  | _ -> saveBase in
+  let daMark  = match mark with | Some x -> "-"^x | _ -> "" in
   let infiks  = sprintf "%s-%s" daMark saveBase in
   let suffiks = sprintf "%s.%s" infiks suffix in
   infiks, suffiks
@@ -203,5 +223,9 @@ let listNames saveSuffix prefixes =
   
 let reportTableNames inName asWhat outDir tableNames =
   leprintf "splitting %s as %s %s, new tables:" inName asWhat (showDir outDir); 
-  L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames;
+  L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames
 
+let tableFileName optDrop dataFileName =
+  dataFileName |> 
+  mayDropText optDrop |> dropText ".mlb" |> 
+  sprintf "%s.tex"

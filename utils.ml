@@ -219,5 +219,10 @@ let carveTL (* : ('a tuple4 -> 'a) -> float4 list list -> rates *) =
 let trailingChar s =
   String.backwards s |> E.get
   
-let dropText str sub =
+let dropText sub str  =
   String.replace ~str ~sub ~by:"" |> snd
+  
+let mayDropText optSub str =
+  match optSub with
+  | Some sub -> dropText sub str
+  | _ -> str

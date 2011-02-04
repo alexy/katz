@@ -10,7 +10,9 @@ let matrix'    = ref false
 let matrixDoc' = ref false
 let normalize' = ref false
 let outDir'    = ref ""
-let drop'      = ref "rbucks-aranks-caps-"
+let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
+let masterLine'= ref true
+let drop'      = ref (Some "rbucks-aranks-caps-")
 let verbose'   = ref false
 
 let specs =
@@ -21,7 +23,10 @@ let specs =
   ('d',"mdoc",      (set matrixDoc' true), None);  
   ('n',"normalize", (set normalize' true), None);
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
-  ('x',"drop",      None, Some (fun x -> drop'   := x));
+  ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
+  ('L',"masterline",(set masterLine' (not !masterLine')),None);
+  ('x',"drop",      None, Some (fun x -> drop'   := Some x));
+  ('X',"nodrop",    (set drop'      None), None);
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -29,13 +34,15 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   normalize,   outDir,   drop,   verbose =
-      !latex', !tableDoc', !matrix', !matrixDoc', !normalize', !outDir', !drop', !verbose' in  	
+  let latex,   tableDoc,   matrix,   matrixDoc,   normalize =   
+      !latex', !tableDoc', !matrix', !matrixDoc', !normalize' in	
+  
+  let outDir,   inputPath,   masterLine,  drop,   verbose =
+      !outDir', !inputPath', !masterLine', !drop', !verbose' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
-  let mark = if normalize then "norm" else "int" in
-  let drop = if String.is_empty drop then None else Some drop in
+  let mark = if normalize then Some "norm" else Some "int" in
   
   let vols4Name = 
   match args with
@@ -44,7 +51,7 @@ let _ =
   in
   
 
-  let saveInfix, saveSuffix = saveBase ~mark suffix vols4Name in  
+  let saveInfix, saveSuffix = saveBase ~mark ~drop suffix vols4Name in  
   
   let prefixes   = ["re";"ru";"me";"mu"] in
   
@@ -63,14 +70,18 @@ let _ =
   
   if normalize then
     let normalTables = L.map normalizeIntTable tables in
-    printShowTables tex ~verbose floatPrint normalTables outDir ~drop tableNames
+    printShowTables tex ~verbose floatPrint normalTables outDir tableNames
   else
-    printShowTables tex ~verbose Int.print  tables       outDir ~drop tableNames;
+    printShowTables tex ~verbose Int.print  tables       outDir tableNames;
     
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in
     let matrixName   = sprintf "4x4%s" saveSuffix in  
-    printShowMatrix matrixDoc ~verbose outDir matrixName includeNames
+    printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName includeNames;
+    
+    if masterLine then
+      printShowMasterLine ~verbose outDir ~inputPath matrixName
+    else ()
   end
   else ()

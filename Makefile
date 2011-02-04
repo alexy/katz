@@ -15,7 +15,8 @@ CRANKS=docranks
 RATES=dorates
 SCAPS=save_caps
 CBUCKS=docbucks
-BLENS=doblens
+LBLENS=dolblens
+RBLENS=dorblens
 SKEW=sk
 SGEN=sg
 RBUCKS=save_rbucks
@@ -34,8 +35,9 @@ STOV=dostayovers
 TEXV=texvols
 TEXB2B=texb2bs
 TEXSB=texstarbucks
+TEX4=tex4rates
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(BLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4)
 
 all: $(ALL:%=%.opt)
 
@@ -136,7 +138,10 @@ $(CBUCKS).opt: lib.cmxa $(CBUCKS).ml
 $(RBUCKS).opt: lib.cmxa topsets.cmx $(RBUCKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(BLENS).opt: lib.cmxa $(BLENS).ml
+$(LBLENS).opt: lib.cmxa $(LBLENS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(RBLENS).opt: lib.cmxa bucket_power.cmx $(RBLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SKEW).opt: lib.cmxa anygraph.cmxa soc_run_skew.cmx invert.cmx $(SKEW).cmx
@@ -185,5 +190,8 @@ $(TEXB2B).opt: lib.cmxa bucket_power.cmx teX.cmx $(TEXB2B).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(TEXSB).opt: lib.cmxa teX.cmx $(TEXSB).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+  
+$(TEX4).opt: lib.cmxa teX.cmx $(TEX4).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   

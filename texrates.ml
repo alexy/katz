@@ -6,7 +6,7 @@ open TeX
 let latex'     = ref false
 let tableDoc'  = ref false
 let outDir'    = ref ""
-let drop'      = ref "rbucks-aranks-caps-"
+let drop'      = ref (Some "rbucks-aranks-caps-")
 let verbose'   = ref false
 
 let specs =
@@ -14,7 +14,8 @@ let specs =
   ('t',"tex",    (set latex'     true),None);
   ('d',"doc",    (set tableDoc'  true),None);
   ('o',"outdir", None, Some (fun x -> outDir' := x));
-  ('x',"drop",   None, Some (fun x -> drop'   := x));
+  ('x',"drop",   None, Some (fun x -> drop'   := Some x));
+  (noshort,"nodrop", (set drop' None),None);
   ('v',"verbose",(set verbose'  true),None)
 ]
 
@@ -26,7 +27,6 @@ let () =
   
   let tex,suffix,asWhat = texParams latex tableDoc in
   let outDir = if String.is_empty outDir then suffix else outDir in
-  let drop = if String.is_empty drop then None else Some drop in
     
   let ratesName =
   match args with
@@ -35,10 +35,10 @@ let () =
   in
   
 
-  let _,saveName = saveBase suffix ratesName in
+  let _,saveName = saveBase ~drop suffix ratesName in
   leprintfln "reading rates from %s, writing %s to %s %s"
     ratesName asWhat saveName (showDir outDir);
   
   let rates : rates = loadData ratesName in
 
-  printShowTable tex ~verbose floatPrint rates outDir ~drop saveName
+  printShowTable tex ~verbose floatPrint rates outDir saveName

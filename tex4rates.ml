@@ -21,11 +21,11 @@ let specs =
   ('T',"tdoc",      (set tableDoc'  true), None);
   ('m',"matrix",    (set matrix'    true), None);
   ('d',"mdoc",      (set matrixDoc' true), None);
-  ('a',"absNorm",   (set absNorm'   true), None); 
   ('o',"outdir",    None, Some (fun x -> outDir'    := x));
   ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
   ('L',"masterline",(set masterLine' (not !masterLine')),None);
   ('x',"drop",      None, Some (fun x -> drop'      := Some x));
+  ('X',"nodrop",    (set drop'      None), None);
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -33,45 +33,33 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   absNorm =   
-      !latex', !tableDoc', !matrix', !matrixDoc', !absNorm' in	
+  let latex,   tableDoc,   matrix,   matrixDoc =   
+      !latex', !tableDoc', !matrix', !matrixDoc' in	
   
-  let outDir,   inputPath,   masterLine,  drop,   verbose =
+  let outDir,   inputPath,   masterLine,   drop,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !verbose' in
         
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
-  let mark = if absNorm then Some "abs" else Some "rel" in
   
-  let b2bName = 
+  let dataFileNames,tt = 
   match args with
-  | x::[] -> x
-  | _ -> failwith "usage: texvols [-tTmd] b2bName"
+  | t1::t2::t3::t4::tt::[] -> [t1;t2;t3;t4],tt
+  | t1::t2::t3::tt::[]     -> [t1;t2;t3],tt  
+  | _ -> failwith "usage: tex4rates [-tdmvL [-i inputPath] [-o outDir] [-x drop]] t1 t2 t3 [t4] tt"
   in
 
-
-  let saveInfix, saveSuffix = saveBase ~mark ~drop suffix b2bName in  
-  
-  let roguePrefix = if absNorm then "srel" else "sabs" in
-  let prefixes    = ["befr";"self";"aftr";roguePrefix] in
-  
-  let tableNames = listNames saveSuffix prefixes in
-  reportTableNames b2bName asWhat outDir tableNames;
-
     
-  let b2bs: day_b2b = loadData b2bName in
-  let before,self,after,rogue = 
-    Bucket_power.b2b_ratios absNorm b2bs in
+  let tableNames = L.map (tableFileName drop) dataFileNames in
+  reportTableNames "raw world" asWhat outDir tableNames;
   
-  let tables: rates list = [before;self;after;rogue] in
+  let tables: rates list = L.map loadData dataFileNames in
   
-  (* ~drop unnecessary as we do it right in saveInfix! *)
   printShowTables tex ~verbose floatPrint tables outDir tableNames;
 
   if matrix then begin
-    let includeNames = listNames saveInfix prefixes in
-    let matrixName   = sprintf "4x4%s" saveSuffix in  
-    printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName includeNames;
+    let matrixName   = sprintf "4x4-%s.tex" tt in  
+    printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName tableNames;
     
     if masterLine then
       printShowMasterLine ~verbose outDir ~inputPath matrixName

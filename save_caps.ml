@@ -1,27 +1,36 @@
 open Common
+open Getopt
+
+let minDays' = ref 7
+let minCap'  = ref 1e-35 
+let mark'    = ref ""
+let specs =
+[
+  ('d',"mindays",None,Some (fun x -> minDays' := int_of_string x));
+  ('c',"mincap", None,Some (fun x -> minCap'  := float_of_string x));
+  ('k',"mark",   None,Some (fun x -> mark'    := x))
+]
+
 
 let () =
-  let args = getArgs in
-  let maturityDef = 7 in (* days *)
-  let minimumDef  = 1e-35 in 
-  let (dcapsName,maturity,minimum) =
+  let args = getOptArgs specs in
+  
+  let minDays,   minCap,   mark =
+      !minDays', !minCap', !mark' in
+      
+  let dcapsName =
   match args with
-    | dcapsName::matS::minS::restArgs -> 
-      (dcapsName, int_of_string matS, float_of_string minS)
-    | dcapsName::matS::restArgs ->
-      (dcapsName, int_of_string matS, minimumDef)
-    | dcapsName::restArgs ->
-      (dcapsName, maturityDef, minimumDef)
-    | _ -> failwith "usage: save_caps dcapsName [maturity minimum]"    
+    | dcapsName::restArgs -> dcapsName
+    | _ -> failwith "usage: save_caps [-d mindays] [-c mincap] dcapsName"    
   in        
     (* j is for just caps *)
-    let capsName = "j" ^ dcapsName in
+    let capsName = sprintf "j%s%s" mark dcapsName in
     let sort = true in
     
     leprintfln "reading dcaps from %s, saving caps in %s" 
       dcapsName capsName;
       
     let dcaps: user_day_reals = loadData dcapsName in
-    let caps: day_caps = Dcaps.mature_day_caps maturity minimum ~sort dcaps in
+    let caps:  day_caps = Dcaps.mature_day_caps minDays minCap ~sort dcaps in
     
-    saveData caps capsName;
+    saveData caps capsName
