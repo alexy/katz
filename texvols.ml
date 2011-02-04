@@ -10,6 +10,7 @@ let matrix'    = ref false
 let matrixDoc' = ref false
 let normalize' = ref false
 let outDir'    = ref ""
+let drop'      = ref "rbucks-aranks-caps-"
 let verbose'   = ref false
 
 let specs =
@@ -20,6 +21,7 @@ let specs =
   ('d',"mdoc",      (set matrixDoc' true), None);  
   ('n',"normalize", (set normalize' true), None);
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
+  ('x',"drop",      None, Some (fun x -> drop'   := x));
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -27,12 +29,13 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   normalize,   outDir,    verbose =
-      !latex', !tableDoc', !matrix', !matrixDoc', !normalize', !outDir',  !verbose' in  	
+  let latex,   tableDoc,   matrix,   matrixDoc,   normalize,   outDir,   drop,   verbose =
+      !latex', !tableDoc', !matrix', !matrixDoc', !normalize', !outDir', !drop', !verbose' in  	
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
   let mark = if normalize then "norm" else "int" in
+  let drop = if String.is_empty drop then None else Some drop in
   
   let vols4Name = 
   match args with
@@ -60,9 +63,9 @@ let _ =
   
   if normalize then
     let normalTables = L.map normalizeIntTable tables in
-    printShowTables tex ~verbose floatPrint normalTables outDir tableNames
+    printShowTables tex ~verbose floatPrint normalTables outDir ~drop tableNames
   else
-    printShowTables tex ~verbose Int.print  tables       outDir tableNames;
+    printShowTables tex ~verbose Int.print  tables       outDir ~drop tableNames;
     
 
   if matrix then begin

@@ -42,7 +42,7 @@ let normalizeFloatTable: rates -> rates =
 	end table
 
   
-let printTable oc tex printOne table name =
+let printTable oc tex printOne table caption name =
   let anyTeX,docTeX = 
   match tex with
   | DocTeX -> true,true
@@ -77,36 +77,13 @@ let printTable oc tex printOne table name =
     fprintf oc "
 \\end{tabular}}
 \\label{table:%s}
-\\caption{%s}
-" name name else ();
+\\caption{\\small %s}
+" caption caption else ();
 
   if docTeX then
     fprintf oc "
 \\end{document}    
 " else ()
-
-
-(* let print_table oc tex name printOne elems =
-  let table_string = 
-    sprint_table tex name printOne elems in
-  String.print oc table_string *)
-
-
-let printIntTable: 'a BatInnerIO.output -> tex -> ?normalize:bool ->
-  'c list list -> string -> unit =
-  fun oc tex ?(normalize=false) table name ->
-	if normalize then
-		let ft = normalizeIntTable table in
-		printTable oc	tex floatPrint ft	name	
-	else 
-		printTable oc tex Int.print table name
-
-
-let printFloatTable: 'a BatInnerIO.output -> tex -> ?normalize:bool ->
-  'c list list -> string -> unit =
-  fun oc tex ?(normalize=false) table name ->
-	let ft = if normalize then normalizeFloatTable table else table in
-	printTable oc	tex floatPrint ft	name
 
 
 let tables2x2 tableNames =
@@ -166,7 +143,7 @@ let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   L.print ~first:", including " ~sep:", " ~last:"\n" String.print stderr includeNames;
   
   let pathName = sprintf "%s/%s" outDir matrixName in
-  let oc = open_out matrixName in
+  let oc = open_out pathName in
   printMatrix oc matrixDoc includeNames; 
   close_out oc;
   if verbose then 
@@ -176,23 +153,30 @@ let printShowMatrix matrixDoc ?(verbose=false) outDir matrixName includeNames =
   
 let printShowTable: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list -> string -> string -> unit =
-  fun tex ?(verbose=false) printOne table outDir tableName ->
+  'c list list -> string -> ?drop:string option -> string -> unit =
+  fun tex ?(verbose=false) printOne table outDir ?(drop=None) tableName ->
     let pathName = sprintf "%s/%s" outDir tableName in
+    
+    let name = 
+    match drop with
+    | Some infix -> dropText tableName infix
+    | _ -> tableName
+    in
+    let caption = dropText name ".tex" in
     let oc = open_out pathName in
-    printTable oc tex printOne table tableName; 
+    printTable oc tex printOne table caption tableName; 
     close_out oc;
     if verbose then 
-    	printTable stdout tex printOne table tableName 
+    	printTable stdout tex printOne table caption tableName 
    else ()
   
   
 let printShowTables: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list list -> string -> string list -> unit =
-  fun tex ?(verbose=false) printOne tables outDir tableNames ->
+  'c list list list -> string -> ?drop:string option -> string list -> unit =
+  fun tex ?(verbose=false) printOne tables outDir ?(drop=None) tableNames ->
   L.iter2 begin fun table tableName -> 
-    printShowTable tex ~verbose printOne table outDir tableName
+    printShowTable tex ~verbose printOne table outDir ~drop tableName
   end tables tableNames
 
 
@@ -210,7 +194,7 @@ let saveBase ?(mark="") suffix inName =
   assert replaced;
 
   let daMark  = if String.is_empty mark then "" else "-"^mark in
-  let infiks  = sprintf "%s%s" daMark saveBase in
+  let infiks  = sprintf "%s-%s" daMark saveBase in
   let suffiks = sprintf "%s.%s" infiks suffix in
   infiks, suffiks
   

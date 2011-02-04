@@ -6,6 +6,7 @@ open TeX
 let latex'     = ref false
 let tableDoc'  = ref false
 let outDir'    = ref ""
+let drop'      = ref "rbucks-aranks-caps-"
 let verbose'   = ref false
 
 let specs =
@@ -13,22 +14,26 @@ let specs =
   ('t',"tex",    (set latex'     true),None);
   ('d',"doc",    (set tableDoc'  true),None);
   ('o',"outdir", None, Some (fun x -> outDir' := x));
+  ('x',"drop",   None, Some (fun x -> drop'   := x));
   ('v',"verbose",(set verbose'  true),None)
 ]
 
 let () =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   outDir,   verbose = 
-      !latex', !tableDoc', !outDir', !verbose' in
+  let latex,   tableDoc,   outDir,   drop,   verbose = 
+      !latex', !tableDoc', !outDir', !drop', !verbose' in
+  
+  let tex,suffix,asWhat = texParams latex tableDoc in
+  let outDir = if String.is_empty outDir then suffix else outDir in
+  let drop = if String.is_empty drop then None else Some drop in
     
   let ratesName =
   match args with
   | x::[] -> x
-  | _ -> failwith "texrates [-tT] ratesName"
+  | _ -> failwith "texrates [-tdv [-o outdir]] ratesName"
   in
   
-  let tex,suffix,asWhat = texParams latex tableDoc in
 
   let _,saveName = saveBase suffix ratesName in
   leprintfln "reading rates from %s, writing %s to %s %s"
@@ -36,4 +41,4 @@ let () =
   
   let rates : rates = loadData ratesName in
 
-  printShowTable tex ~verbose floatPrint rates outDir saveName
+  printShowTable tex ~verbose floatPrint rates outDir ~drop saveName

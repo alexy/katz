@@ -10,6 +10,7 @@ let matrix'    = ref false
 let matrixDoc' = ref false
 let absNorm'   = ref false
 let outDir'    = ref ""
+let drop'      = ref "rbucks-aranks-caps-"
 let verbose'   = ref false
 
 let specs =
@@ -20,6 +21,7 @@ let specs =
   ('d',"mdoc",      (set matrixDoc' true), None);
   ('a',"absNorm",   (set absNorm'   true), None); 
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
+  ('x',"drop",      None, Some (fun x -> drop'   := x));
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -27,12 +29,13 @@ let specs =
 let _ =
   let args = getOptArgs specs in
   
-  let latex,   tableDoc,   matrix,   matrixDoc,   absNorm,   outDir,    verbose =
-      !latex', !tableDoc', !matrix', !matrixDoc', !absNorm', !outDir',  !verbose' in  	
+  let latex,   tableDoc,   matrix,   matrixDoc,   absNorm,   outDir,   drop,   verbose =
+      !latex', !tableDoc', !matrix', !matrixDoc', !absNorm', !outDir', !drop', !verbose' in  	
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
   let mark = if absNorm then "abs" else "rel" in
+  let drop = if String.is_empty drop then None else Some drop in
   
   let b2bName = 
   match args with
@@ -44,7 +47,7 @@ let _ =
   let saveInfix, saveSuffix = saveBase ~mark suffix b2bName in  
   
   let roguePrefix = if absNorm then "srel" else "sabs" in
-  let prefixes    = ["befo";"self";"aftr";roguePrefix] in
+  let prefixes    = ["befr";"self";"aftr";roguePrefix] in
   
   let tableNames = listNames saveSuffix prefixes in
   reportTableNames b2bName asWhat outDir tableNames;
@@ -56,7 +59,7 @@ let _ =
   
   let tables: rates list = [before;self;after;rogue] in
   
-  printShowTables tex ~verbose floatPrint tables outDir tableNames;
+  printShowTables tex ~verbose floatPrint tables outDir ~drop tableNames;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

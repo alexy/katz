@@ -6,6 +6,7 @@ open Getopt
 
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
+let leprintfLn        = eprintf "\n%!"
 
 (* this is slow since it doesn't specify a possibly large initial length
    instead, we can have an optional parameter and first H.create with that,
@@ -217,3 +218,6 @@ let carveTL (* : ('a tuple4 -> 'a) -> float4 list list -> rates *) =
 
 let trailingChar s =
   String.backwards s |> E.get
+  
+let dropText str sub =
+  String.replace ~str ~sub ~by:"" |> snd
