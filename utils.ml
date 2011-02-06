@@ -226,3 +226,12 @@ let mayDropText optSub str =
   match optSub with
   | Some sub -> dropText sub str
   | _ -> str
+  
+let mayApply f opt = 
+  match opt with
+  | Some x -> f x
+  | _ -> identity
+  
+let listRange ?(take=None) ?(drop=None) x =
+  (mayApply L.take take |- mayApply L.drop drop) x
+  

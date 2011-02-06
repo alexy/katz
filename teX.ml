@@ -41,49 +41,76 @@ let normalizeFloatTable: rates -> rates =
 		L.map (flip (/.) total) bucket
 	end table
 
-  
-let printTable oc tex printOne table caption name =
-  let anyTeX,docTeX = 
-  match tex with
-  | DocTeX -> true,true
-  | TeX    -> true,false
-  | _      -> false,false
-  in
 
-  if docTeX then
+let preamble oc tex =
+  match tex with 
+  | DocTeX ->
     fprintf oc "
 \\documentclass{article}
-\\begin{document}    
-" else ();
+\\begin{document}"    
+  | _ -> ()
+  
 
-  if anyTeX then
+let epilogue oc tex =
+  match tex with
+  | DocTeX ->
+    fprintf oc "
+\\end{document}    
+" 
+  | _ -> ()
+
+
+let tableHead oc tex rowName cols =
+  match tex with
+  | TeX | DocTeX ->
+    let cs = String.repeat "c" (L.length cols + 1) in
+    let colstr = L.sprint ~first:" & " ~sep:" & " ~last:"" String.print cols in
     fprintf oc "
 \\resizebox{\\linewidth}{!}{
-\\begin{tabular}{|cccccccc|}
+\\begin{tabular}{|%s|}
 \\toprule
-\\emph{day} & 10 & 100 & 1K & 10K & 100K & 1M & 10M \\\\
+\\emph{%s}%s\\\\
 \\midrule
-" else ();
-  
-  L.iteri begin fun day rs ->
-    fprintf oc "%d" (day+7) ;
-    if anyTeX then
-      L.print ~first:" & "~sep:" & " ~last:"\\\\\n" printOne oc rs
-    else
-      L.print ~first:"" ~sep:" " ~last:"\n" printOne oc rs
-  end (table |> L.take 34 |> L.drop 7);
-  
-  if anyTeX then
+" cs rowName colstr
+  | _ -> ()
+
+
+let tableTail oc tex label caption =
+  match tex with
+  | TeX | DocTeX ->   
     fprintf oc "
+\\bottomrule
 \\end{tabular}}
 \\label{table:%s}
 \\caption{\\small %s}
-" caption caption else ();
+" label caption
+  | _ -> ()
 
-  if docTeX then
-    fprintf oc "
-\\end{document}    
-" else ()
+  
+let rowOrnaments tex =
+  match tex with
+  | TeX | DocTeX -> " & "," & ","\\\\\n"
+  | _ ->            "",   " ",  "\n"
+  
+  
+(* TODO rename to printDayBucketTable 
+   since colNames and table droptake hardcoded *)
+    
+let printTable oc tex printOne table ?(startRow=1) caption name =
+  preamble oc tex;
+
+  let colNames = ["10";"100";"1K";"10K";"100K";"1M";"10M"] in
+  tableHead oc tex "day" colNames;
+
+  let first,sep,last = rowOrnaments tex in
+  
+  L.iteri begin fun row rs ->
+    Int.print oc (row+startRow);
+    L.print ~first ~sep ~last printOne oc rs
+  end table;
+  
+  tableTail oc tex name caption;
+  epilogue oc tex
 
 
 let tables2x2 tableNames =
@@ -171,8 +198,10 @@ let printShowMasterLine ?(verbose=false) outDir ?(inputPath=None) matrixName =
   
 let printShowTable: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list -> string -> ?drop:string option -> string -> unit =
-  fun tex ?(verbose=false) printOne table outDir ?(drop=None) tableName ->
+  'c list list -> ?startRow:int ->
+  string -> ?drop:string option -> string -> unit =
+  fun tex ?(verbose=false) printOne table ?(startRow=1) 
+      outDir ?(drop=None) tableName ->
     let pathName = sprintf "%s/%s" outDir tableName in
     
     let name = 
@@ -182,19 +211,21 @@ let printShowTable: tex -> ?verbose:bool ->
     in
     let caption = drop_tex name in
     let oc = open_out pathName in
-    printTable oc tex printOne table caption tableName; 
+    printTable oc tex printOne table ~startRow caption caption; 
     close_out oc;
     if verbose then 
-    	printTable stdout tex printOne table caption tableName 
+    	printTable stdout tex printOne table  ~startRow caption caption 
    else ()
   
   
 let printShowTables: tex -> ?verbose:bool -> 
   ('a BatInnerIO.output -> 'b -> unit) ->
-  'c list list list -> string -> ?drop:string option -> string list -> unit =
-  fun tex ?(verbose=false) printOne tables outDir ?(drop=None) tableNames ->
+  'c list list list -> ?startRow:int ->
+  string -> ?drop:string option -> string list -> unit =
+  fun tex ?(verbose=false) printOne tables ?(startRow=1) 
+      outDir ?(drop=None) tableNames ->
   L.iter2 begin fun table tableName -> 
-    printShowTable tex ~verbose printOne table outDir ~drop tableName
+    printShowTable tex ~verbose printOne table ~startRow outDir ~drop tableName
   end tables tableNames
 
 
@@ -207,14 +238,15 @@ let showDir dir =
       sprintf "to %s%s" dir slash
       
 
-let saveBase ?(mark=None) ?(drop=None) suffix inName =      
+let saveBase ?(mark=None) ?(drop=None) ?(dash=true) suffix inName =      
   let replaced,saveBase = String.replace inName ".mlb" "" in
   assert replaced;
   let saveBase = match drop with 
   | Some drop -> dropText drop saveBase
   | _ -> saveBase in
-  let daMark  = match mark with | Some x -> "-"^x | _ -> "" in
-  let infiks  = sprintf "%s-%s" daMark saveBase in
+  let daMark   = match mark with | Some x -> x^"-" | _ -> "" in
+  let daDash   = if dash then "-" else "" in
+  let infiks  = sprintf "%s%s%s" daDash daMark saveBase in
   let suffiks = sprintf "%s.%s" infiks suffix in
   infiks, suffiks
   
@@ -229,3 +261,14 @@ let tableFileName optDrop dataFileName =
   dataFileName |> 
   mayDropText optDrop |> dropText ".mlb" |> 
   sprintf "%s.tex"
+
+let dayRange ?(takeDays=None) ?(dropDays=None) table =
+  let day = Option.default 1 dropDays in
+  let tableRange = listRange ~take:takeDays ~drop:dropDays table in
+  day,tableRange
+
+let dayRanges ?(takeDays=None) ?(dropDays=None) tables =
+  let day = Option.default 1 dropDays in
+  let tableRanges = L.map (listRange ~take:takeDays ~drop:dropDays) tables in
+  day,tableRanges
+  

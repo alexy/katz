@@ -4,6 +4,8 @@ open TeX
 
 (* tabulate a b2b data as 4 tables *)
 
+let takeDays'  = ref (Some 34)
+let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
 let matrix'    = ref false
@@ -17,6 +19,10 @@ let verbose'   = ref false
 
 let specs =
 [
+  (noshort,"takedays",None,Some (fun x -> takeDays' := Some (int_of_string x)));
+  (noshort,"notakedays",(set takeDays' None),None);
+  (noshort,"dropdays",None,Some (fun x -> dropDays' := Some (int_of_string x)));
+  (noshort,"nodropdays",(set dropDays' None),None);
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
   ('m',"matrix",    (set matrix'    true), None);
@@ -38,7 +44,10 @@ let _ =
   
   let outDir,   inputPath,   masterLine,  drop,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !verbose' in
-        
+
+  let takeDays,   dropDays =
+      !takeDays', !dropDays' in
+          
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
   let mark = if absNorm then Some "abs" else Some "rel" in
@@ -64,9 +73,10 @@ let _ =
     Bucket_power.b2b_ratios absNorm b2bs in
   
   let tables: rates list = [before;self;after;rogue] in
+  let startRow,tables = dayRanges ~takeDays ~dropDays tables in
   
   (* ~drop unnecessary as we do it right in saveInfix! *)
-  printShowTables tex ~verbose floatPrint tables outDir tableNames;
+  printShowTables tex ~verbose floatPrint tables ~startRow outDir tableNames;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

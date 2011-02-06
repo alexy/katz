@@ -4,6 +4,8 @@ open TeX
 
 (* tabulate a vols4 data as 4 tables *)
 
+let takeDays'  = ref (Some 34)
+let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
 let matrix'    = ref false
@@ -17,6 +19,10 @@ let verbose'   = ref false
 
 let specs =
 [
+  (noshort,"takedays",None,Some (fun x -> takeDays' := Some (int_of_string x)));
+  (noshort,"notakedays",(set takeDays' None),None);
+  (noshort,"dropdays",None,Some (fun x -> dropDays' := Some (int_of_string x)));
+  (noshort,"nodropdays",(set dropDays' None),None);
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
   ('m',"matrix",    (set matrix'    true), None);
@@ -39,6 +45,9 @@ let _ =
   
   let outDir,   inputPath,   masterLine,  drop,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !verbose' in
+      
+  let takeDays,   dropDays =
+      !takeDays', !dropDays' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -68,11 +77,12 @@ let _ =
   let tables = [re;ru;me;mu] in
   
   
+  let startRow,tables = dayRanges ~takeDays ~dropDays tables in
   if normalize then
     let normalTables = L.map normalizeIntTable tables in
-    printShowTables tex ~verbose floatPrint normalTables outDir tableNames
+    printShowTables tex ~verbose floatPrint normalTables ~startRow outDir tableNames
   else
-    printShowTables tex ~verbose Int.print  tables       outDir tableNames;
+    printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames;
     
 
   if matrix then begin

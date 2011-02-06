@@ -1,0 +1,77 @@
+Story:
+	- overx for rreps strong in 100K
+	- but why orates for rreps weak in 100K then?
+	- all vs ureps
+	- look at actual volumes in all buckets @1
+
+Visualize:
+	- in Mathematica, with a 3D plot
+	- all day * bucket * value tables
+
+Reorganize:
+	- edit dir-*.tex files to achieve the correct order
+	- in command.sh, it's not then enough to cat tex/line* > tex/dir-tag.tex; predefined order list?
+	- get rid of creps or push them back?
+	- select only those starbucks of interest or representative
+	- see which tables are trivial, e.g. all 0s, and remove them while noting as such
+Log buckets:
+	- save_caps, both 1e-35 and -l 7 -c 1e-7
+	- dolblens
+	- normalize?
+Fractional volume:
+	- run vols fractions
+	- add to command
+Stov-nums:
+	- aggregate 84 lines into a single table, say with 2 columns
+Skews:
+	- sort by skew within each day, estabish drank
+	- compute dranks by bucket
+	- or compute Kendall's τ
+Pagerank:
+	- compute with Jung for all days
+	- stick into sqlite from Clojure
+	- read with mfp's typed sqlite bindings into ocaml
+Bucket Staying:
+	- stay over in each bucket for more than N days, say (35-7)/2 or 7 @done
+	- new bucket sizes, per class @done
+	- filter existing stay counts for two values above, create bucket sizes @done
+Bucket Volumes:
+	all buckets
+	- by replying tweets @done
+	- by mentioning tweets @done
+	- by repliers @done
+	- by mentioners @done
+	- rewrite to use full denums and produce both rvols,mvols at once @done
+	- volumes as fractions @done
+Bucket Ratios:
+	all buckets
+	- staying power within each buckets array @done
+	interbuckets -- select bucket pairs
+	- overlaps between types of graphs, for same ages @done
+	- overlaps within same family, different weeks @done
+Bucket B2B:
+	all buckets
+	- bucket to bucket by replies @done
+	- bucket to bucket by mentions, for all buckets @done
+	- condensing into a single table -- how? @done
+Bucket Starrank:
+	all buckets
+	- starrank by replies @done
+	- starrank by mentions @done
+	- for two values of maturity @done
+Write table formatters:
+	- volumes: all 4? 2? 1? @done
+	- staying rates in overlaps: in a matrix @done
+	- starrank, my rank, audience rank: all 3? @done
+	- b2b @done
+Print with working tools:
+	output include hierarchy paths, with a root at /t
+	rates need assembilng into matrices!
+	- staying rates @done
+	- overlap rates, pairwise and staying for intersect @done
+	
+	- vols4 @done
+	- b2br, b2bm @done
+	- starbucks 1e-35, 1e-7, r & m @done
+	
+	

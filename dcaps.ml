@@ -81,7 +81,7 @@ let bucketize2 l =
       let lastBound = exceedBound a.(iLast) bound in
       (* len to sync with bucketize1, iLast for real last index *)
       (lastBound,len)::acc |> L.rev in
-  aux 0 under [(under,0)] 
+  aux 0 under [] 
   
   
 let bucket_lens: day_log_buckets -> day_log_buckets =

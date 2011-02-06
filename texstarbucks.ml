@@ -4,6 +4,8 @@ open TeX
 
 (* tabulate a sb data as 4 tables *)
 
+let takeDays'  = ref (Some 34)
+let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
 let matrix'    = ref false
@@ -18,6 +20,10 @@ let verbose'   = ref false
 
 let specs =
 [
+  (noshort,"takedays",None,Some (fun x -> takeDays' := Some (int_of_string x)));
+  (noshort,"notakedays",(set takeDays' None),None);
+  (noshort,"dropdays",None,Some (fun x -> dropDays' := Some (int_of_string x)));
+  (noshort,"nodropdays",(set dropDays' None),None);
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
   ('m',"matrix",    (set matrix'    true), None);
@@ -41,6 +47,9 @@ let _ =
   
   let outDir,   inputPath,   masterLine,  drop,    scientific,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !scientific', !verbose' in
+
+  let takeDays,   dropDays =
+      !takeDays', !dropDays' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -66,11 +75,13 @@ let _ =
   let triples = carveTL carver (A.to_list sb) in
   let self,star,auds = 
     carveTL fst3 triples, carveTL snd3 triples, carveTL trd3 triples in
+
   let tables: rates list = [self;auds;star] in
+  let startRow,tables = dayRanges ~takeDays ~dropDays tables in
   
   let realPrint = if scientific then sciencePrint else floatPrint in
   
-  printShowTables tex ~verbose realPrint tables outDir tableNames;
+  printShowTables tex ~verbose realPrint tables ~startRow outDir tableNames;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

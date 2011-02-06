@@ -8,7 +8,7 @@ let () =
     | _ -> failwith "usage: dobuckles bucksName"      
   in  
 
-  let lensName = "lens-"^bucksName in
+  let lensName = "rblens-"^bucksName in
   leprintfln "reading buckets from %s, saving lengths in %s" 
     bucksName lensName;
 
