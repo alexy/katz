@@ -43,8 +43,7 @@ let growUtility genOpts sgraph day userNEdges =
     let edgeCount = ref 0 in
     userNEdges |> H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
-        let {socUS =soc; insUS =ins; outsUS =outs; 
-            totUS =tot;  balUS =bal} = ustats --> fromUser in
+        let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if (H.is_empty outs) || itTurnsOut jumpProb then
             justJump genOpts sgraph edgeCount day fromUser 
