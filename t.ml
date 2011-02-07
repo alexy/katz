@@ -2,6 +2,10 @@ open Batteries_uni
 open H
 open Graph
 
+(* general *)
+
+type ints = int list
+
 (* synonyms *)
 
 type dreps = graph
@@ -70,26 +74,28 @@ type starts = users array
 
 (* volume *)
 
-type bucket_volumes  = (int list) array
+type bucket_volumes  = ints array
 type bucket_volumes2 = (int_int list) array
 type bucket_volumes4 = (int_int_pair list) array
 
-(* soc_run_common *)
+(* soc_run *)
 
-type dcaps  = (user, (int * float) list) H.t
+type dcaps          = (user, (int * float) list) H.t
+type skew           = float list
+type dskews         = (user, (int * skew)  list) H.t
+type talk_balance   = (user,int) H.t
+type terms_stat     = (float * float * float) option
+type attachment_strategy = UniformAttachment | MentionsAttachment 
+              (*  | FOFsAttachment *)
 
-type skew   = float list
-type dskews = (user, (int * skew)  list) H.t
-
-type talkBalance = (user,int) H.t
 
 (* bucket power *)
 
 type staying        = user_int array array
 type staying_totals = int array
-type b2b            = (int list) list
+type b2b            = ints list (* same as int_rates *)
 type day_b2b        = b2b array
-type int_rates      = int list list   (* TODO rename as: int_table *)
+type int_rates      = ints list   (* TODO rename as: int_table *)
 type float4         = float * float * float * float
 type rates4         = rates * rates * rates * rates
 

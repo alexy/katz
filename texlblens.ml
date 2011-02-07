@@ -10,7 +10,9 @@ let latex'     = ref false
 let tableDoc'  = ref false
 let normalize' = ref false
 let outDir'    = ref ""
-let drop'      = ref (Some "jcaps-")
+let drop'      = ref (Some "jcaps")
+let scientific'= ref true   (* stoggle cientific notation %e vs. %f *)
+let mark'      = ref None
 let verbose'   = ref false
 
 let specs =
@@ -25,6 +27,9 @@ let specs =
   ('o',"outdir", None, Some (fun x -> outDir' := x));
   ('x',"drop",   None, Some (fun x -> drop'   := Some x));
   (noshort,"nodrop", (set drop' None),None);
+  ('e',"scientific",(set scientific' (not !scientific')),None);
+  ('m',"mark",None,Some (fun x -> mark' := Some x));
+  (noshort,"nomark",(set mark' None),None);
   ('v',"verbose",(set verbose'  true),None)
 ]
 
@@ -36,7 +41,7 @@ let fcolStr x =
   | _ -> sprintf "%1.0e" x
  
  
-let printLbLens oc tex ?(normalize=false) table ?(startRow=1) scols caption name =
+let printLbLens oc tex ?(normalize=false) ?(scientific=true) table ?(startRow=1) scols caption name =
   preamble oc tex;
   
   tableHead oc tex "day" scols;
@@ -50,7 +55,8 @@ let printLbLens oc tex ?(normalize=false) table ?(startRow=1) scols caption name
       lbs |> L.map begin fun (x,y) -> 
         let k = fcolStr x in
         let v = if normalize then 
-          (floatPrint |> to_string) (float y /. norm)
+          let fPrint = if scientific then sciencePrint else floatPrint in
+          (fPrint |> to_string) (float y /. norm)
         else (Int.print |> to_string) y in
         k,v
       end |> L.enum |> H.of_enum in
@@ -68,7 +74,7 @@ let printLbLens oc tex ?(normalize=false) table ?(startRow=1) scols caption name
   epilogue oc tex
   
 
-let printShowLbLens tex ?(verbose=false) ?(normalize=false) table ?(startRow=1) 
+let printShowLbLens tex ?(verbose=false) ?(normalize=false) ?(scientific=true) table ?(startRow=1) 
   cols outDir ?(drop=None) tableName =
   
   let pathName = sprintf "%s/%s" outDir tableName in
@@ -80,9 +86,9 @@ let printShowLbLens tex ?(verbose=false) ?(normalize=false) table ?(startRow=1)
   let caption = drop_tex name in
   let oc = open_out pathName in
 
-  printLbLens oc tex ~normalize table ~startRow cols caption caption; close_out oc;
+  printLbLens oc tex ~normalize ~scientific table ~startRow cols caption caption; close_out oc;
   if verbose then
-    printLbLens stdout tex ~normalize table ~startRow cols caption caption
+    printLbLens stdout tex ~normalize ~scientific table ~startRow cols caption caption
   else ()
   
 
@@ -92,11 +98,18 @@ let () =
   let latex,   tableDoc,   outDir,   drop,   verbose = 
       !latex', !tableDoc', !outDir', !drop', !verbose' in
       
-  let normalize,   takeDays,   dropDays =
-      !normalize', !takeDays', !dropDays' in
+  let normalize,   scientific,   takeDays,   dropDays,   mark =
+      !normalize', !scientific', !takeDays', !dropDays', !mark' in
       
   let tex,suffix,asWhat = texParams latex tableDoc in
   let outDir = if String.is_empty outDir then suffix else outDir in
+  let mark = match mark with 
+  | Some x as sm -> sm 
+  | _ when scientific -> Some "e" 
+  | _ -> Some "f" in
+  let replace = if normalize then Some "norm" else Some "int" in
+  (* standard mark is prepended before lelb, as in f-lelb-norm-dreps;
+     but we want infix, as in lelb-f-norm *)
   
   let dataFileName =
   match args with
@@ -105,7 +118,7 @@ let () =
   in
   
 
-  let _,tableName = saveBase ~drop ~dash:false suffix dataFileName in
+  let _,tableName = saveBase ~mark ~drop ~replace ~dash:false suffix dataFileName in
   let normalizedShow = if normalize then "normalized " else "" in
   leprintfln "reading lblens from %s, writing %s%s to %s %s"
     dataFileName normalizedShow asWhat tableName (showDir outDir);
@@ -125,4 +138,4 @@ let () =
   
   let scols = H.enum h |> L.of_enum |> L.sort ~cmp:(fun (_,x) (_,y) -> compare y x) |> L.map fst in
    
-  printShowLbLens tex ~verbose ~normalize table ~startRow scols outDir ~drop tableName
+  printShowLbLens tex ~verbose ~normalize ~scientific table ~startRow scols outDir ~drop tableName

@@ -1,37 +1,50 @@
 open Common
 include Sgraph_local
-open Sgraph_based
-let socDay = Socday.socDay Suds.socUserDaySum
+open Gen_opts
+let socDay = Socday.socDay Suds_local.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 socInitSR : float; byMassSR : bool; skewTimesSR : int;
                 minCapDaysSR : int; minCapSR : float;
                 initDrepsSR : graph option; initDaySR : int option;
-                maxDaysSR : int option }
+                maxDaysSR : int option;
+                jumpProbSR : float; attachmentStrategySR : attachment_strategy }
+ 
                       
 let optSocRun : socRun = 
   { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; byMassSR = false; skewTimesSR = 8;
     minCapDaysSR = 7; minCapSR = 1e-35;
     initDrepsSR = None; initDaySR = None; 
-    maxDaysSR = None }
+    maxDaysSR = None;
+    jumpProbSR = 0.2; attachmentStrategySR = MentionsAttachment }
+
 
 let paramSC {alphaSR =a; betaSR =b; gammaSR =g; 
     byMassSR =by_mass; skewTimesSR =skew_times} = 
     (a, b, g, by_mass, skew_times)
 
+
+let genOptsSC {jumpProbSR= jumpProb; attachmentStrategySR= attachmentStrategy} = 
+  {jumpProbGO =jumpProb; attachmentStrategyGO =attachmentStrategy}
+
+
 let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
     fun dstarts drnums opts ->
-    let params  = paramSC opts in
+    
+    let params, genOpts  = paramSC opts, genOptsSC opts in
+
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in
     let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap; 
-         initDrepsSR =initDreps; initDaySR =initDay} = opts in
-
+         initDrepsSR =initDreps; initDaySR =initDay; 
+         jumpProbSR =jumpProb; attachmentStrategySR =attachmentStrategy} = opts in
+    
     let dcaps     = usersHash () in
-    let dskews    = usersHash () in
     let ustats    = usersHash () in
+    let dskews    = usersHash () in
+    let inDegreeProportions = [||],[||]  in
 
-    let dreps,dments = 
+    let dreps,dments,inDegree,outDegree = 
     match initDreps with
     | Some dreps ->
       (* when initDreps is Some, initDay must be Some *)
@@ -39,10 +52,13 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
       let breps = Dreps.before dreps beforeDay |> 
         H.filter (fun days ->  not (H.is_empty days)) in
       let bments = Invert.invert2 breps in
-      breps,bments
-    | _ -> usersHash (), usersHash () in
+      let binDegree  = Dreps.userTotals bments in
+      let boutDegree = Dreps.userTotals breps in
+      breps,bments,binDegree,boutDegree
+    | _ -> usersHash (), usersHash (),
+           usersHash (), usersHash () in
 
-    let sgraph = sgraphInit dreps dments dcaps ustats ~dskews in
+    let sgraph = sgraphInit dreps dments dcaps ustats ~dskews ~inDegree ~outDegree ~inDegreeProportions in
 
     (* for simple dstarts from dreps always starting at day 0 *)
     let firstDay = 0 in
@@ -65,8 +81,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
       begin match initDay with
       | Some before when day < before -> ()
       | _ ->
-        let props = mature_caps minCapDays minCap ustats day |> H.enum in
-        Simulate.growEdges fromNums.(day) props minCap dreps dments day
+        Simulate_utility.growUtility genOpts sgraph day fromNums.(day)
       end;
     
       socDay sgraph params day;

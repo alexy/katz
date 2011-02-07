@@ -1,25 +1,6 @@
-(* TODO 
-	currently we H.fold amd List.fold_left everywhere although
-	H.iter and List.iter is possible with Hashtbl; can do that and measure.
-	The current style allows to replace with pure Map later with fewer changes.
-	
-	We also update records even though when their mutable field is changed,
-	seems we don't have to.   I.e. instead of
-	
-	List.iter (fun user -> H.add ustats user ...) newUsers;
-	sgraph
-	
-	-- we do:
-	
-	let ustats' = List.fold_left (fun user res -> H.add ustats res user ...; res) newUsers ustats in
-	{ sgraph with ustatsSG = ustats' }
-	
-	-- preserving Haskell style; the question is, is it efficient?
-*)
-
-
 open Common
-include Soc_run_common
+include Sgraph_local
+let socUserDaySum = Suds.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                       socInitSR : float; maxDaysSR : int option }
@@ -46,8 +27,8 @@ let socDay sgraph params day =
                         (0.,0.,0.) sumTerms in
   leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
 
-  (* : user -> ((float * float * float) option * userStats) -> userStats *)
-  let tick : user -> userStats -> termsStat -> userStats = 
+  (* : user -> ((float * float * float) option * ustats) -> ustats *)
+  let tick : user -> ustats -> terms_stat -> ustats = 
     fun user stats numers ->
     let soc = stats.socUS in
     let soc' = 
@@ -80,11 +61,8 @@ let socRun dreps dments opts =
     let orderN  = Constants.usersN in
     let dcaps   = H.create orderN in
     let ustats  = H.create orderN in
-    let sgraph  = {drepsSG=dreps; dmentsSG=dments; dcapsSG=dcaps; ustatsSG=ustats;
-    (* TODO backported to unify in soc_run_common, 
-       perhaps define sgraph_empty with it there,
-       and here only say sgraph_empty with meaningful fields? *)
-      dskewsSG=H.create 0} in
+    
+    let sgraph  = sgraphInit dreps dments dcaps ustats in
 
     let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
 

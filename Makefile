@@ -37,8 +37,9 @@ TEXB2B=texb2bs
 TEXSB=texstarbucks
 TEX4=tex4rates
 TEXLB=texlblens
+SU=su
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SU)
 
 all: $(ALL:%=%.opt)
 
@@ -71,10 +72,10 @@ simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
 
-lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo soc_run_common.cmo mathy.cmo
+lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo mathy.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 
-lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx soc_run_common.cmx mathy.cmx
+lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx mathy.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
 anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
@@ -83,7 +84,9 @@ anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
 anygraph.cmxa: json_graph.cmx tokyo_graph.cmx load_graph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
   
-
+sgraph.cmxa: soc_run_common.cmx ustats_skew.cmx user_stats.cmx sgraph_local.cmx sgraph_based.cmx gen_opts.cmx socday.cmx
+	ocamlfind ocamlopt -a -o $@ $^
+    
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt
 
@@ -94,10 +97,10 @@ $(SAVE_GRAPH).opt: lib.cmxa anygraph.cmxa $(SAVE_GRAPH).ml
 $(INVERT_GRAPH).opt: lib.cmxa invert.cmx $(INVERT_GRAPH).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ common.cmx -o $@
 
-$(SC):     lib.cma anygraph.cma graph.cmo soc_run.cmo invert.cmo $(SC).ml
+$(SC):     lib.cma  anygraph.cma sgraph.cmo soc_run.cmo invert.cmo $(SC).ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SC).opt: lib.cmxa anygraph.cmxa soc_run.cmx invert.cmx $(SC).cmx
+$(SC).opt: lib.cmxa anygraph.cmxa sgraph.cmxa suds.cmx soc_run.cmx invert.cmx $(SC).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(LOOK):      lib.cma $(LOOK).ml
@@ -145,10 +148,10 @@ $(LBLENS).opt: lib.cmxa $(LBLENS).ml
 $(RBLENS).opt: lib.cmxa bucket_power.cmx $(RBLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).opt: lib.cmxa anygraph.cmxa soc_run_skew.cmx invert.cmx $(SKEW).cmx
+$(SKEW).opt: lib.cmxa anygraph.cmxa invert.cmx sgraph.cmxa suds.cmx soc_run_skew.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx soc_run_gen.cmx $(SGEN).ml
+$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx sgraph.cmxa suds.cmx soc_run_gen.cmx $(SGEN).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
@@ -199,3 +202,6 @@ $(TEX4).opt: lib.cmxa teX.cmx $(TEX4).ml
 $(TEXLB).opt: lib.cmxa teX.cmx $(TEXLB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
+$(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx simulate_utility.cmx soc_run_local.cmx $(SU).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+

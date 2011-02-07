@@ -1,11 +1,13 @@
 open Common
-open Soc_run_gen
+open Soc_run_local
 open Getopt
 
-let byMass'   = ref true
-let minDays'  = ref 7
-let minCap'   = ref 1e-35
-let mark'     = ref ""
+let byMass'    = ref true
+let minDays'   = ref 7
+let minCap'    = ref 1e-35
+let jumpProb'  = ref 0.2
+let attStrat'  = ref UniformAttachment
+let mark'      = ref ""
 
 let specs =
 [
@@ -13,14 +15,17 @@ let specs =
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
   (noshort,"nomindays",(set minDays' 0),None);
-  ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n))
+  ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n));
+  ('j',"jump",None,Some (fun x -> jumpProb' := float_of_string x));
+  (noshort,"auni",(set attStrat' UniformAttachment),None);
+  (noshort,"amen",(set attStrat' MentionsAttachment),None)
 ]
   
 let () = 
   let args = getOptArgs specs in
   
-  let byMass,   minDays,   minCap, mark =
-    !byMass', !minDays', !minCap', !mark' in
+  let byMass,   minDays,   minCap,   jumpProb,   attStrat,   mark =
+      !byMass', !minDays', !minCap', !jumpProb', !attStrat', !mark' in
   
   let (dstartsName,drnumsName,saveBase,dreps',day') =
   match args with
@@ -57,7 +62,8 @@ let () =
                              initDrepsSR= initDrepsO; initDaySR= initDayO;
                              minCapSR= minCap;
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
-                             minCapDaysSR= minDays}
+                             minCapDaysSR= minDays;
+                             jumpProbSR= jumpProb; attachmentStrategySR= attStrat}
                              in
                              
   let ({drepsSG =dreps; dmentsSG =dments;

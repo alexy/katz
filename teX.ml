@@ -238,15 +238,17 @@ let showDir dir =
       sprintf "to %s%s" dir slash
       
 
-let saveBase ?(mark=None) ?(drop=None) ?(dash=true) suffix inName =      
-  let replaced,saveBase = String.replace inName ".mlb" "" in
+let saveBase ?(mark=None) ?(drop=None) ?(replace=None) ?(dash=true) suffix inName =      
+  let replaced,str = String.replace inName ".mlb" "" in
   assert replaced;
-  let saveBase = match drop with 
-  | Some drop -> dropText drop saveBase
-  | _ -> saveBase in
+  let name = match drop,replace with
+  | Some sub, Some by -> begin let ok,res = String.replace ~str ~sub ~by in
+    assert ok; res end
+  | Some drop, None ->   dropText drop str
+  | _ -> str in
   let daMark   = match mark with | Some x -> x^"-" | _ -> "" in
   let daDash   = if dash then "-" else "" in
-  let infiks  = sprintf "%s%s%s" daDash daMark saveBase in
+  let infiks  = sprintf "%s%s%s" daDash daMark name in
   let suffiks = sprintf "%s.%s" infiks suffix in
   infiks, suffiks
   

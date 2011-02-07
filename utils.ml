@@ -234,4 +234,26 @@ let mayApply f opt =
   
 let listRange ?(take=None) ?(drop=None) x =
   (mayApply L.take take |- mayApply L.drop drop) x
+
+(* NB: throws exception on []! *)
+let listMax2: ('a * float) list -> 'a * float =
+  fun l2 ->
+  L.fold_left begin fun ((amax,xmax) as curmax) ((a,x) as ax) ->
+    if x > xmax then ax else curmax
+  end (L.hd l2) (L.tl l2)
   
+
+let itTurnsOut prob =
+  Random.float 1.0 < prob
+  
+let enumNth e n =
+  E.drop n e; E.get e
+  
+let safeDivide3 (x,y,z) (x',y',z') =
+  let a = safeDivide x x' in
+  let b = safeDivide y y' in
+  let c = safeDivide z z' in
+  (a,b,c)
+
+let emptyHash () =
+  H.create 0

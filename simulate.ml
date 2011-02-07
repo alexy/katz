@@ -1,4 +1,5 @@
 open Common
+open Sgraph_local
 
 let usersN = Constants.usersN
 let daysN  = Constants.daysN
@@ -121,6 +122,9 @@ let growEdges userNEdges props smooth dreps dments day =
               hashInc toDay fromUser;
               incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
             end (* new edge *)  
-        end (E.range 1 ~until:numEdges)
+        end (1 -- numEdges) (* E.range 1 ~until:numEdges *)
       end (* numEdges > 0 *)
     end userNEdges 
+    
+    
+    
