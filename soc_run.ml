@@ -58,9 +58,11 @@ let socDay sgraph params day =
 let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
-    let orderN  = Constants.usersN in
-    let dcaps   = H.create orderN in
-    let ustats  = H.create orderN in
+    
+    let dreps   = usersHash () in
+    let dments  = usersHash () in
+    let dcaps   = usersHash () in
+    let ustats  = usersHash () in
     
     let sgraph  = sgraphInit dreps dments dcaps ustats in
 

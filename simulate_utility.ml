@@ -43,15 +43,16 @@ let growUtility genOpts sgraph day userNEdges =
     let edgeCount = ref 0 in
     userNEdges |> H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
+        let {socUS =soc; insUS =ins; outsUS =outs; 
+            totUS =tot;  balUS =bal} = ustats --> fromUser in
         E.iter begin fun _ ->
-          if itTurnsOut jumpProb then
+          if (H.is_empty outs) || itTurnsOut jumpProb then
             justJump genOpts sgraph edgeCount day fromUser 
           else
-          let {socUS =soc; insUS =ins; outsUS =outs; 
-              totUS =tot;  balUS =bal} = ustats --> fromUser in
             
               (* TODO should we simulate num from a Poisson?  1 for now 
                  also, can pick not a max but some with a fuzz *)
+                 
               let toUser,_ = H.keys outs |> L.of_enum |> 
                           L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
                           listMax2 in
