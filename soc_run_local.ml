@@ -72,7 +72,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
     
     (* inject the users first appearing in this cycle *)
     let tick ts day =
-      let {drepsSG =dreps; dmentsSG =dments; ustatsSG =ustats} = sgraph in
+      let {drepsSG =dreps; dmentsSG =dments; ustatsSG =ustats; inDegreeSG =inDegree} = sgraph in
       let newUsers = dstarts.(day) in
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
@@ -81,6 +81,8 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
       begin match initDay with
       | Some before when day < before -> ()
       | _ ->
+        let sgraph = { sgraph with inDegreeProportionsSG =
+          Simulate_utility.makeInDegreeProportions inDegree newUsers } in
         Simulate_utility.growUtility genOpts sgraph day fromNums.(day)
       end;
     

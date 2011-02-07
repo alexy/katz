@@ -37,8 +37,6 @@ let justJump genOpts sgraph edgeCount day fromUser  =
 
 let growUtility genOpts sgraph day userNEdges =
     let {jumpProbGO =jumpProb} = genOpts in
-    let sgraph = {sgraph with inDegreeProportionsSG=
-      Proportional.rangeLists (+)  1 0 (H.enum sgraph.inDegreeSG)} in
     let {ustatsSG =ustats} = sgraph in
     let edgeCount = ref 0 in
     userNEdges |> H.iter begin fun fromUser numEdges ->
@@ -59,3 +57,15 @@ let growUtility genOpts sgraph day userNEdges =
         end (1 -- numEdges)
       end else ()
     end
+
+
+(* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely
+   to get a mention than a newbie (1 + 1 = 2, 0 + 1 = 1) 
+   We can easily smooth with a floating-point number and use the corresponding
+   version of the proportional choice accroding to float-valued bucket sizes *)
+   
+let makeInDegreeProportions inDegree novices =
+  let oldies      = H.enum inDegree |> E.map (fun (u,n) -> u,succ n) in
+  let newbies     = L.enum novices |> E.map (fun x -> x,1) in
+  let attachables = E.append oldies newbies in
+  Proportional.rangeLists (+)  1 0 attachables
