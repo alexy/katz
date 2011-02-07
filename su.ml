@@ -43,8 +43,13 @@ let () =
   let jumpName   = "jump-"^saveSuffix in
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
-  (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
-  leprintfln "options: byMass=%b, minDays=%d, minCap=%e" byMass minDays minCap;
+    
+  let strategyName = match attStrat with
+  | UniformAttachment  -> "uniform"
+  | MentionsAttachment -> "by mentions"
+  in
+  leprintfln "options: byMass=%b, minDays=%d, minCap=%e, jumpProb=%f, strategy=%s" 
+    byMass minDays minCap jumpProb strategyName;
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
