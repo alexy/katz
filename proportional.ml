@@ -66,7 +66,7 @@ let justGreater a = binarySearch findGreater        a
 let pickInt a bound =
   (* a |> A.length |> pred |> A.get a, or
     A.backwards |> Enum.peek |> Option.get *)
-  let r = Random.int bound in
+  let r = (Random.int bound) |> succ in
   justGE a r
 
 let pickReal a bound =

@@ -10,7 +10,7 @@ type sgraph =
    dcapsSG : dcaps; dskewsSG : dskews;
    ustatsSG : user_stats;
    inDegreeSG : degree; outDegreeSG: degree;
-   inDegreeProportionsSG : user array * int array}
+   inDegreeProportionsSG : user array * int array }
 
 let sgraphInit?(dskews=emptyHash ())
     ?(inDegree=emptyHash ()) ?(outDegree=emptyHash ())

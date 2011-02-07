@@ -21,16 +21,16 @@ let justJump genOpts sgraph edgeCount day fromUser  =
   let {attachmentStrategyGO =attachmentStrategy} = genOpts in
   let {ustatsSG =ustats; inDegreeProportionsSG =inDegreeProportions} = sgraph in
   match attachmentStrategy with
-  | UniformAttachment -> let n = Random.int (H.length ustats) in 
-    let toUser = enumNth (H.keys ustats) n |> Option.get in
+  | UniformAttachment -> 
+    let userArray,_ =  inDegreeProportions in
+    let n = Random.int (A.length userArray - 1) |> succ in 
+    let toUser = userArray.(n) in
     addEdge sgraph edgeCount day fromUser toUser
   | MentionsAttachment ->
-    (* TODO compute inDegreeProportions once as below between ticks *)
-    let (names,vals) = inDegreeProportions (*  *) in
-    let bound = vals.((A.length vals)-1)+1 in
+    let names,vals = inDegreeProportions in
+    let bound = array_last vals in
     match Proportional.pickInt vals bound with
-    | None -> ()
-    | Some n -> 
+    | None -> () | Some n -> 
       let toUser = names.(n) in 
       addEdge sgraph edgeCount day fromUser toUser
 

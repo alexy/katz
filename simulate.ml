@@ -51,7 +51,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
     let (anames,ivals,ibound,avals,abound) = match duvals with
     (* TODO parameterize 1e-35 *)
     | Some dv -> let (ns,vs) = Proportional.rangeLists (+.) 1e-35 0. (H.enum dv.(day)) in
-                 let b = vs.((A.length vs)-1) in
+                 let b = array_last vs in
                  let dummyIntArray = A.create 0 0 in
                  let dummyBound = 0 in
                  (ns,dummyIntArray,dummyBound,vs,b)
@@ -62,7 +62,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
        
        let bound = A.backwards avals |> E.peek |> Option.get |> succ in
        *)
-                 let b = vs.((A.length vs)-1)+1 in
+                 let b = array_last vs in
                  let dummyFloatArray = A.create 0 0. in
                  let dummyBound = 0. in
                  (ns,vs,b,dummyFloatArray,dummyBound)
