@@ -1,6 +1,7 @@
 open Common
 include Sgraph_local
 open Gen_opts
+open Simulate_utility
 let socDay = Socday.socDay Suds_local.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
@@ -29,7 +30,7 @@ let genOptsSC {jumpProbSR= jumpProb; attachmentStrategySR= attachmentStrategy} =
   {jumpProbGO =jumpProb; attachmentStrategyGO =attachmentStrategy}
 
 
-let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
+let socRun: starts -> day_rep_nums -> socRun -> sgraph * ((int * int * int) * float) list =
     fun dstarts drnums opts ->
     
     let params, genOpts  = paramSC opts, genOptsSC opts in
@@ -78,19 +79,20 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
       leprintfln "now got %d" (H.length ustats);
       
-      begin match initDay with
-      | Some before when day < before -> ()
+      let edgeCounts = 
+      match initDay with
+      | Some before when day < before -> (0,0,0)
       | _ ->
         let sgraph = { sgraph with inDegreeProportionsSG =
-          Simulate_utility.makeInDegreeProportions inDegree newUsers } in
-        Simulate_utility.growUtility genOpts sgraph day fromNums.(day)
-      end;
+          makeInDegreeProportions inDegree newUsers } in
+      growUtility genOpts sgraph day fromNums.(day) in
     
       socDay sgraph params day;
+      
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
-      t::ts in
+      (edgeCounts,t)::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
-    let timings = Enum.fold tick [] theDays in
-    (sgraph,timings)
+    let countsTimings = Enum.fold tick [] theDays in
+    (sgraph,countsTimings)

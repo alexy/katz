@@ -154,7 +154,10 @@ let list_of_array a =
   
 let array_last a =
   a.(A.length a - 1)
-  (* A.length a |> pred |> A.get a *)
+  (* A.length a |> pred |> A.get a
+     a |> A.length |> pred |> A.get a, or
+     A.backwards |> Enum.peek |> Option.get *)
+
   
 (* let safeDivide x y = if y = 0. then x else x /. y *)
 let safeDivide x y = let res = x /. y in

@@ -39,13 +39,17 @@ let growUtility genOpts sgraph day userNEdges =
     let {jumpProbGO =jumpProb} = genOpts in
     let {ustatsSG =ustats} = sgraph in
     let edgeCount = ref 0 in
+    let jumpCount = ref 0 in
+    let stayCount = ref 0 in
     userNEdges |> H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
-          if (H.is_empty outs) || itTurnsOut jumpProb then
-            justJump genOpts sgraph edgeCount day fromUser 
-          else
+          if (H.is_empty outs) || itTurnsOut jumpProb then begin
+              justJump genOpts sgraph edgeCount day fromUser;
+              incr jumpCount 
+            end
+          else begin
             
               (* TODO should we simulate num from a Poisson?  1 for now 
                  also, can pick not a max but some with a fuzz *)
@@ -53,10 +57,13 @@ let growUtility genOpts sgraph day userNEdges =
               let toUser,_ = H.keys outs |> L.of_enum |> 
                           L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
                           listMax2 in
-              addEdge sgraph edgeCount day fromUser toUser
+              addEdge sgraph edgeCount day fromUser toUser;
+            incr stayCount
+          end
         end (1 -- numEdges)
       end else ()
-    end
+    end;
+    !edgeCount,!jumpCount,!stayCount
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely

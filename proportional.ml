@@ -61,11 +61,8 @@ let justGE      a = binarySearch findGreaterOrEqual a
 let justGreater a = binarySearch findGreater        a
   
 (* bound is precomputed as maximum of a,
-   i.e. a's last element, plus 1
-   NB: can be an optional parameter *)
+   i.e. a's last element *)
 let pickInt a bound =
-  (* a |> A.length |> pred |> A.get a, or
-    A.backwards |> Enum.peek |> Option.get *)
   let r = (Random.int bound) |> succ in
   justGE a r
 

@@ -39,7 +39,8 @@ let () =
   let drepsName  = "dreps-"^saveSuffix in
   let dmentsName = "dments-"^saveSuffix in
   let capsName   = "caps-"^saveSuffix in
-  let skewName   = "skew-"^saveSuffix  in
+  let skewName   = "skew-"^saveSuffix in
+  let jumpName   = "jump-"^saveSuffix in
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
   (* let maxDays = restArgs |> List.map int_of_string |> option_of_list in *)
@@ -67,10 +68,12 @@ let () =
                              in
                              
   let ({drepsSG =dreps; dmentsSG =dments;
-    dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
+    dcapsSG =dcaps; dskewsSG =dskews},countsTimings) = socRun dstarts drnums opts in
     
-  leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
-    drepsName dmentsName capsName skewName;
+  let edgeCounts,tSocRun = L.split countsTimings in
+    
+  leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s, dskews in %s, jumps in %s" 
+    drepsName dmentsName capsName skewName jumpName;
   saveData dreps  drepsName;
   let tSavingDReps  =  Some "-- saved dreps timing: "  |> getTiming in
   saveData dments dmentsName;  
@@ -79,5 +82,7 @@ let () =
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
   let tSavingDSkews =  Some "-- saved dskews timing: " |> getTiming in
+  saveData edgeCounts jumpName;
+  
   let ts = List.rev (tSavingDSkews::tSavingDCaps::tSavingDMents::tSavingDReps::tSocRun@[tLoadDRnums;tLoadDStarts]) in
   printf "timings: %s\n" (show_float_list ts);
