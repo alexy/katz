@@ -23,7 +23,7 @@ let () =
       maturity minimum;
       
     let dcaps: user_day_reals = loadData dcapsName in
-    let (dranks, aranks) = Cranks.daranks maturity minimum dcaps in
+    let (dranks : user_day_ranks), (aranks : day_rank_users) = Cranks.daranks maturity minimum dcaps in
     
     saveData dranks dranksName;
     saveData aranks aranksName

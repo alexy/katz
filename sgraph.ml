@@ -1,4 +1,5 @@
 open Common
+include Soc_run_common
 open Ustats
 open User_stats
 
