@@ -18,7 +18,6 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit =
 
 
 let justJump strategy sgraph degr edgeCount day fromUser  =
-  let {ustatsSG =ustats} = sgraph in
   let {inDePropsDG =inDeProps; fnofsDG     =fnofs; 
        fnumMentsDG =fnumMents; fnofMentsDG =fnofMents} = degr in
   let toUser = 
