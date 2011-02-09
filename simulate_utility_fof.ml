@@ -33,15 +33,21 @@ let justJump strategy sgraph degr edgeCount day fromUser  =
       Proportional.pickInt2 inDeProps
     end
   | FOFUniformAttachment -> begin
-      let someFOF = Proportional.pickInt2 (fnofs --> fromUser) in
+      
+      let someFOF = 
+      try Proportional.pickInt2 (fnofs --> fromUser)
+      with Not_found -> failwith "Not_found fnofs --> %s" fromUser in
       let someFriends1,_ = fnofs --> someFOF in
       hashInc edgeCount "FOFUniform";
       randomElementBut0th someFriends1
     end
   | FOFMentionsAttachment -> begin
-      let someFOF = Proportional.pickInt2 (fnofMents --> fromUser) in
+      let someFOF = 
+      try Proportional.pickInt2 (fnofMents --> fromUser) 
+      with Not_found -> failwith "Not_found fnofMents --> %s" fromUser in
       hashInc edgeCount "FOFMentions";
-      Proportional.pickInt2 (fnumMents --> someFOF)
+      try Proportional.pickInt2 (fnumMents --> someFOF)
+      with Not_found -> failwith "Not_found fnumMents --> %s" someFOF 
     end
   in
   addEdge sgraph degr edgeCount day fromUser toUser;
