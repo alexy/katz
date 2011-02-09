@@ -128,7 +128,7 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
   fun ustats inDegree ->
   H.map begin fun user {totUS =tot} ->
     let userFMents = H.keys tot |> E.map begin fun friend ->
-      friend,inDegree --> friend
+      friend,H.find_default inDegree friend 0
     end in
     Proportional.intRangeLists userFMents
   end ustats
@@ -138,7 +138,9 @@ let makeFNOFMents: user_stats -> fnofs -> fnofs =
   fun ustats fnumMents ->
   H.map begin fun user {totUS =tot} ->
     let userFMentsTotal = H.keys tot |> E.map begin fun friend ->
-      friend,fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
+      friend,
+      try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
+    with Not_found -> failwith (sprintf "Not_found in makeFNOFMents fnumMents --> %s" friend)
     end in
     Proportional.intRangeLists userFMentsTotal
   end ustats
