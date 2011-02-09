@@ -1,11 +1,10 @@
 open Common
 include Soc_run_common
-open Ustats
-open User_stats
+include Ustats
 
 type sgraph = 
   {drepsSG  : graph; dmentsSG : graph; 
-   dcapsSG  : dcaps; ustatsSG : user_stats}
+   ustatsSG : user_stats}
 
-let sgraphInit dreps dments dcaps ustats =
-  {drepsSG=dreps; dmentsSG=dments; dcapsSG=dcaps; ustatsSG=ustats}
+let sgraphInit dreps dments ustats =
+  {drepsSG=dreps; dmentsSG=dments; ustatsSG=ustats}

@@ -1,7 +1,6 @@
 open Common
 open Soc_run_common
-open Sgraph_local
-open Sgraph_based
+open Sgraph
 
 let stepOut ustats from to' num res = 
   let {outsUS =outs; totUS =tot; balUS =bal} = ustats --> from in

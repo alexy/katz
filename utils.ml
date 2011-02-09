@@ -2,6 +2,7 @@ open Printf
 (* if we open Printf after Batteries, we get leprintf all screwed up! *)
 open Batteries_uni
 open H
+open H.Infix
 open Getopt
 
 let leprintf   format = eprintf (format ^^ "%!")
@@ -260,3 +261,13 @@ let safeDivide3 (x,y,z) (x',y',z') =
 
 let emptyHash () =
   H.create 0
+  
+let randomElementBut0th a =
+  let n = Random.int (A.length a - 1) in
+  a.(n+1)
+  
+let hash_map2 f h1 h2 =
+  H.map begin fun k v1 ->
+    let v2 = h2 --> k in
+    f k v1 v2
+  end

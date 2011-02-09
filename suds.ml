@@ -1,7 +1,6 @@
 open Common
 open Soc_run_common
-open Sgraph_local
-open Sgraph_based
+open Sgraph
 
 (* updates stats in the original ustats! *)
 

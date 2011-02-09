@@ -1,5 +1,5 @@
 open Common
-open Sgraph_local
+open Sgraph
 
 let usersN = Constants.usersN
 let daysN  = Constants.daysN
@@ -55,7 +55,7 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
                  let dummyIntArray = A.create 0 0 in
                  let dummyBound = 0 in
                  (ns,dummyIntArray,dummyBound,vs,b)
-    | None ->    let (ns,vs) = Proportional.rangeLists (+)  1 0 (H.enum users) in
+    | None ->    let (ns,vs) = Proportional.intRangeLists (H.enum users) in
     (* we increment the last, maximum value of the range array 
        since Random.int can never reach the bound 
        Another way to get the bound:

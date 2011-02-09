@@ -22,7 +22,7 @@ let () =
   let dments = Invert.invert2 dreps in
   let tInvert = Some "-- inverted dreps into dments, timing: " |> getTiming in
   leprintfln "dments has length %d" (H.length dments);
-  let ({dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = 
+  let _,dcaps,dskews,tSocRun = 
     socRun dreps dments {optSocRun with maxDaysSR= maxDays; byMassSR= by_mass} in
   leprintfln "computed sgraph, now saving dcaps in %s and dskews in %s" capsName skewName;
   saveData dcaps  capsName;

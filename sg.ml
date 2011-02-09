@@ -60,8 +60,7 @@ let () =
                              minCapDaysSR= minDays}
                              in
                              
-  let ({drepsSG =dreps; dmentsSG =dments;
-    dcapsSG =dcaps; dskewsSG =dskews},tSocRun) = socRun dstarts drnums opts in
+  let {drepsSG =dreps; dmentsSG =dments},(dcaps,dskews),tSocRun = socRun dstarts drnums opts in
     
   leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     drepsName dmentsName capsName skewName;

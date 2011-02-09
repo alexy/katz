@@ -38,8 +38,9 @@ TEXSB=texstarbucks
 TEX4=tex4rates
 TEXLB=texlblens
 SU=su
+SF=sf
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(SKEW) $(SGEN) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SU)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS)$(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) # $(SGEN) # $(SU) $(SF)
 
 all: $(ALL:%=%.opt)
 
@@ -84,7 +85,7 @@ anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
 anygraph.cmxa: json_graph.cmx tokyo_graph.cmx load_graph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
   
-sgraph.cmxa: soc_run_common.cmx ustats_skew.cmx user_stats.cmx sgraph_local.cmx sgraph_based.cmx gen_opts.cmx socday.cmx
+sgraph.cmxa: soc_run_common.cmx ustats.cmx sgraph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
     
 clean:
@@ -148,10 +149,10 @@ $(LBLENS).opt: lib.cmxa $(LBLENS).ml
 $(RBLENS).opt: lib.cmxa bucket_power.cmx $(RBLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).opt: lib.cmxa anygraph.cmxa invert.cmx sgraph.cmxa suds.cmx soc_run_skew.cmx $(SKEW).cmx
+$(SKEW).opt: lib.cmxa anygraph.cmxa invert.cmx sgraph.cmxa suds.cmx socday.cmx soc_run_skew.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx sgraph.cmxa suds.cmx soc_run_gen.cmx $(SGEN).ml
+$(SGEN).opt: lib.cmxa invert.cmx simulate.cmx sgraph.cmxa suds.cmx  socday.cmx soc_run_gen.cmx $(SGEN).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(VOLS).opt: lib.cmxa by_day.cmx cranks.cmx topsets.cmx volume.cmx $(VOLS).ml
@@ -202,6 +203,8 @@ $(TEX4).opt: lib.cmxa teX.cmx $(TEX4).ml
 $(TEXLB).opt: lib.cmxa teX.cmx $(TEXLB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
-$(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx simulate_utility.cmx soc_run_local.cmx $(SU).ml
+$(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_local.cmx simulate_utility_local.cmx soc_run_local.cmx $(SU).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
+$(SF).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

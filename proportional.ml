@@ -1,7 +1,9 @@
 open Common
 
+let empty: 'a proportions = [||],[||]
+
 (* choose members of a hash at random proportionally to their value *)
-let rangeLists =
+let rangeLists: ('a -> 'a -> 'a) -> 'a -> 'a -> (user * 'a) E.t -> 'a proportions =
   fun add smooth zero uvals ->
   (* first, I wanted to work with enums, but then decided to keep lists inside...
      otherwise, here's how I'd prepend a 0 valued pair to the input stream:
@@ -23,6 +25,8 @@ let rangeLists =
     ([],[]) ranges in
   (A.of_list ul, A.of_list il)
   
+  
+let intRangeLists = rangeLists (+) 1 0 
   
 (* find the first element greater or equal than x in a sorted array a *)
   
@@ -60,6 +64,7 @@ let rec findGreater a fI fV uI uV x =
 let justGE      a = binarySearch findGreaterOrEqual a
 let justGreater a = binarySearch findGreater        a
   
+
 (* bound is precomputed as maximum of a,
    i.e. a's last element *)
 let pickInt a bound =
@@ -70,8 +75,11 @@ let pickReal a bound =
   let r = Random.float bound in
   justGE a r
 
-(* NB doesn't type:
-let pick isReal a bound =
-  if isReal then pickReal a bound
-  else pickInt a bound
- *)  
+
+(* TODO raise an exception *)
+let pickInt2 (names,vals) =
+  let bound = array_last vals in
+  let n = pickInt vals bound in
+  match n with
+  | Some n -> names.(n)
+  | _ -> failwith "proportional arrays are all messed up"

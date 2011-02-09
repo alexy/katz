@@ -1,5 +1,5 @@
 open Common
-include Sgraph_local
+include Sgraph
 let socDay = Socday.socDay Suds.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
@@ -25,7 +25,7 @@ let socRun dreps dments opts =
     let ustats    = usersHash () in
     let dskews    = usersHash () in
 
-    let sgraph  = sgraphInit dreps dments dcaps ustats ~dskews in
+    let sgraph  = sgraphInit dreps dments ustats in
 
     let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
 
@@ -41,11 +41,14 @@ let socRun dreps dments opts =
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
       leprintfln "now got %d" (H.length ustats);
-      socDay sgraph params day;
+      let skews = socDay sgraph params day in
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
+
+      H.iter (updateFromUStats dcaps statSoc day) ustats;
+      H.iter (updateUserDaily  dskews day) skews;
       t::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
     let timings = Enum.fold tick [] theDays in
-    (sgraph,timings)
+    sgraph,dcaps,dskews,timings

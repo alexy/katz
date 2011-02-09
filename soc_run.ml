@@ -1,5 +1,5 @@
 open Common
-include Sgraph_local
+include Sgraph
 let socUserDaySum = Suds.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
@@ -15,7 +15,7 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g} = (a, b, g)
 
 let socDay sgraph params day =
   let (alpha, beta, gamma) = params in
-  let {ustatsSG =ustats; dcapsSG =dcaps} = sgraph in
+  let {ustatsSG =ustats} = sgraph in
     (* or is it faster to dot fields:
     let ustats = sgraph.ustatsSG in
     let dcaps  = sgraph.dcapsSG in *)
@@ -44,27 +44,20 @@ let socDay sgraph params day =
     let stats' = {stats with socUS = soc'} in
     stats' in
     
-  hashUpdateWithImp tick ustats termsStats;
-  
-  let updateUser dcaps user stats  =
-    let soc = stats.socUS in
-    let caps  = H.find_default dcaps user [] in
-    let caps' = (day,soc)::caps in
-    H.replace dcaps user caps' in
-
-  H.iter (updateUser dcaps) ustats
-  
-
+  hashUpdateWithImp tick ustats termsStats
+   
+      
 let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
     
     let dreps   = usersHash () in
     let dments  = usersHash () in
-    let dcaps   = usersHash () in
     let ustats  = usersHash () in
     
-    let sgraph  = sgraphInit dreps dments dcaps ustats in
+    let sgraph  = sgraphInit dreps dments ustats in
+
+    let dcaps   = usersHash () in
 
     let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
 
@@ -82,9 +75,11 @@ let socRun dreps dments opts =
       leprintfln "now got %d" (H.length ustats);
       socDay sgraph params day;
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
+
+      H.iter (updateFromUStats dcaps statSoc day) ustats;
       t::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
     let timings = Enum.fold tick [] theDays in
-    (sgraph,timings)
+    sgraph,dcaps,timings

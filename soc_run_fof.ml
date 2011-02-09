@@ -1,6 +1,6 @@
 open Common
 include Sgraph
-include Simulate_utility_local
+include Simulate_utility_fof
 let socDay = Socday.socDay Suds_local.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
@@ -8,16 +8,20 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 minCapDaysSR : int; minCapSR : float;
                 initDrepsSR : graph option; initDaySR : int option;
                 maxDaysSR : int option;
-                jumpProbSR : float; attachmentStrategySR : attachment_strategy }
+                jumpProbUtilSR : float; jumpProbFOFSR : float;
+                globalStrategySR : attachment_strategy;
+                fofStrategySR    : attachment_strategy }
+ 
 
-                      
 let optSocRun : socRun = 
   { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; byMassSR = false; skewTimesSR = 8;
     minCapDaysSR = 7; minCapSR = 1e-35;
     initDrepsSR = None; initDaySR = None; 
     maxDaysSR = None;
-    jumpProbSR = 0.2; attachmentStrategySR = MentionsAttachment }
+    jumpProbUtilSR = 0.5; jumpProbFOFSR = 0.2;
+    globalStrategySR = GlobalMentionsAttachment;
+    fofStrategySR    = FOFMentionsAttachment }
 
 
 let paramSC {alphaSR =a; betaSR =b; gammaSR =g; 
@@ -25,19 +29,20 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g;
     (a, b, g, by_mass, skew_times)
 
 
-let genOptsSC {jumpProbSR= jumpProb; attachmentStrategySR= attachmentStrategy} = 
-  {jumpProbGO =jumpProb; attachmentStrategyGO =attachmentStrategy}
+let genOptsSC {jumpProbUtilSR   =jumpProbUtil;   jumpProbFOFSR =jumpProbFOF;
+               globalStrategySR =globalStrategy; fofStrategySR =fofStrategy } =
+  { jumpProbUtilGO=   jumpProbUtil;   jumpProbFOFGO= jumpProbFOF;
+    globalStrategyGO= globalStrategy; fofStrategyGO= fofStrategy }
 
 
-let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_counts * float) list =
+let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_count_list * float) list =
     fun dstarts drnums opts ->
     
     let params, genOpts  = paramSC opts, genOptsSC opts in
 
-    let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in
+    let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in (* TODO ByMass? *)
     let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap; 
-         initDrepsSR =initDreps; initDaySR =initDay; 
-         jumpProbSR =jumpProb; attachmentStrategySR =attachmentStrategy} = opts in
+         initDrepsSR =initDreps; initDaySR =initDay} = opts in
     
     let dcaps     = usersHash () in
     let ustats    = usersHash () in
@@ -79,18 +84,29 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
       
       let edgeCounts = 
       match initDay with
-      | Some before when day < before -> (0,0,0)
+      | Some before when day < before -> emptyHash ()
       | _ ->
         let inDeProps = makeInDegreeProportions inDegree newUsers in
-        let degr = {inDegreeDG=inDegree;outDegreeDG=outDegree;inDePropsDG=inDeProps} in
-        growUtility genOpts sgraph degr day fromNums.(day) in
+        let fnums = makeFNums ustats in
+        let fnofs = makeFNOFs ustats fnums in
+        let fnumMents = makeFNumMents ustats inDegree in
+        let fnofMents = makeFNOFMents ustats fnumMents in
+        let degr = 
+        { inDegreeDG=inDegree;
+          outDegreeDG=outDegree;
+          inDePropsDG=inDeProps;
+          fnumsDG=fnums;
+          fnofsDG=fnofs;
+          fnumMentsDG=fnumMents;
+          fnofMentsDG=fnofMents } in
+          growUtility genOpts sgraph degr day fromNums.(day) in
     
       let skews = socDay sgraph params day in
       
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       H.iter (updateFromUStats dcaps statSoc day) ustats;
       H.iter (updateUserDaily  dskews day) skews;
-      (edgeCounts,t)::ts in
+      (edgeCounts |> listHash,t)::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)

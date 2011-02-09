@@ -14,7 +14,7 @@ let () =
     let dments = Invert.invert2 dreps in
     let tInvert = Some "inverted dreps into dments, timing: " |> getTiming in
     leprintfln "dments has length %d" (H.length dments);
-    let ({dcapsSG =dcaps},tSocRun) = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in
+    let _,dcaps,tSocRun = socRun dreps dments {optSocRun with maxDaysSR= maxDays} in
     leprintfln "computed sgraph, now saving dcaps in %s" saveName;
     Binary_graph.saveData dcaps saveName;
     let tSaving =  Some "saved dcaps timing: " |> getTiming in

@@ -5,6 +5,11 @@ open Graph
 (* general *)
 
 type ints = int list
+type 'a tuple4 = 'a * 'a * 'a * 'a
+
+(* basis *)
+
+type user_int_hash = (user,int) H.t
 
 (* synonyms *)
 
@@ -24,8 +29,7 @@ type day_re_me      = day_rep_nums * day_rep_nums
 type day_edgenums   = user_nums_pair array
 type user_int       = user * int
 type user_ints_enum = user_int E.t
-type user_ints_hash = (user,int) H.t (* users_total below *)
-type day_user_ints  = user_ints_hash array
+type day_user_ints  = user_int_hash array
 type day_user_nums  = user_nums array
 type real           = float
 type day_real       = day * float
@@ -65,7 +69,7 @@ type day_log_buckets = log_buckets array
 (* dreps *)
 
 type daily_ints  = (user,(int,int) H.t) H.t
-type users_total = (user, int) H.t
+type users_total = user_int_hash
 type pair_totals = (user, users_total) H.t
 
 (* dranges *)
@@ -83,11 +87,8 @@ type bucket_volumes4 = (int_int_pair list) array
 type dcaps          = (user, (int * float) list) H.t
 type skew           = float list
 type dskews         = (user, (int * skew)  list) H.t
-type talk_balance   = (user,int) H.t
+type talk_balance   = user_int_hash
 type terms_stat     = (float * float * float) option
-type attachment_strategy = UniformAttachment | MentionsAttachment 
-              (*  | FOFsAttachment *)
-
 
 (* bucket power *)
 
@@ -110,6 +111,13 @@ type starrank_hash = (user,(day,srank) H.t) H.t
 type starbucks     = (float_triple * float_triple) list (* averages * medians *)
 type day_starbucks = starbucks array
 
-(* general *)
+(* proportional *)
 
-type 'a tuple4 = 'a * 'a * 'a * 'a
+type 'a proportions  = user array * 'a array
+type int_proportions = int proportions
+
+(* fof *)
+
+type udegr = user_int_hash
+type fnums = user_int_hash
+type fnofs = (user,int_proportions) H.t

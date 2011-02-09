@@ -1,6 +1,5 @@
 open Common
-include Sgraph_local
-open Sgraph_based
+include Sgraph
 let socDay = Socday.socDay Suds.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
@@ -20,7 +19,7 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g;
     byMassSR =by_mass; skewTimesSR =skew_times} = 
     (a, b, g, by_mass, skew_times)
 
-let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
+let socRun: starts -> day_rep_nums -> socRun -> sgraph * (dcaps * dskews) * timings =
     fun dstarts drnums opts ->
     let params  = paramSC opts in
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in
@@ -42,7 +41,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
       breps,bments
     | _ -> usersHash (), usersHash () in
 
-    let sgraph = sgraphInit dreps dments dcaps ustats ~dskews in
+    let sgraph = sgraphInit dreps dments ustats in
 
     (* for simple dstarts from dreps always starting at day 0 *)
     let firstDay = 0 in
@@ -69,11 +68,13 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * timings =
         Simulate.growEdges fromNums.(day) props minCap dreps dments day
       end;
     
-      socDay sgraph params day;
+      let skews = socDay sgraph params day in
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
+      H.iter (updateFromUStats dcaps statSoc day) ustats;
+      H.iter (updateUserDaily  dskews day) skews;
       t::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
     let timings = Enum.fold tick [] theDays in
-    (sgraph,timings)
+    sgraph,(dcaps,dskews),timings

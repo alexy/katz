@@ -1,12 +1,12 @@
 open Common
-open Sgraph_local
-open Gen_opts
+open Sgraph
 open Suds_local
+include Attachment_local
 
-let addEdge: sgraph -> int ref -> day -> user -> user -> unit = 
-  fun sgraph edgeCount day fromUser toUser ->
-    let {drepsSG =dreps; dmentsSG =dments; 
-         inDegreeSG =inDegree; outDegreeSG =outDegree} = sgraph in 
+let addEdge: sgraph -> degr -> int ref -> day -> user -> user -> unit = 
+  fun sgraph degr edgeCount day fromUser toUser ->
+    let {drepsSG =dreps; dmentsSG =dments} = sgraph in
+    let {inDegreeDG =inDegree; outDegreeDG =outDegree} = degr in 
     let fromDay = Dreps.userDay dreps fromUser day in  
     hashInc fromDay toUser;
     hashInc outDegree fromUser;
@@ -17,25 +17,22 @@ let addEdge: sgraph -> int ref -> day -> user -> user -> unit =
     if !edgeCount mod 10000 = 0 then leprintf "." else ()
 
 
-let justJump genOpts sgraph edgeCount day fromUser  =
+let justJump genOpts sgraph degr edgeCount day fromUser  =
   let {attachmentStrategyGO =attachmentStrategy} = genOpts in
-  let {ustatsSG =ustats; inDegreeProportionsSG =inDegreeProportions} = sgraph in
+  let {inDePropsDG =inDeProps} = degr in
+  let toUser =
   match attachmentStrategy with
   | UniformAttachment -> 
-    let userArray,_ =  inDegreeProportions in
-    let n = Random.int (A.length userArray - 1) |> succ in 
-    let toUser = userArray.(n) in
-    addEdge sgraph edgeCount day fromUser toUser
-  | MentionsAttachment ->
-    let names,vals = inDegreeProportions in
-    let bound = array_last vals in
-    match Proportional.pickInt vals bound with
-    | None -> () | Some n -> 
-      let toUser = names.(n) in 
-      addEdge sgraph edgeCount day fromUser toUser
+    let userArray,_ =  inDeProps in
+    randomElementBut0th userArray
+  | MentionsAttachment -> 
+    Proportional.pickInt2 inDeProps
+  in
+  addEdge sgraph degr edgeCount day fromUser toUser
 
 
-let growUtility genOpts sgraph day userNEdges =
+let growUtility: gen_opts -> sgraph -> degr -> day -> user_int_hash -> edge_counts =
+  fun genOpts sgraph degr day userNEdges ->
     let {jumpProbGO =jumpProb} = genOpts in
     let {ustatsSG =ustats} = sgraph in
     let edgeCount = ref 0 in
@@ -46,18 +43,18 @@ let growUtility genOpts sgraph day userNEdges =
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if (H.is_empty outs) || itTurnsOut jumpProb then begin
-              justJump genOpts sgraph edgeCount day fromUser;
+              justJump genOpts sgraph degr edgeCount day fromUser;
               incr jumpCount 
             end
           else begin
-            
-              (* TODO should we simulate num from a Poisson?  1 for now 
-                 also, can pick not a max but some with a fuzz *)
-                 
-              let toUser,_ = H.keys outs |> L.of_enum |> 
-                          L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
-                          listMax2 in
-              addEdge sgraph edgeCount day fromUser toUser;
+          
+            (* TODO should we simulate num from a Poisson?  1 for now 
+               also, can pick not a max but some with a fuzz *)
+               
+            let toUser,_ = H.keys outs |> L.of_enum |> 
+                        L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
+                        listMax2 in
+            addEdge sgraph degr edgeCount day fromUser toUser;
             incr stayCount
           end
         end (1 -- numEdges)
@@ -75,4 +72,4 @@ let makeInDegreeProportions inDegree novices =
   let oldies      = H.enum inDegree |> E.map (fun (u,n) -> u,succ n) in
   let newbies     = L.enum novices |> E.map (fun x -> x,1) in
   let attachables = E.append oldies newbies in
-  Proportional.rangeLists (+)  1 0 attachables
+  Proportional.rangeLists (+) 1 0 attachables

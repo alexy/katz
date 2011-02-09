@@ -1,13 +1,15 @@
 open Common
-open Soc_run_local
+open Soc_run_fof
 open Getopt
 
-let byMass'    = ref true
-let minDays'   = ref 7
-let minCap'    = ref 1e-35
-let jumpProb'  = ref 0.2
-let attStrat'  = ref UniformAttachment
-let mark'      = ref ""
+let byMass'  = ref true
+let minDays' = ref 7
+let minCap'  = ref 1e-35
+let jumpProbUtil' = ref 0.5 (* maximize utility or just jump in general *)
+let jumpProbFOF'  = ref 0.2 (* atach globally after first jump vs FOF-based *)
+let globalStrat'  = ref GlobalUniformAttachment
+let fofStrat'     = ref FOFUniformAttachment
+let mark' = ref ""
 
 let specs =
 [
@@ -16,17 +18,23 @@ let specs =
   ('u',"byusers",(set byMass' false),None);
   (noshort,"nomindays",(set minDays' 0),None);
   ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n));
-  ('j',"jump",None,Some (fun x -> jumpProb' := float_of_string x));
-  (noshort,"auni",(set attStrat' UniformAttachment),None);
-  (noshort,"amen",(set attStrat' MentionsAttachment),None)
+  ('j',"jumpUtil",None,Some (fun x -> jumpProbUtil' := float_of_string x));
+  ('J',"jumpFOF", None,Some (fun x -> jumpProbFOF'  := float_of_string x));
+  (noshort,"globuni",(set globalStrat' GlobalUniformAttachment), None);
+  (noshort,"globmen",(set globalStrat' GlobalMentionsAttachment),None);
+  (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
+  (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None)
 ]
   
 let () = 
   let args = getOptArgs specs in
   
-  let byMass,   minDays,   minCap,   jumpProb,   attStrat,   mark =
-      !byMass', !minDays', !minCap', !jumpProb', !attStrat', !mark' in
+  let byMass,   minDays,   minCap,   mark =
+      !byMass', !minDays', !minCap', !mark' in
   
+  let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat =
+      !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat' in
+      
   let (dstartsName,drnumsName,saveBase,dreps',day') =
   match args with
   | dstartsName::drnumsName::saveBase::dreps'::day'::[] -> 
@@ -44,9 +52,10 @@ let () =
   leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
     dstartsName drnumsName drepsName dmentsName capsName skewName;
     
-  let strategyName = showStrategy attStrat in
-  leprintfln "options: byMass=%b, minDays=%d, minCap=%e, jumpProb=%f, strategy=%s" 
-    byMass minDays minCap jumpProb strategyName;
+  let globalStrategyName = showStrategy globalStrat in
+  let fofStrategyName    = showStrategy fofStrat in
+  leprintfln "options: byMass=%b, minDays=%d, minCap=%e, jumpProbUtil=%e, jumpProbFOF=%e, globalStrategy=%s, fofStrategy=%s" 
+    byMass minDays minCap jumpProbUtil jumpProbFOF globalStrategyName fofStrategyName;
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
@@ -66,7 +75,8 @@ let () =
                              minCapSR= minCap;
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
                              minCapDaysSR= minDays;
-                             jumpProbSR= jumpProb; attachmentStrategySR= attStrat}
+                             jumpProbUtilSR= jumpProbUtil;jumpProbFOFSR= jumpProbFOF;
+                             globalStrategySR= globalStrat; fofStrategySR= fofStrat }
                              in
                              
   let {drepsSG =dreps; dmentsSG =dments},
@@ -84,8 +94,7 @@ let () =
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
   let tSavingDSkews =  Some "-- saved dskews timing: " |> getTiming in
-
   saveData edgeCounts jumpName;
-
+  
   let ts = List.rev (tSavingDSkews::tSavingDCaps::tSavingDMents::tSavingDReps::tSocRun@[tLoadDRnums;tLoadDStarts]) in
   printf "timings: %s\n" (show_float_list ts);
