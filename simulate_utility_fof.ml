@@ -54,6 +54,7 @@ let growUtility genOpts sgraph degr day userNEdges =
     let {jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
          globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy} = genOpts in
     let {ustatsSG =ustats} = sgraph in
+    let {fnumsDG  =fnums}  = degr in
     
     let edgeCount =  edgeCountNames |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
     H.iter begin fun fromUser numEdges ->
@@ -61,7 +62,7 @@ let growUtility genOpts sgraph degr day userNEdges =
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if (H.is_empty outs) || itTurnsOut jumpProbUtil then begin
-              if itTurnsOut jumpProbFOF then
+              if fnums --> fromUser = 0 || itTurnsOut jumpProbFOF then
                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
                 justJump fofStrategy sgraph degr edgeCount day fromUser
