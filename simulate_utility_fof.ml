@@ -36,7 +36,7 @@ let justJump strategy sgraph degr edgeCount day fromUser  =
       
       let someFOF = 
       try Proportional.pickInt2 (fnofs --> fromUser)
-      with Not_found -> failwith "Not_found fnofs --> %s" fromUser in
+      with Not_found -> failwith (sprintf "Not_found in justJump fnofs --> %s" fromUser) in
       let someFriends1,_ = fnofs --> someFOF in
       hashInc edgeCount "FOFUniform";
       randomElementBut0th someFriends1
@@ -44,10 +44,10 @@ let justJump strategy sgraph degr edgeCount day fromUser  =
   | FOFMentionsAttachment -> begin
       let someFOF = 
       try Proportional.pickInt2 (fnofMents --> fromUser) 
-      with Not_found -> failwith "Not_found fnofMents --> %s" fromUser in
+      with Not_found -> failwith (sprintf "Not_found in justJump fnofMents --> %s" fromUser) in
       hashInc edgeCount "FOFMentions";
       try Proportional.pickInt2 (fnumMents --> someFOF)
-      with Not_found -> failwith "Not_found fnumMents --> %s" someFOF 
+      with Not_found -> failwith (sprintf "Not_found in justJump fnumMents --> %s" someFOF) 
     end
   in
   addEdge sgraph degr edgeCount day fromUser toUser;
@@ -94,14 +94,6 @@ let growUtility genOpts sgraph degr day userNEdges =
    to get a mention than a newbie (1 + 1 = 2, 0 + 1 = 1) 
    We can easily smooth with a floating-point number and use the corresponding
    version of the proportional choice accroding to float-valued bucket sizes *)
-   
-   
-let makeFNums: user_stats -> fnums =
-  fun ustats ->
-  H.map begin fun _ {totUS =tot} ->
-    H.length tot 
-  end ustats
-
 
 let makeInDegreeProportions: udegr -> users -> int_proportions =
   fun inDegree novices ->
@@ -110,6 +102,13 @@ let makeInDegreeProportions: udegr -> users -> int_proportions =
   let attachables = E.append oldies newbies in
   Proportional.intRangeLists attachables
 
+      
+let makeFNums: user_stats -> fnums =
+  fun ustats ->
+  H.map begin fun _ {totUS =tot} ->
+    H.length tot 
+  end ustats
+
   
 (* may avoid separate fnums altogether and compute fnum as
   (ustats --> friend).tot |> H.length, but too many repeated accesses? *)
@@ -117,7 +116,9 @@ let makeFNOFs: user_stats -> fnums -> fnofs =
   fun ustats fnums ->
   H.map begin fun user {totUS =tot} ->
     let userFNums = H.keys tot |> E.map begin fun friend ->
-      friend,fnums --> friend (* total number of that friend's friends! *)
+      friend,
+      try fnums --> friend (* total number of that friend's friends! *)
+    with Not_found -> failwith (sprintf "Not_found in makeFNOFs fnums --> %s" friend)
     end in
     Proportional.intRangeLists userFNums
   end ustats
