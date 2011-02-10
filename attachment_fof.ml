@@ -49,7 +49,7 @@ GlobalMentionsAttachment,
 FOFUniformAttachment,
 [fnumsSF;fnofsSF];
 FOFMentionsAttachment,
-[fnumsSF;fnofsSF];
+[fnumsSF;fnofsSF];  (* fnums used to skip in growUtility *)
 FOFSocCapAttachment,
 [fsocsSF;fscofsSF]
 ]

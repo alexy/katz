@@ -44,7 +44,8 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
 
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in (* TODO ByMass? *)
     let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap; 
-         initDrepsSR =initDreps; initDaySR =initDay} = opts in
+         initDrepsSR =initDreps; initDaySR =initDay;
+         strategyFeaturesSR =strategyFeatures} = opts in
     
     let dcaps     = usersHash () in
     let ustats    = usersHash () in
@@ -88,6 +89,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
       match initDay with
       | Some before when day < before -> emptyHash ()
       | _ -> let degr = basicDegr inDegree outDegree in
+             let degr = computeStrategyData degr strategyFeatures ustats newUsers in
              growUtility genOpts sgraph degr day fromNums.(day) in
     
       let skews = socDay sgraph params day in
