@@ -189,7 +189,10 @@ let computeStrategyFeatures strategyData strategyList =
   let sdata = L.fold_left begin fun res strategy ->
     (* just convert each to a set and union, then restore list order form s
        trategyDataInOrder *)
-    let sdata = L.assoc strategy strategyFeatures |> L.enum |> S.of_enum in
+    let sdata = 
+    try L.assoc strategy strategyFeatures |> L.enum |> S.of_enum
+      with Not_found -> failwith (sprintf "strategy %s is not found in the strategies-features list" 
+        (showStrategy strategy)) in
     S.union res sdata
   end S.empty strategyList in
   L.fold_left begin fun res feature ->

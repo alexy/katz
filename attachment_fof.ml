@@ -48,7 +48,7 @@ GlobalMentionsAttachment,
 [inDegreeSF;inDePropsSF];
 FOFUniformAttachment,
 [fnumsSF;fnofsSF];
-FOFUniformAttachment,
+FOFMentionsAttachment,
 [fnumsSF;fnofsSF];
 FOFSocCapAttachment,
 [fsocsSF;fscofsSF]
