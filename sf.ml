@@ -24,7 +24,7 @@ let specs =
   (noshort,"globmen",(set globalStrat' GlobalMentionsAttachment),None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
-  (noshort,"fofcap", (set fofStrat'    FOFMentionsAttachment),   None)
+  (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None)
 ]
   
 let () = 
@@ -74,6 +74,8 @@ let () =
                              
   let strategies = [globalStrat;fofStrat] in
   let strategyFeatures = computeStrategyFeatures strategyFeaturesInOrder strategies in
+  L.print ~first:"overall strategy features to compute, in order:\n  "
+  ~sep:", " ~last:"\n" String.print stderr strategyFeatures;
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= byMass;
                              initDrepsSR= initDrepsO; initDaySR= initDayO;
