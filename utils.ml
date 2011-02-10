@@ -275,3 +275,6 @@ let hash_map2 f h1 h2 =
 let enum_fsum: float E.t -> float =
   fun e ->
   E.fold (+.) 0. e
+  
+  (* is this in a standard library? *)
+let map_second f x y = f y
