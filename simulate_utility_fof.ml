@@ -203,6 +203,8 @@ let computeStrategyFeatures strategyData strategyList =
 let computeStrategyData degr features ustats newUsers =
  L.fold_left begin fun degr feature ->
     match feature with
+     | x when x = inDegreeSF  -> begin assert (Option.is_some degr.inDegreeDG); degr end
+     | x when x = outDegreeSF -> begin assert (Option.is_some degr.outDegreeDG); degr end
      | x when x = inDePropsSF -> let inDeProps = makeInDegreeProportions (degrInDegree degr) newUsers in
                       { degr with inDePropsDG=Some inDeProps }
      | x when x = fnumsSF     -> let fnums = makeFNums ustats in
