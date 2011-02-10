@@ -20,8 +20,8 @@ let specs =
   ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n));
   ('j',"jumpUtil",None,Some (fun x -> jumpProbUtil' := float_of_string x));
   ('J',"jumpFOF", None,Some (fun x -> jumpProbFOF'  := float_of_string x));
-  (noshort,"glouni",(set globalStrat' GlobalUniformAttachment), None);
-  (noshort,"glomen",(set globalStrat' GlobalMentionsAttachment),None);
+  (noshort,"glouni", (set globalStrat' GlobalUniformAttachment), None);
+  (noshort,"glomen", (set globalStrat' GlobalMentionsAttachment),None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None)

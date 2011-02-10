@@ -71,7 +71,7 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
     | Not_found -> 
       jumpBack "Not_found" "FOFMentionsAttachment"
     | Invalid_argument("Random.int") ->
-      jumpBack "Invalid_argument(Random.int)" "FOFMentionsAttachment"
+      jumpBack "Invalid_argument(\"Random.int\")" "FOFMentionsAttachment"
     end
   | FOFSocCapAttachment -> begin
     try
@@ -151,6 +151,9 @@ let makeFNOFs: user_stats -> fnums -> fnofs =
     (* TODO can use fnums instead of H.is_empty tot, computed in makeFNums? *)
   ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun user {totUS =tot} ->
+    (* TODO are enums eating too much memory?
+       Should we replace H.keys ... E.map user, f user 
+       by H.map user val ... H.enum, right before Proportional? *)
     H.keys tot |> E.map begin fun friend ->
       friend,
       try fnums --> friend (* total number of that friend's friends! *)
