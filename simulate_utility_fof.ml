@@ -217,7 +217,7 @@ let computeStrategyData degr features ustats newUsers =
                       { degr with fsocsDG=Some fsocs }
      | x when x = fscofsSF    -> let fscofs = makeFscofs ustats (degrFsocs degr) in
                       { degr with fscofsDG=Some fscofs }
-     | _ -> failwith "an impossible strategy feature is needed!"
+     | x -> failwith (sprintf "an impossible strategy feature %s is needed!" x)
   end degr features
   
    
