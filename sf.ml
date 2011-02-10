@@ -24,6 +24,7 @@ let specs =
   (noshort,"globmen",(set globalStrat' GlobalMentionsAttachment),None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None)
+  (noshort,"fofcap", (set fofStrat'    FOFMentionsAttachment),   None)
 ]
   
 let () = 
