@@ -30,11 +30,16 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit =
 
 
 let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr edgeCount day fromUser  =
+  let jumpBack error where =
+    leprintfln "WARNING *** %s in justJump %s --> %s" error where fromUser;
+    hashInc edgeCount backupEC;
+    justJump backupStrategy sgraph degr edgeCount day fromUser
+  in
   match strategy with
   | GlobalUniformAttachment -> begin
       let userArray1,_ =  degrInDeProps degr in
-      hashInc edgeCount globalUniformEC;
       let toUser = randomElementBut0th userArray1 in
+      hashInc edgeCount globalUniformEC;
       addEdge sgraph degr edgeCount day fromUser toUser
     end
  | GlobalMentionsAttachment -> begin
@@ -48,13 +53,11 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       let someFOF = 
       Proportional.pickInt2 (fnofs --> fromUser) in
       let someFriends1,_ = fnofs --> someFOF in
-      hashInc edgeCount fOFUniformEC;
       let toUser = randomElementBut0th someFriends1 in
+      hashInc edgeCount fOFUniformEC;
       addEdge sgraph degr edgeCount day fromUser toUser
     with Not_found -> 
-      leprintfln "WARNING *** Not_found in justJump FOFUniformAttachment --> %s" fromUser;
-      hashInc edgeCount backupEC;
-      justJump backupStrategy sgraph degr edgeCount day fromUser
+      jumpBack "Not_found" "FOFUniformAttachment"
     end
   | FOFMentionsAttachment -> begin
     try 
@@ -64,10 +67,11 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       hashInc edgeCount fOFMentionsEC;
       let toUser = Proportional.pickInt2 (fnumMents --> someFOF) in
       addEdge sgraph degr edgeCount day fromUser toUser
-    with Not_found -> 
-      leprintfln "WARNING *** Not_found in justJump FOFMentionsAttachment --> %s" fromUser;
-      hashInc edgeCount backupEC;
-      justJump backupStrategy sgraph degr edgeCount day fromUser
+    with 
+    | Not_found -> 
+      jumpBack "Not_found" "FOFMentionsAttachment"
+    | Invalid_argument("Random.int") ->
+      jumpBack "Invalid_argument(Random.int)" "FOFMentionsAttachment"
     end
   | FOFSocCapAttachment -> begin
     try
@@ -78,9 +82,7 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       let toUser = Proportional.pickFloat2 (fsocs --> someFOF) in
       addEdge sgraph degr edgeCount day fromUser toUser
     with Not_found -> 
-        leprintfln "WARNING *** Not_found in justJump FOFSocCapAttachment --> %s" fromUser;
-        hashInc edgeCount backupEC;
-        justJump backupStrategy sgraph degr edgeCount day fromUser
+      jumpBack "Not_found" "FOFSocCapAttachment"
     end;
   hashInc edgeCount jumpEC
 
@@ -157,7 +159,8 @@ let makeFNOFs: user_stats -> fnums -> fnofs =
     E.filter (snd |- (<>) 0)
   end |>
   H.filter (E.is_empty |- not) |>
-  H.map (map_second Proportional.intRangeLists)
+  H.map (map_second Proportional.intRangeLists) |>
+  H.filter (snd |- array_last |- (<) 0)
    
    
 let makeFNumMents: user_stats -> udegr -> fnofs =
@@ -168,7 +171,9 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
       friend,H.find_default inDegree friend 0
     end in
     Proportional.intRangeLists userFMents
-  end
+  end |>
+  H.filter (snd |- array_last |- (<) 0)
+
   
 
 let makeFNOFMents: user_stats -> fnofs -> fnofs =
@@ -182,7 +187,8 @@ let makeFNOFMents: user_stats -> fnofs -> fnofs =
     end |> E.filter (snd |- (<>) 0)
   end |>
   H.filter (E.is_empty |- not) |>
-  H.map (map_second Proportional.intRangeLists)
+  H.map (map_second Proportional.intRangeLists) |>
+  H.filter (snd |- array_last |- (<) 0)
   
   
 let makeFsocs: user_stats -> fsocs =
