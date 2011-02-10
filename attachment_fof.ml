@@ -51,7 +51,7 @@ FOFUniformAttachment,
 FOFUniformAttachment,
 [fnumsSF;fnofsSF];
 FOFSocCapAttachment,
-[inDegreeSF;fnumMentsSF;fnofMentsSF]
+[fsocsSF;fscofsSF]
 ]
                  
               
