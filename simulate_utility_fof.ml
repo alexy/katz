@@ -100,7 +100,9 @@ let growUtility genOpts sgraph degr day userNEdges =
         E.iter begin fun _ ->
           if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
               if fnums --> fromUser = 0 || 
+                (fofStrategy = FOFUniformAttachment  && H.is_empty (degrFnumMents degr)) ||
                 (fofStrategy = FOFMentionsAttachment && H.is_empty (degrFnofMents degr)) ||                
+                (fofStrategy = FOFSocCapAttachment   && H.is_empty (degrFscofs    degr)) ||                
                 jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
