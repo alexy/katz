@@ -42,16 +42,11 @@ type strategies_features = (attachment_strategy * strategy_features) list
 
 let strategyFeatures : strategies_features =
 [
-GlobalUniformAttachment,
-[inDegreeSF;inDePropsSF];
-GlobalMentionsAttachment,
-[inDegreeSF;inDePropsSF];
-FOFUniformAttachment,
-[fnumsSF;fnofsSF];
-FOFMentionsAttachment,
-[fnumsSF;fnofsSF];  (* fnums used to skip in growUtility *)
-FOFSocCapAttachment,
-[fsocsSF;fscofsSF]
+GlobalUniformAttachment,  [inDegreeSF;inDePropsSF];
+GlobalMentionsAttachment, [inDegreeSF;inDePropsSF];
+FOFUniformAttachment,     [fnumsSF;fnofsSF];
+FOFMentionsAttachment,    [fnumsSF;fnumMentsSF;fnofMentsSF];  (* fnums used to skip in growUtility *)
+FOFSocCapAttachment,      [fnumsSF;fsocsSF;fscofsSF]
 ]
                  
               
