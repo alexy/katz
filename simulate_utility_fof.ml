@@ -86,7 +86,9 @@ let growUtility genOpts sgraph degr day userNEdges =
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
-              if fnums --> fromUser = 0 || jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
+              if fnums --> fromUser = 0 || 
+                (fofStrategy = FOFMentionsAttachment && H.is_empty (degrFnofMents degr)) ||                
+                jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
                 justJump fofStrategy sgraph degr edgeCount day fromUser
@@ -129,59 +131,66 @@ let makeFNums: user_stats -> fnums =
 
   
 (* may avoid separate fnums altogether and compute fnum as
-  (ustats --> friend).tot |> H.length, but too many repeated accesses? *)
+  (ustats --> friend).tot |> H.length, but too many repeated accesses? 
+  NB: fnums are importnt in growUtility jumping, as a guard when fnums = 0 *)
 let makeFNOFs: user_stats -> fnums -> fnofs =
   fun ustats fnums ->
+    (* TODO can use fnums instead of H.is_empty tot, computed in makeFNums? *)
+  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun user {totUS =tot} ->
     let userFNums = H.keys tot |> E.map begin fun friend ->
       friend,
       try fnums --> friend (* total number of that friend's friends! *)
     with Not_found -> failwith (sprintf "Not_found in makeFNOFs fnums --> %s" friend)
-    end in
+    end |> E.filter (snd |- (<>) 0) in
     Proportional.intRangeLists userFNums
-  end ustats
+  end
    
    
 let makeFNumMents: user_stats -> udegr -> fnofs =
   fun ustats inDegree ->
+  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun user {totUS =tot} ->
     let userFMents = H.keys tot |> E.map begin fun friend ->
       friend,H.find_default inDegree friend 0
     end in
     Proportional.intRangeLists userFMents
-  end ustats
+  end
   
 
 let makeFNOFMents: user_stats -> fnofs -> fnofs =
   fun ustats fnumMents ->
+  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun user {totUS =tot} ->
     let userFMentsTotal = H.keys tot |> E.map begin fun friend ->
       friend,
       try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
     with Not_found -> failwith (sprintf "Not_found in makeFNOFMents fnumMents --> %s" friend)
-    end in
+    end |> E.filter (snd |- (<>) 0) in
     Proportional.intRangeLists userFMentsTotal
-  end ustats
+  end
   
   
 let makeFsocs: user_stats -> fsocs =
   fun ustats ->
+  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun _ {totUS=tot} ->
     H.map begin fun friend _ -> 
       (ustats-->friend).socUS
     end tot |> H.enum |>
     Proportional.floatRangeLists
-  end ustats
+  end
 
 
 let makeFscofs: user_stats -> fsocs -> fsocs =
   fun ustats fsocs ->
+  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun _ {totUS=tot} ->
     H.map begin fun friend _ -> 
       fsocs-->friend |> snd |> array_last
     end tot |> H.enum |>
     Proportional.floatRangeLists
-  end ustats
+  end
   
   
 (* NB uses prefedined strategyFeatures *)
