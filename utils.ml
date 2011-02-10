@@ -271,3 +271,7 @@ let hash_map2 f h1 h2 =
     let v2 = h2 --> k in
     f k v1 v2
   end
+  
+let enum_fsum: float E.t -> float =
+  fun e ->
+  E.fold (+.) 0. e

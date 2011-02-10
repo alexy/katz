@@ -73,5 +73,9 @@ Print with working tools:
 	- vols4 @done
 	- b2br, b2bm @done
 	- starbucks 1e-35, 1e-7, r & m @done
+SF improvements:
+	- 0.0 prob means no Random call
+	- FOFNumFriends, FOFSocCap strategies
+	- print edge counts in each cycle
 	
 	

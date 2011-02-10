@@ -10,7 +10,8 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 maxDaysSR : int option;
                 jumpProbUtilSR : float; jumpProbFOFSR : float;
                 globalStrategySR : attachment_strategy;
-                fofStrategySR    : attachment_strategy }
+                fofStrategySR    : attachment_strategy;
+                strategyFeaturesSR : strategy_features }
  
 
 let optSocRun : socRun = 
@@ -20,8 +21,9 @@ let optSocRun : socRun =
     initDrepsSR = None; initDaySR = None; 
     maxDaysSR = None;
     jumpProbUtilSR = 0.5; jumpProbFOFSR = 0.2;
-    globalStrategySR = GlobalMentionsAttachment;
-    fofStrategySR    = FOFMentionsAttachment }
+    globalStrategySR   = GlobalMentionsAttachment;
+    fofStrategySR      = FOFMentionsAttachment;
+    strategyFeaturesSR = [] (* must be recomputed *) }
 
 
 let paramSC {alphaSR =a; betaSR =b; gammaSR =g; 
@@ -85,21 +87,8 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
       let edgeCounts = 
       match initDay with
       | Some before when day < before -> emptyHash ()
-      | _ ->
-        let inDeProps = makeInDegreeProportions inDegree newUsers in
-        let fnums = makeFNums ustats in
-        let fnofs = makeFNOFs ustats fnums in
-        let fnumMents = makeFNumMents ustats inDegree in
-        let fnofMents = makeFNOFMents ustats fnumMents in
-        let degr = 
-        { inDegreeDG=inDegree;
-          outDegreeDG=outDegree;
-          inDePropsDG=inDeProps;
-          fnumsDG=fnums;
-          fnofsDG=fnofs;
-          fnumMentsDG=fnumMents;
-          fnofMentsDG=fnofMents } in
-          growUtility genOpts sgraph degr day fromNums.(day) in
+      | _ -> let degr = basicDegr inDegree outDegree in
+             growUtility genOpts sgraph degr day fromNums.(day) in
     
       let skews = socDay sgraph params day in
       

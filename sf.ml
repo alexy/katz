@@ -69,6 +69,10 @@ let () =
           let dreps: graph = loadData drepsName in
           (Some dreps, Some day)
   | _ -> (None, None) in
+
+                             
+  let strategies = [globalStrat;fofStrat] in
+  let strategyFeatures = computeStrategyFeatures strategyFeaturesInOrder strategies in
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= byMass;
                              initDrepsSR= initDrepsO; initDaySR= initDayO;
@@ -76,7 +80,8 @@ let () =
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
                              minCapDaysSR= minDays;
                              jumpProbUtilSR= jumpProbUtil;jumpProbFOFSR= jumpProbFOF;
-                             globalStrategySR= globalStrat; fofStrategySR= fofStrat }
+                             globalStrategySR= globalStrat; fofStrategySR= fofStrat;
+                             strategyFeaturesSR= strategyFeatures }
                              in
                              
   let {drepsSG =dreps; dmentsSG =dments},

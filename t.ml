@@ -113,11 +113,13 @@ type day_starbucks = starbucks array
 
 (* proportional *)
 
-type 'a proportions  = user array * 'a array
-type int_proportions = int proportions
+type 'a proportions    = user array * 'a array
+type int_proportions   = int proportions
+type float_proportions = float proportions
 
 (* fof *)
 
 type udegr = user_int_hash
 type fnums = user_int_hash
 type fnofs = (user,int_proportions) H.t
+type fsocs = (user,float_proportions) H.t

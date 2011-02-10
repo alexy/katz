@@ -17,7 +17,7 @@ let rangeLists: ('a -> 'a -> 'a) -> 'a -> 'a -> (user * 'a) E.t -> 'a proportion
     let tot' = add tot v' in
     let uv' = (u,tot') in
     (tot',uv'::res)
-  end (zero,[("zeroKatzLazarsfeldWattsDodds",zero)]) uvals in
+  end (zero,[("-",zero)]) uvals in
   (* this is Utils.unzip body without rev's, as we have ranges in rev from 
      the first fold! *)
   (* unzip with reverse *)
@@ -26,7 +26,8 @@ let rangeLists: ('a -> 'a -> 'a) -> 'a -> 'a -> (user * 'a) E.t -> 'a proportion
   (A.of_list ul, A.of_list il)
   
   
-let intRangeLists = rangeLists (+) 1 0 
+let intRangeLists   = rangeLists (+)  1  0 
+let floatRangeLists = rangeLists (+.) 1. 0.
   
 (* find the first element greater or equal than x in a sorted array a *)
   
@@ -77,9 +78,13 @@ let pickReal a bound =
 
 
 (* TODO raise an exception *)
-let pickInt2 (names,vals) =
+
+let pick2 pickOne kind (names,vals) =
   let bound = array_last vals in
-  let n = pickInt vals bound in
+  let n = pickOne vals bound in
   match n with
   | Some n -> names.(n)
-  | _ -> failwith "proportional arrays are all messed up"
+  | _ -> failwith (sprintf "proportional %s arrays are misaligned" kind)
+  
+let pickInt2   x = pick2 pickInt  "int"   x
+let pickFloat2 x = pick2 pickReal "float" x

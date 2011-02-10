@@ -2,72 +2,91 @@ open Common
 open Sgraph
 open Suds_local
 include Attachment_fof
+let oget=Option.get
+
+
+let edgeCountNames = ("total","jump","stay",
+"GlobalUniform","GlobalMentions",
+"FOFUniform","FOFMentions","FOFSocCap")
+let (totalEC,jumpEC,stayEC,globalUniformEC,globalMentionsEC,
+fOFUniformEC,fOFMentionsEC,fOFSocCapEC) = edgeCountNames
+let edgeCountNamesList = [totalEC;jumpEC;stayEC;globalUniformEC;globalMentionsEC;
+fOFUniformEC;fOFMentionsEC;fOFSocCapEC]
 
 let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit = 
   fun sgraph degr edgeCount day fromUser toUser ->
     let {drepsSG =dreps; dmentsSG =dments} = sgraph in
-    let {inDegreeDG =inDegree; outDegreeDG =outDegree} = degr in 
+    let inDegree  = degrInDegree  degr in 
+    let outDegree = degrOutDegree degr in 
     let fromDay = Dreps.userDay dreps fromUser day in  
     hashInc fromDay toUser;
     hashInc outDegree fromUser;
     let toDay = Dreps.userDay  dments toUser day in
     hashInc toDay fromUser;
     hashInc inDegree toUser;
-    hashInc edgeCount "total"; 
-    if (edgeCount --> "total") mod 10000 = 0 then leprintf "." else ()
+    hashInc edgeCount totalEC;
+    if (edgeCount --> totalEC) mod 10000 = 0 then leprintf "." else ()
 
 
 let justJump strategy sgraph degr edgeCount day fromUser  =
-  let {inDePropsDG =inDeProps; fnofsDG     =fnofs; 
-       fnumMentsDG =fnumMents; fnofMentsDG =fnofMents} = degr in
-  let toUser = 
+  let toUser =
   match strategy with
   | GlobalUniformAttachment -> begin
-      let userArray1,_ =  inDeProps in
-      hashInc edgeCount "GlobalUniform";
+      let userArray1,_ =  degrInDeProps degr in
+      hashInc edgeCount globalUniformEC;
       randomElementBut0th userArray1
     end
-  | GlobalMentionsAttachment -> begin
-      hashInc edgeCount "GlobalMentions";
-      Proportional.pickInt2 inDeProps
+ | GlobalMentionsAttachment -> begin
+      hashInc edgeCount globalMentionsEC;
+      Proportional.pickInt2 (degrInDeProps degr)
     end
   | FOFUniformAttachment -> begin
-      
+      let fnofs = degrFnofs degr in
       let someFOF = 
-      try Proportional.pickInt2 (fnofs --> fromUser)
+        try Proportional.pickInt2 (fnofs --> fromUser)
       with Not_found -> failwith (sprintf "Not_found in justJump fnofs --> %s" fromUser) in
       let someFriends1,_ = fnofs --> someFOF in
-      hashInc edgeCount "FOFUniform";
+      hashInc edgeCount fOFUniformEC;
       randomElementBut0th someFriends1
     end
   | FOFMentionsAttachment -> begin
+      let fnumMents = degrFnumMents degr in
+      let fnofMents = degrFnofMents degr in
       let someFOF = 
-      try Proportional.pickInt2 (fnofMents --> fromUser) 
+        try Proportional.pickInt2 (fnofMents --> fromUser) 
       with Not_found -> failwith (sprintf "Not_found in justJump fnofMents --> %s" fromUser) in
-      hashInc edgeCount "FOFMentions";
+      hashInc edgeCount fOFMentionsEC;
       try Proportional.pickInt2 (fnumMents --> someFOF)
       with Not_found -> failwith (sprintf "Not_found in justJump fnumMents --> %s" someFOF) 
     end
+  | FOFSocCapAttachment -> begin
+      let fsocs  = degrFsocs  degr in
+      let fscofs = degrFscofs degr in
+      let someFOF = 
+        try Proportional.pickFloat2 (fscofs --> fromUser) 
+      with Not_found -> failwith (sprintf "Not_found in justJump fscofs --> %s" fromUser) in
+      hashInc edgeCount fOFSocCapEC;
+      try Proportional.pickFloat2 (fsocs --> someFOF)
+      with Not_found -> failwith (sprintf "Not_found in justJump fsocs --> %s" someFOF) 
+    end
   in
   addEdge sgraph degr edgeCount day fromUser toUser;
-  hashInc edgeCount "jump"
+  hashInc edgeCount jumpEC
 
-
-let edgeCountNames = ["total";"jump";"stay";"GlobalUniform";"GlobalMentions";"FOFUniform";"FOFMentions"]
 
 let growUtility genOpts sgraph degr day userNEdges =
     let {jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
          globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy} = genOpts in
     let {ustatsSG =ustats} = sgraph in
-    let {fnumsDG  =fnums}  = degr in
+    let fnums = degrFnums degr in
     
-    let edgeCount =  edgeCountNames |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
+    let edgeCount =  edgeCountNamesList |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
     H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
-          if (H.is_empty outs) || itTurnsOut jumpProbUtil then begin
-              if fnums --> fromUser = 0 || itTurnsOut jumpProbFOF then
+          if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
+              if fnums --> fromUser = 0 || jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
                 justJump fofStrategy sgraph degr edgeCount day fromUser
@@ -81,7 +100,7 @@ let growUtility genOpts sgraph degr day userNEdges =
                         L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
                         listMax2 in
             addEdge sgraph degr edgeCount day fromUser toUser;
-            hashInc edgeCount "stay"
+            hashInc edgeCount stayEC
           end
         end (1 -- numEdges)
       end else ()
@@ -144,3 +163,65 @@ let makeFNOFMents: user_stats -> fnofs -> fnofs =
     Proportional.intRangeLists userFMentsTotal
   end ustats
   
+  
+let makeFsocs: user_stats -> fsocs =
+  fun ustats ->
+  H.map begin fun _ {totUS=tot} ->
+    H.map begin fun friend _ -> 
+      (ustats-->friend).socUS
+    end tot |> H.enum |>
+    Proportional.floatRangeLists
+  end ustats
+
+
+let makeFscofs: user_stats -> fsocs -> fsocs =
+  fun ustats fsocs ->
+  H.map begin fun _ {totUS=tot} ->
+    H.map begin fun friend _ -> 
+      fsocs-->friend |> snd |> array_last
+    end tot |> H.enum |>
+    Proportional.floatRangeLists
+  end ustats
+  
+  
+(* NB uses prefedined strategyFeatures *)
+let computeStrategyFeatures strategyData strategyList =
+  let sdata = L.fold_left begin fun res strategy ->
+    (* just convert each to a set and union, then restore list order form s
+       trategyDataInOrder *)
+    let sdata = L.assoc strategy strategyFeatures |> L.enum |> S.of_enum in
+    S.union res sdata
+  end S.empty strategyList in
+  L.fold_left begin fun res feature ->
+    if S.mem feature sdata then feature::res else res
+  end [] strategyFeaturesInOrder |> L.rev 
+
+
+let computeStrategyData degr features ustats newUsers =
+ L.fold_left begin fun degr feature ->
+    match feature with
+     | x when x = inDePropsSF -> let inDeProps = makeInDegreeProportions (degrInDegree degr) newUsers in
+                      { degr with inDePropsDG=Some inDeProps }
+     | x when x = fnumsSF     -> let fnums = makeFNums ustats in
+                      { degr with fnumsDG=Some fnums }
+     | x when x = fnofsSF     -> let fnofs = makeFNOFs ustats (degrFnums degr) in
+                      { degr with fnofsDG=Some fnofs }
+     | x when x = fnumMentsSF -> let fnumMents = makeFNumMents ustats (degrInDegree degr) in
+                      { degr with fnumMentsDG=Some fnumMents }
+     | x when x = fnofMentsSF -> let fnofMents = makeFNOFMents ustats (degrFnumMents degr) in
+                      { degr with fnofMentsDG=Some fnofMents }
+     | x when x = fsocsSF     -> let fsocs = makeFsocs ustats in
+                      { degr with fsocsDG=Some fsocs }
+     | x when x = fscofsSF    -> let fscofs = makeFscofs ustats (degrFsocs degr) in
+                      { degr with fscofsDG=Some fscofs }
+     | _ -> failwith "an impossible strategy feature is needed!"
+  end degr features
+  
+   
+let basicDegr inDegree outDegree =
+  { inDegreeDG=Some inDegree; outDegreeDG=Some outDegree;
+    inDePropsDG=None;
+    fnumsDG=None;     fnofsDG=None;
+    fnumMentsDG=None; fnofMentsDG=None;
+    fsocsDG=None;     fscofsDG=None }
+     
