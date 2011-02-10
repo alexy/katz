@@ -23,7 +23,7 @@ let specs =
   (noshort,"globuni",(set globalStrat' GlobalUniformAttachment), None);
   (noshort,"globmen",(set globalStrat' GlobalMentionsAttachment),None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
-  (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None)
+  (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFMentionsAttachment),   None)
 ]
   
