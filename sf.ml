@@ -9,6 +9,7 @@ let jumpProbUtil' = ref 0.5 (* maximize utility or just jump in general *)
 let jumpProbFOF'  = ref 0.2 (* atach globally after first jump vs FOF-based *)
 let globalStrat'  = ref GlobalUniformAttachment
 let fofStrat'     = ref FOFUniformAttachment
+let saveMents' = ref false
 let mark' = ref ""
 
 let specs =
@@ -24,14 +25,15 @@ let specs =
   (noshort,"glomen", (set globalStrat' GlobalMentionsAttachment),None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
-  (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None)
+  (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);
+  ('m',"ments",(set saveMents' (not !saveMents')),None);
 ]
   
 let () = 
   let args = getOptArgs specs in
   
-  let byMass,   minDays,   minCap,   mark =
-      !byMass', !minDays', !minCap', !mark' in
+  let byMass,   minDays,   minCap,   saveMents,   mark =
+      !byMass', !minDays', !minCap', !saveMents', !mark' in
   
   let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat =
       !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat' in
@@ -96,8 +98,9 @@ let () =
     drepsName dmentsName capsName skewName jumpName;
   saveData dreps  drepsName;
   let tSavingDReps  =  Some "-- saved dreps timing: "  |> getTiming in
-  saveData dments dmentsName;  
-  let tSavingDMents =  Some "-- saved dments timing: " |> getTiming in
+  let msg = if saveMents then begin saveData dments dmentsName; "-- saved dments timing: " end
+    else "-- did not save dments, timing: " in
+  let tSavingDMents =  Some msg |> getTiming in
   saveData dcaps  capsName;
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
