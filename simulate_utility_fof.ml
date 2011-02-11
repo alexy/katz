@@ -189,7 +189,7 @@ let makeFNOFMents: user_stats -> fnofs -> fnofs =
     H.keys tot |> E.map begin fun friend ->
       friend,
       try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
-    with Not_found -> failwith (sprintf "Not_found in makeFNOFMents fnumMents --> %s" friend)
+    with Not_found -> 0 (* fnumMents is prefiltered, and are we, so we issue 0 and filter this whole pair next *)
     end |> 
     E.filter (snd |- (<) 0)
   end |>
