@@ -91,13 +91,16 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
       | _ -> let degr = basicDegr inDegree outDegree in
              let degr = computeStrategyData degr strategyFeatures ustats newUsers in
              growUtility genOpts sgraph degr day fromNums.(day) in
+      let edgeCountList = edgeCounts |> listHash in
+             
+      L.print ~last:"]\n" (Pair.print String.print Int.print) stderr edgeCountList;
     
       let skews = socDay sgraph params day in
       
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       H.iter (updateFromUStats dcaps statSoc day) ustats;
       H.iter (updateUserDaily  dskews day) skews;
-      (edgeCounts |> listHash,t)::ts in
+      (edgeCountList,t)::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)

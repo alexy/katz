@@ -31,7 +31,7 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit =
 
 let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr edgeCount day fromUser  =
   let jumpBack error where =
-    leprintfln "WARNING *** %s in justJump %s --> %s" error where fromUser;
+    (* leprintfln "WARNING *** %s in justJump %s --> %s" error where fromUser; *)
     hashInc edgeCount backupEC;
     justJump backupStrategy sgraph degr edgeCount day fromUser
   in
