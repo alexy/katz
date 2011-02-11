@@ -188,8 +188,8 @@ let makeFNOFMents: fnofs -> fnofs =
     A.enum friends |> E.skip 1 |> E.map begin fun friend ->
       friend,
       try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
-      with Not_found -> (* 0 *) (* issue 0 and filter this whole pair in the coming E.filter *)
-        failwith (sprintf "Not_found in makeFNOFs, enum over prefiltered fnumMents --> %s" friend)
+      with Not_found -> 0                           (* issue 0 and filter this whole pair in the coming E.filter *)
+        (* failwith (sprintf "Not_found in makeFNOFs, enum over prefiltered fnumMents --> %s" friend) *)
     end |> 
     E.filter (snd |- (<) 0)
   end |>
