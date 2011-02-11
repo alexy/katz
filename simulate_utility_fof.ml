@@ -182,14 +182,14 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
 
   
 
-let makeFNOFMents: user_stats -> fnofs -> fnofs =
-  fun ustats fnumMents ->
-  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
-  H.map begin fun user {totUS =tot} ->
-    H.keys tot |> E.map begin fun friend ->
+let makeFNOFMents: fnofs -> fnofs =
+  fun fnumMents ->
+  fnumMents |> H.map begin fun user (friends,_) ->
+    A.enum friends |> E.skip 1 |> E.map begin fun friend ->
       friend,
       try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
-    with Not_found -> 0 (* fnumMents is prefiltered, and are we, so we issue 0 and filter this whole pair next *)
+      with Not_found -> (* 0 *) (* issue 0 and filter this whole pair in the coming E.filter *)
+        failwith (sprintf "Not_found in makeFNOFs, enum over prefiltered fnumMents --> %s" friend)
     end |> 
     E.filter (snd |- (<) 0)
   end |>
@@ -209,13 +209,13 @@ let makeFsocs: user_stats -> fsocs =
   end
 
 
-let makeFscofs: user_stats -> fsocs -> fsocs =
-  fun ustats fsocs ->
-  ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
-  H.map begin fun _ {totUS=tot} ->
-    H.map begin fun friend _ -> 
-      fsocs-->friend |> snd |> array_last
-    end tot |> H.enum |>
+let makeFscofs: fsocs -> fsocs =
+  fun fsocs ->
+  fsocs |> H.map begin fun _ (friends,_)  ->
+    A.enum friends |> E.skip 1 |> E.map begin fun friend ->
+      friend,
+      fsocs --> friend |> snd |> array_last
+    end |>
     Proportional.floatRangeLists
   end
   
@@ -249,11 +249,11 @@ let computeStrategyData degr features ustats newUsers =
                       { degr with fnofsDG=Some fnofs }
      | x when x = fnumMentsSF -> let fnumMents = makeFNumMents ustats (degrInDegree degr) in
                       { degr with fnumMentsDG=Some fnumMents }
-     | x when x = fnofMentsSF -> let fnofMents = makeFNOFMents ustats (degrFnumMents degr) in
+     | x when x = fnofMentsSF -> let fnofMents = makeFNOFMents (degrFnumMents degr) in
                       { degr with fnofMentsDG=Some fnofMents }
      | x when x = fsocsSF     -> let fsocs = makeFsocs ustats in
                       { degr with fsocsDG=Some fsocs }
-     | x when x = fscofsSF    -> let fscofs = makeFscofs ustats (degrFsocs degr) in
+     | x when x = fscofsSF    -> let fscofs = makeFscofs (degrFsocs degr) in
                       { degr with fscofsDG=Some fscofs }
      | x -> failwith (sprintf "an impossible strategy feature %s is needed!" x)
   end degr features
