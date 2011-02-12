@@ -116,7 +116,8 @@ let growUtility genOpts sgraph degr day userNEdges =
       if numEdges > 0 then begin
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
-          if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
+          if jumpProbUtil <> 0.0 && begin
+            H.is_empty outs || itTurnsOut jumpProbUtil end then begin
             (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
                thus throwing GlobalUniform for those into the mix -- may do so explicitly;
                jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 
