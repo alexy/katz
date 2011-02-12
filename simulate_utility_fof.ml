@@ -161,7 +161,7 @@ let makeFNOFs: user_stats -> fnums -> fnofs =
       try fnums --> friend (* total number of that friend's friends! *)
       with Not_found -> failwith (sprintf "Not_found in makeFNOFs fnums --> %s" friend)
     end |> 
-    E.filter (snd |- (<>) 0)
+    E.filter (snd |- (<) 0)
   end |>
   H.filter (E.is_empty |- not) |>
   H.map (map_second Proportional.intRangeLists) |>
@@ -172,11 +172,11 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
   fun ustats inDegree ->
   ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun user {totUS =tot} ->
-    let userFMents = H.keys tot |> E.map begin fun friend ->
+    H.keys tot |> E.map begin fun friend ->
       friend,H.find_default inDegree friend 0
     end |>
-    E.filter (snd |- (<) 0) in
-    Proportional.intRangeLists userFMents
+    E.filter (snd |- (<) 0) |>
+    Proportional.intRangeLists
   end |>
   H.filter (snd |- array_last |- (<) 0)
 

@@ -93,7 +93,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
              growUtility genOpts sgraph degr day fromNums.(day) in
       let edgeCountList = edgeCounts |> listHash in
              
-      L.print ~last:"]\n" (Pair.print String.print Int.print) stderr edgeCountList;
+      L.print ~first:"\n["~last:"]\n" (Pair.print String.print Int.print) stderr edgeCountList;
     
       let skews = socDay sgraph params day in
       
