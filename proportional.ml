@@ -88,3 +88,5 @@ let pick2 pickOne kind (names,vals) =
   
 let pickInt2   x = pick2 pickInt  "int"   x
 let pickFloat2 x = pick2 pickReal "float" x
+
+let bound pair = pair |> snd |> array_last

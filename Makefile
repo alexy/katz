@@ -57,6 +57,13 @@ load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
 %.cmx: %.ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c $^ -o $@
 
+#%.cmi: %.mli
+#ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c $^ -o $@
+#simulate_utility_fof.cmi: attachment_fof.ml simulate_utility_fof.mli 
+#ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c $^ -o $@ 
+#simulate_utility_fof.cmx: simulate_utility_fof.cmi
+#simulate_utility_fof.ml: simulate_utility_fof.mli
+  
 json_graph.cmo: graph.cmo
 json_graph.cmx: graph.cmx
 
@@ -72,7 +79,7 @@ invert.cmx by_day.cmx: utils.cmx graph.cmx
 simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
-
+  
 lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo mathy.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 

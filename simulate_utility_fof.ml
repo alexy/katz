@@ -28,6 +28,8 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit =
     hashInc edgeCount totalEC;
     if (edgeCount --> totalEC) mod 10000 = 0 then leprintf "." else ()
 
+exception NotFound  of string
+exception RandomInt of string * int
 
 let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr edgeCount day fromUser  =
   let jumpBack error where =
@@ -63,15 +65,31 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
     try 
       let fnumMents = degrFnumMents degr in
       let fnofMents = degrFnofMents degr in
-      let someFOF = Proportional.pickInt2 (fnofMents --> fromUser) in
+      let someFOF = 
+      try Proportional.pickInt2 (fnofMents --> fromUser)
+      with
+        | Not_found -> 
+          raise (NotFound("fnofMents -->"^fromUser))
+        | Invalid_argument("Random.int") ->
+          raise (RandomInt("fnofMents -->"^fromUser, 
+                            fnofMents -->  fromUser |> Proportional.bound))
+      in
+      let toUser = 
+      try Proportional.pickInt2 (fnumMents --> someFOF)
+      with
+        | Not_found -> 
+          raise (NotFound("fnumMents -->"^fromUser))
+        | Invalid_argument("Random.int") ->
+          raise (RandomInt("fnumMents -->"^fromUser, 
+                            fnumMents -->  fromUser |> Proportional.bound))
+      in
       hashInc edgeCount fOFMentionsEC;
-      let toUser = Proportional.pickInt2 (fnumMents --> someFOF) in
       addEdge sgraph degr edgeCount day fromUser toUser
     with 
-    | Not_found -> 
-      jumpBack "Not_found" "FOFMentionsAttachment"
-    | Invalid_argument("Random.int") ->
-      jumpBack "Invalid_argument(\"Random.int\")" "FOFMentionsAttachment"
+    | NotFound(where) -> 
+      jumpBack "Not_found" ("FOFMentionsAttachment "^where)
+    | RandomInt(where,num) ->
+      jumpBack (sprintf "Invalid_argument(\"Random.int\"): %d" num) ("FOFMentionsAttachment "^where)
     end
   | FOFSocCapAttachment -> begin
     try
@@ -178,7 +196,7 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
   end |>
   H.filter (E.is_empty |- not) |>
   H.map (map_second Proportional.intRangeLists)
-  (* |> H.filter (snd |- array_last |- (<) 1) *)
+  (* |> H.filter (Proportional.bound |- (<) 1) *)
   
 
 let makeFNOFMents: fnofs -> fnofs =
@@ -186,15 +204,15 @@ let makeFNOFMents: fnofs -> fnofs =
   fnumMents |> H.map begin fun user (friends,_) ->
     A.enum friends |> E.skip 1 |> E.map begin fun friend ->
       friend,
-      try fnumMents --> friend |> snd |> array_last (* total number of mentions of all that user's friends! *)
-      with Not_found -> 0                           (* issue 0 and filter this whole pair in the coming E.filter *)
+      try fnumMents --> friend |> Proportional.bound (* total number of mentions of all that user's friends! *)
+      with Not_found -> 0                            (* issue 0 and filter this whole pair in the coming E.filter *)
         (* failwith (sprintf "Not_found in makeFNOFs, enum over prefiltered fnumMents --> %s" friend) *)
     end |> 
     E.filter (snd |- (<) 0)
   end |>
   H.filter (E.is_empty |- not) |>
   H.map (map_second Proportional.intRangeLists) 
-  (* |> H.filter (snd |- array_last |- (<) 1) *)
+  (* |> H.filter (Proportional.bound |- (<) 1) *)
   
   
 let makeFsocs: user_stats -> fsocs =
@@ -213,7 +231,7 @@ let makeFscofs: fsocs -> fsocs =
   fsocs |> H.map begin fun _ (friends,_)  ->
     A.enum friends |> E.skip 1 |> E.map begin fun friend ->
       friend,
-      fsocs --> friend |> snd |> array_last
+      fsocs --> friend |> Proportional.bound
     end |>
     Proportional.floatRangeLists
   end
