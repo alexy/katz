@@ -164,9 +164,8 @@ let makeFNOFs: user_stats -> fnums -> fnofs =
     E.filter (snd |- (<) 0)
   end |>
   H.filter (E.is_empty |- not) |>
-  H.map (map_second Proportional.intRangeLists) |>
-  H.filter (snd |- array_last |- (<) 0)
-   
+  H.map (map_second Proportional.intRangeLists)
+     
    
 let makeFNumMents: user_stats -> udegr -> fnofs =
   fun ustats inDegree ->
@@ -175,11 +174,10 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
     H.keys tot |> E.map begin fun friend ->
       friend,H.find_default inDegree friend 0
     end |>
-    E.filter (snd |- (<) 0) |>
-    Proportional.intRangeLists
+    E.filter (snd |- (<) 0)
   end |>
-  H.filter (snd |- array_last |- (<) 0)
-
+  H.filter (E.is_empty |- not) |>
+  H.map (map_second Proportional.intRangeLists)
   
 
 let makeFNOFMents: fnofs -> fnofs =
@@ -194,8 +192,8 @@ let makeFNOFMents: fnofs -> fnofs =
     E.filter (snd |- (<) 0)
   end |>
   H.filter (E.is_empty |- not) |>
-  H.map (map_second Proportional.intRangeLists) |>
-  H.filter (snd |- array_last |- (<) 0)
+  H.map (map_second Proportional.intRangeLists) 
+  (* |> H.filter (snd |- array_last |- (<) 1) *)
   
   
 let makeFsocs: user_stats -> fsocs =
