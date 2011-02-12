@@ -31,6 +31,9 @@
 for i in caps*; do ../../docranks.opt $i; done
 for i in aranks*; do ../../save_rbucks.opt $i; done
 
+mv rbucks* rbucks
+cd rbucks
+
 for i in rbucks*; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
 
 for i j in \
