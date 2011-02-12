@@ -69,19 +69,19 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       try Proportional.pickInt2 (fnofMents --> fromUser)
       with
         | Not_found -> 
-          raise (NotFound("fnofMents -->"^fromUser))
+          raise (NotFound("fnofMents"))
         | Invalid_argument("Random.int") ->
-          raise (RandomInt("fnofMents -->"^fromUser, 
-                            fnofMents -->  fromUser |> Proportional.bound))
+          raise (RandomInt("fnofMents", 
+                            fnofMents --> fromUser |> Proportional.bound))
       in
       let toUser = 
       try Proportional.pickInt2 (fnumMents --> someFOF)
       with
         | Not_found -> 
-          raise (NotFound("fnumMents -->"^fromUser))
+          raise (NotFound("fnumMents"))
         | Invalid_argument("Random.int") ->
-          raise (RandomInt("fnumMents -->"^fromUser, 
-                            fnumMents -->  fromUser |> Proportional.bound))
+          raise (RandomInt("fnumMents", 
+                            fnumMents --> fromUser |> Proportional.bound))
       in
       hashInc edgeCount fOFMentionsEC;
       addEdge sgraph degr edgeCount day fromUser toUser
@@ -117,10 +117,12 @@ let growUtility genOpts sgraph degr day userNEdges =
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
+            (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
+               thus throwing GlobalUniform for those into the mix -- may do so explicitly *)
               if fnums --> fromUser = 0 || 
-                (fofStrategy = FOFUniformAttachment  && H.is_empty (degrFnofs degr)) ||
-                (fofStrategy = FOFMentionsAttachment && H.is_empty (degrFnofMents degr)) ||                
-                (fofStrategy = FOFSocCapAttachment   && H.is_empty (degrFscofs    degr)) ||                
+                (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
+                (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
+                (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
                 jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
