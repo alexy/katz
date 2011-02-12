@@ -31,7 +31,7 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit =
 
 let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr edgeCount day fromUser  =
   let jumpBack error where =
-    (* leprintfln "WARNING *** %s in justJump %s --> %s" error where fromUser; *)
+    leprintfln "WARNING *** %s in justJump %s --> %s" error where fromUser;
     hashInc edgeCount backupEC;
     justJump backupStrategy sgraph degr edgeCount day fromUser
   in
@@ -178,6 +178,7 @@ let makeFNumMents: user_stats -> udegr -> fnofs =
   end |>
   H.filter (E.is_empty |- not) |>
   H.map (map_second Proportional.intRangeLists)
+  (* |> H.filter (snd |- array_last |- (<) 1) *)
   
 
 let makeFNOFMents: fnofs -> fnofs =
