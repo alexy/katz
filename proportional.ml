@@ -69,7 +69,9 @@ let justGreater a = binarySearch findGreater        a
 (* bound is precomputed as maximum of a,
    i.e. a's last element *)
 let pickInt a bound =
-  let r = (Random.int bound) |> succ in
+  (* total mentiosn of friends of friends get so large they exceed 30 random bits,
+     so we need to handle a full int, which even on 64 bit platform requires a conversion *)
+  let r = bound |> Int64.of_int |> Random.int64 |> Int64.to_int |> succ in
   justGE a r
 
 let pickReal a bound =
