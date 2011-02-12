@@ -119,12 +119,12 @@ let growUtility genOpts sgraph degr day userNEdges =
           if (H.is_empty outs) || jumpProbUtil = 0.0 || itTurnsOut jumpProbUtil then begin
             (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
                thus throwing GlobalUniform for those into the mix -- may do so explicitly *)
-              if fnums --> fromUser = 0 || 
-                (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
-                (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
-                (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
-                jumpProbFOF = 0.0 || itTurnsOut jumpProbFOF then
-                justJump globalStrategy sgraph degr edgeCount day fromUser
+              if jumpProbFOF <> 0.0 && begin 
+                 (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
+                 (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
+                 (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
+                 itTurnsOut jumpProbFOF end then
+                 justJump globalStrategy sgraph degr edgeCount day fromUser
               else
                 justJump fofStrategy sgraph degr edgeCount day fromUser
           end
