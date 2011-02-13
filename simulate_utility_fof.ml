@@ -118,6 +118,8 @@ let growUtility genOpts sgraph degr day userNEdges =
         E.iter begin fun _ ->
           if jumpProbUtil <> 0.0 && begin
             H.is_empty outs || itTurnsOut jumpProbUtil end then begin
+              hashInc edgeCount jumpEC;
+
             (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
                thus throwing GlobalUniform for those into the mix -- may do so explicitly;
                jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 

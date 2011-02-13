@@ -48,24 +48,14 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
        a parameter type to0 do it for reals... or integers, properly;
        or we can modularize Proportional better, making them store names
        and return those names directly *)
-    let (anames,ivals,ibound,avals,abound) = match duvals with
-    (* TODO parameterize 1e-35 *)
+    let (anames,ivals,avals) = match duvals with
+                                       (* TODO parameterize 1e-35 *)
     | Some dv -> let (ns,vs) = Proportional.rangeLists (+.) 1e-35 0. (H.enum dv.(day)) in
-                 let b = array_last vs in
                  let dummyIntArray = A.create 0 0 in
-                 let dummyBound = 0 in
-                 (ns,dummyIntArray,dummyBound,vs,b)
+                 (ns,dummyIntArray,vs)
     | None ->    let (ns,vs) = Proportional.intRangeLists (H.enum users) in
-    (* we increment the last, maximum value of the range array 
-       since Random.int can never reach the bound 
-       Another way to get the bound:
-       
-       let bound = A.backwards avals |> E.peek |> Option.get |> succ in
-       *)
-                 let b = array_last vs in
                  let dummyFloatArray = A.create 0 0. in
-                 let dummyBound = 0. in
-                 (ns,vs,b,dummyFloatArray,dummyBound)
+                 (ns,vs,dummyFloatArray)
     in 
 
     (* grow new edges *)
@@ -74,24 +64,19 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
       if numEdges > 0 then begin
         let fromDay = Dreps.userDay ereps fromUser day in
         E.iter begin fun _ ->
-          let n' = 
+          let toUser = 
             match uniform with
             (* since anames is padded with a dummy 0th element, 
                we pick 1-based when uniform-direct *)
-            | Some _ -> Some (Random.int numUsers |> succ)
+            | Some _ -> randomElementBut0th anames
             | _ ->
             if realVals
-              then Proportional.pickReal avals abound 
-              else Proportional.pickInt  ivals ibound
-          in
-          match n' with 
-          | None -> ()
-          | Some n -> 
-            let toUser = anames.(n) in begin
-              hashInc fromDay toUser;
-              hashInc users toUser;
-              incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
-            end (* new edge *)  
+              then Proportional.pickFloat2 (anames,avals)
+              else Proportional.pickInt2   (anames,ivals)
+          in 
+          hashInc fromDay toUser;
+          hashInc users toUser;
+          incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
         end (E.range 1 ~until:numEdges)
       end (* numEdges > 0 *)
     end (By_day.numUserEdges denums.(day))
@@ -105,23 +90,17 @@ let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
    attaching preferentially according to the current capital distribution *)
    
 let growEdges userNEdges props smooth dreps dments day =
-   let (anames,avals) = Proportional.rangeLists (+.) smooth 0. props in
-   let abound = array_last avals in
+   let props = Proportional.rangeLists (+.) smooth 0. props in
    let edgeCount = ref 0 in
    H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
         let fromDay = Dreps.userDay dreps fromUser day in
         E.iter begin fun _ ->
-        let n' =  Proportional.pickReal avals abound in
-          match n' with 
-          | None -> ()
-          | Some n -> 
-            let toUser = anames.(n) in begin
-              hashInc fromDay toUser;
-              let toDay = Dreps.userDay dments toUser day in
-              hashInc toDay fromUser;
-              incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
-            end (* new edge *)  
+          let toUser =  Proportional.pickFloat2 props in
+          hashInc fromDay toUser;
+          let toDay = Dreps.userDay dments toUser day in
+          hashInc toDay fromUser;
+          incr edgeCount; if !edgeCount mod 10000 = 0 then leprintf "."
         end (1 -- numEdges) (* E.range 1 ~until:numEdges *)
       end (* numEdges > 0 *)
     end userNEdges 

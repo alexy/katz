@@ -68,25 +68,27 @@ let justGreater a = binarySearch findGreater        a
 
 (* bound is precomputed as maximum of a,
    i.e. a's last element *)
+   
+let maxRandomInt = 2.**30. |> Int.of_float |> pred
+
 let pickInt a bound =
   (* total mentiosn of friends of friends get so large they exceed 30 random bits,
      so we need to handle a full int, which even on 64 bit platform requires a conversion *)
-  let r = bound |> Int64.of_int |> Random.int64 |> Int64.to_int |> succ in
+  let r = randomInt bound |> succ in  
   justGE a r
 
 let pickReal a bound =
   let r = Random.float bound in
   justGE a r
 
-
-(* TODO raise an exception *)
+exception Proportional of string
 
 let pick2 pickOne kind (names,vals) =
   let bound = array_last vals in
   let n = pickOne vals bound in
   match n with
   | Some n -> names.(n)
-  | _ -> failwith (sprintf "proportional %s arrays are misaligned" kind)
+  | _ -> raise (Proportional (sprintf "proportional %s arrays are misaligned" kind))
   
 let pickInt2   x = pick2 pickInt  "int"   x
 let pickFloat2 x = pick2 pickReal "float" x

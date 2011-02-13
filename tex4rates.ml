@@ -8,7 +8,7 @@ let takeDays'  = ref (Some 34)
 let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
-let matrix'    = ref false
+let matrix'    = ref true
 let matrixDoc' = ref false
 let areInts'   = ref false
 let normalize' = ref false
@@ -26,7 +26,7 @@ let specs =
   (noshort,"nodropdays",(set dropDays' None),None);
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
-  ('m',"matrix",    (set matrix'    true), None);
+  ('m',"matrix",    (set matrix'    !matrix'), None);
   ('d',"mdoc",      (set matrixDoc' true), None);
   ('n',"normalize", (set normalize' true), None);
   ('I',"ints",      (set areInts'   (not !areInts')),None);
@@ -82,7 +82,7 @@ let _ =
   end;
 
   if matrix then begin
-    let matrixName   = sprintf "4x4-%s.tex" tt in  
+    let matrixName   = sprintf "4x%d-%s.tex" (L.length tableNames) tt in  
     printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName tableNames;
     
     if masterLine then

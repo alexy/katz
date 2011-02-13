@@ -278,3 +278,11 @@ let enum_fsum: float E.t -> float =
   
   (* is this in a standard library? *)
 let map_second f x y = f y
+
+let maxRandomInt = 2.**30. |> Int.of_float |> pred
+
+let randomInt bound =
+  if bound > maxRandomInt then
+    bound |> Int64.of_int |> Random.int64 |> Int64.to_int
+  else 
+    bound |> Random.int
