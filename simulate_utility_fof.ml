@@ -105,50 +105,6 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
   hashInc edgeCount jumpEC
 
 
-let growUtility genOpts sgraph degr day userNEdges =
-    let {jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
-         globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy} = genOpts in
-    let {ustatsSG =ustats} = sgraph in
-    let fnums = degrFnums degr in
-    
-    let edgeCount =  edgeCountNamesList |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
-    H.iter begin fun fromUser numEdges ->
-      if numEdges > 0 then begin
-        let {outsUS =outs} = ustats --> fromUser in
-        E.iter begin fun _ ->
-          if jumpProbUtil <> 0.0 && begin
-            H.is_empty outs || itTurnsOut jumpProbUtil end then begin
-              hashInc edgeCount jumpEC;
-
-            (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
-               thus throwing GlobalUniform for those into the mix -- may do so explicitly;
-               jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 
-               justJump fofStrategy! *)
-              if jumpProbFOF <> 0.0 && begin
-                 fnums --> fromUser = 0 || (* no friends -- no friends of friends, no? *)
-                 (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
-                 (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
-                 (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
-                 itTurnsOut jumpProbFOF end then
-                 justJump globalStrategy sgraph degr edgeCount day fromUser
-              else
-                justJump fofStrategy sgraph degr edgeCount day fromUser
-          end
-          else begin
-          
-            (* TODO should we simulate num from a Poisson?  1 for now 
-               also, can pick not a max but some with a fuzz *)
-               
-            let toUser,_ = H.keys outs |> L.of_enum |> 
-                        L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
-                        listMax2 in
-            addEdge sgraph degr edgeCount day fromUser toUser;
-            hashInc edgeCount stayEC
-          end
-        end (1 -- numEdges)
-      end else ()
-    end userNEdges;
-    edgeCount
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely
@@ -223,12 +179,14 @@ let makeFNOFMents: fnofs -> fnofs =
   (* |> H.filter (Proportional.bound |- (<) 1) *)
   
   
-let makeFsocs: user_stats -> fsocs =
-  fun ustats ->
+let makeFsocs: day -> float -> day -> user_stats -> fsocs =
+  fun minDays minCap day ustats ->
   ustats |> H.filter begin fun {totUS =tot} -> not (H.is_empty tot) end |>
   H.map begin fun _ {totUS=tot} ->
     H.map begin fun friend _ -> 
-      (ustats-->friend).socUS
+      let {socUS =cap; dayUS =sincetDay} = ustats-->friend in
+      if day - sincetDay > minDays then cap
+      else minCap
     end tot |> H.enum |>
     Proportional.floatRangeLists
   end
@@ -261,7 +219,8 @@ let computeStrategyFeatures strategyData strategyList =
   end [] strategyFeaturesInOrder |> L.rev 
 
 
-let computeStrategyData degr features ustats newUsers =
+let computeStrategyData genOpts degr ustats day newUsers =
+ let {strategyFeaturesGO =strategyFeatures; minCapDaysGO =minDays; minCapGO =minCap} = genOpts in
  L.fold_left begin fun degr feature ->
     match feature with
      | x when x = inDegreeSF  -> begin assert (Option.is_some degr.inDegreeDG); degr end
@@ -276,12 +235,12 @@ let computeStrategyData degr features ustats newUsers =
                       { degr with fnumMentsDG=Some fnumMents }
      | x when x = fnofMentsSF -> let fnofMents = makeFNOFMents (degrFnumMents degr) in
                       { degr with fnofMentsDG=Some fnofMents }
-     | x when x = fsocsSF     -> let fsocs = makeFsocs ustats in
+     | x when x = fsocsSF     -> let fsocs = makeFsocs minDays minCap day ustats in
                       { degr with fsocsDG=Some fsocs }
      | x when x = fscofsSF    -> let fscofs = makeFscofs (degrFsocs degr) in
                       { degr with fscofsDG=Some fscofs }
      | x -> failwith (sprintf "an impossible strategy feature %s is needed!" x)
-  end degr features
+  end degr strategyFeatures
   
    
 let basicDegr inDegree outDegree =
@@ -291,3 +250,51 @@ let basicDegr inDegree outDegree =
     fnumMentsDG=None; fnofMentsDG=None;
     fsocsDG=None;     fscofsDG=None }
      
+
+let growUtility genOpts degr sgraph day newUsers userNEdges =
+    let {jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
+         globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy} = genOpts in
+    let {ustatsSG =ustats} = sgraph in
+
+    let degr = computeStrategyData genOpts degr ustats day newUsers in
+
+    let fnums = degrFnums degr in
+    
+    let edgeCount =  edgeCountNamesList |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
+    H.iter begin fun fromUser numEdges ->
+      if numEdges > 0 then begin
+        let {outsUS =outs} = ustats --> fromUser in
+        E.iter begin fun _ ->
+          if jumpProbUtil <> 0.0 && begin
+            H.is_empty outs || itTurnsOut jumpProbUtil end then begin
+              hashInc edgeCount jumpEC;
+
+            (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
+               thus throwing GlobalUniform for those into the mix -- may do so explicitly;
+               jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 
+               justJump fofStrategy! *)
+              if jumpProbFOF <> 0.0 && begin
+                 fnums --> fromUser = 0 || (* no friends -- no friends of friends, no? *)
+                 (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
+                 (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
+                 (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
+                 itTurnsOut jumpProbFOF end then
+                 justJump globalStrategy sgraph degr edgeCount day fromUser
+              else
+                justJump fofStrategy sgraph degr edgeCount day fromUser
+          end
+          else begin
+          
+            (* TODO should we simulate num from a Poisson?  1 for now 
+               also, can pick not a max but some with a fuzz *)
+               
+            let toUser,_ = H.keys outs |> L.of_enum |> 
+                        L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
+                        listMax2 in
+            addEdge sgraph degr edgeCount day fromUser toUser;
+            hashInc edgeCount stayEC
+          end
+        end (1 -- numEdges)
+      end else ()
+    end userNEdges;
+    edgeCount

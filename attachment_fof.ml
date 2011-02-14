@@ -8,9 +8,14 @@ type attachment_strategy =
   | FOFMentionsAttachment
   | FOFSocCapAttachment
 
+(* this order corresponds to the order in which the data must be computed *)
+type strategy_features = string list
+
 type gen_opts = { jumpProbUtilGO : float; jumpProbFOFGO : float;
                   globalStrategyGO : attachment_strategy; 
-                  fofStrategyGO : attachment_strategy }
+                  fofStrategyGO : attachment_strategy;
+                  minCapDaysGO : int; minCapGO : float;
+                  strategyFeaturesGO : strategy_features }
 
 type degr = { inDegreeDG : user_int_hash option; outDegreeDG : user_int_hash option; 
               inDePropsDG : int_proportions option;
@@ -29,9 +34,6 @@ let degrFnofMents {fnofMentsDG =x} = match x with Some x -> x | _ -> failwith "m
 let degrFsocs {fsocsDG =x}         = match x with Some x -> x | _ -> failwith "must have fsocsDG" 
 let degrFscofs {fscofsDG =x}       = match x with Some x -> x | _ -> failwith "must have fscofsDG" 
       
-(* this order corresponds to the order in which the data must be computed *)
-type strategy_features = string list
-
 let (inDegreeSF,outDegreeSF,inDePropsSF,fnumsSF,fnofsSF,fnumMentsSF,fnofMentsSF,fsocsSF,fscofsSF) =
   ("inDegreeSF","outDegreeSF","inDePropsSF","fnumsSF","fnofsSF","fnumMentsSF","fnofMentsSF","fsocsSF","fscofsSF")
 let strategyFeaturesInOrder : strategy_features = 

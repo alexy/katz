@@ -31,10 +31,14 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g;
     (a, b, g, by_mass, skew_times)
 
 
-let genOptsSC {jumpProbUtilSR   =jumpProbUtil;   jumpProbFOFSR =jumpProbFOF;
-               globalStrategySR =globalStrategy; fofStrategySR =fofStrategy } =
+let genOptsSC {jumpProbUtilSR     =jumpProbUtil;   jumpProbFOFSR =jumpProbFOF;
+               globalStrategySR =globalStrategy;   fofStrategySR =fofStrategy;
+               minCapDaysSR         =minCapDays;  minCapSR=minCap;
+               strategyFeaturesSR =strategyFeatures } =
   { jumpProbUtilGO=   jumpProbUtil;   jumpProbFOFGO= jumpProbFOF;
-    globalStrategyGO= globalStrategy; fofStrategyGO= fofStrategy }
+    globalStrategyGO= globalStrategy; fofStrategyGO= fofStrategy;
+    minCapDaysGO= minCapDays;         minCapGO= minCap;
+    strategyFeaturesGO= strategyFeatures }
 
 
 let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_count_list * float) list =
@@ -88,9 +92,8 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
       let edgeCounts = 
       match initDay with
       | Some before when day < before -> emptyHash ()
-      | _ -> let degr = basicDegr inDegree outDegree in
-             let degr = computeStrategyData degr strategyFeatures ustats newUsers in
-             growUtility genOpts sgraph degr day fromNums.(day) in
+      | _ ->  let degr = basicDegr inDegree outDegree in
+              growUtility genOpts degr sgraph day newUsers fromNums.(day) in
       let edgeCountList = edgeCounts |> listHash in
              
       L.print ~first:"\n["~last:"]\n" (Pair.print String.print Int.print) stderr edgeCountList;
