@@ -1,7 +1,14 @@
-../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 --glouni --fofcap fg2uf05ce4wk ../ereps/dreps.mlb 28
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m0
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m1wk ../ereps/dreps.mlb 7
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m2wk ../ereps/dreps.mlb 14
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m3wk ../ereps/dreps.mlb 21
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m4wk ../ereps/dreps.mlb 28
 
-../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 --glouni --fofcap fg8uf05ce4wk ../ereps/dreps.mlb 28
-
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m0
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m1wk ../ereps/dreps.mlb 7
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m2wk ../ereps/dreps.mlb 14
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m3wk ../ereps/dreps.mlb 21
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m4wk ../ereps/dreps.mlb 28
 
 for i in caps*; do ../../docranks.opt $i; done
 for i in aranks*; do ../../save_rbucks.opt $i; done
