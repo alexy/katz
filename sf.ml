@@ -23,6 +23,7 @@ let specs =
   ('J',"jumpFOF", None,Some (fun x -> jumpProbFOF'  := float_of_string x));
   (noshort,"glouni", (set globalStrat' GlobalUniformAttachment), None);
   (noshort,"glomen", (set globalStrat' GlobalMentionsAttachment),None);
+  (noshort,"glocap", (set globalStrat' GlobalSocCapAttachment),  None);
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);

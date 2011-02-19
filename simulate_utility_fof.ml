@@ -6,12 +6,13 @@ let oget=Option.get
 
 
 let edgeCountNames = ("total","jump","stay","backup",
-"GlobalUniform","GlobalMentions",
+"GlobalUniform","GlobalMentions","GlobalSocCap",
 "FOFUniform","FOFMentions","FOFSocCap")
-let (totalEC,jumpEC,stayEC,backupEC,globalUniformEC,globalMentionsEC,
-fOFUniformEC,fOFMentionsEC,fOFSocCapEC) = edgeCountNames
+let (totalEC,jumpEC,stayEC,backupEC,
+  globalUniformEC,globalMentionsEC,globalSocCapEC,
+  fOFUniformEC,fOFMentionsEC,fOFSocCapEC) = edgeCountNames
 let edgeCountNamesList = [totalEC;jumpEC;stayEC;backupEC;
-globalUniformEC;globalMentionsEC;
+globalUniformEC;globalMentionsEC;globalSocCapEC;
 fOFUniformEC;fOFMentionsEC;fOFSocCapEC]
 
 let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit = 
@@ -48,6 +49,11 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       hashInc edgeCount globalMentionsEC;
       let toUser = Proportional.pickInt2 (degrInDeProps degr) in
       addEdge sgraph degr edgeCount day fromUser toUser
+    end
+  | GlobalSocCapAttachment -> begin
+      hashInc edgeCount globalSocCapEC;
+      let toUser = Proportional.pickFloat2 (degrSocCapProps degr) in
+      addEdge sgraph degr edgeCount day fromUser toUser      
     end
   | FOFUniformAttachment -> begin
     try 
@@ -118,6 +124,16 @@ let makeInDegreeProportions: udegr -> users -> int_proportions =
   let newbies     = L.enum novices |> E.map (fun x -> x,1) in
   let attachables = E.append oldies newbies in
   Proportional.intRangeLists attachables
+  
+  
+(* NB shares the meat with makeFsocs and dcaps.mature_caps -- factor out? *)
+let makeSocCapProportions: day -> float -> day -> user_stats -> float_proportions =
+  fun minDays minCap day ustats ->
+  H.map begin fun _ {socUS =cap; dayUS =sincetDay} ->
+    if day - sincetDay > minDays then cap
+    else minCap
+  end ustats |> H.enum |>
+  Proportional.floatRangeLists
 
       
 let makeFNums: user_stats -> fnums =
@@ -227,6 +243,8 @@ let computeStrategyData genOpts degr ustats day newUsers =
      | x when x = outDegreeSF -> begin assert (Option.is_some degr.outDegreeDG); degr end
      | x when x = inDePropsSF -> let inDeProps = makeInDegreeProportions (degrInDegree degr) newUsers in
                       { degr with inDePropsDG=Some inDeProps }
+     | x when x = socCapPropsSF -> let socCapProps = makeSocCapProportions minDays minCap day ustats in
+                      { degr with socCapPropsDG = Some socCapProps }
      | x when x = fnumsSF     -> let fnums = makeFNums ustats in
                       { degr with fnumsDG=Some fnums }
      | x when x = fnofsSF     -> let fnofs = makeFNOFs ustats (degrFnums degr) in
@@ -245,7 +263,7 @@ let computeStrategyData genOpts degr ustats day newUsers =
    
 let basicDegr inDegree outDegree =
   { inDegreeDG=Some inDegree; outDegreeDG=Some outDegree;
-    inDePropsDG=None;
+    inDePropsDG=None; socCapPropsDG=None;
     fnumsDG=None;     fnofsDG=None;
     fnumMentsDG=None; fnofMentsDG=None;
     fsocsDG=None;     fscofsDG=None }
