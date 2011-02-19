@@ -1,12 +1,11 @@
-../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m2wk ../ereps/dreps.mlb 14
-../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m3wk ../ereps/dreps.mlb 21
-../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m4wk ../ereps/dreps.mlb 28
-
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m0
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m1wk ../ereps/dreps.mlb 7
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m2wk ../ereps/dreps.mlb 14
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m3wk ../ereps/dreps.mlb 21
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.8 -J 0.05 -c 1e-7 --glouni --fofcap fg8uf05c7m4wk ../ereps/dreps.mlb 28
+
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m3wk ../ereps/dreps.mlb 21
+../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c 1e-7 --glouni --fofcap fg2uf05c7m4wk ../ereps/dreps.mlb 28
 
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c --glocap --fofcap fg2cf05c0
 ../../sf.opt ../dstarts.mlb ../drnums/nr-dreps.mlb -j 0.2 -J 0.05 -c --glocap --fofcap fg2cf05c1wk ../ereps/dreps.mlb 7
