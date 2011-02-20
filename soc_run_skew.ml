@@ -41,7 +41,7 @@ let socRun dreps dments opts =
       leprintfln "adding %d users on day %d" (List.length newUsers) day;
       List.iter (fun user -> H.add ustats user (newUserStats socInit day)) newUsers;
       leprintfln "now got %d" (H.length ustats);
-      let skews = socDay sgraph params day in
+      let _,skews = socDay sgraph params day in
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
 
       H.iter (updateFromUStats dcaps statSoc day) ustats;

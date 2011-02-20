@@ -85,7 +85,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
         let degr = {inDegreeDG=inDegree;outDegreeDG=outDegree;inDePropsDG=inDeProps} in
         growUtility genOpts sgraph degr day fromNums.(day) in
     
-      let skews = socDay sgraph params day in
+      let _,skews = socDay sgraph params day in
       
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       H.iter (updateFromUStats dcaps statSoc day) ustats;

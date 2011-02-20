@@ -97,6 +97,7 @@ type staying_totals = int array
 type b2b            = ints list (* same as int_rates *)
 type day_b2b        = b2b array
 type int_rates      = ints list   (* TODO rename as: int_table *)
+type float3         = float * float * float
 type float4         = float * float * float * float
 type rates4         = rates * rates * rates * rates
 
@@ -104,11 +105,10 @@ type rates4         = rates * rates * rates * rates
 
 type dcaps_hash    = (user,(day,float) H.t) H.t
 type starts_hash   = (user,day) H.t
-type float_triple  = float * float * float
-type srank         = float_triple
+type srank         = float3
 type starrank      = (user, (day * srank) list) H.t
 type starrank_hash = (user,(day,srank) H.t) H.t
-type starbucks     = (float_triple * float_triple) list (* averages * medians *)
+type starbucks     = (float3 * float3) list (* averages * medians *)
 type day_starbucks = starbucks array
 
 (* proportional *)

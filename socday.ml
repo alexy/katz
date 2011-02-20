@@ -49,4 +49,4 @@ let socDay socUserDaySum sgraph params day =
      stats' in
     
   hashUpdateWithImp tick ustats termsStats;
-  skews
+  norms,skews

@@ -51,10 +51,11 @@ let () =
   let drepsName  = "dreps-"^saveSuffix in
   let dmentsName = "dments-"^saveSuffix in
   let capsName   = "caps-"^saveSuffix in
+  let normsName  = "norms-"^saveSuffix in
   let skewName   = "skew-"^saveSuffix in
   let jumpName   = "jump-"^saveSuffix in
-  leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s, dcaps in %s and dskews in %s" 
-    dstartsName drnumsName drepsName dmentsName capsName skewName;
+  leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
+    dstartsName drnumsName drepsName dmentsName capsName skewName normsName jumpName;
     
   let globalStrategyName = showStrategy globalStrat in
   let fofStrategyName    = showStrategy fofStrat in
@@ -93,7 +94,8 @@ let () =
   let {drepsSG =dreps; dmentsSG =dments},
     dcaps,dskews,countsTimings = socRun dstarts drnums opts in
     
-  let edgeCounts,tSocRun = L.split countsTimings in
+  let normsEdgeCounts,tSocRun = L.split countsTimings in
+  let norms,edgeCounts        = L.split normsEdgeCounts in
     
   leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s, dskews in %s, jumps in %s" 
     drepsName dmentsName capsName skewName jumpName;
@@ -106,6 +108,8 @@ let () =
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
   let tSavingDSkews =  Some "-- saved dskews timing: " |> getTiming in
+  
+  saveData norms      normsName;
   saveData edgeCounts jumpName;
   
   let ts = List.rev (tSavingDSkews::tSavingDCaps::tSavingDMents::tSavingDReps::tSocRun@[tLoadDRnums;tLoadDStarts]) in

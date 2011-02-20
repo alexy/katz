@@ -41,7 +41,7 @@ let genOptsSC {jumpProbUtilSR     =jumpProbUtil;   jumpProbFOFSR =jumpProbFOF;
     strategyFeaturesGO= strategyFeatures }
 
 
-let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_count_list * float) list =
+let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * ((float3 * edge_count_list) * float) list =
     fun dstarts drnums opts ->
     
     let params, genOpts  = paramSC opts, genOptsSC opts in
@@ -98,14 +98,14 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * (edge_
              
       L.print ~first:"\n["~last:"]\n" (Pair.print String.print Int.print) stderr edgeCountList;
     
-      let skews = socDay sgraph params day in
+      let norms,skews = socDay sgraph params day in
       
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       H.iter (updateFromUStats dcaps statSoc day) ustats;
       H.iter (updateUserDaily  dskews day) skews;
-      (edgeCountList,t)::ts in
+      ((norms,edgeCountList),t)::ts in
       
     let theDays = Enum.seq firstDay succ (fun x -> x <= lastDay) in
     (* this is a two-headed eagle, imperative in sgraph, functional in timings *)
-    let countsTimings = Enum.fold tick [] theDays in
-    sgraph,dcaps,dskews,countsTimings
+    let normsEdgesTimings = Enum.fold tick [] theDays in
+    sgraph,dcaps,dskews,normsEdgesTimings

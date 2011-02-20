@@ -107,7 +107,7 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
       addEdge sgraph degr edgeCount day fromUser toUser
     with Not_found -> 
       jumpBack "Not_found" "FOFSocCapAttachment"
-    end;
+    end
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely

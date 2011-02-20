@@ -68,7 +68,7 @@ let socRun: starts -> day_rep_nums -> socRun -> sgraph * (dcaps * dskews) * timi
         Simulate.growEdges fromNums.(day) props minCap dreps dments day
       end;
     
-      let skews = socDay sgraph params day in
+      let _,skews = socDay sgraph params day in
       let t = Some (sprintf "day %d timing: " day) |> getTiming in
       H.iter (updateFromUStats dcaps statSoc day) ustats;
       H.iter (updateUserDaily  dskews day) skews;
