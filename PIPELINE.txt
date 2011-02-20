@@ -1,15 +1,14 @@
-dosim/dosimf/dosimu -- generate a replier graph, such as
+sc/sk/sg/su/sf -- generate a replier graph, such as
+	ureps -- uniformly random
 	ereps -- preferential attachment by mentioners (indegree)
 	creps -- preferential by nominal capital from the original soc_run results in dcaps
-	ureps -- uniformly random
+	rreps
+	lreps
+
+=> dreps, caps
 	
-sk -- compute social capital and skew for each replier graph
-	dcaps
-	dskews
-	
-docranks -- rank users for each day by their capital
-	dranks
-	aranks
+doaranks -- rank users for each day by their capital
+	caps => aranks
 	
 save_rbucks -- bucketize ranked users into power of 10 buckets
 	rbucks
@@ -17,12 +16,9 @@ save_rbucks -- bucketize ranked users into power of 10 buckets
 dorates 
 dovols -- compute which part of all replies or mentions comes from each bucket
 	
+
 	
 	
 TODO
 
 skew sort
-
-staying in most buckets within self
-staying in most buckets between two
-in how many days did this user stay in his bucket class
