@@ -108,9 +108,6 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
     with Not_found -> 
       jumpBack "Not_found" "FOFSocCapAttachment"
     end;
-  hashInc edgeCount jumpEC
-
-
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely
