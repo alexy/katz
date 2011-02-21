@@ -40,8 +40,9 @@ TEX4=tex4rates
 TEXLB=texlblens
 SU=su
 SF=sf
+OC=overclass
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(OC)
 
 all: $(ALL:%=%.opt)
 
@@ -219,3 +220,7 @@ $(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_
 
 $(SF).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(OC).opt: $(OC).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) $^ -o $@
+  
