@@ -10,15 +10,47 @@ sc/sk/sg/su/sf -- generate a replier graph, such as
 doaranks -- rank users for each day by their capital
 	caps => aranks
 	
+	for i in caps-*; do ../../../doaranks.opt $i; done
+	
 save_rbucks -- bucketize ranked users into power of 10 buckets
-	rbucks
+	aranks => rbucks
 	
-dorates 
-dovols -- compute which part of all replies or mentions comes from each bucket
+	for i in aranks-*; do ../../../save_rbucks.opt $i; done
 	
+dorates -- compute staying power within the same simulation, across days
 
+overlaps with dreps
+
+	for i in rbucks*; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
+
+overlaps within class and between classes
+
+	for i j in `cat freps-overlaps.list`; do ../../../doversets.opt rbucks-aranks-caps-$i.mlb rbucks-aranks-caps-$j.mlb $i-$j; done
+
+dovols -- compute which part of all replies or mentions comes from each bucket
+	denums, rbucks => vols4
+-- run in  rbucks/
+-- uses ../denums/
+-- name from rbucks
 	
+	for i in `cat freps.list`; do ../../../dovols2.opt ../denums/denums-dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
+
+b2br
+-- in rbucks/
+-- name from rbucks
+
+	for i in `cat freps.list`; do ../../../dob2bs.opt ../dreps/dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
 	
+b2bm -- invert to get dments we didn't save earlier, then as above with -k m
+
+starbucks: 
+stars:
+-- run in  dreps/
+-- uses ../caps/
+-- name from dreps
+
+	for i in `cat freps.list`; do ../../../dosranks.opt dreps-$i.mlb ../caps/caps-$i.mlb; done
+
 TODO
 
 skew sort

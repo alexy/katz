@@ -5,7 +5,7 @@ open Common
 open Getopt
 
 (* here we expect mark either r, by replies, or m, by mentions *)
-let mark' = ref ""
+let mark' = ref "r"
 let specs =
 [
   ('k',"mark",None,Some (fun x -> mark' := x))
@@ -13,6 +13,7 @@ let specs =
 
 let () =
   let args = getOptArgs specs in
+  
   let mark = !mark' in
 
   let drepsName,bucksName =
