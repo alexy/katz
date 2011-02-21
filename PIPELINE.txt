@@ -17,11 +17,17 @@ save_rbucks -- bucketize ranked users into power of 10 buckets
 	
 	for i in aranks-*; do ../../../save_rbucks.opt $i; done
 	
-dorates -- compute staying power within the same simulation, across days
-
+save_days -- denums, number of edges, both replies and mentions, for each user daily
+	dreps => denums
+	
+	for i in dreps-*; do ../../../save_days.opt $i; done
+	mv denums-* ../denums
+	
 overlaps with dreps
 
-	for i in rbucks*; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
+	for i in `cat ../../list/freps.list`; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
+
+dorates -- compute staying power within the same simulation, across days
 
 overlaps within class and between classes
 
@@ -33,7 +39,7 @@ dovols -- compute which part of all replies or mentions comes from each bucket
 -- uses ../denums/
 -- name from rbucks
 	
-	for i in `cat freps.list`; do ../../../dovols2.opt ../denums/denums-dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
+	for i in `cat ../../list/freps.list`; do ../../../dovols2.opt ../denums/denums-dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
 
 b2br
 -- in rbucks/
@@ -49,7 +55,7 @@ stars:
 -- uses ../caps/
 -- name from dreps
 
-	for i in `cat freps.list`; do ../../../dosranks.opt dreps-$i.mlb ../caps/caps-$i.mlb; done
+	for i in `cat ../../list/freps.list`; do ../../../dosranks.opt dreps-$i.mlb ../caps/caps-$i.mlb; done
 
 TODO
 
