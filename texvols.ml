@@ -4,18 +4,21 @@ open TeX
 
 (* tabulate a vols4 data as 4 tables *)
 
-let takeDays'  = ref (Some 34)
-let dropDays'  = ref (Some 7)
-let latex'     = ref false
-let tableDoc'  = ref false
-let matrix'    = ref false
-let matrixDoc' = ref false
-let normalize' = ref false
-let outDir'    = ref ""
-let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
-let masterLine'= ref true
-let drop'      = ref (Some "rbucks-aranks-caps-")
-let verbose'   = ref false
+let takeDays'    = ref (Some 34)
+let dropDays'    = ref (Some 7)
+let latex'       = ref false
+let tableDoc'    = ref false
+let matrix'      = ref true
+let matrixDoc'   = ref false
+let summary'     = ref true
+let showTables'  = ref true
+let normalize'   = ref false
+let outDir'      = ref ""
+let inputPath'   = ref None   (* input path to encode in the matrix' input statements *)
+let masterLine'  = ref true
+let drop'        = ref (Some "rbucks-aranks-caps-")
+let scientific'  = ref false   (* stoggle cientific notation %e vs. %f *)
+let verbose'     = ref false
 
 let specs =
 [
@@ -23,17 +26,22 @@ let specs =
   (noshort,"notakedays",(set takeDays' None),None);
   (noshort,"dropdays",None,Some (fun x -> dropDays' := Some (int_of_string x)));
   (noshort,"nodropdays",(set dropDays' None),None);
-  ('t',"tex",       (set latex'     true), None);
-  ('T',"tdoc",      (set tableDoc'  true), None);
-  ('m',"matrix",    (set matrix'    true), None);
-  ('d',"mdoc",      (set matrixDoc' true), None);  
-  ('n',"normalize", (set normalize' true), None);
-  ('o',"outdir",    None, Some (fun x -> outDir' := x));
-  ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
-  ('L',"masterline",(set masterLine' (not !masterLine')),None);
-  ('x',"drop",      None, Some (fun x -> drop'   := Some x));
-  ('X',"nodrop",    (set drop'      None), None);
-  ('v',"verbose",   (set verbose'   true), None)
+  ('t',"tex",         (set latex'       (not !latex')),       None);
+  ('T',"tdoc",        (set tableDoc'    (not !tableDoc')),    None);
+  ('m',"matrix",      (set matrix'      (not !matrix')),      None);
+  (noshort,"nomatrix",(set matrix'      false),               None);
+  ('d',"mdoc",        (set matrixDoc'   (not !matrixDoc')),   None);
+  ('s',"summary",     (set summary'     (not !summary')),     None);
+  ('S',"showTables",  (set showTables'  (not !showTables')),  None);
+  (noshort,"notables",(set showTables'  false),               None);
+  ('n',"normalize",   (set normalize' (not !normalize')), None);
+  ('o',"outdir",      None, Some (fun x -> outDir' := x));
+  ('i',"inputpath",   None, Some (fun x -> inputPath' := Some x));
+  ('L',"masterline",  (set masterLine' (not !masterLine')),None);
+  ('x',"drop",        None, Some (fun x -> drop'   := Some x));
+  ('X',"nodrop",      (set drop'        None), None);
+  ('e',"scientific",  (set scientific' (not !scientific')),   None);
+  ('v',"verbose",     (set verbose'     (not !verbose')),     None)
 ]
   
 
@@ -46,8 +54,8 @@ let _ =
   let outDir,   inputPath,   masterLine,  drop,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !verbose' in
       
-  let takeDays,   dropDays =
-      !takeDays', !dropDays' in
+  let takeDays,   dropDays,   summary,   showTables,   scientific =
+      !takeDays', !dropDays', !summary', !showTables', !scientific' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -78,12 +86,16 @@ let _ =
   
   
   let startRow,tables = dayRanges ~takeDays ~dropDays tables in
-  if normalize then
+  let printFloat = if scientific then sciencePrint else floatPrint in
+  if normalize then begin
     let normalTables = L.map normalizeIntTable tables in
-    printShowTables tex ~verbose floatPrint normalTables ~startRow outDir tableNames
-  else
-    printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames;
-    
+    if showTables then printShowTables tex ~verbose printFloat normalTables ~startRow outDir tableNames else ();
+    if summary then tableSummaries tex ~verbose ~outDir printFloat normalTables tableNames else ()
+  end
+  else begin
+    if showTables then printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames else ();
+    if summary then intTableSummaries tex ~verbose ~outDir printFloat tables tableNames else ()
+  end;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

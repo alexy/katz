@@ -67,7 +67,7 @@ let starbucks: day_buckets -> starrank_hash -> day_starbucks =
       let amy    = A.of_list my
       and astars = A.of_list stars 
       and aauds  = A.of_list auds in
-      let medians = Mathy.median amy, Mathy.median astars, Mathy.median aauds in
+      let medians = Mathy.array_median amy, Mathy.array_median astars, Mathy.array_median aauds in
       averages,medians
     end buckets
   end bucks

@@ -22,16 +22,19 @@ save_days -- denums, number of edges, both replies and mentions, for each user d
 	
 	for i in dreps-*; do ../../../save_days.opt $i; done
 	mv denums-* ../denums
+
+dorates -- compute staying power within the same simulation, across days
+	rbucks => srates
+	
+ 	for i in rbucks-*; do ../../../dorates.opt $i; done
 	
 overlaps with dreps
 
-	for i in `cat ../../list/freps.list`; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
-
-dorates -- compute staying power within the same simulation, across days
+	for i in `cat ../../list/freps-bases.list`; do ../../../doversets.opt ../../rbucks/rbucks-aranks-caps-dreps.mlb rbucks-aranks-caps-$i.mlb dreps-$i; done
 
 overlaps within class and between classes
 
-	for i j in `cat freps-overlaps.list`; do ../../../doversets.opt rbucks-aranks-caps-$i.mlb rbucks-aranks-caps-$j.mlb $i-$j; done
+	for i j in `cat ../../freps-overlaps1.list`; do ../../../doversets.opt rbucks-aranks-caps-$i.mlb rbucks-aranks-caps-$j.mlb $i-$j; done
 
 dovols -- compute which part of all replies or mentions comes from each bucket
 	denums, rbucks => vols4
@@ -45,11 +48,13 @@ b2br
 -- in rbucks/
 -- name from rbucks
 
-	for i in `cat freps.list`; do ../../../dob2bs.opt ../dreps/dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
+	for i in `cat ../../list/freps.list`; do ../../../dob2bs.opt ../dreps/dreps-$i.mlb rbucks-aranks-caps-$i.mlb; done
 	
 b2bm -- invert to get dments we didn't save earlier, then as above with -k m
 
 starbucks: 
+	dreps, caps   => stars
+	rbucks, stars => sbucks
 stars:
 -- run in  dreps/
 -- uses ../caps/
@@ -57,6 +62,21 @@ stars:
 
 	for i in `cat ../../list/freps.list`; do ../../../dosranks.opt dreps-$i.mlb ../caps/caps-$i.mlb; done
 
-TODO
+sbucks:
+-- run in stars/
+-- uses ../rbucks/
+-- name from stars
 
-skew sort
+	for i in `cat ../../list/freps.list`; do ../../../dostarbucks.opt ../rbucks/rbucks-aranks-caps-$i.mlb stars-dreps-$i.mlb; done
+	
+--
+
+TABLES
+
+srates
+
+cat srates-rbucks-aranks-caps-but4.list | xargs -n5 ../../../tex4rates.opt -t -i freps/srates/tex
+
+vols4
+for i in vols4-rbucks-aranks-caps-fg*; do ../../../texvols.opt -t  -i freps/vols4/tex $i; done
+for i in vols4-rbucks-aranks-caps-fg*; do ../../../texvols.opt -tn -i freps/vols4/tex $i; done
