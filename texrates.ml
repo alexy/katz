@@ -3,7 +3,7 @@ open Common
 open Getopt
 open TeX
 
-let takeDays'  = ref (Some 34)
+let takeDays'  = ref (Some 33)
 let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
