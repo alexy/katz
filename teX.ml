@@ -14,10 +14,11 @@ let texParams isTeX isDoc =
   | _ -> "txt","text" in
   tex,suffix,asWhat
 
-let fileSuffix tex =
-  match tex with
+let fileSuffix ?(dot=false) tex =
+  let s = match tex with
   | TeX | DocTeX -> "tex"
-  | _ -> "txt"
+  | _ -> "txt" in
+  if dot then "."^s else s
   
 (* Float.print would do, but it doesn't control for precision *)
 let floatPrint   oc x = fprintf oc "%5.2f" x
@@ -309,12 +310,7 @@ let printSummary oc tex printOne name numbers =
   L.print ~first ~sep ~last printOne oc numbers
   
   
-let printShowSummary tex ~verbose printOne rowName numbers outDir ?(drop=None) fileName =
-  let fileName = 
-  match drop with
-  | Some infix -> dropText infix fileName
-  | _ -> fileName
-  in
+let printShowSummary tex ~verbose printOne rowName numbers outDir fileName =
   let pathName = sprintf "%s/%s" outDir fileName in
   let oc = open_out pathName in
   printSummary oc tex printOne rowName numbers;
@@ -324,18 +320,20 @@ let printShowSummary tex ~verbose printOne rowName numbers outDir ?(drop=None) f
   else ()
     
   
-let tableSummary tex ~verbose ~outDir printOne ?(filter1=false) table name =
+let tableSummary tex ~verbose ~outDir printOne ?(filter1=false) ?(drop=None) table name =
   let averages,medians = tableAveragesAndMedians ~filter1 table in
   let averagesName = sprintf "averages-%s" name in
   let mediansName  = sprintf "medians-%s"  name in
-  printShowSummary tex ~verbose printOne name averages outDir averagesName;
-  printShowSummary tex ~verbose printOne name medians  outDir mediansName
+  let rowName = dropText (fileSuffix ~dot:true tex) name in
+  let rowName = mayDropText drop rowName in
+  printShowSummary tex ~verbose printOne rowName averages outDir averagesName;
+  printShowSummary tex ~verbose printOne rowName medians  outDir mediansName
   
 
-let tableSummaries tex ~verbose ~outDir printOne ?(filter1=false) tables tableNames =
-  L.iter2 (tableSummary tex ~verbose ~outDir printOne ~filter1) tables tableNames
+let tableSummaries tex ~verbose ~outDir printOne ?(filter1=false) ?(drop=None) tables tableNames =
+  L.iter2 (tableSummary tex ~verbose ~outDir printOne ~filter1 ~drop) tables tableNames
   
 
-let intTableSummaries tex ~verbose ~outDir printOne ?(filter1=false) tables tableNames =
+let intTableSummaries tex ~verbose ~outDir printOne ?(filter1=false) ?(drop=None) tables tableNames =
   let floatTables = L.map floatOfIntTable tables in
-  tableSummaries tex ~verbose ~outDir printOne ~filter1 floatTables tableNames
+  tableSummaries tex ~verbose ~outDir printOne ~filter1 ~drop floatTables tableNames

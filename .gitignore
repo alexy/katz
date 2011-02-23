@@ -12,3 +12,8 @@ look
 *.lock
 *.omc
 .omakedb
+*.tex
+*.aux
+*.log
+*.pdf
+*.xz

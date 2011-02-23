@@ -19,6 +19,7 @@ let outDir'    = ref ""
 let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
 let masterLine'= ref true
 let drop'      = ref (Some "rbucks-aranks-caps-")
+let dropRow'   = ref (Some "srates-")
 let scientific'= ref false   (* stoggle cientific notation %e vs. %f *)
 let verbose'   = ref false
 
@@ -44,6 +45,8 @@ let specs =
   ('L',"masterline",  (set masterLine' (not !masterLine')),   None);
   ('x',"drop",        None, Some (fun x -> drop'      := Some x));
   ('X',"nodrop",      (set drop'        None),                None);
+  (noshort,"droprow", None, Some (fun x -> dropRow'   := Some x));
+  (noshort,"nodroprow",(set dropRow'    None),                None);
   ('e',"scientific",  (set scientific' (not !scientific')),   None);
   ('v',"verbose",     (set verbose'     true),                None)
 ]
@@ -61,7 +64,8 @@ let _ =
   let takeDays,   dropDays,   summary,   showTables,   scientific =
       !takeDays', !dropDays', !summary', !showTables', !scientific' in
       
-  let filter1 = !filter1' in
+  let filter1,   dropRow = 
+      !filter1', !dropRow' in
 
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -85,18 +89,18 @@ let _ =
     if normalize then begin
       let normalTables = L.map normalizeIntTable tables in
       if showTables then printShowTables tex ~verbose printFloat normalTables ~startRow outDir tableNames else ();
-      if summary then tableSummaries tex ~verbose ~outDir printFloat ~filter1 normalTables tableNames else ()
+      if summary then tableSummaries tex ~verbose ~outDir printFloat ~filter1 ~drop:dropRow normalTables tableNames else ()
     end
     else begin
       if showTables then printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames else ();
-      if summary then intTableSummaries tex ~verbose ~outDir printFloat ~filter1 tables tableNames else ()
+      if summary then intTableSummaries tex ~verbose ~outDir printFloat ~filter1 ~drop:dropRow tables tableNames else ()
     end
   end
   else begin
     let tables: rates list = L.map loadData dataFileNames in
     let startRow,tables = dayRanges ~takeDays ~dropDays tables in
     if showTables then printShowTables tex ~verbose printFloat tables ~startRow outDir tableNames else ();
-    if summary then tableSummaries tex ~verbose ~outDir printFloat ~filter1 tables tableNames else ()  
+    if summary then tableSummaries tex ~verbose ~outDir printFloat ~filter1 ~drop:dropRow tables tableNames else ()  
   end;
 
   if matrix then begin
