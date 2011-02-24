@@ -21,8 +21,19 @@ let fileSuffix ?(dot=false) tex =
   if dot then "."^s else s
   
 (* Float.print would do, but it doesn't control for precision *)
-let floatPrint   oc x = fprintf oc "%5.2f" x
-let sciencePrint oc x = fprintf oc "%5.2e" x
+
+let floatPrint          oc x = fprintf oc "%5.2f" x
+let sciencePrint        oc x = fprintf oc "%5.2e" x
+let preciseFloatPrint   oc x = fprintf oc "%18.15f" x
+let preciseSciencePrint oc x = fprintf oc "%22.15e" x
+
+let pickFloatPrint scientific precise =
+  match scientific,precise with
+  | false,false -> floatPrint
+  | false,true  -> preciseFloatPrint
+  | true,false  -> sciencePrint
+  | true,true   -> preciseSciencePrint
+  
 
 (* TODO because of these differently typed normalize functions,
    we cannot unify printAnyTable out of print{Int,Float}Table,

@@ -16,6 +16,7 @@ let inputPath' = ref None   (* input path to encode in the matrix' input stateme
 let masterLine'= ref true
 let drop'      = ref (Some "sbucks-stars-")
 let scientific'= ref true   (* stoggle cientific notation %e vs. %f *)
+let precise'   = ref false
 let verbose'   = ref false
 
 let specs =
@@ -35,6 +36,7 @@ let specs =
   ('x',"drop",      None, Some (fun x -> drop'   := Some x));
   ('X',"nodrop",    (set drop' None),      None);
   ('e',"scientific",(set scientific' (not !scientific')),None);
+  (noshort,"precise", (set precise' (not !precise')), None);
   ('v',"verbose",   (set verbose'   true), None)
 ]
   
@@ -45,11 +47,11 @@ let _ =
   let latex,   tableDoc,   matrix,   matrixDoc,   averages =   
       !latex', !tableDoc', !matrix', !matrixDoc', !averages' in	
   
-  let outDir,   inputPath,   masterLine,  drop,    scientific,   verbose =
-      !outDir', !inputPath', !masterLine', !drop', !scientific', !verbose' in
+  let outDir,   inputPath,   masterLine,  drop,    verbose =
+      !outDir', !inputPath', !masterLine', !drop', !verbose' in
 
-  let takeDays,   dropDays =
-      !takeDays', !dropDays' in
+  let takeDays,   dropDays,   scientific,   precise =
+      !takeDays', !dropDays', !scientific', !precise' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -79,9 +81,9 @@ let _ =
   let tables: rates list = [self;auds;star] in
   let startRow,tables = dayRanges ~takeDays ~dropDays tables in
   
-  let realPrint = if scientific then sciencePrint else floatPrint in
+  let floatPrint = pickFloatPrint scientific precise in
   
-  printShowTables tex ~verbose realPrint tables ~startRow outDir tableNames;
+  printShowTables tex ~verbose floatPrint tables ~startRow outDir tableNames;
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

@@ -18,6 +18,7 @@ let inputPath'   = ref None   (* input path to encode in the matrix' input state
 let masterLine'  = ref true
 let drop'        = ref (Some "rbucks-aranks-caps-")
 let scientific'  = ref false   (* stoggle cientific notation %e vs. %f *)
+let precise'     = ref false
 let verbose'     = ref false
 
 let specs =
@@ -41,6 +42,7 @@ let specs =
   ('x',"drop",        None, Some (fun x -> drop'   := Some x));
   ('X',"nodrop",      (set drop'        None), None);
   ('e',"scientific",  (set scientific' (not !scientific')),   None);
+  (noshort,"precise", (set precise' (not !precise')),         None);
   ('v',"verbose",     (set verbose'     (not !verbose')),     None)
 ]
   
@@ -56,6 +58,8 @@ let _ =
       
   let takeDays,   dropDays,   summary,   showTables,   scientific =
       !takeDays', !dropDays', !summary', !showTables', !scientific' in
+      
+  let precise = !precise' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -86,15 +90,16 @@ let _ =
   
   
   let startRow,tables = dayRanges ~takeDays ~dropDays tables in
-  let printFloat = if scientific then sciencePrint else floatPrint in
+  let floatPrint = pickFloatPrint scientific precise in
+
   if normalize then begin
     let normalTables = L.map normalizeIntTable tables in
-    if showTables then printShowTables tex ~verbose printFloat normalTables ~startRow outDir tableNames else ();
-    if summary then tableSummaries tex ~verbose ~outDir printFloat normalTables tableNames else ()
+    if showTables then printShowTables tex ~verbose floatPrint normalTables ~startRow outDir tableNames else ();
+    if summary then tableSummaries tex ~verbose ~outDir floatPrint normalTables tableNames else ()
   end
   else begin
     if showTables then printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames else ();
-    if summary then intTableSummaries tex ~verbose ~outDir printFloat tables tableNames else ()
+    if summary then intTableSummaries tex ~verbose ~outDir floatPrint tables tableNames else ()
   end;
 
   if matrix then begin
