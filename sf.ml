@@ -12,6 +12,11 @@ let fofStrat'     = ref FOFUniformAttachment
 let saveMents' = ref false
 let mark' = ref ""
 
+let randInit i = begin
+  Random.init i;
+  leprintfln "Random.init %d" i;
+end
+
 let specs =
 [
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
@@ -28,6 +33,7 @@ let specs =
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);
   ('m',"ments",(set saveMents' (not !saveMents')),None);
+  ('r',"rand",None,Some (fun x -> randInit (int_of_string x)))
 ]
   
 let () = 
