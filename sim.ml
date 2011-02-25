@@ -7,7 +7,8 @@ let duvalsNameOpt' = ref None
 let specs =
 [
   ('u',"uniform",(set uniform' (not !uniform')), None);
-  ('c',"duvals",None,Some (fun x -> duvalsNameOpt' := Some x))
+  ('c',"duvals",None,Some (fun x -> duvalsNameOpt' := Some x));
+  ('r',"rand",None,Some (fun x -> randInit (int_of_string x)))
 ]
 
 let () =

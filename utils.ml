@@ -286,3 +286,8 @@ let randomInt bound =
     bound |> Int64.of_int |> Random.int64 |> Int64.to_int
   else 
     bound |> Random.int
+    
+let randInit i = begin
+  Random.init i;
+  leprintfln "Random.init %d" i;
+end
