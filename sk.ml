@@ -32,7 +32,11 @@ let () =
 
   let dreps,tLoad = loadAnyGraph drepsName in
   leprintfln "loaded %s, %d" drepsName (H.length dreps);
-  let dments = Invert.invert2 dreps in
+  
+  let dments = 
+    try
+      Invert.invert2 dreps 
+    with Not_found -> failwith "spurious Not_found, should have been handled in invert" in
   let tInvert = Some "-- inverted dreps into dments, timing: " |> getTiming in
   leprintfln "dments has length %d" (H.length dments);
   let norms,dcaps,dskews,tSocRun = 
