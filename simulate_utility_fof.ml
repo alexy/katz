@@ -274,7 +274,7 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
 
     let degr = computeStrategyData genOpts degr ustats day newUsers in
 
-    let fnums = degrFnums degr in
+    
     
     let edgeCount =  edgeCountNamesList |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
     H.iter begin fun fromUser numEdges ->
@@ -293,7 +293,8 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
                justJump fofStrategy! *)
               if jumpProbFOF <> 0.0 && begin
                  jumpProbFOF =  1.0 ||
-                 fnums --> fromUser = 0 || (* no friends -- no friends of friends, no? *)
+                 (* no friends -- no friends of friends, no? *)
+                 (fofStrategy <> NoAttachment && let fnums = degrFnums degr in fnums --> fromUser = 0) ||
                  (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
                  (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
                  (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                
