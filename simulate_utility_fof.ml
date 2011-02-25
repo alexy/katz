@@ -281,14 +281,17 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if jumpProbUtil <> 0.0 && begin
-            H.is_empty outs || itTurnsOut jumpProbUtil end then begin
-              hashInc edgeCount jumpEC;
+             jumpProbUtil =  1.0 ||
+             H.is_empty outs || 
+             itTurnsOut jumpProbUtil end then begin
+             hashInc edgeCount jumpEC;
 
             (* NB we used to guard with a wrong && guard and called backup jumps in justJump,
                thus throwing GlobalUniform for those into the mix -- may do so explicitly;
                jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 
                justJump fofStrategy! *)
               if jumpProbFOF <> 0.0 && begin
+                 jumpProbFOF =  1.0 ||
                  fnums --> fromUser = 0 || (* no friends -- no friends of friends, no? *)
                  (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
                  (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                

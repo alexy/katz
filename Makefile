@@ -11,6 +11,7 @@ STARTS=save_starts
 SIM=dosim
 SIMF=dosimf
 SIMU=dosimu
+SIM1=sim
 CRANKS=docranks
 ARANKS=doaranks
 RATES=dorates
@@ -42,7 +43,7 @@ SU=su
 SF=sf
 OC=overclass
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(OC)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(OC)
 
 all: $(ALL:%=%.opt)
 
@@ -135,6 +136,9 @@ $(SIMF).opt: lib.cmxa invert.cmx simulate.cmx $(SIMF).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SIMU).opt: lib.cmxa invert.cmx simulate.cmx $(SIMU).cmx
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SIM1).opt: lib.cmxa invert.cmx simulate.cmx $(SIM1).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(CRANKS).opt: lib.cmxa cranks.cmx $(CRANKS).ml
