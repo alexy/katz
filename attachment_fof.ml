@@ -8,6 +8,7 @@ type attachment_strategy =
   | FOFUniformAttachment
   | FOFMentionsAttachment
   | FOFSocCapAttachment
+  | NoAttachment
 
 (* this order corresponds to the order in which the data must be computed *)
 type strategy_features = string list
@@ -52,7 +53,8 @@ GlobalMentionsAttachment, [inDegreeSF;inDePropsSF];
 GlobalSocCapAttachment,   [socCapPropsSF];
 FOFUniformAttachment,     [fnumsSF;fnofsSF];
 FOFMentionsAttachment,    [fnumsSF;fnumMentsSF;fnofMentsSF];  (* fnums used to skip in growUtility *)
-FOFSocCapAttachment,      [fnumsSF;fsocsSF;fscofsSF]
+FOFSocCapAttachment,      [fnumsSF;fsocsSF;fscofsSF];
+NoAttachment,             []
 ]
                  
               
@@ -68,3 +70,4 @@ match strat with
   | FOFUniformAttachment     -> "FOF Uniform"
   | FOFMentionsAttachment    -> "FOF by Mentions"
   | FOFSocCapAttachment      -> "FOF by SocCaps"
+  | NoAttachment             -> "No Attachment"

@@ -27,6 +27,7 @@ let specs =
   (noshort,"fofuni", (set fofStrat'    FOFUniformAttachment),    None);
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);
+  (noshort,"fofnone",(set fofStrat'    NoAttachment),            None);
   ('m',"ments",(set saveMents' (not !saveMents')),None);
   ('r',"rand",None,Some (fun x -> randInit (int_of_string x)))
 ]
@@ -40,13 +41,13 @@ let () =
   let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat =
       !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat' in
       
-  let (dstartsName,drnumsName,saveBase,dreps',day') =
+  let dstartsName,denumsName,saveBase,dreps',day' =
   match args with
-  | dstartsName::drnumsName::saveBase::dreps'::day'::[] -> 
-      (dstartsName,drnumsName,saveBase,Some dreps',Some day')
-  | dstartsName::drnumsName::saveBase::[] -> 
-      (dstartsName,drnumsName,saveBase,None,None)
-  | _ -> failwith "usage: sg dtartsName drnumsName saveBase [drepsName initDay]"
+  | dstartsName::denumsName::saveBase::dreps'::day'::[] -> 
+      (dstartsName,denumsName,saveBase,Some dreps',Some day')
+  | dstartsName::denumsName::saveBase::[] -> 
+      (dstartsName,denumsName,saveBase,None,None)
+  | _ -> failwith "usage: sg dtartsName denumsName saveBase [drepsName initDay]"
   in
   let saveSuffix = saveBase^".mlb" in
   let drepsName  = "dreps-"^saveSuffix in
@@ -55,8 +56,8 @@ let () =
   let normsName  = "norms-"^saveSuffix in
   let skewName   = "skew-"^saveSuffix in
   let jumpName   = "jump-"^saveSuffix in
-  leprintfln "reading dstarts from %s and drnums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
-    dstartsName drnumsName drepsName dmentsName capsName skewName normsName jumpName;
+  leprintfln "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
+    dstartsName denumsName drepsName dmentsName capsName skewName normsName jumpName;
     
   let globalStrategyName = showStrategy globalStrat in
   let fofStrategyName    = showStrategy fofStrat in
@@ -65,7 +66,8 @@ let () =
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
-  let drnums: day_rep_nums = loadData drnumsName in
+  let denums: day_edgenums = loadData denumsName in
+  let drnums: day_rep_nums = array_split denums |> fst in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
   let (initDrepsO,initDayO) = match dreps' with

@@ -108,6 +108,7 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
     with Not_found -> 
       jumpBack "Not_found" "FOFSocCapAttachment"
     end
+  | NoAttachment -> leprintf "*** justJump called with NoAttachment ***"
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely
