@@ -8,9 +8,6 @@ OPTFLAGS=-inline 100 $(PROFILE)
 PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt
 BYDAY=save_days
 STARTS=save_starts
-SIM=dosim
-SIMF=dosimf
-SIMU=dosimu
 SIM1=sim
 CRANKS=docranks
 ARANKS=doaranks
@@ -43,7 +40,7 @@ SU=su
 SF=sf
 OC=overclass
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM) $(SIMF) $(SIMU) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(OC)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(OC)
 
 all: $(ALL:%=%.opt)
 
@@ -127,15 +124,6 @@ $(SAVE_REME).opt: lib.cmxa $(SAVE_REME).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
 $(STARTS).opt: lib.cmxa anygraph.cmxa invert.cmx $(STARTS).ml
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-
-$(SIM).opt:  lib.cmxa invert.cmx simulate.cmx $(SIM).cmx
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-
-$(SIMF).opt: lib.cmxa invert.cmx simulate.cmx $(SIMF).cmx
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-
-$(SIMU).opt: lib.cmxa invert.cmx simulate.cmx $(SIMU).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SIM1).opt: lib.cmxa invert.cmx simulate.cmx $(SIM1).cmx
