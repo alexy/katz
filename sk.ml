@@ -1,6 +1,5 @@
 open Common
 open Getopt
-open Load_graph
 open Soc_run_skew
 
 (* TODO optionize *)
@@ -30,7 +29,7 @@ let () =
     
   let maxDays = restArgs |> List.map int_of_string |> option_of_list in
 
-  let dreps,tLoad = loadAnyGraph drepsName in
+  let dreps,tLoad = loadData drepsName in
   leprintfln "loaded %s, %d" drepsName (H.length dreps);
   
   let dments = 
