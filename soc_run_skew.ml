@@ -27,7 +27,7 @@ let socRun dreps dments opts =
 
     let sgraph  = sgraphInit dreps dments ustats in
 
-    let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
+    let dstarts,(firstDay,lastDay) = Dranges.startsRange dreps dments in
 
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
