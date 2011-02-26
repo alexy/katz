@@ -19,11 +19,9 @@ let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
 
-    let dreps     = usersHash () in
-    let dments    = usersHash () in
-    let dcaps     = usersHash () in
-    let ustats    = usersHash () in
-    let dskews    = usersHash () in
+    let ustats  = usersHash () in
+    let dcaps   = usersHash () in
+    let dskews  = usersHash () in
 
     let sgraph  = sgraphInit dreps dments ustats in
 
