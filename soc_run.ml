@@ -51,15 +51,12 @@ let socRun dreps dments opts =
     let params  = paramSC opts in
     let socInit = opts.socInitSR in
     
-    let dreps   = usersHash () in
-    let dments  = usersHash () in
     let ustats  = usersHash () in
+    let dcaps   = usersHash () in
     
     let sgraph  = sgraphInit dreps dments ustats in
 
-    let dcaps   = usersHash () in
-
-    let (dstarts,(firstDay,lastDay)) = Dranges.startsRange dreps dments in
+    let dstarts,(firstDay,lastDay) = Dranges.startsRange dreps dments in
 
     let lastDay = match opts.maxDaysSR with
       | None -> lastDay
