@@ -5,17 +5,19 @@ open Soc_run_skew
 
 (* TODO optionize *)
 let byMass' = ref true
+let dmentsNameOpt' = ref None
   
 let specs =
 [
+  ('m',"ments",None,Some (fun x -> dmentsNameOpt' := Some x));
   (noshort,"bymass",(set byMass' (not !byMass')), None)
 ]
 
 let () = 
   let args = getOptArgs specs in
   
-  let byMass =
-      !byMass' in
+  let byMass,   dmentsNameOpt =
+      !byMass', !dmentsNameOpt' in
   
   let drepsName,restArgs =
   match args with
@@ -33,7 +35,10 @@ let () =
   let dreps,tLoad = loadAnyGraph drepsName in
   leprintfln "loaded %s, %d" drepsName (H.length dreps);
   
-  let dments = Invert.invert2 dreps in
+  let dments: graph = 
+    match dmentsNameOpt with
+    | Some dmentsName -> loadData dmentsName
+    | _ -> Invert.invert2 dreps in
   let tInvert = Some "-- inverted dreps into dments, timing: " |> getTiming in
   leprintfln "dments has length %d" (H.length dments);
   let norms,dcaps,dskews,tSocRun = 
