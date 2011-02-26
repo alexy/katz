@@ -80,9 +80,12 @@ simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
   
+  
 lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo skew.cmo mathy.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o lib.cma $^
 
+lib.cma: lib
+  
 lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx skew.cmx mathy.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
@@ -128,6 +131,9 @@ $(STARTS).opt: lib.cmxa anygraph.cmxa invert.cmx $(STARTS).ml
 
 $(SIM1).opt: lib.cmxa invert.cmx simulate.cmx $(SIM1).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SIM1).byte: lib.cma invert.cmo simulate.cmo $(SIM1).cmo
+	ocamlfind ocamlc $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(CRANKS).opt: lib.cmxa cranks.cmx $(CRANKS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

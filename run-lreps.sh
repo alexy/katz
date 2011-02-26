@@ -1,2 +1,1 @@
-for i j in fg5cf1cA0 fg5cf1cB0 fg5cf1cA1wk fg5cf1cB1wk fg5cf1cA2wk fg5cf1cB2wk fg5cf1cA3wk fg5cf1cB3wk fg5cf1cA4wk fg5cf1cB4wk \
-fg5cf1cB0 fg5cf1cC0 fg5cf1cB1wk fg5cf1cC1wk fg5cf1cB2wk fg5cf1cC2wk fg5cf1cB3wk fg5cf1cC3wk fg5cf1cB4wk fg5cf1cC4wk; do ../../doversets.opt rbucks-aranks-caps-$i.mlb rbucks-aranks-caps-$j.mlb $i-$j; done 
+for i j in ureps0 urepsC0 ureps1wk urepsC1wk ureps2wk urepsC2wk ureps3wk urepsC3wk ureps4wk urepsC4wk; do ../../doversets.opt rbucks-aranks-caps-$i.mlb rbucks-aranks-caps-$j.mlb $i-$j; done 
