@@ -102,7 +102,7 @@ sgraph.cmxa: soc_run_common.cmx ustats.cmx sgraph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
         
 clean:
-	rm -f *.cmi *.cmo *.cmx *.o *.opt
+	rm -f *.cmi *.cmo *.cmx *.o *.opt *.cma *.cmxa
 
 
 $(SAVE_GRAPH).opt: lib.cmxa anygraph.cmxa $(SAVE_GRAPH).ml

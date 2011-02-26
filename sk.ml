@@ -4,7 +4,7 @@ open Load_graph
 open Soc_run_skew
 
 (* TODO optionize *)
-let byMass'    = ref true
+let byMass' = ref true
   
 let specs =
 [
@@ -33,10 +33,7 @@ let () =
   let dreps,tLoad = loadAnyGraph drepsName in
   leprintfln "loaded %s, %d" drepsName (H.length dreps);
   
-  let dments = 
-    try
-      Invert.invert2 dreps 
-    with Not_found -> failwith "spurious Not_found, should have been handled in invert" in
+  let dments = Invert.invert2 dreps in
   let tInvert = Some "-- inverted dreps into dments, timing: " |> getTiming in
   leprintfln "dments has length %d" (H.length dments);
   let norms,dcaps,dskews,tSocRun = 
