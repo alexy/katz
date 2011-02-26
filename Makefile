@@ -91,15 +91,15 @@ lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.
 
 anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
 	ocamlfind ocamlc -a -o $@ $^
-  
+    
 anygraph.cmxa: json_graph.cmx tokyo_graph.cmx load_graph.cmx
-	ocamlfind ocamlopt -a -o $@ $^
-  
-sgraph.cmxa: soc_run_common.cmx ustats.cmx sgraph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
 sgraph.cma: soc_run_common.cmo ustats.cmo sgraph.cmo
 	ocamlfind ocamlc -a -o $@ $^
+  
+sgraph.cmxa: soc_run_common.cmx ustats.cmx sgraph.cmx
+	ocamlfind ocamlopt -a -o $@ $^
         
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt
@@ -162,10 +162,10 @@ $(LBLENS).opt: lib.cmxa $(LBLENS).ml
 $(RBLENS).opt: lib.cmxa bucket_power.cmx $(RBLENS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).opt: lib.cmxa sgraph.cmxa invert.cmx suds.cmx socday.cmx soc_run_skew.cmx $(SKEW).cmx
+$(SKEW).opt: lib.cmxa anygraph.cmxa sgraph.cmxa invert.cmx suds.cmx socday.cmx soc_run_skew.cmx $(SKEW).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SKEW).byte: lib.cma sgraph.cma  invert.cmo suds.cmo socday.cmo soc_run_skew.cmo $(SKEW).ml
+$(SKEW).byte: lib.cma anygraph.cma sgraph.cma  invert.cmo suds.cmo socday.cmo soc_run_skew.cmo $(SKEW).ml
 	ocamlfind ocamlc $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SGEN).opt: lib.cmxa invert.cmx simulate.cmx sgraph.cmxa suds.cmx  socday.cmx soc_run_gen.cmx $(SGEN).ml
