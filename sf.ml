@@ -9,6 +9,7 @@ let jumpProbUtil' = ref 0.5 (* maximize utility or just jump in general *)
 let jumpProbFOF'  = ref 0.2 (* atach globally after first jump vs FOF-based *)
 let globalStrat'  = ref GlobalUniformAttachment
 let fofStrat'     = ref FOFUniformAttachment
+let denums2'   = ref false
 let saveMents' = ref false
 let mark' = ref ""
 
@@ -28,6 +29,7 @@ let specs =
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);
   (noshort,"fofnone",(set fofStrat'    NoAttachment),            None);
+  ('2',"denums",(set denums2' (not !denums2')), None);
   ('m',"ments",(set saveMents' (not !saveMents')),None);
   ('r',"rand",None,Some (fun x -> randInit (int_of_string x)))
 ]
@@ -35,8 +37,8 @@ let specs =
 let () = 
   let args = getOptArgs specs in
   
-  let byMass,   minDays,   minCap,   saveMents,   mark =
-      !byMass', !minDays', !minCap', !saveMents', !mark' in
+  let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
+      !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
   
   let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat =
       !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat' in
@@ -66,8 +68,12 @@ let () =
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
-  let denums: day_edgenums = loadData denumsName in
-  let drnums: day_rep_nums = array_split denums |> fst in
+  let drnums: day_rep_nums = 
+    if denums2 then 
+      let denums: day_edgenums = loadData denumsName in
+      array_split denums |> fst
+    else 
+      loadData denumsName in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
   let (initDrepsO,initDayO) = match dreps' with
