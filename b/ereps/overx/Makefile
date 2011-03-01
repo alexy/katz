@@ -1,8 +1,6 @@
-include ../../tex.mk
-
 INPUT_PATH=ereps/overx/tex
+LIST1=ereps-overx-dreps.list
+LIST2=ereps-overx-ereps.list
 
-.PHONY: tex
-tex:
-	cat ereps-overx-dreps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
-	cat ereps-overx-ereps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
+include ../../rates2.mk
+  

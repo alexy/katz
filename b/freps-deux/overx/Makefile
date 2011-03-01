@@ -1,8 +1,5 @@
-include ../../tex.mk
-
 INPUT_PATH=freps-deux/overx/tex
+LIST1=freps-deux-overx-dreps.list
+LIST2=freps-deux-overx-freps.list
 
-.PHONY: tex
-tex:
-	cat freps-deux-overx-dreps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
-	cat freps-deux-overx-freps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
+include ../../rates2.mk

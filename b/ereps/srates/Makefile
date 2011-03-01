@@ -1,7 +1,4 @@
-include ../../tex.mk
-
 INPUT_PATH=ereps/srates/tex
+LIST=ereps-srates.list
 
-.PHONY: tex
-tex:
-	cat ereps-srates.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
+include ../../rates1.mk

@@ -1,8 +1,5 @@
-include ../../tex.mk
-
 INPUT_PATH=ureps-deux/overx/tex
+LIST1=ureps-deux-overx-dreps.list
+LIST2=ureps-deux-overx-ureps.list
 
-.PHONY: tex
-tex:
-	cat ureps-deux-overx-dreps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
-	cat ureps-deux-overx-ureps.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
+include ../../rates2.mk

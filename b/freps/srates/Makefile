@@ -1,7 +1,4 @@
-include ../../tex.mk
-
 INPUT_PATH=freps/srates/tex
+LIST=freps-srates.list
 
-.PHONY: tex
-tex:
-	cat freps-srates.list | xargs -n5 $(TEX4RATES) -t -i $(INPUT_PATH)
+include ../../rates1.mk

@@ -189,6 +189,25 @@
 \section{Abstract}
 \label{abstract}
 
+In their 1955 seminal book ``Personal Influence,'' Katz and Lazarsfeld proposed the concept of influentials in social networks, propagating and filtering media streams in their communities.  Watts and Dodds, in their own 2008 paper, popularly known as ``Accidental Influentials,'' had shown that for a diffusion model with cascades, it's not necessary to have influentials to excite a typical network.  A Twitter study co-authored by Watts shows that influentials are not propagating URLs much better than the rest of us.  So are these influentials indeed accidental?
+
+
+We look at a basic form of influence, showing how effective a communicator a person is in the social network.  We use our own reciprocal social capital as a metric keeping track how a person prioritizes his or her replies, paying attention to ``communication balances'' owed and to whom -- e.g., answering questions of somebody with a high social capital more often.  Any such metric induces a ranking among the users, and we build a class system on top of this ranking, resembling a human hierarchy of wealth.
+
+
+In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attach randomly, or proportionally to the global indegrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local social gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their outdegrees for each day.
+
+
+Having built the dynamic hierarchy if influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the simulations.  We look at the staying power in the same class across days within a world, and overlap of the respective buckets across the same type of simulation, seeded with different lengths of reality, or across different kinds altogether.
+We observe that the more intelligent a simulation is, the higher is its staying power, showing that the influencers -- those in the higher classes -- are not random in their own worlds.  The overlap of the simulated influencers with the real-world ones is minimal, but also increases with more intelligent attachment strategies.
+
+
+Our conclusion is that the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the life f their world, but are totally different across various runs of the uniform world.
+
+
+What is less random across the more intelligent simulations is the main discovery of this thesis -- the middle class of social network.  They carry 40\% of all communications, while being roughly 20-25\% of population.  Together with the upper-middle class, these users are the actual influencers in Twitter, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy.  In that sense, we conclude that success is earned.
+
+
 \section{Accidental Influentials, or Not?}
 \label{accidentalinfluentialsornot}
 
@@ -204,16 +223,16 @@ Since we study influence in real social networks, we took this question as a sta
 Let's say that we pick some definition of influence which suits a problem at hand.  The only general requirement for an influence measure we impose is that it establishes an order, or ranking, among all of the people in the study; and that the ``top influentials'' are simply the most highly ranked people in this list.  A consideration of influence then can focus on the very top, or look broadly at the classes of influence, similarly to the rich, the poor, and the middle class in a human economy.
 
 
-Then our question can be made more concrete as follows: if influence is a function of behavior and connectivity, can we generally say that somebody becomes influential to their ``intrinsic'' qualities, such as efficient behavior, or, on the contrary, is their influence mostly a product of luck, such as the propitious time and place of that individual in the network?
+Then our question can be made more concrete as follows: if influence is a function of behavior and connectivity, can we generally say that somebody becomes influential due to their ``intrinsic'' qualities, such as efficient behavior, or, on the contrary, is their influence mostly a product of luck, such as the propitious time and place of that individual in the network?
 
 
 \section{Taught by Randomness}
 \label{taughtbyrandomness}
 
-The way to answer a philosophical question about whether something is random in this world or not is to create parallel worlds with slightly different rules, mix them with the real one at some point, and see what happens.  In this world, there's only one Twitter, albeit its character is constantly changing.  For any given dataset, we have only one order of influentials for any one metric.  However, we can separate the components of behavior which contribute to that influence, and, preserving some part of the network position and some of the behavior, alter the other parts, to see how the influence is affected.  By teasing the starting conditions and the behaviors apart, we can hope to get to the root of our main question.
+The way to answer a philosophical question about whether something is random in this world or not is to create parallel worlds with slightly different rules, mix them with the real one at some point, and see what happens in the same way. or differently.  When creating the new worlds by varying one feature at a time, we can hope to tease apart the features which make a difference in the course of events.  In this world, there's only one Twitter, albeit its character is constantly changing.  For any given dataset, we have only one order of influentials for any one metric.  However, we can separate the components of behavior which contribute to that influence, and, preserving some part of the network position and some of the behavior, alter the other parts, to see how the influence is affected.  By teasing the starting conditions and the behaviors apart, we can hope to get to the root of our main question.
 
 
-We introduce a series of strategies to grow the graph from some point onwards, using a combination of behaviors which we reward in the actual graph and ransom ones.  First of all, we keep the dynamic characteristics of all simulations the same in the following sense:
+We introduce a series of strategies to grow the graph from some point onwards, using a combination of behaviors which we reward in the actual graph for rewards in the random ones.  First of all, we keep the dynamic characteristics of all simulations the same in the following sense:
 
 
 \begin{itemize}
@@ -670,7 +689,7 @@ urepsB & \ref{table:srates-urepsB0}—\ref{table:srates-urepsB3wk} & \ref{table:
 $\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-medians}, lines 1-4 & \ref{table:ureps-deux-overx-dreps-averages}—\ref{table:ureps-deux-overx-dreps-medians}, lines 1-4 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 1-4 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 9-12, 17-20 \\
 \hline
 urepsC & \ref{table:srates-urepsC0}—\ref{table:srates-urepsC3wk} & \ref{table:overx-dreps-urepsC0}—\ref{table:overx-dreps-urepsC3wk} & \ref{table:overx-urepsC0-urepsC1wk}—\ref{table:overx-urepsC3wk-urepsC4wk} & \ref{table:overx-ureps0-urepsC0}—\ref{table:overx-urepsB3wk-urepsC3wk} \\
-$\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-medians}, lines 5-8 & \ref{table:ureps-deux-overx-dreps-averages}—\ref{table:ureps-deux-overx-dreps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-averages}, lines 13-20 \\
+$\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-medians}, lines 5-8 & \ref{table:ureps-deux-overx-dreps-averages}—\ref{table:ureps-deux-overx-dreps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 13-20 \\
 \bottomrule
 \end{tabular}
 \caption{ureps tables and their summaries}
@@ -932,21 +951,30 @@ For every kind of a dynamic graph, real, synthetic, or mixed with social capital
 \subsection{Overlaps}
 \label{overlaps}
 
-For two different simulations, we can compare how similar the buckets are by computing the bucket overlap between respective buckets for respective days, using the same formula as for [ref staying power] --- except here, bucket1 and bucket2 are not buckets in the same positions from consecutive days of the same simulation,  but from same day and position two different simulations.  This is the primary way to see how well the original dreps classes are reproduced by a simulation, and also to check whether the same simulation, shifted by weeks, is consistent with itself.
+For two different simulations, we can compare how similar the buckets are by computing the bucket overlap between respective buckets for respective days, using the same formula as for staying power --- except here, bucket1 and bucket2 are not buckets in the same positions from consecutive days of the same simulation,  but from same day and position in two different simulations.  This is the primary way to see how well the original $dreps$ classes are reproduced by a simulation, and also to check whether the same simulation, shifted by weeks, is consistent with itself.
 
 
-Overlaps with dreps shows how well we reproduce the actual social capital distribution.  Overlap between dreps and ureps is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
-[Tell the key stories of dreps overlap here --- notably, creps and middle class]
+Overlaps with $dreps$ shows how well we reproduce the actual social capital distribution.  Overlap between $dreps$ and $ureps$ is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
 
 
-We also compute overlap between simulations from the same class, but mixed at different weeks --- e.g., for class X, we compute overlaps
+We also compute overlap between simulations from the same class, but mixed at different weeks --- e.g., for class $X$, we compute overlaps
 
 
-X0 and X1wk
-X1wk and X2wk
+$X0$ and $X1wk$
+
+
+$X1wk$ and $X2wk$
+
+
 {\ldots}
-X0 and X2wk
-X1wk and X3wk
+
+
+$X0$ and $X2wk$
+
+
+$X1wk$ and $X3wk$
+
+
 {\ldots}
 These simulations differ only by the starting conditions, --- how much of the original dreps was used to seed them.  The week-shifted overlap will show how much the buckets resulting depend on the starting conditions, as opposed to the simulation-specific ones.
 
@@ -1008,21 +1036,26 @@ So, are the influentials accidental, or not, after all?
 The staying rate within the same simulation shows how stable the winners are within their own classes -- if the churn in buckets is not too great, especially among the higher classes, we have our influentials which keep their positions for long periods of time, as they do in the real world.
 
 
-What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  The uniform simulations, ureps, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, but the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  However, a comparison between different runs of ureps, -- ureps, urepsA, and urepsB groups, -- show that there's alnost no overlap among the celebrities across the groups.  What happens in teh uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance.  Then, they will be likely to stay there, especially if they activity was high.
+What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of $fg2uf05m$, $fg2uf05c$, and $fg2cf05c$ (Table~\ref{table:freps-srates-averages}, lines 17-20, 9-12, 1-4, respectively) -- capital-based global attachment significantly increases stability of the top buckets.
+
+
+The uniform simulations, $ureps$, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  (Table~\ref{table:ereps-srates-averages}, lines 2-6.)  However, a comparison between different runs of $ureps$, -- $ureps$, $urepsA$, and $urepsB$ groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning.  Then, they will be likely to stay there, especially if they activity was high.
 
 
 The capital-based attachments achieve a staying rate which is even higher than the real ones.  The uniform-based FOF and global ones rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
 
 
-The overlap among the simulated winners and the real ones, while minimal, is not random.  It gets closer to 10\% per bucket of the upper middle classes for our most elaborate, utility/FOF-capital/global-capital simulations, fgXcfYc.  It means that in a world with slightly different rules, other people will win -- if everybody attaches according to slightly different rules, those who were in a good starting position (seeded with dreps, show up on the same day), and are active enough (outdegree preserved), will fit better.
+The overlap among the simulated winners and the real ones, while minimal, is not random.  It gets closer to 10\% per bucket of the upper middle classes for our most elaborate, utility/FOF-capital/global-capital simulations, $fgXcfYc$ (Table~\ref{table:freps-overx-dreps-averages}, lines 1-4, 61-64).  It means that in a world with slightly different rules, other people will win -- if everybody attaches according to slightly different rules, those who were in a good starting position (seeded with dreps, show up on the same day), and are active enough (outdegree preserved), will fit better.
 
 
-Among the same type of simulation, generated with different initializations of the random number generator, we get much higher overlap than with any other simulation.  Tables \ref{table:overx-fg5cf1cA0-fg5cf1cB0}---\ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk} show the overlap for three distinct groups of the same kind of simulation, fg5f1c -- fg5f1cA, fg5f1cB, and fg5f1cC.  The corresponding summaries are in lines 13-27 of the tables \ref{tablefreps-deux-overx-freps-averages}---\ref{table:freps-deux-overx-freps-medians}.
+Among the same type of simulation, generated with different initializations of the random number generator, we get much higher overlap than with any other simulation.  Tables \ref{table:overx-fg5cf1cA0-fg5cf1cB0}---\ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk} show the overlap for three distinct groups of the same kind of simulation, $fg5f1c$ -- $fg5f1cA$, $fg5f1cB$, and $fg5f1cC$.  The corresponding summaries are in lines 13-27 of the tables \ref{table:freps-deux-overx-freps-averages}---\ref{table:freps-deux-overx-freps-medians}.
 
 
-Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  However, the top celebrities can be persistent even in a version of a stochastic world, and slight change of rules will lead to a persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to persist, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
+Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  The more intelligent they are, the better they stay on top, and grab a better share of the real-world winners in overlaps.  However, the top celebrities can be persistent even in a version of a stochastic world, and a slight change of rules will lead to a new and distinct persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to continue, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
 
 
+
+\bibliography{/Users/alexyk/Documents/Thesis/bib/bibdesk/khrabrov-mindeconomy-thesis}
 
 \appendixpage
 \appendix
