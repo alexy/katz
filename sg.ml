@@ -6,6 +6,7 @@ let byMass'   = ref true
 let minDays'  = ref 7
 let minCap'   = ref 1e-35
 let mark'     = ref ""
+let saveMents'= ref false
 
 let specs =
 [
@@ -13,14 +14,15 @@ let specs =
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
   (noshort,"nomindays",(set minDays' 0),None);
-  ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n))
+  ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n));
+  ('m',"ments",(set saveMents' (not !saveMents')),None)
 ]
   
 let () = 
   let args = getOptArgs specs in
   
-  let byMass,   minDays,   minCap, mark =
-    !byMass', !minDays', !minCap', !mark' in
+  let byMass,   minDays,   minCap, mark,   saveMents =
+    !byMass', !minDays', !minCap', !mark', !saveMents' in
   
   let (dstartsName,drnumsName,saveBase,dreps',day') =
   match args with
@@ -67,7 +69,9 @@ let () =
   saveData dreps  drepsName;
   let tSavingDReps  =  Some "-- saved dreps timing: "  |> getTiming in
   saveData dments dmentsName;  
-  let tSavingDMents =  Some "-- saved dments timing: " |> getTiming in
+  let msg = if saveMents then begin saveData dments dmentsName; "-- saved dments timing: " end
+    else "-- did not save dments, timing: " in
+  let tSavingDMents =  Some msg |> getTiming in
   saveData dcaps  capsName;
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
