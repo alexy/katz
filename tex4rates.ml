@@ -80,7 +80,7 @@ let _ =
   in
 
     
-  let tableNames = L.map (tableFileName drop) dataFileNames in
+  let tableNames = L.map (tableFileName suffix drop) dataFileNames in
   reportTableNames "raw world" asWhat outDir tableNames;
   
   let floatPrint = pickFloatPrint scientific precise in

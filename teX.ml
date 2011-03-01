@@ -275,10 +275,10 @@ let reportTableNames inName asWhat outDir tableNames =
   leprintf "splitting %s as %s %s, new tables:" inName asWhat (showDir outDir); 
   L.print ~first:"" ~sep:", "~last:"\n" String.print stderr tableNames
 
-let tableFileName optDrop dataFileName =
+let tableFileName suffix optDrop dataFileName =
   dataFileName |> 
   mayDropText optDrop |> dropText ".mlb" |> 
-  sprintf "%s.tex"
+  flip (sprintf "%s.%s") suffix
 
 let dayRange ?(takeDays=None) ?(dropDays=None) table =
   let day = Option.default 1 dropDays in
