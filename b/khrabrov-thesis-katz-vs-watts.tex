@@ -1,0 +1,478 @@
+\documentclass[10pt,oneside]{memoir}
+\usepackage{layouts}[2001/04/29]
+\makeglossary
+\makeindex
+
+\def\mychapterstyle{default}
+\def\mypagestyle{headings}
+\def\revision{}
+
+%%% need more space for ToC page numbers
+\setpnumwidth{2.55em}
+\setrmarg{3.55em}
+
+%%% need more space for ToC section numbers
+\cftsetindents{part}{0em}{3em}
+\cftsetindents{chapter}{0em}{3em}
+\cftsetindents{section}{3em}{3em}
+\cftsetindents{subsection}{4.5em}{3.9em}
+\cftsetindents{subsubsection}{8.4em}{4.8em}
+\cftsetindents{paragraph}{10.7em}{5.7em}
+\cftsetindents{subparagraph}{12.7em}{6.7em}
+
+%%% need more space for LoF numbers
+\cftsetindents{figure}{0em}{3.0em}
+
+%%% and do the same for the LoT
+\cftsetindents{table}{0em}{3.0em}
+
+%%% set up the page layout
+\settrimmedsize{\stockheight}{\stockwidth}{*}	% Use entire page
+\settrims{0pt}{0pt}
+
+\setlrmarginsandblock{1.5in}{1.5in}{*}
+\setulmarginsandblock{1.5in}{1.5in}{*}
+
+\setmarginnotes{17pt}{51pt}{\onelineskip}
+\setheadfoot{\onelineskip}{2\onelineskip}
+\setheaderspaces{*}{2\onelineskip}{*}
+\checkandfixthelayout
+
+\usepackage{fontspec}
+\setromanfont[Mapping=tex-text]{Palatino}
+
+\usepackage{fancyvrb}			% Allow \verbatim et al. in footnotes
+\usepackage{graphicx}			% To include graphics in pdf's (jpg, gif, png, etc)
+\usepackage{booktabs}			% Better tables
+\usepackage{tabulary}			% Support longer table cells
+%\usepackage[utf8]{inputenc}		% For UTF-8 support
+
+% \usepackage[T1]{fontenc}		% Use T1 font encoding for accented characters
+\usepackage{xcolor}				% Allow for color (annotations)
+% diagonal top left cell in tables
+\usepackage{slashbox}
+% for tables in the appendix
+\usepackage[section]{placeins}
+\usepackage{geometry}
+
+
+%\geometry{landscape}			% Activate for rotated page geometry
+
+%\usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
+								% line rather than an indent
+
+
+\def\myauthor{Author}			% In case these were not included in metadata
+\def\mytitle{Title}
+\def\mykeywords{}
+\def\mybibliostyle{plain}
+\def\bibliocommand{}
+
+\VerbatimFootnotes
+\def\myauthor{Alexy Khrabrov}
+\def\baseheaderlevel{2}
+\def\format{complete}
+\def\latexxslt{memoir-thesis-xelatex.xslt}
+\def\mytitle{The Mind Economy of Social Networks: Dynamic Graph Analysis of Communications}
+
+
+%
+%	PDF Stuff
+%
+
+%\ifpdf							% Removed for XeLaTeX compatibility
+%  \pdfoutput=1					% Removed for XeLaTeX compatibility
+  \usepackage[
+  	plainpages=false,
+  	pdfpagelabels,
+  	pdftitle={\mytitle},
+  	pagebackref,
+  	pdfauthor={\myauthor},
+  	pdfkeywords={\mykeywords}
+  	]{hyperref}
+  \usepackage{memhfixc}
+%\fi							% Removed for XeLaTeX compatibility
+
+
+%
+% Title Information
+%
+
+
+\ifx\latexauthor\undefined
+\else
+	\def\myauthor{\latexauthor}
+\fi
+
+\ifx\subtitle\undefined
+\else
+	\addtodef{\mytitle}{}{ \\ \subtitle}
+\fi
+
+\ifx\affiliation\undefined
+\else
+	\addtodef{\myauthor}{}{ \\ \affiliation}
+\fi
+
+\ifx\address\undefined
+\else
+	\addtodef{\myauthor}{}{ \\ \address}
+\fi
+
+\ifx\phone\undefined
+\else
+	\addtodef{\myauthor}{}{ \\ \phone}
+\fi
+
+\ifx\email\undefined
+\else
+	\addtodef{\myauthor}{}{ \\ \email}
+\fi
+
+\ifx\web\undefined
+	\else
+		\addtodef{\myauthor}{}{ \\ \web}
+\fi
+
+\title{\mytitle}
+\author{\myauthor}
+
+\begin{document}
+
+\chapterstyle{\mychapterstyle}
+\pagestyle{\mypagestyle}
+
+%
+%		Front Matter
+%
+
+\frontmatter
+
+
+% Title Page
+
+\maketitle
+\clearpage
+
+% Copyright Page
+\vspace*{\fill}
+
+\setlength{\parindent}{0pt}
+
+\ifx\mycopyright\undefined
+\else
+	\textcopyright{} \mycopyright
+\fi
+
+\revision
+
+\begin{center}
+\framebox{ \parbox[t]{1.5in}{\centering Formatted for \LaTeX  \\ 
+ by MultiMarkdown}}
+\end{center}
+
+\setlength{\parindent}{1em}
+\clearpage
+
+%
+% Main Content
+%
+
+
+% Layout settings
+\setlength{\parindent}{1em}
+
+\mainmatter
+\chapter{Success is Earned}
+\label{successisearned}
+
+\section{Intro}
+\label{intro}
+
+\section{KLWD overview}
+\label{klwdoverview}
+
+\section{Methodology}
+\label{methodology}
+
+We use our reciprocal social capital as a measure of influence.  we define and compute it iteratively for each day.  Once the capital is computed for each user in a time period,  we can rank all users according to their social capital for that period (daily).  The top-ranked users are the most influential in this metric.
+What does it mean to have influence according to the reciprocal social capital metrics?  One gets to the top in this metric by being attentive to one's balance of communication, and by maintaining a high absolute value of dialogues with other partners who also have high social capital, by being an effective communicator and maintaining a good standing in a community of other effective communicators.
+The form of influence we consider directly relates to the communication pathways.  Our influencers carry the bulk of actual conversations, which is shown in the volume metrics discussed in [ref].  Diffusion models, such as WD, define influence as an ability to propagate information through the social graph, specifically ignite cascades which will affect a bulk of the network.  We submit that prior to any such diffusion begins, the channels of communications must be established, such as conversational links, over which the diffusion will be taking place. \\
+Our analogy is a railroad.  The trains of thought must run over the rails of communication links. \\
+Conversations are rarely about diffusion.  Only U out of all N replies contain a URL, while Q are questions (defined simply as strings containing a question mark).
+
+
+\section{Playback by day}
+\label{playbackbyday}
+
+Since we base our study on statistique de conversation (Tarde 1898), a node shows up in our graph when an edge first appears originating or ending in it, I.e. It replies to somebody or someone replies to it.
+First, we enable playback, cycle by cycle (day by day), of any social graph.  For every new day, we record which users appeared first in that cycle, and how many edges each new user has issued.
+We then can replay those edges literally, thus recreating the original graph for one more day.  As we do so, we can compute any iterative function on the nodes (and potentially edges).  Thus we compute our reciprocal social capital as a function of previous day capitals and the fact that an edge was established in this cycle, which is defined in [Ref Formula SC].
+
+
+\subsection{Simulation}
+\label{simulation}
+
+Instead of replaying the edges literally, we can attach them somewhat differently, thus perturbing the original growth process.  We employ several different kinds of such simulations, described below in detail.  We preserve the original number of outgoing edges for each user in each cycle, but do not control for a similar distribution of receiving edges.  Here we rely on the fact that replying is an active decision, while receiving a reply is outside of the receiver's control, generally speaking --- even though we reward for getting owed replies, as showing effective dialogue management.
+
+
+\subsection{Mixed Growth}
+\label{mixedgrowth}
+
+When simulating with any given strategy, we can actually start later in the organic growth process.  For all of our key simulation techniques, we start following the playback from scratch, then after 1 week of the actual graph growth, 2 weeks, etc.  In order to achieve a smooth transition to the simulation, we compute all of the features required by a specific simulation from the cut-off of the original graph at the time of the hand-off.
+The types of simulation strategies we use can be divided into two general classes:
+* Global
+* Local
+These elemental strategies can then be mixed within a single simulation, depending on a probability parameter jump and on whether the data for more complex local computations are actually available at a given day for a given user.  We now go over all of the simulation strategies.
+
+
+\subsection{GlobalUniform}
+\label{globaluniform}
+
+Given a fromUser and a new edge to issue from him, the toUser is simply an equiprobable choice among all existing users.  If the edge is going to a user which only now appears in the graph, we note that user addition with initial social capital actually happens prior to edge addition, so the original toUser will have a chance to receive the edge.
+
+
+\subsection{GlobalMentions}
+\label{globalmentions}
+
+Here, we consider how many mentions all of the eligible toUsers has already received prior to this cycle, and generate an attachment with a probability proportional to the toUser's total number of edges received so far. We call this total edge count byMass, as opposed to a distinct mentioner count byUser (see [ref GlobalMentions Extra]).
+
+
+\subsection{GlobalConstants}
+\label{globalconstants}
+
+This strategy takes a list of values, such as actual social capitals expected in this cycle for dreps, associates them with the same nodes as in dreps, and picks a node in this graph-cycle proportional to that given probability.
+
+
+\subsection{GlobalRealValues}
+\label{globalrealvalues}
+
+This strategy computes a real-valued function, such as the actual social capital obtained in this simulation so far, and picks a node proportional to that.  The difference with GlobalConstants is that, while the latter takes a value from a predefined list, here the value is actually computed --- hence the growth simulation is inseparable from the iterative social capital computation via playback.
+
+
+\subsection{FOF (Friends of Friends)}
+\label{foffriendsoffriends}
+
+These are local strategies, where every fromUser looks at his list of friends and picks a friend of a friend to attach to.  This strategy corresponds to a common scenario where a fromUser is talking to his/her friends and sees a friend mention his/her friend, which causes attachment.  We perform two types of FOF attachment.
+
+
+\subsection{FOFUniform}
+\label{fofuniform}
+
+This is an equiprobable attachment to all FOFs available in this cycle.  I.e., only the number of friends count for each friend.  First, a cumulative mass of such FOF numbers is assembled for each user, and a friend is picked proportionally to his/her number of friends.  Then,  friend of such friend is chosen equiprobably.
+
+
+\subsection{FOFMentions}
+\label{fofmentions}
+
+Here we look at the overall number of mentions each friend  of a friend has accumulated, and pick one proportionally.  For each fromUser, we have an array of friends and the total number of mentions each such friends' friends has generated, from which we pick a friend in proportion to that number.  Then among that friend's friends, we pick one proportionally to his/her overall number of mentions.
+
+
+\subsection{Local Utility}
+\label{localutility}
+
+This strategy goes to the crux of the matter.  We apply exactly the same utility function here which is used to compute the reciprocal social capital once the edges are in place --- or, rather, its stepOut part, which computes possible rewards of replying to someone to whom we owe a balance of communication.  This is a local optimization for the fromUser. 
+
+
+\subsection{GlobalMentions Extra}
+\label{globalmentionsextra}
+
+We also implemented a byUser version where instead of total number of incoming edges, we consider the total number of distinct users who replied to a given user so far (collapsing the incoming edges from the same fromUser), but did not find any interesting distinctions from the byMass version.
+Instead of the probability of attachment linearly proportional to the total number of mentions (or mentioning users), we could also transform to a Gaussian (and fit one first over the general population).
+
+
+\subsection{Local Utility}
+\label{localutility}
+
+We could theoretically optimize over a subset of potential incoming edges, but that would involve summation over fromUsers and be in a new class of strategies, incompatible with other fromUser-based ones above.
+
+
+\section{Actual Simulations}
+\label{actualsimulations}
+
+Using the above strategies as elements, we combine them, possibly with one or more jump probability parameter, into actual simulations, discussed below.  The original dynamic graph, recording all of the replies across the fromUser/day/toUser dimensions, is called dreps.  Its format is defined in [ref dreps format].  All other simulations lead to a similar dynamic reply graph, and we give it a short root name to distinguish the simulation class.  A suffix is then used to show the combination of the parameters selected, and the week from which the simulation continues the actual dreps.  For every root name, we list all of the suffixes computed for that root class, except for the week designator.
+
+
+\subsection{Global Uniform Replies --- ureps}
+\label{globaluniformrepliesureps}
+
+Ureps are generated using the GlobalUniform attachment only.  They comprise a stochastic graph with a set of nodes and outdegree for each cycle.  Each ureps graph leads to a distribution of social capital, ranking, buckets, and bucket-based comparisons, which serve as a baseline for more elaborate simulations.
+Ureps Tables
+List them here.
+
+
+\subsection{Global Metions Repliers --- ereps}
+\label{globalmetionsrepliersereps}
+
+Ereps are generated using the GlobalMentions strategy only.  They are getting us surprisingly far, especially when started not form scratch but mixed after a week or more of dreps.
+
+
+\subsection{Global Constants --- creps}
+\label{globalconstantscreps}
+
+Creps are generated using the GlobalConstants strategy only.  We use the actual social capitals from dreps as expected values.  Despite an artificial character of this setup --- attachment is proportional to a prescribed, not earned, social capital --- the fact is that we obtain a distribution with a similar ranking and bucketing, which leads to a remarkable result of reproducible middle and upper middle classes, as discussed in the [Ref Findings].
+
+
+\subsection{Global Real Values --- rreps}
+\label{globalrealvaluesrreps}
+
+Rreps are generated the GlobalRealValues strategy only, using actual social capital --- but there are two parameters related to the way the capital is computed in comparisons at different time points.  Our Social Capital, defined in [ref Social Capital], uses exponential decay, currently multiplying the previous value by 0.1 each day.  Since every day, new users get onboard with the default capital of 1.0, there's always a wave of newcomers who are interesting only because they are new.  When comparing capitals, we usually downgrade any user with less than 7 days of history to the minimum possible capital in our study, 1e-35 (across 35 days).  However, when used as an interval, determining the proportionality of attachment probability, this makes attachment to a new user highly unlikely.  Thus we also experiment with a higher minimum-capital value, such as 1e-7.  Generally, the parameters for mature social capital comparisons are minDays and minCap, applies as follows:
+--- If user exists for more than minDays, use his actual capital
+--- Otherwise, use minCap
+For rreps, we tried both minCap value of 1e-35 and 1e-7, with minDays = 7 in both cases.  The corresponding graphs are called rreps{0,{1,2,3,4}wk}, vs rreps{0a7,{1,2,3,4}wk7}.
+
+
+\subsection{Local Utility with Global Jump --- lreps}
+\label{localutilitywithglobaljumplreps}
+
+These simulations take a single jump probability parameter, jumpProb, and proceed as follows.  For every new edge, with a probability jumpProb, we jump to a global attachment.  This can be either GlobalUniform, or GlobalMentions, as specified by a global strategy parameter.  When we don't jump, we attach to the user which maximizes our reward for returning owed balance of reciprocal communications.  When there's no balance to maintain, I.e. No incoming edges, we jump to global.
+The lreps simulations are named with a prefix lj, followed by the decimal part of the jumpProb parameter, and the global strategy letter, with u for uniform and m for mentions.
+Lj2m --- jumpProb is 0.2, i.e.\ do local utility attachment with probability 0.8, global by mentions with probability 0.2.
+
+
+\subsection{Local Utility with Local and Global Jumps --- freps}
+\label{localutilitywithlocalandglobaljumpsfreps}
+
+These simulations take two jump probability parameters, jumpProbUtil and jumpProbFOF.  They mean how likely it is that we'll jump away from utility attachment, and then whether we'll do a FOF-based attachment, or jump to a global one.  In addition to these jump probabilities, there are also two strategy parameters --- FOF and Global.
+The freps simulations are named with a prefix f, followed by the global block mark g, then by a decimal part of the jumpProbUtil probability, then the global strategy designator, u or m (for GlobalUniform and GlobalMentions attachments, respectively), then the FOF block mark f, the jumpProbFOF decimal part, and the FOF strategy designator, u, m, or c (for FOFUniform, FOFMentions, or FOFSocCap, respectively), potentially followed by the decimal digits of the minimum capital assumed for those users with less than minDays (7) of maturity and its suffix m.  No m means the standard value, 1e-35, is used; 0m means minDays = 0 and actual capital is always used.
+
+
+E.g., simulation
+fg2uf05c7m1wk  will try to do local utility attachment with probability 0.8 --- unless it jumps away from utility with jumpProbUtil = 0.2, --- then do a FOFSocSap attachment with probability 0.95, or, jumping from it with jumpProbFOF = 0.05, perform a GlobalUniform attachment in the end.
+We conduct the following freps simulations:
+List of freps
+
+
+\pagebreak \section{Simulations List}
+\label{simulationslist}
+
+\subsection{freps}
+\label{freps}
+
+\section{Buckets}
+\label{buckets}
+
+Financial capital leads to a power-law hierarchy.  A small minority controls an overwhelming majority of the financial wealth.  As shown by George Kingsley Zipf, almost any man-made ranking leads to a power-law distribution of set size vs. rank, now known as the Zipf law.  Based on this structure, we study our social capital distribution in terms of buckets of exponentially increasing sizes.
+For simplicity, we choose the bucket sizes as the powers of 10.  Since we have about 5 million users total by the end of the study (35 days), our bucket sizes are
+table
+10 100 1,000 10,000 100,000 1,000,000 10,000,000
+We now discuss our analyses in detail and present the key findings.  More than 2,000 tables are produced from real world data and simulations based on them, supporting our story.  The key K tables are provided in the Appendix, while the full Gazillion  tables are available online as a PDF document (of Bazillion pages).
+
+
+\section{Ranking}
+\label{ranking}
+
+Given a set of capitals for all users in a day, we sort them all in descending order, and group together users with equal capitals.  Each arank ranking position is occupied by such a list, where all users in a list have the same rank and any two different lists correspond to different ranks. \\
+Once the aranks are established, we fill the rank buckets, or simply buckets, starting from the top one, of size 10.  We add users from arank lists (sorted in descending order) until a bucket is filled.  If adding the next arank list will overflow the bucket, we push the list down the exponentially larger buckets until a fitting bucket is found.  When that happens, if any intermediate buckets are skipped, they will remain empty, and filling will continue from the last bucket.
+
+
+\section{Classes}
+\label{classes}
+
+Once the buckets are computed, they establish the classes of influence.  The first three buckets contain the rich --- the top 10 top users, the next 100 celebrities, and the 1,000 elite ones.  The largest bucket contains the poor masses.  The preceding bucket of size 1M is our middle class, as will be shown by various analogous metrics, with the still earlier bucket, of size 100K, corresponding to the upper middle class. Our major finding is that this middle class is carrying the bulk of the conversation and is effectively replicated with our reciprocal social capital measures in rreps, lreps, and freps simulations.
+
+
+\section{Staying Power}
+\label{stayingpower}
+
+For every kind of a dynamic graph, real, synthetic, or mixed with social capital computed daily, we now have daily buckets, reflecting classes of capital ranks.  If our metric is continuous and people's behavior is meaningful with regard to our metrics, we should see the membership of those buckets to rotate at a reasonable rate.  The staying power metric compares the set membership of each bucket and finds the intersection of today's and yesterday's sets:
+
+
+[Formula of Staying Power Ratio]
+
+
+\section{Overlaps}
+\label{overlaps}
+
+For two different simulations, we can compare how similar the buckets are by computing the bucket overlap between respective buckets for respective days, using the same formula as for [ref staying power] --- except here, bucket1 and bucket2 are not buckets in the same positions from consecutive days of the same simulation,  but from same day and position two different simulations.  This is the primary way to see how well the original dreps classes are reproduced by a simulation, and also to check whether the same simulation, shifted by weeks, is consistent with itself.
+
+
+\subsection{with real}
+\label{withreal}
+
+Overlaps with dreps shows how well we reproduce the actual social capital distribution.  Overlap between dreps and ureps is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
+[Tell the key stories of dreps overlap here --- notably, creps and middle class]
+
+
+\subsection{within own class}
+\label{withinownclass}
+
+We also compute overlap between simulations from the same class, but mixed at different weeks --- e.g., for class X, we compute overlaps
+
+
+X0 and X1wk
+X1wk and X2wk
+{\ldots}
+X0 and X2wk
+X1wk and X3wk
+{\ldots}
+These simulations differ only by the starting conditions, --- how much of the original dreps was used to seed them.  The week-shifted overlap will show how much the buckets resulting depend on the starting conditions, as opposed to the simulation-specific ones.
+
+
+\subsection{staying power in intersection}
+\label{stayingpowerinintersection}
+
+When we compute an overlap between two different simulations, we end up with a series of intersections of every two respective buckets.  We can then find out the staying power of those members in the intersections across days.  If there's a stable core persisting throughout such intersections, it would point at a regularity in this process, and vice versa.
+
+
+\section{Volume per bucket}
+\label{volumeperbucket}
+
+A very important characteristic of classes in discourse is how much of it is actually carried by each class.  Hence we compute volume per bucket, in two forms:
+* Absolute: how many replies were issued from this bucket, that day, overall?
+* Relative: what fraction of all replies had originated in this bucket?
+We compute volumes for replies and mentions separately.  This is how we see that our middle class carries the bulk of the communication, in proportion to its own size.  
+
+
+\section{Bucket to bucket}
+\label{buckettobucket}
+
+In addition to the sheer overall volume of communications originating (or ending) in each bucket, we also want to look at bucket-to-bucket communication --- i.e, for each bucket, how much replies from it are ending in each bucket, including itself; or, for mentions, how much of those come from each bucket.
+Having computed that, how do we compactly represent such a matrix?  The difficulty is, for our dynamic graph, we have a set of buckets across a set of days already.  A full bucket-to-bucket table would require some 3D representations or colorings.  In order to stay with the table format, we do the following: for each bucket-to-bucket array from a given bucket A, we sum communications to all the buckets higher than A, to A itself, and to all those lower than A.  We then represent each type of communication --- with higher classes, lower classes, or same ones --- as a separate table, thus yielding three tables per simulation, six when considering replies and mentions.
+
+
+\section{Starrank per bucket}
+\label{starrankperbucket}
+
+Starrank was defined previously for comparing a rank of a node with the average rank of its audience.  Previously [ref drank], the rank was drank, a relativized pagerank.  Here, we base starrank off of social capital directly, and compute it as follows, daily.
+
+
+
+Let $x$ be a node, and $A(x)$ its audience, defined via some neighborhood metric.  Specifically, we look at repliers x talks to and mentioners talking to x.  For every node a in $A$, let $n_a$ be the number of links between $x$ and $a$ of the required nature (e.g., a reply from $x$ to $a$ or a mention of $x$ by $a$).  Then average audience rank is
+
+\[ Ar(x) = \frac{\sum_{a \in A} n_a S(a)}{\sum_{a \in A} n_a} \]
+
+Finally, starrank of $x$ with respect to $A(x)$ is
+
+\[ Sr(x) = \frac{S(x)}{Ar(x)} \]
+In our starrank tables, we show all three components --- per bucket per day --- average social capital, average audience rank, and their ratio, the starrank.
+
+
+\pagebreak \section{Tables}
+\label{tables}
+
+
+\appendixpage
+\pagestyle{empty}
+\newgeometry{hmargin=19mm,includefoot,top=1cm,bottom=15pt}
+\input{in-tables-summary}
+\input{in-tables}
+%
+% Back Matter
+%
+
+\backmatter
+%\appendixpage
+
+%	Bibliography
+\bibliographystyle{\mybibliostyle}
+\bibliocommand
+
+%	Glossary
+\printglossary
+
+
+%	Index
+\printindex
+
+\end{document}

@@ -1,0 +1,28 @@
+\begin{table}
+\centering
+\minipage{0.50\textwidth}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|llccccccc|}
+\toprule
+\# & \emph{simulation} & 10 & 100 & 1K & 10K & 100K & 1M & 10M\\
+\midrule
+\input{lreps/srates/tex/n-lreps-srates-averages}
+\bottomrule
+\end{tabular}}
+\caption{lreps-srates-averages}
+\label{table:lreps-srates-averages}
+\endminipage\hfill%
+%
+\minipage{0.50\textwidth}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|llccccccc|}
+\toprule
+\# & \emph{simulation} & 10 & 100 & 1K & 10K & 100K & 1M & 10M\\
+\midrule
+\input{lreps/srates/tex/n-lreps-srates-medians}
+\bottomrule
+\end{tabular}}
+\caption{lreps-srates-medians}
+\label{table:lreps-srates-medians}
+\endminipage
+\end{table}

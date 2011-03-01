@@ -1,0 +1,28 @@
+\begin{table}
+\centering
+\minipage{0.50\textwidth}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|llccccccc|}
+\toprule
+\# & \emph{simulation} & 10 & 100 & 1K & 10K & 100K & 1M & 10M\\
+\midrule
+\input{ereps/srates/tex/n-ereps-srates-averages}
+\bottomrule
+\end{tabular}}
+\caption{ereps-srates-averages}
+\label{table:ereps-srates-averages}
+\endminipage\hfill%
+%
+\minipage{0.50\textwidth}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|llccccccc|}
+\toprule
+\# & \emph{simulation} & 10 & 100 & 1K & 10K & 100K & 1M & 10M\\
+\midrule
+\input{ereps/srates/tex/n-ereps-srates-medians}
+\bottomrule
+\end{tabular}}
+\caption{ereps-srates-medians}
+\label{table:ereps-srates-medians}
+\endminipage
+\end{table}

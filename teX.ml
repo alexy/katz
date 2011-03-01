@@ -97,8 +97,8 @@ let tableTail oc tex label caption =
     fprintf oc "
 \\bottomrule
 \\end{tabular}}
-\\label{table:%s}
 \\caption{\\small %s}
+\\label{table:%s}
 " label caption
   | _ -> ()
 
