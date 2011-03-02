@@ -1,0 +1,1 @@
+TEX4RATES=../../../tex4rates.opt

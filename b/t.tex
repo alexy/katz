@@ -195,14 +195,16 @@ In their 1955 seminal book ``Personal Influence,'' Katz and Lazarsfeld proposed 
 We look at a basic form of influence, showing how effective a communicator a person is in the social network.  We use our own reciprocal social capital as a metric keeping track how a person prioritizes his or her replies, paying attention to ``communication balances'' owed and to whom -- e.g., answering questions of somebody with a high social capital more often.  Any such metric induces a ranking among the users, and we build a class system on top of this ranking, resembling a human hierarchy of wealth.
 
 
-In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attach randomly, or proportionally to the global indegrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local social gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their outdegrees for each day.
+In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attaching randomly, or proportionally to the global indegrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local capital gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their outdegrees for each day.
 
 
-Having built the dynamic hierarchy if influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the simulations.  We look at the staying power in the same class across days within a world, and overlap of the respective buckets across the same type of simulation, seeded with different lengths of reality, or across different kinds altogether.
+Having built the dynamic hierarchy of influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the worlds.  We look at the staying power in the same class bucket across days within the same world, and overlap of the respective buckets across the same type of simulated world, seeded with different lengths of reality to obtain week-shifted ones, or across different worlds altogether.
+
+
 We observe that the more intelligent a simulation is, the higher is its staying power, showing that the influencers -- those in the higher classes -- are not random in their own worlds.  The overlap of the simulated influencers with the real-world ones is minimal, but also increases with more intelligent attachment strategies.
 
 
-Our conclusion is that the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the life f their world, but are totally different across various runs of the uniform world.
+Our conclusion is that the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the common rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the life f their world, but are totally different across various runs of the uniform world.
 
 
 What is less random across the more intelligent simulations is the main discovery of this thesis -- the middle class of social network.  They carry 40\% of all communications, while being roughly 20-25\% of population.  Together with the upper-middle class, these users are the actual influencers in Twitter, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy.  In that sense, we conclude that success is earned.
@@ -258,6 +260,17 @@ Thus, we only rearrange the sinks of some edges in the simulation, after a certa
 
 In each simulated world, we mix these strategies via jump probabilities, creating a composite behavior, hopefully capturing some subset of the real world.  We see who wins in the simulated world, and compare the winners in each position, or rather class, to the real ones for that day and class.  We seed the simulated world with the real one, hence establishing communication balances, friends-of-friends networks, and social capital distributions in advance, in different proportions.  If starting conditions are key, and simulation strategies are reasonable, we'd see the original winners keep their place in large numbers.  By varying the degree of randomness in the simulated strategies, we can see how quickly the winners dissipate from either the real or the simulated world.  If the simulated world is governed by it own rules which are self-consistent, we'd see the same winners across days, even though different world might have different sets of winners; when, once emerging, the winners will persist for the duration of the world, it will mean their behavior is consistent with the rules of that world.
 
+
+The remainder of this chapter is structured as follows.
+
+
+\begin{itemize}
+
+
+\item Reciprocal Social Capital -- we introduce our definition of social capital and iterative algorithm to compute it on a dynamic communications graph.
+
+\item 
+\end{itemize}
 
 \pagebreak \section{Reciprocal Social Capital}
 \label{reciprocalsocialcapital}
@@ -409,8 +422,8 @@ A typical example is beauty industry. Two owners of Singapore beauty salons come
 Hence one of the differences in the utility of tweeting. Celebrities, those most followed in a typical definition, often get on top by projection from the real world, YouTube, etc. They don't have to tweet for their supper, so to speak. On the contrary, their top fans and other in-Twitter ``phenomenal'' users have to work for it. While spammers achieve a short-term notoriety by mass following, hoping for automatic follow-backs, we do not register those numbers, since we look for real conversations and mentions. Top celebrities like \texttt{@donniewahlberg} and \texttt{@justinbieber} understand this and cultivate their fan base, encouraging top fans once in a while. The timing feature of our metrics smooth over the spikes typical in social networks and reveal true value.
 
 
-\pagebreak \section{Methodology}
-\label{methodology}
+\pagebreak \section{Methodology of Influence Study}
+\label{methodologyofinfluencestudy}
 
 We use our reciprocal conversational social capital as the measure of influence.  We define and compute it iteratively for each day.  Once the capital is computed for each user in a time period,  we can rank all users according to their social capital for that period (daily).  The top-ranked users are the most influential in this metric.
 
@@ -479,8 +492,8 @@ The types of simulation strategies we use can be divided into three general clas
 These elemental strategies can then be mixed within a single simulation, depending on jump probability parameters and on whether the data for more complex local computations are actually available at a given day for a given user.  We now go over all of the simulation strategies.
 
 
-\pagebreak \section{Strategies}
-\label{strategies}
+\pagebreak \section{Simulation Strategies}
+\label{simulationstrategies}
 
 There are three kinds of strategies:
 
@@ -801,6 +814,8 @@ $\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, l
 
 \item fg2uf05m --- local utility with probability 0.8, jump to FOF with 0.2, then mentions-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
 
+\item fg5mf1c --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
+
 \item fg5mf1c0d --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, no capital maturity
 
 \item fg5mf1m --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then mentions-based global attachment with probability 0.1, standard capital maturity
@@ -829,78 +844,7 @@ $\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, l
 \end{itemize}
 
 
-\begin{table}
-\begin{tabular}{|cccc|}
-\toprule
-run & srates & overx-dreps & overx-freps-self  \\
-\midrule
-fg2cf05c & \ref{table:srates-fg2cf05c0}—\ref{table:srates-fg2cf05c3wk} & \ref{table:overx-dreps-fg2cf05c0}—\ref{table:overx-dreps-fg2cf05c3wk} & \ref{table:overx-fg2cf05c0-fg2cf05c1wk}—\ref{table:overx-fg2cf05c3wk-fg2cf05c4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 1-4 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 1-4 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 1-4  \\
-\hline
-fg2uf05c0d & \ref{table:srates-fg2uf05c0d0}—\ref{table:srates-fg2uf05c0d3wk} & \ref{table:overx-dreps-fg2uf05c0d0}—\ref{table:overx-dreps-fg2uf05c0d3wk} & \ref{table:overx-fg2uf05c0d0-fg2uf05c0d1wk}—\ref{table:overx-fg2uf05c0d3wk-fg2uf05c0d4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 5-8 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 5-8 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 5-8  \\
-\hline
-fg2uf05c & \ref{table:srates-fg2uf05c0}—\ref{table:srates-fg2uf05c3wk} & \ref{table:overx-dreps-fg2uf05c0}—\ref{table:overx-dreps-fg2uf05c3wk} & \ref{table:overx-fg2uf05c0-fg2uf05c1wk}—\ref{table:overx-fg2uf05c3wk-fg2uf05c4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 9-12 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 9-12 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 9-12  \\
-\hline
-fg2uf05c7m & \ref{table:srates-fg2uf05c7m0}—\ref{table:srates-fg2uf05c7m3wk} & \ref{table:overx-dreps-fg2uf05c7m0}—\ref{table:overx-dreps-fg2uf05c7m3wk} & \ref{table:overx-fg2uf05c7m0-fg2uf05c7m1wk}—\ref{table:overx-fg2uf05c7m3wk-fg2uf05c7m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 13-16 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg2uf05m & \ref{table:srates-fg2uf05m0}—\ref{table:srates-fg2uf05m3wk} & \ref{table:overx-dreps-fg2uf05m0}—\ref{table:overx-dreps-fg2uf05m3wk} & \ref{table:overx-fg2uf05m0-fg2uf05m1wk}—\ref{table:overx-fg2uf05m3wk-fg2uf05m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 17-20 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 17-20 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg5mf1c0d & \ref{table:srates-fg5mf1c0d0}—\ref{table:srates-fg5mf1c0d3wk} & \ref{table:overx-dreps-fg5mf1c0d0}—\ref{table:overx-dreps-fg5mf1c0d3wk} & \ref{table:overx-fg5mf1c0d0-fg5mf1c0d1wk}—\ref{table:overx-fg5mf1c0d3wk-fg5mf1c0d4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 21-24 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 21-24 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 21-24  \\
-\hline
-fg5mf1m & \ref{table:srates-fg5mf1m0}—\ref{table:srates-fg5mf1m3wk} & \ref{table:overx-dreps-fg5mf1m0}—\ref{table:overx-dreps-fg5mf1m3wk} & \ref{table:overx-fg5mf1m0-fg5mf1m1wk}—\ref{table:overx-fg5mf1m3wk-fg5mf1m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 25-28 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 25-28 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg5mf1u & \ref{table:srates-fg5mf1u0}—\ref{table:srates-fg5mf1u3wk} & \ref{table:overx-dreps-fg5mf1u0}—\ref{table:overx-dreps-fg5mf1u3wk} & \ref{table:overx-fg5mf1u0-fg5mf1u1wk}—\ref{table:overx-fg5mf1u3wk-fg5mf1u4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 29-32 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg5uf1m & \ref{table:srates-fg5uf1m0}—\ref{table:srates-fg5uf1m3wk} & \ref{table:overx-dreps-fg5uf1m0}—\ref{table:overx-dreps-fg5uf1m3wk} & \ref{table:overx-fg5uf1m0-fg5uf1m1wk}—\ref{table:overx-fg5uf1m3wk-fg5uf1m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 33-36 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg5uf1u & \ref{table:srates-fg5uf1u0}—\ref{table:srates-fg5uf1u3wk} & \ref{table:overx-dreps-fg5uf1u0}—\ref{table:overx-dreps-fg5uf1u3wk} & \ref{table:overx-fg5uf1u0-fg5uf1u1wk}—\ref{table:overx-fg5uf1u3wk-fg5uf1u4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 37-40 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg8cf05c & \ref{table:srates-fg8cf05c0}—\ref{table:srates-fg8cf05c3wk} & \ref{table:overx-dreps-fg8cf05c0}—\ref{table:overx-dreps-fg8cf05c3wk} & \ref{table:overx-fg8cf05c0-fg8cf05c1wk}—\ref{table:overx-fg8cf05c3wk-fg8cf05c4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 41-44 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg8uf05c0d & \ref{table:srates-fg8uf05c0d0}—\ref{table:srates-fg8uf05c0d3wk} & \ref{table:overx-dreps-fg8uf05c0d0}—\ref{table:overx-dreps-fg8uf05c0d3wk} & \ref{table:overx-fg8uf05c0d0-fg8uf05c0d1wk}—\ref{table:overx-fg8uf05c0d3wk-fg8uf05c0d4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 45-48 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg8uf05c & \ref{table:srates-fg8uf05c0}—\ref{table:srates-fg8uf05c3wk} & \ref{table:overx-dreps-fg8uf05c0}—\ref{table:overx-dreps-fg8uf05c3wk} & \ref{table:overx-fg8uf05c0-fg8uf05c1wk}—\ref{table:overx-fg8uf05c3wk-fg8uf05c4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 49-52 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg8uf05c7m & \ref{table:srates-fg8uf05c7m0}—\ref{table:srates-fg8uf05c7m3wk} & \ref{table:overx-dreps-fg8uf05c7m0}—\ref{table:overx-dreps-fg8uf05c7m3wk} & \ref{table:overx-fg8uf05c7m0-fg8uf05c7m1wk}—\ref{table:overx-fg8uf05c7m3wk-fg8uf05c7m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 53-56 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-fg8uf05m & \ref{table:srates-fg8uf05m0}—\ref{table:srates-fg8uf05m3wk} & \ref{table:overx-dreps-fg8uf05m0}—\ref{table:overx-dreps-fg8uf05m3wk} & \ref{table:overx-fg8uf05m0-fg8uf05m1wk}—\ref{table:overx-fg8uf05m3wk-fg8uf05m4wk} \\
-$\sum$ & \ref{table:freps-srates-averages}—\ref{table:freps-srates-medians}, lines 57-60 & \ref{table:freps-overx-dreps-averages}—\ref{table:freps-overx-dreps-medians}, line 13-16 & \ref{table:freps-overx-freps-averages}—\ref{table:freps-overx-freps-medians}, lines 13-16  \\
-\hline
-\bottomrule
-\end{tabular}
-\label{table:freps-tables}
-\caption{freps tables and their summaries}
-\begin{tabular}{|ccccc|}
-\toprule
-run & srates & overx-dreps & overx-freps-self & overx-freps-xrun \\
-\midrule
-fg5cf1cA & \ref{table:srates-fg5cf1cA0}—\ref{table:srates-fg5cf1cA3wk} & \ref{table:overx-dreps-fg5cf1cA0}—\ref{table:overx-dreps-fg5cf1cA3wk} & \ref{table:overx-fg5cf1cA0-fg5cf1cA1wk}—\ref{table:overx-fg5cf1cA3wk-fg5cf1cA4wk} & \ref{table:overx-fg5cf1cA0-fg5cf1cC0}—\ref{table:overx-fg5cf1cA3wk-fg5cf1cC3wk}, \ref{table:overx-fg5cf1cA4wk-fg5cf1cB4wk}—\ref{table:overx-fg5cf1cA4wk-fg5cf1cC4wk} \\
-$\sum$ & \ref{table:freps-deux-srates-averages}—\ref{table:freps-deux-srates-medians}, lines 1-4 & \ref{table:freps-deux-overx-dreps-averages}—\ref{table:freps-deux-overx-dreps-medians}, line 1-4 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 1-4 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 13-22 \\
-\hline
-fg5cf1cB & \ref{table:srates-fg5cf1cB0}—\ref{table:srates-fg5cf1cB3wk} & \ref{table:overx-dreps-fg5cf1cB0}—\ref{table:overx-dreps-fg5cf1cB3wk} & \ref{table:overx-fg5cf1cB0-fg5cf1cB1wk}—\ref{table:overx-fg5cf1cB3wk-fg5cf1cB4wk} & \ref{table:overx-fg5cf1cA0-fg5cf1cB0}—\ref{table:overx-fg5cf1cA3wk-fg5cf1cB3wk}, \ref{table:overx-fg5cf1cB0-fg5cf1cC0}—\ref{table:overx-fg5cf1cB3wk-fg5cf1cC3wk},  \ref{table:overx-fg5cf1cA4wk-fg5cf1cB4wk}, \ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk}\\
-$\sum$ & \ref{table:freps-deux-srates-averages}—\ref{table:freps-deux-srates-medians}, lines 5-8 & \ref{table:freps-deux-overx-dreps-averages}—\ref{table:freps-deux-overx-dreps-medians}, line 5-8 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 5-8 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 13-17, 23-27 \\
-\hline
-fg5cf1cC & \ref{table:srates-fg5cf1cC0}—\ref{table:srates-fg5cf1cC3wk} & \ref{table:overx-dreps-fg5cf1cC0}—\ref{table:overx-dreps-fg5cf1cC3wk} & \ref{table:overx-fg5cf1cC0-fg5cf1cC1wk}—\ref{table:overx-fg5cf1cC3wk-fg5cf1cC4wk} & \ref{table:overx-fg5cf1cA0-fg5cf1cC0}—\ref{table:overx-fg5cf1cB3wk-fg5cf1cC3wk}, \ref{table:overx-fg5cf1cA4wk-fg5cf1cC4wk}—\ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk} \\
-$\sum$ & \ref{table:freps-deux-srates-averages}—\ref{table:freps-deux-srates-medians}, lines 9-12 & \ref{table:freps-deux-overx-dreps-averages}—\ref{table:freps-deux-overx-dreps-medians}, line 9-12 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 9-12 & \ref{table:freps-deux-overx-freps-averages}—\ref{table:freps-deux-overx-freps-medians}, lines 18-27 \\
-\hline
-\bottomrule
-\end{tabular}
-\caption{freps-deux tables and their summaries}
-\label{table:freps-deux-tables}
-\end{table}
+\input{in-freps-deux-tables}
 \pagebreak \section{Evaluation}
 \label{evaluation}
 
