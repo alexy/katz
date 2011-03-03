@@ -198,19 +198,56 @@ We look at a basic form of influence, showing how effective a communicator a per
 In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attaching randomly, or proportionally to the global indegrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local capital gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their outdegrees for each day.
 
 
-Having built the dynamic hierarchy of influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the worlds.  We look at the staying power in the same class bucket across days within the same world, and overlap of the respective buckets across the same type of simulated world, seeded with different lengths of reality to obtain week-shifted ones, or across different worlds altogether.
+Having built the dynamic hierarchy of influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the worlds.  We look at the staying power in the same class bucket across days within the same world, and overlap of the respective buckets across different instances of the same world type, seeded with different lengths of reality to obtain week-shifted ones, or across different worlds altogether.
 
 
 We observe that the more intelligent a simulation is, the higher is its staying power, showing that the influencers -- those in the higher classes -- are not random in their own worlds.  The overlap of the simulated influencers with the real-world ones is minimal, but also increases with more intelligent attachment strategies.
 
 
-Our conclusion is that the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the common rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the life f their world, but are totally different across various runs of the uniform world.
+Our conclusions are as follows.
 
 
-What is less random across the more intelligent simulations is the main discovery of this thesis -- the middle class of social network.  They carry 40\% of all communications, while being roughly 20-25\% of population.  Together with the upper-middle class, these users are the actual influencers in Twitter, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy.  In that sense, we conclude that success is earned.
+\begin{itemize}
 
 
-\section{Accidental Influentials, or Not?}
+\item the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the common rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the lifespan of their world, but are totally different across various runs of the uniform world.  At the same time, top buckets of smarter simulations show overlaps higher than 50\%, more than overlap of any other two simulations, showing that their success in under the rules of those worlds is repeatable even when many edges are rearranged, and thus is not random.
+
+
+
+
+\item the overlap with the real winners is small, proving that the winners in this world are lucky to have the set of rules which distinguished them.  If the accepted attachment strategies were slightly different, others would easily replace the current winners in some of the top buckets, and stay there under wide ranges new conditions and their combinations.
+
+
+
+
+\item simply prescribing a desirable distribution of influence from the real world, as we do with {\itshape creps} simulations, leads to a stable and reproducible middle class.  It shows that order leads to a stable economy.
+
+
+
+
+\item the middle and upper middle classes of social networks is less random across the more intelligent simulations, and is the main discovery of this thesis.  They carry 40\% of all communications, while comprising (roughly) only 20-25\% of population.  These users are the actual majority influencers, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy demands.  In that sense, we conclude that success is earned.
+
+
+
+
+\item mixed strategies optimizing communication efficiency can achieve staying power rates higher than real worlds -- which means that the real world is not optimal in thet sense, and reciprocal social capital, with its underlying communication balance, is not the only criteria used by real people, of course.  However, increasing its efficiency, we capture more of the real winners, in several cases near 10\%, proving that it is in fact consistent with the behavior of many successful communicators on Twitter.
+
+
+
+\end{itemize}
+
+Figure~\ref{figure:heatmap-srates-medians-3wk} shows how several groups of simulations, loosely corresponding to either Katz-Lazarsfeld or Watts-Dodds models, relate to reality and each other.  Or social-capital based models, taking into account many feature of influencers as effective communicators, end up close to each other and reality, as compared to many simpler simulations, based on either uniform, or mentions-based attachment, such as the simulations of Watts-Dodds.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-srates-medians-3wk}
+    \caption{Clustering of all simulations seeded by 3 weeks of reality, by staying power.  \emph{Dreps}, the reality, ends up together with our most intelligent capital-based worlds, reflecting Katz-Lazarsfeld better,  while uniform or mentions-based worlds, similar to Watts-Dodds simulations, end up in a more distant cluster.}
+    \label{figure:heatmap-srates-medians-3wk}
+\end{center}
+\end{figure}
+\pagebreak \section{Accidental Influentials, or Not?}
 \label{accidentalinfluentialsornot}
 
 In the 1955 seminal book ``Personal Influence,'' Katz and Lazarsfeld proposed the concept of influentials in social networks, propagating and filtering media streams in their communities.  Although the focus of their study was information diffusion, Katz and Lazarsfeld for the first time fused media studies with dynamics of social groups at local level, and they identified many features of their opinion leaders which position those influentials as important community members by many criteria.
@@ -225,16 +262,16 @@ Since we study influence in real social networks, we took this question as a sta
 Let's say that we pick some definition of influence which suits a problem at hand.  The only general requirement for an influence measure we impose is that it establishes an order, or ranking, among all of the people in the study; and that the ``top influentials'' are simply the most highly ranked people in this list.  A consideration of influence then can focus on the very top, or look broadly at the classes of influence, similarly to the rich, the poor, and the middle class in a human economy.
 
 
-Then our question can be made more concrete as follows: if influence is a function of behavior and connectivity, can we generally say that somebody becomes influential due to their ``intrinsic'' qualities, such as efficient behavior, or, on the contrary, is their influence mostly a product of luck, such as the propitious time and place of that individual in the network?
+Then our question can be made more concrete as follows: if influence is a function of behavior and connectivity, can we generally say that somebody becomes influential due to their ``intrinsic'' qualities, such as efficient behavior, or, on the contrary, is their influence mostly a product of luck, such as the propitious time and place of that individual's appearance in the network?
 
 
 \section{Taught by Randomness}
 \label{taughtbyrandomness}
 
-The way to answer a philosophical question about whether something is random in this world or not is to create parallel worlds with slightly different rules, mix them with the real one at some point, and see what happens in the same way. or differently.  When creating the new worlds by varying one feature at a time, we can hope to tease apart the features which make a difference in the course of events.  In this world, there's only one Twitter, albeit its character is constantly changing.  For any given dataset, we have only one order of influentials for any one metric.  However, we can separate the components of behavior which contribute to that influence, and, preserving some part of the network position and some of the behavior, alter the other parts, to see how the influence is affected.  By teasing the starting conditions and the behaviors apart, we can hope to get to the root of our main question.
+The way to answer a philosophical question about whether something is random in this world or not is to create parallel worlds with slightly different rules, mix them with the real one at some point, and see what happens in the same way --- or differently.  When creating the new worlds by varying one feature at a time, we can hope to tease apart the features which make a difference in the course of events.  In this world, there's only one Twitter, albeit its character is constantly changing.  For any given dataset, we have only one order of influentials for any one metric.  However, we can separate the components of behavior which contribute to that influence, and, preserving some part of the network position and some of the behavior, alter the other parts, to see how the influence is affected.  By teasing the starting conditions and the behaviors apart, we can hope to get to the root of our main question.
 
 
-We introduce a series of strategies to grow the graph from some point onwards, using a combination of behaviors which we reward in the actual graph for rewards in the random ones.  First of all, we keep the dynamic characteristics of all simulations the same in the following sense:
+We introduce a series of strategies to grow the graph from some point onwards, using a combination of behaviors which we reward in the actual graph, as the rewards in the random ones.  First of all, we keep the dynamic characteristics of all simulations the same in the following sense:
 
 
 \begin{itemize}
@@ -422,25 +459,25 @@ A typical example is beauty industry. Two owners of Singapore beauty salons come
 Hence one of the differences in the utility of tweeting. Celebrities, those most followed in a typical definition, often get on top by projection from the real world, YouTube, etc. They don't have to tweet for their supper, so to speak. On the contrary, their top fans and other in-Twitter ``phenomenal'' users have to work for it. While spammers achieve a short-term notoriety by mass following, hoping for automatic follow-backs, we do not register those numbers, since we look for real conversations and mentions. Top celebrities like \texttt{@donniewahlberg} and \texttt{@justinbieber} understand this and cultivate their fan base, encouraging top fans once in a while. The timing feature of our metrics smooth over the spikes typical in social networks and reveal true value.
 
 
-\pagebreak \section{Methodology of Influence Study}
-\label{methodologyofinfluencestudy}
+\pagebreak \section{Methodology of Influence Randomness}
+\label{methodologyofinfluencerandomness}
 
 We use our reciprocal conversational social capital as the measure of influence.  We define and compute it iteratively for each day.  Once the capital is computed for each user in a time period,  we can rank all users according to their social capital for that period (daily).  The top-ranked users are the most influential in this metric.
 
 
-A fundamental feature of our study similar to Katz-Lazarsfeld and different from Watts-Dodds is the reliance on conversations as pathways of influence.  In fact, this tradition in sociology originates at least with Tarde, who called attention to  the \emph{statistique de conversation} (Tarde 1898) as a means of quantitative study of public opinion.
+A fundamental feature of our study similar to Katz-Lazarsfeld and different from Watts-Dodds is the reliance on conversations as pathways of influence.  In fact, this tradition in sociology originates at least with Tarde, who called attention to  the \emph{statistique de conversation} (Tarde 1898) [NB] as a means of quantitative study of public opinion.
 
 
 What does it actually mean to have influence according to the reciprocal social capital metrics?  One gets to the top in this metric by being attentive to one's balance of communication, and by maintaining a high absolute value of dialogues with other partners who also have high social capital, i.e.\ by being an effective communicator and maintaining a good standing in a community of other effective communicators.
 
 
-The form of influence we consider directly relates to the communication pathways.  Our influencers carry the bulk of actual conversations, which is shown in the volume metrics.  Diffusion models, such as Watts-Dodds, define influence as an ability to propagate information through the social graph, specifically ignite cascades which will affect a bulk of the network.  We submit that prior to any such diffusion begins, the channels of communications must be established, such as conversational links, over which the diffusion will be taking place.
+The form of influence we consider directly relates to the communication pathways.  Our influencers carry the bulk of actual conversations, which is shown in the volume metrics.  Diffusion models, such as Watts-Dodds, define influence as an ability to propagate information through the social graph, specifically igniting cascades which will affect a bulk of the network.  We submit that prior to any such diffusion begins, the channels of communications must be established, such as conversational links, over which the diffusion will be taking place.
 
 
-A good analogy is a railroad.  The trains of thought must run over the rails of communication links. Our influencers build the communication links and carry most of the discourse.  They provide the liquidity of conversations; anything else can the happen in that conversational graph, such as URL diffusion or a cascade.   Baicu, Watts et all 2011 [NB ref] look at the shortened URL spreading via follower graph, and show that the effect of the influentials is inconclusive, making them again accidental.  But following others is not a typical human communication activity -- it's more like RSS subscription, a passive scan with no evidence of being read in full.  On the other hand, conversation, in all its forms -- face-to-face, email, Twitter replying -- shares the same dynamics and expectations throughout time.  When we look how much URL diffusion happens along the reply links, a different picture emerges.
+A good analogy is a railroad.  The trains of thought must run over the rails of communication links. Our influencers build the communication links and carry most of the discourse.  They provide the liquidity of conversations; anything else can the happen in that conversational graph, such as URL diffusion or a cascade.   Baicu, Watts et all 2011 [NB ref] look at the shortened URL spreading via follower graph, and show that the effect of the influentials is inconclusive, making them again seem accidental.  But following others is not a typical human communication activity -- it's more like RSS subscription, a passive scan with no evidence of actual reading or other behavior.  On the other hand, conversations, in all its forms -- face-to-face, phone, email, forum threads,  comment discussions, Twitter replies -- share the same dynamics and expectations as any dialogue in any media throughout human history.  When we look how much URL diffusion happens along the reply links, a different picture emerges.
 
 
-Conversations are rarely about diffusion.  Less then 5\% of all replies contain a URL, while near 19\% are questions (defined simply as strings containing a question mark).  These statistics are shown in \ref{table:reply-stats}.
+Conversations are rarely about diffusion.  Less then 5\% of all replies contain a URL, while near 19\% are questions (defined simply as strings containing a question mark).  These statistics are shown in Table~\ref{table:reply-stats}.
 
 
 
@@ -458,19 +495,19 @@ reply questions & 5,565,838 & \space & 19\% \\
 \bottomrule
 \end{tabular}
 \label{table:reply-stats}
-\caption{Twitter URL and question statistics overall and in replies.  URLs spread much less via replies than overall, while questions are more common in replies.}
+\caption{Twitter URL and question statistics overall and in replies for our 2009 dataset.  URLs spread much less via replies than overall, while questions are more common in replies.}
 \end{table}
 Since we base our study on conversations only, a node shows up in our graph when a reply edge first appears originating or ending in it, i.e.\ when it replies to somebody or someone replies to it.  We record the order of those edges exactly.
 Then, we enable playback, cycle by cycle (day by day), of any social graph.  For every new day, we record which users appeared first in that cycle, and how many edges each new user has issued.
 
 
-We replay those edges literally, thus recreating the original graph for one more day at a time, day after day, for all days in the study.  As we do so, we can compute any iterative function on the nodes (and potentially edges).  Thus we compute our reciprocal social capital as a function of the previous day capitals, balances of communications existing so far, and the fact that an edge was established in this cycle.  The balances and the capitals are all adjusted together, progressing in a discreet fashion from one cycle to another.
+We replay those edges literally, thus recreating the original graph for one more day at a time, day after day, for all days in the study.  As we do so, we can compute any iterative function on the nodes (and potentially edges).  Thus we compute our reciprocal social capital as a function of the previous day capitals, balances of communications existing so far, and the fact that an edge was established in this cycle.  The balances and the capitals are all adjusted together, transactionally, progressing in a discretized time from one cycle to another.
 
 
 \pagebreak \section{Principles of Simulation}
 \label{principlesofsimulation}
 
-Instead of replaying the edges literally, we can attach them somewhat differently, thus perturbing the original growth process.  We employ several different kinds of such simulations, described in detail below.  We preserve the original number of outgoing edges for each user in each cycle, but do not control for a similar distribution of receiving edges.  Here we rely on the fact that replying is an active decision, while receiving a reply is outside of the receiver's control, generally speaking --- even though we reward for getting back the replies owed, as proving some kind of effective dialogue management.
+Instead of replaying the edges literally, we can attach them somewhat differently, thus perturbing the original growth process.  We employ several different kinds of such simulations, described in detail below.  We preserve the original number of outgoing edges for each user in each cycle, but do not control for a similar distribution of receiving edges.  Here we rely on the fact that replying is an active decision, while receiving a reply is outside of the receiver's control, generally speaking --- even though we reward users for getting back the replies owed them, as proving capable of prudent dialogue management.
 
 
 When simulating with any given strategy, we can actually start later in the organic growth process.  For all of our key simulation techniques, we start following the playback from scratch, then do it following a period of 1 week of the actual graph growth, then after 2 weeks, etc.  In order to achieve a smooth transition to the simulation, we compute all of the features required by a specific simulation from the end state of the original graph at the time of the hand-off.
@@ -511,31 +548,31 @@ There are three kinds of strategies:
 \subsection{GlobalUniform}
 \label{globaluniform}
 
-Given a fromUser and a new edge to issue from him, the toUser is simply an equiprobable choice among all users existing at the moment.  If the edge ends up going to a user which only now appears in the graph, we note that a user addition with initial social capital actually happens prior to the edge addition, so the original toUser will have a chance to receive the edge as well as those present already.
+Given a {\itshape fromUser} and a new edge to issue from him, the {\itshape toUser} is simply an equiprobable choice among all users existing at the moment.  If the edge ends up going to a user which only now appears in the graph, we note that a user addition with initial social capital actually happens prior to the edge addition, so the original {\itshape toUser} will have a chance to receive the edge as well as those present already.
 
 
 \subsection{GlobalMentions}
 \label{globalmentions}
 
-Here, we consider how many mentions all of the eligible toUsers has already received prior to this cycle, and generate an attachment with a probability proportional to the toUser's total number of edges received so far. We call this total edge count byMass, as opposed to a distinct mentioner count byUser (see [ref GlobalMentions Extra]).
+Here, we consider how many mentions all of the eligible {\itshape toUsers} had already received prior to this cycle, and generate an attachment with a probability proportional to the toUser's total number of edges received so far. We call this total edge count {\itshape byMass}, as opposed to a distinct mentioner count {\itshape byUser} (see \ref {sec:extra-strategy-features}).
 
 
 \subsection{GlobalConstants}
 \label{globalconstants}
 
-This strategy takes a list of values, such as the actual social capital numbers expected in this cycle for the original graph (dreps), and associates them with the same nodes as in dreps, then picks a node in this graph-cycle proportional to that given probability.
+This strategy takes a list of values, such as the actual social capital numbers expected in this cycle for the original graph ({\itshape dreps}), and associates them with the same nodes as in {\itshape dreps}, then picks a node in this graph-cycle proportional to that given probability.
 
 
 \subsection{GlobalRealValues}
 \label{globalrealvalues}
 
-This strategy computes a real-valued function, such as the actual social capital obtained in this simulation so far, and picks a node proportional to that.  The difference with GlobalConstants is that, while the latter takes a value from a predefined list, here the value is actually computed --- hence the growth simulation is inseparable from the iterative social capital computation via playback.  These and subsequent simulations are performed together with social capital computation, while the preceding global strategies could be done by composing the graph first for all days, and then running it through the capital computation separately (as with the real graph, which already exists before we start playing it back and computing its capital distributions).
+This strategy computes a real-valued function, such as the actual social capital obtained in this simulation so far, and picks a node proportional to that.  The difference with {\itshape GlobalConstants} is that, while the latter takes a value from a predefined list, here the value is actually computed --- hence the growth simulation is inseparable from the iterative social capital computation via playback.  These and subsequent simulations are performed together with social capital computation, while the preceding global strategies could be done by composing the graph first for all days, and then running it through the capital computation separately (as with the real graph, which already exists before we start playing it back and computing its capital distributions).
 
 
 \subsection{FOF (Friends of Friends)}
 \label{foffriendsoffriends}
 
-These are local strategies, where every \emph{fromUser} looks at his list of friends and picks a friend of a friend to attach to.  This strategy corresponds to a common scenario where a \emph{fromUser} is talking to his/her friends and sees a friend mention his/her friend, which causes an attachment.  We perform two types of FOF attachment.
+These are local strategies, where every \emph{fromUser} looks at his list of friends and picks a friend of a friend to attach to.  This strategy corresponds to a common scenario where a \emph{fromUser} is talking to his/her friends and sees a friend mention his/her friend, which, in turn, causes an attachment.  We perform two types of FOF attachment.
 
 
 \subsection{FOFUniform}
@@ -547,127 +584,144 @@ This is an equiprobable attachment to all FOFs available in this cycle.  I.e., o
 \subsection{FOFMentions}
 \label{fofmentions}
 
-Here we look at the overall number of mentions each friend of a friend has accumulated, and pick one proportionally.  For each \emph{fromUser}, we have an array of friends and the total number of mentions each such friends' friends has generated, from which we pick a friend in proportion to that number.  Then among that friend's friends, we pick one proportionally to his/her overall number of mentions again.
+Here we look at the overall number of mentions each friend of a friend has accumulated, and pick one proportionally.  For each {\itshape fromUser}, we have an array of friends and the total number of mentions each of such friend's own friends had generated, from which we pick a friend in proportion to the total number of second-level mentions .  Then among that friend's friends, we pick one proportionally to his/her own overall number of direct mentions.
 
 
 \subsection{Local Utility}
 \label{localutility}
 
-This strategy goes to the crux of the matter.  We apply exactly the same utility function here which is used to compute the reciprocal social capital once the edges are in place --- or, rather, its \emph{stepOut} part, which computes the possible rewards for replying to someone to whom we owe a balance of communication.  This is a local optimization for the\emph{fromUser}. 
+This strategy goes to the crux of the matter.  We apply exactly the same utility function here which is used to compute the reciprocal social capital once the edges are in place --- or, rather, its {\itshape stepOut} part, which computes the possible rewards for replying to someone to whom we owe a balance of communication.  This is a local optimization for the {\itshape fromUser}. 
 
 
 \section{Extra Strategy Features}
 \label{extrastrategyfeatures}
 
+\label{sec:extra-strategy-features}
 Extra strategy features can aid in generating more simulations.  Those listed here were considered but did not add much diversity.
 
 
-We also implemented a \emph{byUser} version where instead of total number of incoming edges, we consider the total number of distinct users who replied to a given user so far (collapsing the incoming edges from the same \emph{fromUser}), but did not find any interesting distinctions from the default \emph{byMass} version.
+We also implemented a {\itshape byUser} version where instead of the total number of incoming edges, we consider the total number of distinct users who replied to a given user so far (collapsing the incoming edges from the same \emph{fromUser}), but did not find any interesting distinctions from the default \emph{byMass} version.
 
 
 Instead of the probability of attachment linearly proportional to the total number of mentions (or mentioning users), we could also transform to a Gaussian (and fit one first over the general population).  Various kernel transforms are possible.
 
 
-We could theoretically optimize over a subset of potential incoming edges, but that would involve summation over \emph{fromUser}s and be in a new class of global strategies, incompatible with the local ones above.
+We could theoretically optimize over a subset of potential incoming edges, but that would involve summation over \emph{fromUser}s and be in a new class of global strategies, incompatible with the ones above, which are limited to {\itshape fromUser}.
 
 
 \pagebreak \section{Actual Simulations}
 \label{actualsimulations}
 
-Using the above strategies as basic elements, we combine them, possibly with one or more jump probability parameters, into actual simulations, discussed below.  The original dynamic graph, recording all of the replies across the $fromUser \rightarrow day \rightarrow toUser$ dimensions, is called \emph{dreps}.  Its format is defined in [ref dreps format].  All other simulations lead to a similarly structured dynamic reply graph, and we give it a short root name to distinguish the simulation class.  A suffix is then used to show the combination of the parameters selected, and the week from which the simulation continues the actual $dreps$.  For every root name, we list all of the suffixes computed for that root class, except for the week designator.
+Using the above strategies as basic elements, we combine them, possibly with one or more jump probability parameters, into actual simulations, discussed below.  The original dynamic graph, recording all of the replies across the {\itshape fromUser $\rightarrow$ day $\rightarrow$ \_toUser} dimensions, is called {\itshape dreps}.  All other simulations lead to a similarly structured dynamic reply graph, and we give it a short root name to distinguish the simulation class.  A suffix is then used to show the combination of the parameters selected, and the week from which the simulation continues the actual {\itshape dreps}.  For every root name, we list all of the suffixes computed for that root class, except for the week designator.
 
 
 \subsection{Global Uniform Replies --- ureps}
 \label{globaluniformrepliesureps}
 
-$Ureps$ are generated using the GlobalUniform attachment only.  They comprise a stochastic graph with a given set of nodes and predefined outdegrees for each cycle.  Each $ureps$ graph leads to a distribution of social capital, ranking, buckets, and bucket-based comparisons, which serve as a baseline for more elaborate simulations.
+{\itshape Ureps} are generated using the {\itshape GlobalUniform} attachment only.  They comprise a stochastic graph with a given set of nodes and predefined outdegrees for each cycle.  Each {\itshape ureps} graph leads to a distribution of social capital, ranking, buckets, and bucket-based comparisons, which serve as a baseline for more elaborate simulations.
 
 
 \subsection{Global Metions Repliers --- ereps}
 \label{globalmetionsrepliersereps}
 
-$Ereps$ are generated using the GlobalMentions strategy only.  They are getting us surprisingly far, especially when started not form scratch but mixed after a week or more of $dreps$.
+{\itshape Ereps} are generated using the {\itshape GlobalMentions} strategy only.  They are getting us surprisingly far, especially when started not form scratch but mixed after a week or more of {\itshape dreps}.
 
 
 \subsection{Global Constants --- creps}
 \label{globalconstantscreps}
 
-$Creps$ are generated using the GlobalConstants strategy only.  We use the actual social capitals from $dreps$ as expected values.  Despite an artificial character of this setup --- attachment is proportional to a prescribed, not earned, social capital --- the fact is that we obtain a distribution with a similar ranking and bucketing, which leads to a remarkable result of reproducible middle and upper middle classes, as discussed in Results, \ref{sec:simulation-results}.
+{\itshape Creps} are generated using the {\itshape GlobalConstants} strategy only.  We use the actual social capitals from {\itshape dreps} as expected values.  Despite an artificial character of this setup --- attachment is proportional to a prescribed, not earned, social capital --- the fact is that we obtain a distribution with a similar ranking and bucketing, which leads to a remarkable result of reproducible middle and upper middle classes, as discussed in Results, \ref{sec:simulation-results}.
 
 
 \subsection{Global Real Values --- rreps}
 \label{globalrealvaluesrreps}
 
-$Rreps$ are generated with the GlobalRealValues strategy only, using the actual social capital as computed on the fly --- but there are two parameters related to the way the capital is computed in comparisons at different time points.  Our Social Capital, defined in \ref{chapter:SocialCapital}, uses exponential decay, currently multiplying the previous value by $0.1$ each day.  Every day there's always a wave of newcomers who are interesting only because they are new.  When comparing capitals, we usually downgrade any user with less than $7$ days of history to the minimum possible capital in our study, $1e-35$ (across $35$ days).  However, when used as an interval, determining the proportionality of attachment probability, this makes attachment to a new user highly unlikely.  Thus we also experiment with a higher minimum-capital value, such as $1e-7$.  Generally, the parameters for mature social capital comparisons are $minDays$ and $minCap$, applied as follows:
+{\itshape Rreps} are generated with the {\itshape GlobalRealValues} strategy only, using the actual social capital as computed on the fly --- but there are two parameters related to the way the capital is computed in comparisons at different time points.  Our Social Capital, defined in \ref{chapter:SocialCapital}, uses exponential decay, currently multiplying the previous value by $0.1$ each day.  Every day there's always a wave of newcomers who are interesting only because they are new.  When comparing capitals, we usually downgrade any user with less than $7$ days of history to the minimum possible capital in our study, $1e-35$ (across $35$ days).  However, when used as an interval, determining the proportionality of attachment probability, this makes attachment to a new user highly unlikely.  Thus we also experiment with a higher minimum-capital value, such as $1e-7$.  Generally, the parameters for mature social capital comparisons are {\itshape minDays} and {\itshape minCap}, applied as follows:
 
 
 \begin{itemize}
 
 
-\item If the user exists for more than $minDays$, use his actual capital
+\item If the user exists for more than {\itshape minDays}, use his actual capital
 
-\item Otherwise, use $minCap$
+\item Otherwise, use {\itshape minCap}
 \end{itemize}
 
-For $rreps$, we tried both $minCap$ value of $1e-35$ and $1e-7$, with $minDays = 7$ in both cases.  The corresponding graph groups are called $rreps$ and $rreps7m$.
+For {\itshape rreps}, we tried both {\itshape minCap} value of $1e-35$ and $1e-7$, with {\itshape minDays} = $7$ in both cases.  The corresponding graph groups are called {\itshape rreps} and {\itshape rreps7m}.
 
 
 \subsection{Local Utility with Global Jump --- lreps}
 \label{localutilitywithglobaljumplreps}
 
-These simulations take a single jump probability parameter, $jumpProb$, and proceed as follows.  For every new edge, with a probability $jumpProb$, we jump to a global attachment.  This can be either GlobalUniform, or GlobalMentions, as specified by a global strategy parameter.  When we don't jump, we attach to the user which maximizes our reward for returning owed balance of reciprocal communications.  When there's no balance to maintain, i.e.\ there is no incoming edges, we jump to global.
+These simulations take a single jump probability parameter, {\itshape jumpProb}, and proceed as follows.  For every new edge, with a probability {\itshape jumpProb}, we jump to a global attachment.  This can be either {\itshape GlobalUniform}, or {\itshape GlobalMentions}, as specified by a global strategy parameter.  When we don't jump, we attach to the user which maximizes our reward for returning owed balance of reciprocal communications.  When there's no balance to maintain, i.e.\ there is no incoming edges, we jump to global.
 
 
-The $lreps$ simulations are named with a prefix $lj$, followed by the decimal part of the $jumpProb$ parameter, and the global strategy letter, with $u$ for uniform and $m$ for mentions.
+The {\itshape lreps} simulations are named with a prefix {\itshape lj}, followed by the decimal part of the {\itshape jumpProb} parameter, and the global strategy letter, with $u$ for uniform and $m$ for mentions.
 
 
-Consider $lj2m$ --- here we have $jumpProb = 0.2$, i.e.\ do local utility attachment with probability $0.8$, otherwise global by mentions with the remaining probability $0.2$.
+Consider {\itshape lj2m} --- here we have {\itshape jumpProb} = $0.2$, i.e.\ do local utility attachment with probability $0.8$, otherwise global by mentions with the remaining probability $0.2$.
 
 
 \subsection{Local Utility with Local and Global Jumps --- freps}
 \label{localutilitywithlocalandglobaljumpsfreps}
 
-These simulations take two jump probability parameters, $jumpProbUtil$ and $jumpProbFOF$.  They mean how likely it is that we'll jump away from utility attachment, and then whether we'll do a FOF-based attachment, or jump to a global one.  In addition to these jump probabilities, there are also two strategy parameters --- FOF and Global.
-The $freps$ simulations are named with a prefix $f$, followed by the global block mark $g$, then by a decimal part of the $jumpProbUtil$ probability, then the global strategy designator, $u$ or $m$ (for GlobalUniform and GlobalMentions attachments, respectively), then the FOF block mark $f$, the $jumpProbFOF$ decimal part, and the FOF strategy designator, $u$, $m$, or $c$ (for FOFUniform, FOFMentions, or FOFSocCap, respectively), potentially followed by the decimal digits of the minimum capital assumed for those users with less than $minDays$ (7) of maturity and its suffix $m$.  No $m$ means the standard value, $1e-35$, is used; $0m$ means $minDays = 0$, i.e.\ the actual, unadjusted capital is always used.
+These simulations take two jump probability parameters, {\itshape jumpProbUtil} and {\itshape jumpProbFOF}.  They mean how likely it is that we'll jump away from utility attachment, and then whether we'll do a {\itshape FOF}-based attachment, or jump to a global one.  In addition to these jump probabilities, there are also two strategy parameters --- {\itshape FOF} and {\itshape Global}.
+The {\itshape freps} simulations are named with a prefix $f$, followed by the global block mark $g$, then by a decimal part of the {\itshape jumpProbUtil} probability, then the global strategy designator, $u$, $m$, or $c$ (for {\itshape GlobalUniform}, {\itshape GlobalMentions}, or {\itshape GlobalSocCap} attachments, respectively), then the {\itshape FOF} block mark $f$, the {\itshape jumpProbFOF} decimal part, and the {\itshape FOF} strategy designator, $u$, $m$, or $c$ (for {\itshape FOFUniform}, {\itshape FOFMentions}, or FOFSocCap, respectively), potentially followed by the decimal digits of the minimum capital assumed for those users with less than {\itshape minDays} (7) of maturity and its suffix $m$.  No $m$ means the standard value, $1e-35$, is used; {\itshape 0d} means {\itshape minDays} = $0$, i.e.\ the actual, unadjusted capital is always used.
 
 
 E.g., the simulation
 
 
-$fg2uf05c7m1wk$
+{\itshape fg2uf05c7m1wk}
 
 
-will try to do local utility attachment with probability $0.8$ --- unless it jumps away from utility with $jumpProbUtil = 0.2$, --- then do a FOFSocSap attachment with probability $0.95$, or, jumping from it with $jumpProbFOF = 0.05$, to perform a GlobalUniform attachment in the end.
+will try to do local utility attachment with probability $0.8$ --- unless it jumps away from utility with {\itshape jumpProbUtil} = $0.2$, --- then do a {\itshape FOFSocSap} attachment with probability $0.95$, or, jumping from it with {\itshape jumpProbFOF} = $0.05$, to perform a {\itshape GlobalUniform} attachment in the end.
 
 
 \section{Simulations List}
 \label{simulationslist}
 
-The full list of all simulations and links to their result tables follows.
+The full list of all simulations and links to their result tables follows.  Each simulation is first analyzed for interday bucket stability, {\itshape srates} (\ref{sec:staying-power}), and then overlaps with reality, {\itshape overx-dreps} (\ref{sec:overx-dreps}), its own week-shifted instances, {\itshape overx-self} (\ref{sec:overx-self}), or differently randomized runs, {\itshape overx-xreps} (\ref{sec:overx-xreps}).
+
+
+Each of the {\itshape srates} and {\itshape overx} comparison is done across all buckets and days, producing a $35 \times 7$ (days $\times$ buckets) table.  We show the first 4 instances of each type, the first simulated from scratch, and three others seeded with one, two, and three weeks of {\itshape dreps}, respectively.  Due to the reciprocal social capital break-in period of one week and edge effects of the cutoff, we drop the first week and the last two days of study, showing 27 days of each.
+
+
+These full tables occupy the bulk of the appendix, with several more categories available online.  In order to compress them, we compute two aggregate lines of each table as a 7-bucket-length vector:
+
+
+\begin{itemize}
+
+
+\item averages of all non-$1.0$ cells
+
+\item medians of all non-$1.0$ cells
+\end{itemize}
+
+The $1.0$ cells appear as a result of comparing identical {\itshape dreps}-based buckets in week-seeded, {\itshape dreps}-mixed simulations.  In such cases, the interesting question is what happens next, so we look at the actual simulated cells only.  These summary vectors are assembled as rows of summary tables, {\itshape averages} and {\itshape medians}, for each class of simulations.  When we list all of the relevant full and summary tables below, we cross-link to the full table and summary one for each simulation class, and list the lines in the summary tables containing the rows summarizing the corresponding full tables.  The summary tables have row numbers for quick reference, as well as the respective simulation names as row names.
 
 
 \subsection{ureps list}
 \label{urepslist}
 
-There's only one conceptual kind of ureps simulation.  We run it several times, initializing the random number generator differently every time.  Each group contains the base, suffixed 0, and 4 with increasing number of weeks of seeding with dreps, from 1wk to 4wk:
+There's only one conceptual kind of {\itshape ureps} simulation.  We run it several times, initializing the random number generator differently every time.  Each group contains the base, suffixed $0$, and 4 with increasing number of weeks of seeding with {\itshape dreps}, from {\itshape 1wk} to {\itshape 4wk}:
 
 
 \begin{itemize}
 
 
-\item ureps
-\begin{itemize}
+\item {\itshape ureps}\begin{itemize}
 
 
-\item ureps0
+\item {\itshape ureps0}
 
-\item ureps1wk
+\item {\itshape ureps1wk}
 
-\item ureps2wk
+\item {\itshape ureps2wk}
 
-\item ureps3wk
+\item {\itshape ureps3wk}
 
-\item ureps4wk
+\item {\itshape ureps4wk}
 \end{itemize}
 
 
@@ -679,14 +733,14 @@ From now on, we'll show only the roots of the simulation groups, like this:
 \begin{itemize}
 
 
-\item ureps
+\item {\itshape ureps}
 
-\item urepsB
+\item {\itshape urepsB}
 
-\item urepsC
+\item {\itshape urepsC}
 \end{itemize}
 
-Their original tables are the following.
+Their original tables are cross-linked in Table~\ref{table:ureps-tables}.
 
 
 
@@ -711,22 +765,25 @@ $\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-m
 \pagebreak \subsection{ereps list}
 \label{erepslist}
 
-Here we list the roots of other global groups:
+Here we list the roots of other global-only simulation groups:
 
 
 \begin{itemize}
 
 
-\item ereps --- global mentions-based attachment only
+\item {\itshape ereps} --- global mentions-based attachment only
 
-\item creps --- global prescription-based attachment only
+\item {\itshape creps} --- global prescription-based attachment only
 
-\item rreps --- global capital-based attachment only, standard capital maturity
+\item {\itshape rreps} --- global capital-based attachment only, standard capital maturity
 
-\item rreps7m --- global capital-based attachment only,  1e-7 adjusted capital before 7 days maturity
+\item {\itshape rreps7m} --- global capital-based attachment only,  1e-7 adjusted capital before 7 days maturity
 
-\item rreps0d --- global capital-based attachment only, no capital maturity
+\item {\itshape rreps0d} --- global capital-based attachment only, no capital maturity
 \end{itemize}
+
+Their original tables are cross-linked in Table~\ref{table:ereps-tables}.
+
 
 
 \begin{table}
@@ -757,18 +814,21 @@ $\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, l
 \begin{itemize}
 
 
-\item lj1m --- local utility attachment with probability 0.9, otherwise (0.1) jump to global attachment by mentions
+\item {\itshape lj1m} --- local utility attachment with probability 0.9, otherwise (0.1) jump to global attachment by mentions
 
-\item lj1u --- local utility attachment with probability 0.9, otherwise (0.1) jump to global uniform attachment
+\item {\itshape lj1u} --- local utility attachment with probability 0.9, otherwise (0.1) jump to global uniform attachment
 
-\item lj2m --- local utility attachment with probability 0.8, otherwise (0.2), jump to global attachment by mentions
+\item {\itshape lj2m} --- local utility attachment with probability 0.8, otherwise (0.2), jump to global attachment by mentions
 
-\item lj2u --- local utility attachment with probability 0.8, otherwise (0.2), jump to global uniform attachment
+\item {\itshape lj2u} --- local utility attachment with probability 0.8, otherwise (0.2), jump to global uniform attachment
 
-\item lj5m --- local utility attachment with probability 0.5, otherwise (0.5) jump to global attachment by mentions
+\item {\itshape lj5m} --- local utility attachment with probability 0.5, otherwise (0.5) jump to global attachment by mentions
 
-\item lj5u --- local utility attachment with probability 0.5, otherwise (0.5) jump to global uniform attachment
+\item {\itshape lj5u} --- local utility attachment with probability 0.5, otherwise (0.5) jump to global uniform attachment
 \end{itemize}
+
+Their original tables are cross-linked in Table~\ref{table:lreps-tables}.
+
 
 
 \begin{table}
@@ -804,47 +864,50 @@ $\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, l
 \begin{itemize}
 
 
-\item fg2cf05c --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then capital-based global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg2cf05c} --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then capital-based global attachment with probability 0.05, standard capital maturity
 
-\item fg2uf05c0d --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, no capital maturity
+\item {\itshape fg2uf05c0d} --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, no capital maturity
 
-\item fg2uf05c --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg2uf05c} --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
 
-\item fg2uf05c7m --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, 1e-7 adjusted capital before 7 days maturity
+\item {\itshape fg2uf05c7m} --- local utility with probability 0.8, jump to FOF with 0.2, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, 1e-7 adjusted capital before 7 days maturity
 
-\item fg2uf05m --- local utility with probability 0.8, jump to FOF with 0.2, then mentions-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg2uf05m} --- local utility with probability 0.8, jump to FOF with 0.2, then mentions-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
 
-\item fg5mf1c --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
+\item {\itshape fg5mf1c} --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
 
-\item fg5mf1c0d --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, no capital maturity
+\item {\itshape fg5mf1c0d} --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, no capital maturity
 
-\item fg5mf1m --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then mentions-based global attachment with probability 0.1, standard capital maturity
+\item {\itshape fg5mf1m} --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then mentions-based global attachment with probability 0.1, standard capital maturity
 
-\item fg5mf1u --- local utility with probability 0.5, jump to FOF with 0.5, then uniform FOF with probability 0.9 or jump to global, then mentions-based global attachment with probability 0.1, standard capital maturity
+\item {\itshape fg5mf1u} --- local utility with probability 0.5, jump to FOF with 0.5, then uniform FOF with probability 0.9 or jump to global, then mentions-based global attachment with probability 0.1, standard capital maturity
 
-\item fg5uf1m --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
+\item {\itshape fg5uf1m} --- local utility with probability 0.5, jump to FOF with 0.5, then mentions-based FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
 
-\item fg5uf1u --- local utility with probability 0.5, jump to FOF with 0.5, then uniform FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
+\item {\itshape fg5uf1u} --- local utility with probability 0.5, jump to FOF with 0.5, then uniform FOF with probability 0.9 or jump to global, then uniform global attachment with probability 0.1, standard capital maturity
 
-\item fg8cf05c --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then capital-based global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg8cf05c} --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then capital-based global attachment with probability 0.05, standard capital maturity
 
-\item fg8uf05c0d --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, no capital maturity
+\item {\itshape fg8uf05c0d} --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, no capital maturity
 
-\item fg8uf05c --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg8uf05c} --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
 
-\item fg8uf05c7m --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, 1e-7 adjusted capital before 7 days maturity
+\item {\itshape fg8uf05c7m} --- local utility with probability 0.2, jump to FOF with 0.8, then capital-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, 1e-7 adjusted capital before 7 days maturity
 
-\item fg8uf05m --- local utility with probability 0.2, jump to FOF with 0.8, then mentions-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
+\item {\itshape fg8uf05m} --- local utility with probability 0.2, jump to FOF with 0.8, then mentions-based FOF with probability 0.95 or jump to global, then uniform global attachment with probability 0.05, standard capital maturity
 
-\item fg5cf1cA --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run A
+\item {\itshape fg5cf1cA} --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run A
 
-\item fg5cf1cB --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run B
+\item {\itshape fg5cf1cB} --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run B
 
-\item fg5cf1cC --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run C
+\item {\itshape fg5cf1cC} --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run C
 \end{itemize}
 
+Their original tables are cross-linked in Table~\ref{table:freps-tables}.
 
-\input{in-freps-deux-tables}
+
+
+\input{in-freps-tables}
 \pagebreak \section{Evaluation}
 \label{evaluation}
 
@@ -854,7 +917,7 @@ Once the simulations are generated, with a possible initial mix-in of the real h
 \subsection{Buckets}
 \label{buckets}
 
-Financial capital leads to a power-law hierarchy.  A small minority controls an overwhelming majority of the financial wealth.  As shown by George Kingsley Zipf, almost any man-made ranking leads to a power-law distribution of set size vs. rank, now known as the Zipf law.  Based on this structure, we study our social capital distribution in terms of buckets of exponentially increasing sizes.
+Financial capital leads to a power-law hierarchy.  A small minority controls an overwhelming majority of the financial wealth.  As shown by George Kingsley Zipf [NB], almost any man-made ranking leads to a power-law distribution of set size vs. rank, now known as the Zipf law.  Based on this structure, we study our social capital distribution in terms of buckets of exponentially increasing sizes.
 For simplicity, we choose the bucket sizes as the powers of 10.  Since we have about 5 million users total by the end of the study (35 days), our bucket sizes are shown in table~\ref{table:bucket-sizes}.
 
 \begin{table}
@@ -867,7 +930,7 @@ For simplicity, we choose the bucket sizes as the powers of 10.  Since we have a
 \caption{We use bucket sizes which are powers of 10.  These buckets are populated for our 5 million users.}
 \end{table}
 
-We now discuss our analyses in detail and present the key findings.  More than 2,000 tables are produced from real world data and simulations based on them, supporting our story.  The key 436 tables are provided in the Appendix, while the full set of tables is available online as a PDF document online.
+We now discuss our analyses in detail and present the key findings.  Several thousand tables are produced from real world data and simulations based on them, supporting our story, available online in a corss-linked PDF.  The key 400+ tables are provided in the Appendix A and cross-linked throughout the body of the thesis.
 
 
 \subsection{Ranking}
@@ -886,7 +949,8 @@ Once the buckets are computed, they establish the classes of influence.  The fir
 \subsection{Staying Power}
 \label{stayingpower}
 
-For every kind of a dynamic graph, real, synthetic, or mixed with social capital computed daily, we now have daily buckets, reflecting classes of capital ranks.  If our metric is continuous and people's behavior is meaningful with regard to our metrics, we should see the membership of those buckets to rotate at a reasonable rate.  The staying power metric compares the set membership of each bucket and finds the intersection of today's and yesterday's sets.  Given that the $i$th bucket for $d$th day is $B\_i^d$, the staying power in that bucket from day $d$ to day $d+1$ is
+\label{sec:staying-power}
+For every kind of a dynamic graph, real, synthetic, or mixed with social capital computed daily, we now have daily buckets, reflecting classes of capital ranks.  If our metric is continuous and people's behavior is meaningful with regard to our metrics, we should see the membership of those buckets to rotate at a reasonable low rate.  The staying power metric compares the set membership of each bucket and finds the intersection of today's and yesterday's sets.  Given that the $i$th bucket for $d$th day is $B_i^d$, the staying power in that bucket from day $d$ to day $d+1$ is
 
 \[ \frac{|B_i^{d+1} \cap B_i^d|}{|B_i^d|} \]
 
@@ -898,9 +962,11 @@ For every kind of a dynamic graph, real, synthetic, or mixed with social capital
 For two different simulations, we can compare how similar the buckets are by computing the bucket overlap between respective buckets for respective days, using the same formula as for staying power --- except here, bucket1 and bucket2 are not buckets in the same positions from consecutive days of the same simulation,  but from same day and position in two different simulations.  This is the primary way to see how well the original $dreps$ classes are reproduced by a simulation, and also to check whether the same simulation, shifted by weeks, is consistent with itself.
 
 
-Overlaps with $dreps$ shows how well we reproduce the actual social capital distribution.  Overlap between $dreps$ and $ureps$ is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
+\label{sec:overx-dreps}
+Overlaps with {\itshape dreps} shows how well we reproduce the actual social capital distribution.  Overlap between {\itshape dreps} and {\itshape ureps} is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
 
 
+\label{sec:overx-self}
 We also compute overlap between simulations from the same class, but mixed at different weeks --- e.g., for class $X$, we compute overlaps
 
 
@@ -913,17 +979,11 @@ $X1wk$ and $X2wk$
 {\ldots}
 
 
-$X0$ and $X2wk$
+These simulations differ only by the starting conditions, --- how much of the original {\itshape dreps} was used to seed them.  The week-shifted overlap will show how much the buckets resulting depend on the starting conditions, as opposed to the simulation-specific ones.
 
 
-$X1wk$ and $X3wk$
-
-
-{\ldots}
-These simulations differ only by the starting conditions, --- how much of the original dreps was used to seed them.  The week-shifted overlap will show how much the buckets resulting depend on the starting conditions, as opposed to the simulation-specific ones.
-
-
-Overlaps with different runs of the same class are computed in the same way as overlaps with different simulations -- buckets in the same positions for the same days are intersected, and the the ratio of cardinality of the intersection to the left bucket size is taken.  This overlap shows how stable each simulation class is.
+\label{sec:overx-xreps}
+Overlaps with different runs of the same class are computed in the same way as overlaps with different simulations -- buckets in the same positions for the same days are intersected, and the ratio of cardinality of the intersection to the left bucket size is taken.  This overlap shows how stable each simulation class is.
 
 
 When we compute an overlap between two different simulations, we end up with a series of intersections of every two respective buckets.  We can then find out the staying power of those members in the intersections across days.  If there's a stable core persisting throughout such intersections, it would point at a regularity in this process, and vice versa.
@@ -983,7 +1043,7 @@ The staying rate within the same simulation shows how stable the winners are wit
 What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of $fg2uf05m$, $fg2uf05c$, and $fg2cf05c$ (Table~\ref{table:freps-srates-averages}, lines 17-20, 9-12, 1-4, respectively) -- capital-based global attachment significantly increases stability of the top buckets.
 
 
-The uniform simulations, $ureps$, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  (Table~\ref{table:ereps-srates-averages}, lines 2-6.)  However, a comparison between different runs of $ureps$, -- $ureps$, $urepsA$, and $urepsB$ groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning.  Then, they will be likely to stay there, especially if they activity was high.
+The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  (Table~\ref{table:ereps-srates-averages}, lines 2-6.)  However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning.  Then, they will be likely to stay there, especially if they activity was high.
 
 
 The capital-based attachments achieve a staying rate which is even higher than the real ones.  The uniform-based FOF and global ones rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
@@ -998,6 +1058,11 @@ Among the same type of simulation, generated with different initializations of t
 Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  The more intelligent they are, the better they stay on top, and grab a better share of the real-world winners in overlaps.  However, the top celebrities can be persistent even in a version of a stochastic world, and a slight change of rules will lead to a new and distinct persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to continue, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
 
 
+\section{Bibliography}
+\label{bibliography}
+
+
+\bibliographystyle{IEEEtran}
 
 \bibliography{/Users/alexyk/Documents/Thesis/bib/bibdesk/khrabrov-mindeconomy-thesis}
 
