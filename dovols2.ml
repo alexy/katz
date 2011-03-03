@@ -24,7 +24,8 @@ let () =
     | _ -> failwith "usage: volume denumsName bucksName"      
   in  
 
-  let volsName = "vols4-"^bucksName in
+  let baseName = cutPath bucksName in
+  let volsName = "vols4-"^baseName in
   leprintfln "reading denums from %s, bucks from %s, saving volumes in %s" 
     denumsName bucksName volsName;
 

@@ -20,7 +20,8 @@ let () =
     | _ -> failwith "usage: dorates bucksName"
   in
   
-  let saveName = sprintf "%s-%s" prefix bucksName in
+  let baseName = cutPath bucksName in
+  let saveName = sprintf "%s-%s" prefix baseName in
   leprintfln "reading bucks from %s, saving rates in %s" 
   bucksName saveName;
 

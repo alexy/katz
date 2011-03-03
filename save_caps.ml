@@ -23,14 +23,15 @@ let () =
     | dcapsName::restArgs -> dcapsName
     | _ -> failwith "usage: save_caps [-d mindays] [-c mincap] dcapsName"    
   in        
-    (* j is for just caps *)
-    let capsName = sprintf "j%s%s" mark dcapsName in
-    let sort = true in
+  (* j is for just caps *)
+  let baseName = cutPath dcapsName in
+  let capsName = sprintf "j%s%s" mark baseName in
+  let sort = true in
+  
+  leprintfln "reading dcaps from %s, saving caps in %s" 
+    dcapsName capsName;
     
-    leprintfln "reading dcaps from %s, saving caps in %s" 
-      dcapsName capsName;
-      
-    let dcaps: user_day_reals = loadData dcapsName in
-    let caps:  day_caps = Dcaps.mature_day_caps minDays minCap ~sort dcaps in
-    
-    saveData caps capsName
+  let dcaps: user_day_reals = loadData dcapsName in
+  let caps:  day_caps = Dcaps.mature_day_caps minDays minCap ~sort dcaps in
+  
+  saveData caps capsName

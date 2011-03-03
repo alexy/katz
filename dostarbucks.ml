@@ -20,7 +20,8 @@ let () =
     | _ -> failwith "usage: dostarbucks bucksName starsName"      
   in  
 
-  let sbucksName = "sbucks-"^mark^starsName in
+  let baseName = cutPath starsName in
+  let sbucksName = "sbucks-"^mark^baseName in
   leprintfln "reading bucks from %s, starrank from %s, storing starbucks in %s" bucksName starsName sbucksName;
 
   let bucks: day_buckets = loadData bucksName in

@@ -12,3 +12,6 @@ $(ALL):
 
 show:
 	@echo $(ALL)
+
+cp:
+	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis-katz-watts-chapter-appendix.pdf

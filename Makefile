@@ -188,7 +188,7 @@ $(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
 $(TEXR).opt: lib.cmxa topsets.cmx teX.cmx $(TEXR).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
-$(B2B).opt: lib.cmxa bucket_power.cmx $(B2B).ml
+$(B2B).opt: lib.cmxa invert.cmx bucket_power.cmx $(B2B).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
 $(OPT).opt: $(OPT).cmx

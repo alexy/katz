@@ -8,7 +8,8 @@ let () =
     | _ -> failwith "usage: dobucks jcapsName"      
   in  
 
-  let bucksName = "lb-"^jcapsName in
+  let baseName = cutPath jcapsName in
+  let bucksName = "lb-"^baseName in
   leprintfln "reading jcaps from %s, saving buckets in %s" 
     jcapsName bucksName;
 

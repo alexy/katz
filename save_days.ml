@@ -24,8 +24,9 @@ let () =
   | _ -> failwith "usage: save_days drepsName"
   in
    
-  let edgeName = "byday-"^drepsName in
-  let numsName = "denums-"^drepsName in
+  let baseName = cutPath drepsName in
+  let edgeName = "byday-"^baseName in
+  let numsName = "denums-"^baseName in
   leprintfln "reading graph from %s, saving byday edges in %s and edge nums in %s" drepsName edgeName numsName;
 
   let dreps = loadData drepsName in

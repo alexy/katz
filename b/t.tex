@@ -189,13 +189,13 @@
 \section{Abstract}
 \label{abstract}
 
-In their 1955 seminal book ``Personal Influence,'' Katz and Lazarsfeld proposed the concept of influentials in social networks, propagating and filtering media streams in their communities.  Watts and Dodds, in their own 2008 paper, popularly known as ``Accidental Influentials,'' had shown that for a diffusion model with cascades, it's not necessary to have influentials to excite a typical network.  A Twitter study co-authored by Watts shows that influentials are not propagating URLs much better than the rest of us.  So are these influentials indeed accidental?
+In their 1955 seminal book ``Personal Influence,'' Katz and Lazarsfeld \cite{katz1955influence} proposed the concept of influentials in social networks, propagating and filtering media streams in their communities.  Watts and Dodds, in their own 2008 paper, popularly known as ``Accidental Influentials,'' had shown that for a diffusion model with cascades, it's not necessary to have influentials to excite a typical network.  A Twitter study co-authored by Watts shows that influentials are not propagating URLs much better than the rest of us.  So are these influentials indeed accidental?
 
 
 We look at a basic form of influence, showing how effective a communicator a person is in the social network.  We use our own reciprocal social capital as a metric keeping track how a person prioritizes his or her replies, paying attention to ``communication balances'' owed and to whom -- e.g., answering questions of somebody with a high social capital more often.  Any such metric induces a ranking among the users, and we build a class system on top of this ranking, resembling a human hierarchy of wealth.
 
 
-In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attaching randomly, or proportionally to the global indegrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local capital gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their outdegrees for each day.
+In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attaching randomly, or proportionally to the global in-degrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local capital gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their out-degrees for each day.
 
 
 Having built the dynamic hierarchy of influencers, changing daily within its own world, we compare the winners in the corresponding positions with the real ones, and across the worlds.  We look at the staying power in the same class bucket across days within the same world, and overlap of the respective buckets across different instances of the same world type, seeded with different lengths of reality to obtain week-shifted ones, or across different worlds altogether.
@@ -210,12 +210,12 @@ Our conclusions are as follows.
 \begin{itemize}
 
 
-\item the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the common rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the lifespan of their world, but are totally different across various runs of the uniform world.  At the same time, top buckets of smarter simulations show overlaps higher than 50\%, more than overlap of any other two simulations, showing that their success in under the rules of those worlds is repeatable even when many edges are rearranged, and thus is not random.
+\item the influentials are not random in their own worlds -- they correspond best to what the attachment strategies are the common rules in these worlds, but they are also those nodes who were well-positioned in their network to take advantage of these rules.  For instance, a global uniform attachment leads to the same stable celebrity bucket (the top one), even though the rest are churning through.  These celebrities stay very stable during the lifespan of their world, but are totally different across various runs of the uniform world.  At the same time, top buckets of smarter simulations show overlaps higher than 50\%, more than overlap of any other two simulations, showing that their success under the rules of those worlds is repeatable even when many edges are rearranged, and thus is not random.
 
 
 
 
-\item the overlap with the real winners is small, proving that the winners in this world are lucky to have the set of rules which distinguished them.  If the accepted attachment strategies were slightly different, others would easily replace the current winners in some of the top buckets, and stay there under wide ranges new conditions and their combinations.
+\item the overlap with the real winners is small, proving that the winners in this world are lucky to have the set of rules which distinguished them.  If the accepted attachment strategies were slightly different, others would easily replace the current winners in some of the top buckets, and stay there under wide ranges of new conditions and their combinations.  In that sense, if we agree that our world with its own communication rules is itself random in a series of many similar ones where such rules can be slightly altered, the influencers might indeed be accidental. 
 
 
 
@@ -230,7 +230,7 @@ Our conclusions are as follows.
 
 
 
-\item mixed strategies optimizing communication efficiency can achieve staying power rates higher than real worlds -- which means that the real world is not optimal in thet sense, and reciprocal social capital, with its underlying communication balance, is not the only criteria used by real people, of course.  However, increasing its efficiency, we capture more of the real winners, in several cases near 10\%, proving that it is in fact consistent with the behavior of many successful communicators on Twitter.
+\item mixed strategies optimizing communication efficiency can achieve staying power rates higher than in real world -- which means that the real world is not optimal in a sense, and reciprocal social capital, with its underlying communication balance, is not the only criteria used by real people, of course.  However, increasing capital efficiency, we capture more of the real winners, in several cases near 10\%, proving that it is in fact consistent with the behavior of many successful communicators on Twitter.
 
 
 
@@ -243,7 +243,7 @@ Figure~\ref{figure:heatmap-srates-medians-3wk} shows how several groups of simul
 \begin{figure}
 \begin{center}
     \includegraphics{figures/heatmap-srates-medians-3wk}
-    \caption{Clustering of all simulations seeded by 3 weeks of reality, by staying power.  \emph{Dreps}, the reality, ends up together with our most intelligent capital-based worlds, reflecting Katz-Lazarsfeld better,  while uniform or mentions-based worlds, similar to Watts-Dodds simulations, end up in a more distant cluster.}
+    \caption{Clustering of all simulations seeded by 3 weeks of reality, by staying power.  \emph{Dreps}, the reality, ends up together with our most intelligent capital-based worlds (red), reflecting Katz-Lazarsfeld better,  while uniform or mentions-based worlds (blue), similar to Watts-Dodds simulations, end up in a more distant cluster.}
     \label{figure:heatmap-srates-medians-3wk}
 \end{center}
 \end{figure}
@@ -304,9 +304,15 @@ The remainder of this chapter is structured as follows.
 \begin{itemize}
 
 
-\item Reciprocal Social Capital -- we introduce our definition of social capital and iterative algorithm to compute it on a dynamic communications graph.
+\item Reciprocal Social Capital -- we introduce our definition of social capital and the iterative algorithm to compute it on a dynamic communications graph.
 
-\item 
+\item Methodology of Influence Studies -- the fundamentals of our parallel world simulations and extracting regularity through overlaps with reality
+
+\item Simulation Strategies -- how the parallel worlds are constructed
+
+\item Actual Simulations -- the simulations we ran, composed of the strategies above
+
+\item Simulation Tables -- a cross-linked hierarchy of 3 levels of tables, referring to and summarizing 457 primary and 30 summary tables with key results.
 \end{itemize}
 
 \pagebreak \section{Reciprocal Social Capital}
@@ -459,13 +465,13 @@ A typical example is beauty industry. Two owners of Singapore beauty salons come
 Hence one of the differences in the utility of tweeting. Celebrities, those most followed in a typical definition, often get on top by projection from the real world, YouTube, etc. They don't have to tweet for their supper, so to speak. On the contrary, their top fans and other in-Twitter ``phenomenal'' users have to work for it. While spammers achieve a short-term notoriety by mass following, hoping for automatic follow-backs, we do not register those numbers, since we look for real conversations and mentions. Top celebrities like \texttt{@donniewahlberg} and \texttt{@justinbieber} understand this and cultivate their fan base, encouraging top fans once in a while. The timing feature of our metrics smooth over the spikes typical in social networks and reveal true value.
 
 
-\pagebreak \section{Methodology of Influence Randomness}
-\label{methodologyofinfluencerandomness}
+\pagebreak \section{Methodology of Influence Studies}
+\label{methodologyofinfluencestudies}
 
 We use our reciprocal conversational social capital as the measure of influence.  We define and compute it iteratively for each day.  Once the capital is computed for each user in a time period,  we can rank all users according to their social capital for that period (daily).  The top-ranked users are the most influential in this metric.
 
 
-A fundamental feature of our study similar to Katz-Lazarsfeld and different from Watts-Dodds is the reliance on conversations as pathways of influence.  In fact, this tradition in sociology originates at least with Tarde, who called attention to  the \emph{statistique de conversation} (Tarde 1898) [NB] as a means of quantitative study of public opinion.
+A fundamental feature of our study similar to Katz-Lazarsfeld and different from Watts-Dodds is the reliance on conversations as pathways of influence.  In fact, this tradition in sociology originates at least with Tarde, who called attention to  the \emph{statistique de conversation} (Tarde 1898) \cite{tarde1969communication} as a means of quantitative study of public opinion.
 
 
 What does it actually mean to have influence according to the reciprocal social capital metrics?  One gets to the top in this metric by being attentive to one's balance of communication, and by maintaining a high absolute value of dialogues with other partners who also have high social capital, i.e.\ by being an effective communicator and maintaining a good standing in a community of other effective communicators.
@@ -474,7 +480,7 @@ What does it actually mean to have influence according to the reciprocal social 
 The form of influence we consider directly relates to the communication pathways.  Our influencers carry the bulk of actual conversations, which is shown in the volume metrics.  Diffusion models, such as Watts-Dodds, define influence as an ability to propagate information through the social graph, specifically igniting cascades which will affect a bulk of the network.  We submit that prior to any such diffusion begins, the channels of communications must be established, such as conversational links, over which the diffusion will be taking place.
 
 
-A good analogy is a railroad.  The trains of thought must run over the rails of communication links. Our influencers build the communication links and carry most of the discourse.  They provide the liquidity of conversations; anything else can the happen in that conversational graph, such as URL diffusion or a cascade.   Baicu, Watts et all 2011 [NB ref] look at the shortened URL spreading via follower graph, and show that the effect of the influentials is inconclusive, making them again seem accidental.  But following others is not a typical human communication activity -- it's more like RSS subscription, a passive scan with no evidence of actual reading or other behavior.  On the other hand, conversations, in all its forms -- face-to-face, phone, email, forum threads,  comment discussions, Twitter replies -- share the same dynamics and expectations as any dialogue in any media throughout human history.  When we look how much URL diffusion happens along the reply links, a different picture emerges.
+A good analogy is a railroad.  The trains of thought must run over the rails of communication links. Our influencers build the communication links and carry most of the discourse.  They provide the liquidity of conversations; anything else can the happen in that conversational graph, such as URL diffusion or a cascade.   Bakshy, Watts et al. \cite{bakshy2011everyone} look at the shortened URL spreading via follower graph, and show that the effect of the influentials is inconclusive, making them again seem accidental.  But following others is not a typical human communication activity -- it's more like RSS subscription, a passive scan with no evidence of actual reading or other behavior.  On the other hand, conversations, in all its forms -- face-to-face, phone, email, forum threads,  comment discussions, Twitter replies -- share the same dynamics and expectations as any dialogue in any media throughout human history.  When we look how much URL diffusion happens along the reply links, a different picture emerges.
 
 
 Conversations are rarely about diffusion.  Less then 5\% of all replies contain a URL, while near 19\% are questions (defined simply as strings containing a question mark).  These statistics are shown in Table~\ref{table:reply-stats}.
@@ -504,7 +510,23 @@ Then, we enable playback, cycle by cycle (day by day), of any social graph.  For
 We replay those edges literally, thus recreating the original graph for one more day at a time, day after day, for all days in the study.  As we do so, we can compute any iterative function on the nodes (and potentially edges).  Thus we compute our reciprocal social capital as a function of the previous day capitals, balances of communications existing so far, and the fact that an edge was established in this cycle.  The balances and the capitals are all adjusted together, transactionally, progressing in a discretized time from one cycle to another.
 
 
-\pagebreak \section{Principles of Simulation}
+\pagebreak \section{Simulation Strategies}
+\label{simulationstrategies}
+
+There are three kinds of strategies:
+
+
+\begin{itemize}
+
+
+\item Global
+
+\item Friends-of-Friends, or FOF
+
+\item Local Utility
+\end{itemize}
+
+\subsection{Principles of Simulation}
 \label{principlesofsimulation}
 
 Instead of replaying the edges literally, we can attach them somewhat differently, thus perturbing the original growth process.  We employ several different kinds of such simulations, described in detail below.  We preserve the original number of outgoing edges for each user in each cycle, but do not control for a similar distribution of receiving edges.  Here we rely on the fact that replying is an active decision, while receiving a reply is outside of the receiver's control, generally speaking --- even though we reward users for getting back the replies owed them, as proving capable of prudent dialogue management.
@@ -529,23 +551,7 @@ The types of simulation strategies we use can be divided into three general clas
 These elemental strategies can then be mixed within a single simulation, depending on jump probability parameters and on whether the data for more complex local computations are actually available at a given day for a given user.  We now go over all of the simulation strategies.
 
 
-\pagebreak \section{Simulation Strategies}
-\label{simulationstrategies}
-
-There are three kinds of strategies:
-
-
-\begin{itemize}
-
-
-\item Global
-
-\item Friends-of-Friends, or FOF
-
-\item Local Utility
-\end{itemize}
-
-\subsection{GlobalUniform}
+\pagebreak \subsection{GlobalUniform}
 \label{globaluniform}
 
 Given a {\itshape fromUser} and a new edge to issue from him, the {\itshape toUser} is simply an equiprobable choice among all users existing at the moment.  If the edge ends up going to a user which only now appears in the graph, we note that a user addition with initial social capital actually happens prior to the edge addition, so the original {\itshape toUser} will have a chance to receive the edge as well as those present already.
@@ -593,7 +599,7 @@ Here we look at the overall number of mentions each friend of a friend has accum
 This strategy goes to the crux of the matter.  We apply exactly the same utility function here which is used to compute the reciprocal social capital once the edges are in place --- or, rather, its {\itshape stepOut} part, which computes the possible rewards for replying to someone to whom we owe a balance of communication.  This is a local optimization for the {\itshape fromUser}. 
 
 
-\section{Extra Strategy Features}
+\subsection{Extra Strategy Features}
 \label{extrastrategyfeatures}
 
 \label{sec:extra-strategy-features}
@@ -678,8 +684,8 @@ E.g., the simulation
 will try to do local utility attachment with probability $0.8$ --- unless it jumps away from utility with {\itshape jumpProbUtil} = $0.2$, --- then do a {\itshape FOFSocSap} attachment with probability $0.95$, or, jumping from it with {\itshape jumpProbFOF} = $0.05$, to perform a {\itshape GlobalUniform} attachment in the end.
 
 
-\section{Simulations List}
-\label{simulationslist}
+\section{Simulation Tables}
+\label{simulationtables}
 
 The full list of all simulations and links to their result tables follows.  Each simulation is first analyzed for interday bucket stability, {\itshape srates} (\ref{sec:staying-power}), and then overlaps with reality, {\itshape overx-dreps} (\ref{sec:overx-dreps}), its own week-shifted instances, {\itshape overx-self} (\ref{sec:overx-self}), or differently randomized runs, {\itshape overx-xreps} (\ref{sec:overx-xreps}).
 
@@ -917,7 +923,7 @@ Once the simulations are generated, with a possible initial mix-in of the real h
 \subsection{Buckets}
 \label{buckets}
 
-Financial capital leads to a power-law hierarchy.  A small minority controls an overwhelming majority of the financial wealth.  As shown by George Kingsley Zipf [NB], almost any man-made ranking leads to a power-law distribution of set size vs. rank, now known as the Zipf law.  Based on this structure, we study our social capital distribution in terms of buckets of exponentially increasing sizes.
+Financial capital leads to a power-law hierarchy.  A small minority controls an overwhelming majority of the financial wealth.  As shown by George Kingsley Zipf \cite{zipf1949humanbehavior}, almost any man-made ranking leads to a power-law distribution of set size vs. rank, now known as the Zipf law.  Based on this structure, we study our social capital distribution in terms of buckets of exponentially increasing sizes.
 For simplicity, we choose the bucket sizes as the powers of 10.  Since we have about 5 million users total by the end of the study (35 days), our bucket sizes are shown in table~\ref{table:bucket-sizes}.
 
 \begin{table}
@@ -1030,8 +1036,8 @@ Finally, starrank of $x$ with respect to $A(x)$ is
 In our starrank tables, we show all three components --- per bucket per day --- average social capital, average audience rank, and their ratio, the starrank.
 
 
-\section{Summary of the Results}
-\label{summaryoftheresults}
+\section{Results}
+\label{results}
 
 \label{sec:simulation-results}
 So, are the influentials accidental, or not, after all?
@@ -1058,11 +1064,95 @@ Among the same type of simulation, generated with different initializations of t
 Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  The more intelligent they are, the better they stay on top, and grab a better share of the real-world winners in overlaps.  However, the top celebrities can be persistent even in a version of a stochastic world, and a slight change of rules will lead to a new and distinct persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to continue, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
 
 
-\section{Bibliography}
-\label{bibliography}
+Figures \ref{figure:heatmap-srates-medians-0wk},\ref{figure:heatmap-srates-medians-1wk},\ref{figure:heatmap-srates-medians-2wk},\ref{figure:heatmap-srates-medians-3wk} show the evolution of staying power as the amount of reality seeding increases.  
 
 
-\bibliographystyle{IEEEtran}
+Uniform global strategies coupled with capital-based FOF ones are closer to dreps initially, then mentions-based global ones get closer, and finally capital-capital ones dominate.  It shows that effective communication gets closer to reality when seeded with more history of such communication.
+
+
+Figure~\ref{figure:heatmap-srates-medians-0wk} shows staying power clustering of all of the basic simulations, run from scratch without mixing any of the {\itshape dreps} reality.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-srates-medians-0wk}
+    \caption{Staying power clustering of all simulations started from scratch.}
+    \label{figure:heatmap-srates-medians-0wk}
+\end{center}
+\end{figure}
+Figure~\ref{figure:heatmap-srates-medians-1wk} shows staying power clustering of all of the basic simulations, seeded with one week of the {\itshape dreps} reality.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-srates-medians-1wk}
+    \caption{Staying power clustering of all simulations seeded by 1 week of reality.}
+    \label{figure:heatmap-srates-medians-1wk}
+\end{center}
+\end{figure}
+Figure~\ref{figure:heatmap-srates-medians-2wk} shows staying power clustering of all of the basic simulations, seeded with two weeks of the {\itshape dreps} reality.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-srates-medians-2wk}
+    \caption{Staying power clustering of all simulations seeded by 2 weeks of reality.}
+    \label{figure:heatmap-srates-medians-2wk}
+\end{center}
+\end{figure}
+Figures \ref{figure:heatmap-overx-dreps-medians-0wk},\ref{figure:heatmap-overx-dreps-medians-1wk},\ref{figure:heatmap-overx-dreps-medians-2wk},\ref{figure:heatmap-overx-dreps-medians-3wk} show the evolution of reality overlap as the amount of reality seeding increases.  
+
+
+Global uniform strategies, also coupled with mentions or capital-based FOFs, are closer to reality when starting from scratch, then gradually yielding to global mentions and mentions-mentions-based ones, finally grouping with global capital and capital-capital-based simulations.  Smarter simulations achieve higher overlap with reality, especially when using our reciprocal social capital.
+
+
+Figure~\ref{figure:heatmap-overx-dreps-medians-0wk} shows reality overlap clustering of all of the basic simulations, run from scratch without mixing any of the {\itshape dreps} reality itself.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-overx-dreps-medians-0wk}
+    \caption{Reality overlap clustering of all simulations started from scratch.}
+    \label{figure:heatmap-overx-dreps-medians-0wk}
+\end{center}
+\end{figure}
+Figure~\ref{figure:heatmap-overx-dreps-medians-1wk} shows reality overlap clustering of all of the basic simulations, run after mixing in one week of the {\itshape dreps} reality itself.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-overx-dreps-medians-1wk}
+    \caption{Reality overlap clustering of all simulations seeded by 1 week of reality.}
+    \label{figure:heatmap-overx-dreps-medians-1wk}
+\end{center}
+\end{figure}
+Figure~\ref{figure:heatmap-overx-dreps-medians-2wk} shows reality overlap clustering of all of the basic simulations, run after mixing in two weeks of the {\itshape dreps} reality itself.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-overx-dreps-medians-2wk}
+    \caption{Reality overlap clustering of all simulations seeded by 2 weeks of reality.}
+    \label{figure:heatmap-overx-dreps-medians-2wk}
+\end{center}
+\end{figure}
+Figure~\ref{figure:heatmap-overx-dreps-medians-3wk} shows reality overlap clustering of all of the basic simulations, run after mixing in three weeks of the {\itshape dreps} reality itself.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-overx-dreps-medians-3wk}
+    \caption{Reality overlap clustering of all simulations seeded by 3 weeks of reality.}
+    \label{figure:heatmap-overx-dreps-medians-3wk}
+\end{center}
+\end{figure}
 
 \bibliography{/Users/alexyk/Documents/Thesis/bib/bibdesk/khrabrov-mindeconomy-thesis}
 

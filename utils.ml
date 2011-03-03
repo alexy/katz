@@ -291,3 +291,6 @@ let randInit i = begin
   Random.init i;
   leprintfln "Random.init %d" i;
 end
+
+let cutPath s =
+  String.right s (String.length s - (try String.rfind s "/" with _ -> -1) - 1)

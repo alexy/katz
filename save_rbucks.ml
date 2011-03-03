@@ -11,7 +11,8 @@ let () =
     | _ -> failwith "usage: execname aranksName"      
   in  
 
-  let bucksName = "rbucks-"^aranksName in
+  let baseName = cutPath aranksName in
+  let bucksName = "rbucks-"^baseName in
   leprintfln "reading aranks from %s, saving buckets in %s" 
     aranksName bucksName;
 
