@@ -102,7 +102,7 @@ vols2: $(VOLS4)
 b2br1:
 	for i in $(BASES); do $(DOB2BS) $(DREPS_DIR)/dreps-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 
-$(B2BR): $(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+$(B2BR): $(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOB2BS) $^
 
 b2br2: $(B2BR)
@@ -110,7 +110,7 @@ b2br2: $(B2BR)
 b2bm1:
 	for i in $(BASES); do $(DOB2BS) -i -k m $(DREPS_DIR)/dreps-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 
-$(B2BM): $(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+$(B2BM): $(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOB2BS) -i -k m $^ $(B2BM_DIR)
 
 b2bm2: $(B2BM)
