@@ -111,7 +111,7 @@ b2bm1:
 #	mv b2bm-* $(B2BM_DIR)
 
 $(B2BM): $(B2BR_DIR)
-$(B2BM): $(B2BR_DIR)/b2br-$(RBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+$(B2BM): $(B2BR_DIR)/b2bm-$(RBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	mkdir -p $(B2BM_DIR)
 	$(DOB2BS) -i -k m $^
 
