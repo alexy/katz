@@ -294,3 +294,9 @@ end
 
 let cutPath s =
   String.right s (String.length s - (try String.rfind s "/" with _ -> -1) - 1)
+  
+let mayPrependDir optDir name =
+  match optDir with
+  | Some dir when not (String.is_empty dir) && String.ends_with dir "/" -> dir^name
+  | Some dir when not (String.is_empty dir) -> sprintf "%s/%s" dir name
+  | _ -> name
