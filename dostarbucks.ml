@@ -22,10 +22,11 @@ let () =
   let prefix, outdir =
       !prefix', !outdir' in
   
-  let bucksName,starsName =
+  let bucksName,starsName,outdir =
   match args with
-    | bucksName::starsName::restArgs -> bucksName,starsName
-    | _ -> failwith "usage: dostarbucks bucksName starsName"      
+    | bucksName::starsName::outdir::restArgs -> bucksName,starsName,Some outdir
+    | bucksName::starsName::restArgs         -> bucksName,starsName,outdir
+    | _ -> failwith "usage: dostarbucks bucksName starsName [outdir]"      
   in  
 
   let baseName = cutPath starsName in

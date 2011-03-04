@@ -3,7 +3,7 @@ open Getopt
 
 let mark'   = ref ""
 let prefix' = ref "lb"
-let outdir' = ref (Some !prefix')
+let outdir' = ref (Some "lbucks")
 let specs =
 [
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
@@ -18,10 +18,11 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
     
-  let jcapsName =
+  let jcapsName,outdir =
   match args with
-    | jcapsName::restArgs -> jcapsName
-    | _ -> failwith "usage: dobucks jcapsName"      
+    | jcapsName::outdir::restArgs -> jcapsName,Some outdir
+    | jcapsName::restArgs         -> jcapsName,outdir
+    | _ -> failwith "usage: dobucks jcapsName [outdir]"      
   in  
 
   let baseName = cutPath jcapsName in

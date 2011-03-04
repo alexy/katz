@@ -300,3 +300,8 @@ let mayPrependDir optDir name =
   | Some dir when not (String.is_empty dir) && String.ends_with dir "/" -> dir^name
   | Some dir when not (String.is_empty dir) -> sprintf "%s/%s" dir name
   | _ -> name
+  
+let optAppend optStr suffix =
+  match optStr with
+  | Some s -> Some (s^suffix)
+  | _ -> None

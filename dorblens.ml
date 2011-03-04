@@ -18,10 +18,11 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
 
-  let bucksName =
+  let bucksName,outdir =
   match args with
-    | bucksName::restArgs -> bucksName
-    | _ -> failwith "usage: dobuckles bucksName"      
+    | bucksName::outdir::restArgs -> bucksName,Some outdir
+    | bucksName::restArgs ->         bucksName,outdir
+    | _ -> failwith "usage: dorblens bucksName [outdir]"      
   in  
 
   let baseName = cutPath bucksName in

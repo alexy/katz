@@ -5,7 +5,7 @@ let minDays' = ref 7
 let minCap'  = ref 1e-35 
 let mark'    = ref ""
 let prefix'  = ref "j"
-let outdir'  = ref (Some !prefix')
+let outdir'  = ref (Some "jcaps")
 let specs =
 [
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
@@ -26,10 +26,11 @@ let () =
   let prefix, outdir =
       !prefix', !outdir' in
   
-  let dcapsName =
+  let dcapsName,outdir =
   match args with
-    | dcapsName::restArgs -> dcapsName
-    | _ -> failwith "usage: save_caps [-d mindays] [-c mincap] dcapsName"    
+    | dcapsName::outdir::restArgs -> dcapsName,Some outdir
+    | dcapsName::restArgs         -> dcapsName,outdir
+    | _ -> failwith "usage: save_caps [-d mindays] [-c mincap] dcapsName [outdir]"    
   in        
   (* j is for just caps *)
   let baseName = cutPath dcapsName in

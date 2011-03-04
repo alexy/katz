@@ -28,10 +28,11 @@ let () =
   let prefix, outdir =
       !prefix', !outdir' in
   
-  let drepsName,dcapsName =
+  let drepsName,dcapsName,outdir =
   match args with
-    | drepsName::dcapsName::restArgs -> drepsName,dcapsName
-    | _ -> failwith "usage: dosranks drepsName dcapsName"      
+    | drepsName::dcapsName::outdir::restArgs -> drepsName,dcapsName,Some outdir
+    | drepsName::dcapsName::restArgs         -> drepsName,dcapsName,outdir
+    | _ -> failwith "usage: dosranks drepsName dcapsName [outdir]"      
   in  
 
   let baseName = cutPath drepsName in

@@ -3,7 +3,7 @@ open Getopt
 
 let mark'   = ref ""
 let prefix' = ref "le"
-let outdir' = ref (Some !prefix')
+let outdir' = ref (Some "lblens")
 let specs =
 [
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
@@ -18,10 +18,11 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
     
-  let bucksName =
+  let bucksName,outdir =
   match args with
-    | bucksName::restArgs -> bucksName
-    | _ -> failwith "usage: dobuckles bucksName"      
+    | bucksName::outdir::restArgs -> bucksName,Some outdir
+    | bucksName::restArgs ->         bucksName,outdir
+    | _ -> failwith "usage: dolblens bucksName [outdir]"      
   in  
 
   let baseName = cutPath bucksName in

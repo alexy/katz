@@ -26,11 +26,13 @@ let () =
 
   let prefix, outdir =
       !prefix', !outdir' in
+  let outdir = optAppend outdir mark in
   
-  let drepsName,bucksName =
+  let drepsName,bucksName,outdir =
   match args with
-    | drepsName::bucksName::restArgs -> drepsName,bucksName
-    | _ -> failwith "usage: dob2bs drepsName bucksName"      
+    | drepsName::bucksName::outdir::restArgs -> drepsName,bucksName,Some outdir
+    | drepsName::bucksName::restArgs         -> drepsName,bucksName,outdir
+    | _ -> failwith "usage: dob2bs drepsName bucksName [outdir]"      
   in  
 
   let baseName = cutPath bucksName in

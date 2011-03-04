@@ -32,10 +32,11 @@ let () =
   let prefixByday, prefixDenums, outdirByday, outdirDenums =
       !prefixByday', !prefixDenums', !outdirByday', !outdirDenums' in
 
-  let drepsName = 
+  let drepsName,outdirDenums = 
   match args with
-  | drepsName::restArgs -> drepsName
-  | _ -> failwith "usage: save_days drepsName"
+  | drepsName::outdirDenums::restArgs -> drepsName,Some outdirDenums
+  | drepsName::restArgs               -> drepsName,outdirDenums
+  | _ -> failwith "usage: save_days drepsName [outdirDenums]"
   in
    
   let baseName = cutPath drepsName in

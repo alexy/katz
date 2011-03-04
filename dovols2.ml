@@ -26,10 +26,11 @@ let () =
   let prefix, outdir =
       !prefix', !outdir' in
   
-  let denumsName,bucksName =
+  let denumsName,bucksName,outdir =
   match args with
-    | denumsName::bucksName::restArgs -> denumsName,bucksName
-    | _ -> failwith "usage: volume denumsName bucksName"      
+    | denumsName::bucksName::outdir::restArgs -> denumsName,bucksName,Some outdir
+    | denumsName::bucksName::restArgs         -> denumsName,bucksName,outdir
+    | _ -> failwith "usage: volume denumsName bucksName [outdir]"      
   in  
 
   let baseName = cutPath bucksName in
