@@ -65,6 +65,7 @@ B2BM=  $(BASES:%=$(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb)
 STARS= $(BASES:%=$(STARS_DIR)/$(STARS_PREFIX)-%.mlb)
 SBUCKS=$(BASES:%=$(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb)
 JCAPS= $(BASES:%=$(JCAPS_DIR)/jcaps-%.mlb)
+LBUCKS=$(BASES:%=$(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
 RBLENS=$(BASES:%=$(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb)
 
@@ -73,9 +74,9 @@ all:  $(DREPS) $(RBUCKS) $(DENUMS) $(VOLS4) $(B2BR) $(B2BM) $(STARS) $(SBUCKS) $
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
-	echo lblens: $(LBLENS)
-	echo lbucks: $(LBUCKS)
-	echo jcaps:  $(JCAPS)
+	@echo lblens: $(LBLENS)
+	@echo lbucks: $(LBUCKS)
+	@echo jcaps:  $(JCAPS)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
