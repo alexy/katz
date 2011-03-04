@@ -16,7 +16,7 @@ LBUCKS_DIR=lbucks
 LBLENS_DIR=lblens
 RBLENS_DIR=rblens
 
-DIRS=
+DIRS= \
   $(DREPS_DIR)  \
   $(CAPS_DIR)   \
   $(ARANKS_DIR) \
