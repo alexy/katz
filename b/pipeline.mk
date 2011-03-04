@@ -84,7 +84,7 @@ denums1:
 $(DIRS):
 	mkdir -p $@
 
-$(DENUMS): $(DENUMS_DIR)
+.INTERMEDIATE: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
 	$(SAVE_DAYS) $^
 
@@ -93,7 +93,6 @@ denums2: $(DENUMS)
 vols1:
 	for i in $(BASES); do $(DOVOLS2) $(DENUMS_DIR)/$(DENUMS_PREFIX)-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 
-$(VOLS4): $(VOLS4_DIR)
 $(VOLS4): $(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb: $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb rbucks/$(RBUCKS_PREFIX)-%.mlb
 	$(DOVOLS2) $^
 
@@ -119,8 +118,8 @@ sbucks1:
 	for i in $(BASES); do $(DOSRANKS) $(DREPS_DIR)/dreps-$$i.mlb $(CAPS_DIR)/caps-$$i.mlb; done
 	for i in $(BASES); do $(DOSTARBUCKS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb $(STARS_DIR)/$(STARS_PREFIX)-$$i.mlb; done
 
-# .INTERMEDIATE can be used instead of .SECONDARY to rm them when done
-.SECONDARY: $(STARS)
+# .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
+.INTERMEDIATE: $(STARS)
 $(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) $^ $(STARS_DIR)
 
@@ -134,7 +133,7 @@ lblens1:
 	for i in $(BASES); do $(DOCBUCKS) $(JCAPS_DIR)/jcaps-$$i.mlb; done
 	for i in $(BASES); do $(DOLBLENS) $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-$$i.mlb; done
 
-.SECONDARY: $(JCAPS)
+.INTERMEDIATE: $(JCAPS)
 $(JCAPS): $(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb
 	$(SAVE_CAPS) $^ $(JCAPS_DIR)
 
