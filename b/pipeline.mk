@@ -134,7 +134,7 @@ sbucks1:
 #	mv sbucks-* $(SBUCKS_DIR)
 
 $(STARS):  $(STARS_DIR)
-$(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+$(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) $^
 
 $(SBUCKS): $(SBUCKS_DIR)
