@@ -3,6 +3,9 @@
 CMD_DIR=../..
 DREPS_DIR=dreps
 CAPS_DIR=caps
+SKEW_DIR=skew
+JUMP_DIR=jump
+NORMS_DIR=norms
 ARANKS_DIR=aranks
 RBUCKS_DIR=rbucks
 DENUMS_DIR=denums
