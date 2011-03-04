@@ -137,8 +137,10 @@ $(STARS):  $(STARS_DIR)
 $(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) $^
 
+.INTERMEDIATE: $(SBUCKS)
 $(SBUCKS): $(SBUCKS_DIR)
 $(SBUCKS): $(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_DIR)/$(STARS_PREFIX)-%.mlb
+#$(SBUCKS): $(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSTARBUCKS) $^
 
 sbucks2: $(SBUCKS)
