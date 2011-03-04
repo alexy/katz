@@ -4,7 +4,7 @@ DREPS= $(BASES:%=dreps/dreps-%.mlb)
 RBUCKS=$(BASES:%=rbucks/rbucks-aranks-caps-%.mlb)
 DENUMS=$(BASES:%=denums/denums-dreps-%.mlb)
 
-all: denums vols b2br b2bm sbucks lblens rblens
+all: denums vols b2br b2bm sbucks lblens rblens show
 
 denums:
 	for i in $(BASES); do ../../save_days.opt dreps/dreps-$$i.mlb; done
@@ -12,8 +12,11 @@ denums:
 	mv denums-* denums
 
 $(DENUMS): denums/denums-dreps-%.mlb: dreps/dreps-%.mlb
-	../../save_days.opt dreps/dreps-$$i.mlb
+	../../save_days.opt $^
 
+show:
+	echo dreps: $(DREPS)
+	
 denums2: $(DENUMS)
 
 vols:
