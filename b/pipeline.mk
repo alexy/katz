@@ -88,7 +88,6 @@ $(DIRS):
 
 $(DENUMS): $(DENUMS_DIR)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
-	mkdir -p $(DENUMS)
 	$(SAVE_DAYS) $^
 
 denums2: $(DENUMS)
@@ -99,7 +98,7 @@ vols1:
 #	mv vols4-* $(VOLS4_DIR)
 
 $(VOLS4): $(VOLS4_DIR)
-$(VOLS4): $(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb: $(DENUMS_DIR)/$(DENUMS_PREFIX)-%i.mlb rbucks/$(RBUCKS_PREFIX)-%i.mlb
+$(VOLS4): $(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb: $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb rbucks/$(RBUCKS_PREFIX)-%.mlb
 	$(DOVOLS2) $^
 
 vols2: $(VOLS4)
