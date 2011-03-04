@@ -43,7 +43,7 @@ DOLBLENS=$(CMD_DIR)/dolblens.opt
 DORBLENS=$(CMD_DIR)/dorblens.opt
 
 RBUCKS_PREFIX=rbucks-aranks-caps
-DENUMS_PERFIX=denums-dreps
+DENUMS_PREFIX=denums-dreps
 VOLS4_PREFIX=vols4-$(RBUCKS_PREFIX)
 B2BR_PREFIX=b2br-$(RBUCKS_PREFIX)
 B2BM_PREFIX=b2bm-$(RBUCKS_PREFIX)
@@ -70,6 +70,7 @@ all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
 	echo denums: $(DENUMS)
+	echo b2bm: $(B2BM)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
