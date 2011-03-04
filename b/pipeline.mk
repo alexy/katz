@@ -44,6 +44,9 @@ DORBLENS=$(CMD_DIR)/dorblens.opt
 
 RBUCKS_PREFIX=rbucks-aranks-caps
 DENUMS_PERFIX=denums-dreps
+VOLS4_PREFIX=vols4-$(RBUCKS_PREFIX)
+B2BR_PREFIX=b2br-$(RBUCKS_PREFIX)
+B2BM_PREFIX=b2bm-$(RBUCKS_PREFIX)
 STARS_PREFIX=stars-dreps
 SBUCKS_PREFIX=sbucks-$(STARS_PREFIX)
 LBUCKS_PREFIX=lb-jcaps
@@ -52,10 +55,10 @@ RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
-DENUMS=$(BASES:%=$(DENUMS_DIR)/denums-dreps-%.mlb)
-VOLS4= $(BASES:%=$(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb)
-B2BR=  $(BASES:%=$(B2BR_DIR)/b2br-$(RBUCKS_PREFIX)-%.mlb)
-B2BM=  $(BASES:%=$(B2BM_DIR)/b2bm-$(RBUCKS_PREFIX)-%.mlb)
+DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
+VOLS4= $(BASES:%=$(VOLS4_DIR)/$(VOLS4_PREFIX)-%.mlb)
+B2BR=  $(BASES:%=$(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb)
+B2BM=  $(BASES:%=$(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb)
 STARS= $(BASES:%=$(STARS_DIR)/$(STARS_PREFIX)-%.mlb)
 SBUCKS=$(BASES:%=$(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
@@ -66,7 +69,7 @@ all:  $(DREPS) $(RBUCKS) $(DENUMS) $(VOLS4) $(B2BR) $(B2BM) $(STARS) $(SBUCKS) $
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
-	echo dreps: $(DREPS)
+	echo denums: $(DENUMS)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
@@ -99,8 +102,8 @@ b2br1:
 	mkdir -p  $(B2BR_DIR)
 #	mv b2br-* $(B2BR_DIR)
 
-$(B2BR): b2br/b2br-$(RBUCKS_PREFIX)-%.mlb: rbucks/$(RBUCKS_PREFIX)-%.mlb
-	mkdir -p $(B2BR_DIR)
+$(B2BR): $(B2BR_DIR)
+$(B2BR): $(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOB2BS) $^
 
 b2br2: $(B2BR)
@@ -110,9 +113,8 @@ b2bm1:
 	mkdir -p  $(B2BM_DIR)
 #	mv b2bm-* $(B2BM_DIR)
 
-$(B2BM): $(B2BR_DIR)
-$(B2BM): $(B2BR_DIR)/b2bm-$(RBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-	mkdir -p $(B2BM_DIR)
+$(B2BM): $(B2BM_DIR)
+$(B2BM): $(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOB2BS) -i -k m $^
 
 b2bm2: $(B2BM)
