@@ -69,7 +69,7 @@ LBUCKS=$(BASES:%=$(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
 RBLENS=$(BASES:%=$(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb)
 
-all:  $(DREPS) $(RBUCKS) $(DENUMS) $(VOLS4) $(B2BR) $(B2BM) $(STARS) $(SBUCKS) $(LBLENS) $(RBLENS)
+all:  $(DREPS) $(RBUCKS) $(DENUMS) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
