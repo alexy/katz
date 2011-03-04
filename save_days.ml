@@ -15,8 +15,8 @@ let specs =
   (noshort,"prefixDenums",None,Some (fun x -> prefixDenums' := x));
   (noshort,"outdirByday", None,Some (fun x -> outdirByday'  := Some x));
   (noshort,"outdirDenums",None,Some (fun x -> outdirDenums' := Some x));
-  (noshort,"noprefixByday", (set outdirByday'  None), None);
-  (noshort,"noprefixDenums",(set outdirDenums' None), None);
+  (noshort,"nodirByday", (set outdirByday'  None), None);
+  (noshort,"nodirDenums",(set outdirDenums' None), None);
   ('e',"edges",(set saveEdges' (not !saveEdges')), None);
   ('n',"nums", (set saveNums'  (not !saveNums')),  None);
   (noshort,"noedges",(set saveEdges' false),       None);

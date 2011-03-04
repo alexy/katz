@@ -4,8 +4,13 @@ open Getopt
 let minDays' = ref 7
 let minCap'  = ref 1e-35 
 let mark'    = ref ""
+let prefix'  = ref "j"
+let outdir'  = ref (Some !prefix')
 let specs =
 [
+  (noshort,"prefix",None,Some (fun x -> prefix' := x));
+  (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
+  (noshort,"nodir", (set outdir' None), None);
   ('d',"mindays",None,Some (fun x -> minDays' := int_of_string x));
   ('c',"mincap", None,Some (fun x -> minCap'  := float_of_string x));
   ('k',"mark",   None,Some (fun x -> mark'    := x))
@@ -18,6 +23,9 @@ let () =
   let minDays,   minCap,   mark =
       !minDays', !minCap', !mark' in
       
+  let prefix, outdir =
+      !prefix', !outdir' in
+  
   let dcapsName =
   match args with
     | dcapsName::restArgs -> dcapsName
@@ -25,7 +33,7 @@ let () =
   in        
   (* j is for just caps *)
   let baseName = cutPath dcapsName in
-  let capsName = sprintf "j%s%s" mark baseName in
+  let capsName = sprintf "%s%s%s" prefix mark baseName |> mayPrependDir outdir in
   let sort = true in
   
   leprintfln "reading dcaps from %s, saving caps in %s" 

@@ -6,10 +6,15 @@ open Getopt
 
 let checkSums' = ref true
 let by1'       = ref false
+let prefix'    = ref "vols4"
+let outdir'    = ref (Some !prefix')
 let specs =
 [
+  (noshort,"prefix",None,Some (fun x -> prefix' := x));
+  (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
+  (noshort,"nodir", (set outdir' None), None);
   (noshort,"nocheck",(set checkSums' false),None);
-  ('1',"by1",(set by1' true),None)
+  ('1',"by1",(set by1' true),None);
 ]
 
 let () =
@@ -17,6 +22,9 @@ let () =
   
   let checkSums,   by1 =
       !checkSums', !by1' in
+      
+  let prefix, outdir =
+      !prefix', !outdir' in
   
   let denumsName,bucksName =
   match args with
@@ -25,7 +33,7 @@ let () =
   in  
 
   let baseName = cutPath bucksName in
-  let volsName = "vols4-"^baseName in
+  let volsName = sprintf "%s-%s" prefix baseName |> mayPrependDir outdir in
   leprintfln "reading denums from %s, bucks from %s, saving volumes in %s" 
     denumsName bucksName volsName;
 
