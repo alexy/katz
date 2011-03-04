@@ -33,4 +33,5 @@ let () =
   let bucks: day_buckets = loadData bucksName in
   let lens: int_rates    = Bucket_power.bucket_lens bucks in
   
+  mayMkDir outdir;
   saveData lens lensName

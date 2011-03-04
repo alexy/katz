@@ -52,4 +52,5 @@ let () =
   | _ -> None in
   let stars: starrank = Starrank.starrank dreps dcapsh maturity in
   
+  mayMkDir outdir;
   saveData stars starsName

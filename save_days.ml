@@ -50,9 +50,14 @@ let () =
   let byday: days = by_day dreps in
   leprintfln "byday has length %d" (Array.length byday);
 
-  if saveEdges then saveData byday edgeName else ();
-  
+  if saveEdges then begin
+    mayMkDir outdirByday;
+    saveData byday edgeName 
+  end 
+  else ();
+
   if saveNums then
     let nums : day_edgenums = dayEdgenums byday in
+    mayMkDir outdirDenums;
     saveData nums numsName
   else ()

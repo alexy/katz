@@ -305,3 +305,15 @@ let optAppend optStr suffix =
   match optStr with
   | Some s -> Some (s^suffix)
   | _ -> None
+  
+let mkDirP  ?(verbose=false) ?(perm=0o755) dirName =
+  if Sys.file_exists dirName && Sys.is_directory dirName then ()
+  else begin
+    Unix.mkdir dirName perm;
+    if verbose then leprintfln "created directory %s" dirName
+  end
+  
+let mayMkDir ?(verbose=false) ?(perm=0o755) optDir =
+  match optDir with
+  | Some dirName -> mkDirP ~verbose ~perm dirName
+  | _ -> ()

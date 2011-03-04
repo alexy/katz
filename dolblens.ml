@@ -33,4 +33,5 @@ let () =
   let bucks:  day_log_buckets = loadData bucksName in
   let lens =  Dcaps.bucket_lens bucks in
   
+  mayMkDir outdir;
   saveData lens lensName

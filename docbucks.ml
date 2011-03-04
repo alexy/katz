@@ -33,4 +33,5 @@ let () =
   let jcaps:  day_caps = loadData jcapsName in
   let bucks = A.map Dcaps.bucketize2 jcaps in
   
+  mayMkDir outdir;
   saveData bucks bucksName

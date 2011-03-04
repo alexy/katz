@@ -45,4 +45,6 @@ let () =
 
   let b2bs: day_b2b = Bucket_power.b2b dreps bucks in
   
+  mayMkDir outdir;
   saveData b2bs b2bName
+  

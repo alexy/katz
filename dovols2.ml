@@ -63,4 +63,5 @@ let () =
   in
   let vols: bucket_volumes4 = A.map2 L.combine vr vm in
     
+  mayMkDir outdir;
   saveData vols volsName

@@ -43,4 +43,5 @@ let () =
   let dcaps: user_day_reals = loadData dcapsName in
   let caps:  day_caps = Dcaps.mature_day_caps minDays minCap ~sort dcaps in
   
+  mayMkDir outdir;
   saveData caps capsName

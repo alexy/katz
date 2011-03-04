@@ -39,4 +39,5 @@ let () =
   let srankh                = Starrank.starrank_hash stars in
   let sbucks: day_starbucks = Starrank.starbucks bucks srankh in
   
+  mayMkDir outdir;
   saveData sbucks sbucksName
