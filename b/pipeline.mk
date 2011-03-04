@@ -48,6 +48,7 @@ STARS_PREFIX=stars-dreps
 SBUCKS_PREFIX=sbucks-$(STARS_PREFIX)
 LBUCKS_PREFIX=lb-jcaps
 LBLENS_PREFIX=le$(LBUCKS_PREFIX)
+RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
@@ -57,13 +58,17 @@ B2BR=  $(BASES:%=$(B2BR_DIR)/b2br-$(RBUCKS_PREFIX)-%.mlb)
 B2BM=  $(BASES:%=$(B2BM_DIR)/b2bm-$(RBUCKS_PREFIX)-%.mlb)
 STARS= $(BASES:%=$(STARS_DIR)/$(STARS_PREFIX)-%.mlb)
 SBUCKS=$(BASES:%=$(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb)
+LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
+RBLENS=$(BASES:%=$(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb)
 
-all: denums vols b2br b2bm sbucks lblens rblens show
+all:  $(DREPS) $(RBUCKS) $(DENUMS) $(VOLS4) $(B2BR) $(B2BM) $(STARS) $(SBUCKS) $(LBLENS) $(RBLENS)
+
+all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
 	echo dreps: $(DREPS)
 
-denums:
+denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
 	mkdir -p    $(DENUMS_DIR)
 #	mv denums-* $(DENUMS_DIR)
@@ -78,7 +83,7 @@ $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
 
 denums2: $(DENUMS)
 
-vols:
+vols1:
 	for i in $(BASES); do $(DOVOLS2) $(DENUMS_DIR)/$(DENUMS_PREFIX)-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 	mkdir -p   $(VOLS4_DIR)
 #	mv vols4-* $(VOLS4_DIR)
@@ -89,7 +94,7 @@ $(VOLS4): $(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb: $(DENUMS_DIR)/$(DENUMS_PREF
 
 vols2: $(VOLS4)
 
-b2br:
+b2br1:
 	for i in $(BASES); do $(DOB2BS) $(DREPS_DIR)/dreps-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 	mkdir -p  $(B2BR_DIR)
 #	mv b2br-* $(B2BR_DIR)
@@ -100,7 +105,7 @@ $(B2BR): b2br/b2br-$(RBUCKS_PREFIX)-%.mlb: rbucks/$(RBUCKS_PREFIX)-%.mlb
 
 b2br2: $(B2BR)
 
-b2bm:
+b2bm1:
 	for i in $(BASES); do $(DOB2BS) -i -k m $(DREPS_DIR)/dreps-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 	mkdir -p  $(B2BM_DIR)
 #	mv b2bm-* $(B2BM_DIR)
@@ -112,7 +117,7 @@ $(B2BM): $(B2BR_DIR)/b2br-$(RBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)
 
 b2bm2: $(B2BM)
 
-sbucks:
+sbucks1:
 	for i in $(BASES); do $(DOSRANKS) $(DREPS_DIR)/dreps-$$i.mlb $(CAPS_DIR)/caps-$$i.mlb; done
 	mkdir -p    $(STARS_DIR)
 #	mv stars-*  $(STARS_DIR)
@@ -130,7 +135,7 @@ $(SBUCKS): $(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-
 
 sbucks2: $(SBUCKS)
 
-lblens:
+lblens1:
 	for i in $(BASES); do $(SAVE_CAPS) $(CAPS_DIR)/caps-$$i.mlb; done
 	mkdir -p   $(JCAPS_DIR)
 #	mv jcaps-* $(JCAPS_DIR)
@@ -156,7 +161,7 @@ $(LBLENS): $(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb: $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-
 lblens2: $(LBLENS)
 
 # these can be saved right from save_rbucks, but we like to recheck afterwards:
-rblens:
+rblens1:
 	for i in $(BASES); do $(DORBLENS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 	mkdir -p    $(RBLENS_DIR)
 	mv rblens-* $(RBLENS_DIR)
