@@ -11,7 +11,8 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 jumpProbUtilSR : float; jumpProbFOFSR : float;
                 globalStrategySR : attachment_strategy;
                 fofStrategySR    : attachment_strategy;
-                strategyFeaturesSR : strategy_features }
+                strategyFeaturesSR : strategy_features;
+                bucketsSR : buckno; keepBucketsSR : bool }
  
 
 let optSocRun : socRun = 
@@ -23,7 +24,8 @@ let optSocRun : socRun =
     jumpProbUtilSR = 0.5; jumpProbFOFSR = 0.2;
     globalStrategySR   = GlobalMentionsAttachment;
     fofStrategySR      = FOFMentionsAttachment;
-    strategyFeaturesSR = [] (* must be recomputed *) }
+    strategyFeaturesSR = [];
+    bucketsSR = None; keepBucketsSR = true }
 
 
 let paramSC {alphaSR =a; betaSR =b; gammaSR =g; 
@@ -31,35 +33,38 @@ let paramSC {alphaSR =a; betaSR =b; gammaSR =g;
     (a, b, g, by_mass, skew_times)
 
 
-let genOptsSC {jumpProbUtilSR     =jumpProbUtil;   jumpProbFOFSR =jumpProbFOF;
-               globalStrategySR =globalStrategy;   fofStrategySR =fofStrategy;
-               minCapDaysSR         =minCapDays;  minCapSR=minCap;
-               strategyFeaturesSR =strategyFeatures } =
-  { jumpProbUtilGO=   jumpProbUtil;   jumpProbFOFGO= jumpProbFOF;
-    globalStrategyGO= globalStrategy; fofStrategyGO= fofStrategy;
-    minCapDaysGO= minCapDays;         minCapGO= minCap;
-    strategyFeaturesGO= strategyFeatures }
+let genOptsSC 
+              {initDrepsSR        =initDreps; 
+               jumpProbUtilSR     =jumpProbUtil;      jumpProbFOFSR =jumpProbFOF;
+               globalStrategySR   =globalStrategy;    fofStrategySR =fofStrategy;
+               minCapDaysSR       =minCapDays;        minCapSR      =minCap;
+               strategyFeaturesSR =strategyFeatures; 
+               bucketsSR          =buckets;           keepBucketsSR =keepBuckets} =
+  { initDrepsGO=        initDreps;
+    jumpProbUtilGO=     jumpProbUtil;      jumpProbFOFGO= jumpProbFOF;
+    globalStrategyGO=   globalStrategy;    fofStrategyGO= fofStrategy;
+    minCapDaysGO=       minCapDays;        minCapGO= minCap;
+    strategyFeaturesGO= strategyFeatures; 
+    bucketsGO= buckets;                    keepBucketsGO= keepBuckets }
 
 
 let socRun: starts -> day_rep_nums -> socRun -> sgraph * dcaps * dskews * ((float3 * edge_count_list) * float) list =
     fun dstarts drnums opts ->
     
-    let params, genOpts  = paramSC opts, genOptsSC opts in
-
     let fromNums = A.map (H.map (fun _ v -> fst v)) drnums in (* TODO ByMass? *)
     let {socInitSR =socInit; minCapDaysSR =minCapDays; minCapSR =minCap; 
          initDrepsSR =initDreps; initDaySR =initDay;
          strategyFeaturesSR =strategyFeatures} = opts in
+
+    let params, genOpts  = paramSC opts, genOptsSC opts in
     
     let dcaps     = usersHash () in
     let ustats    = usersHash () in
     let dskews    = usersHash () in
 
     let dreps,dments,inDegree,outDegree = 
-    match initDreps with
-    | Some dreps ->
-      (* when initDreps is Some, initDay must be Some *)
-      let beforeDay = Option.get initDay in
+    match initDreps,initDay with
+    | Some dreps, Some beforeDay ->
       let breps = Dreps.before dreps beforeDay |> 
         H.filter (fun days ->  not (H.is_empty days)) in
       let bments = Invert.invert2 breps in

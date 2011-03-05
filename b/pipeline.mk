@@ -84,9 +84,21 @@ denums1:
 $(DIRS):
 	mkdir -p $@
 
+# we originally had the target dir as a dependency, like
+# $(DENUMS): $(DENUMS_DIR)
+# -- it was auto-created using the $(DIRS): rule above, 
+# and added as the trailing target to the command, which 
+# we used as an explicit outdir argument.  However, 
+# directory time always changes when used, so it caused
+# unnecessary remakes, and we moved mkdir -p into OCaml,
+# but reting the explicit trailing outdir here for visual confirmation.
+# The drivers are smart enough to use the default which must coincide,
+# but since we parameterize all _DIRs here anyways, 
+# might as well apply them explicitly for guaranteed consistency
+
 .INTERMEDIATE: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
-	$(SAVE_DAYS) $^
+	$(SAVE_DAYS) $^ $(DENUMS_DIR)
 
 denums2: $(DENUMS)
 
@@ -94,7 +106,7 @@ vols1:
 	for i in $(BASES); do $(DOVOLS2) $(DENUMS_DIR)/$(DENUMS_PREFIX)-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 
 $(VOLS4): $(VOLS4_DIR)/vols4-$(RBUCKS_PREFIX)-%.mlb: $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb rbucks/$(RBUCKS_PREFIX)-%.mlb
-	$(DOVOLS2) $^
+	$(DOVOLS2) $^ $(VOLS4_DIR)
 
 vols2: $(VOLS4)
 
@@ -102,7 +114,7 @@ b2br1:
 	for i in $(BASES); do $(DOB2BS) $(DREPS_DIR)/dreps-$$i.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb; done
 
 $(B2BR): $(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-	$(DOB2BS) $^
+	$(DOB2BS) $^ $(B2BR_DIR)
 
 b2br2: $(B2BR)
 

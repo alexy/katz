@@ -7,25 +7,25 @@ let oget=Option.get
 
 let edgeCountNames = ("total","jump","stay","backup",
 "GlobalUniform","GlobalMentions","GlobalSocCap",
-"FOFUniform","FOFMentions","FOFSocCap")
+"FOFUniform","FOFMentions","FOFSocCap","AsIs")
 let (totalEC,jumpEC,stayEC,backupEC,
   globalUniformEC,globalMentionsEC,globalSocCapEC,
-  fOFUniformEC,fOFMentionsEC,fOFSocCapEC) = edgeCountNames
+  fOFUniformEC,fOFMentionsEC,fOFSocCapEC,asIsEC) = edgeCountNames
 let edgeCountNamesList = [totalEC;jumpEC;stayEC;backupEC;
 globalUniformEC;globalMentionsEC;globalSocCapEC;
-fOFUniformEC;fOFMentionsEC;fOFSocCapEC]
+fOFUniformEC;fOFMentionsEC;fOFSocCapEC;asIsEC]
 
-let addEdge: sgraph -> degr -> edge_counts -> day -> user -> user -> unit = 
-  fun sgraph degr edgeCount day fromUser toUser ->
+let addEdge: sgraph -> degr -> edge_counts -> day -> user -> ?n:int -> user -> unit = 
+  fun sgraph degr edgeCount day fromUser ?(n=1) toUser ->
     let {drepsSG =dreps; dmentsSG =dments} = sgraph in
     let inDegree  = degrInDegree  degr in 
     let outDegree = degrOutDegree degr in 
     let fromDay = Dreps.userDay dreps fromUser day in  
-    hashInc fromDay toUser;
-    hashInc outDegree fromUser;
+    hashInc ~n fromDay toUser;
+    hashInc ~n outDegree fromUser;
     let toDay = Dreps.userDay  dments toUser day in
-    hashInc toDay fromUser;
-    hashInc inDegree toUser;
+    hashInc ~n toDay fromUser;
+    hashInc ~n inDegree toUser;
     hashInc edgeCount totalEC;
     if (edgeCount --> totalEC) mod 10000 = 0 then leprintf "." else ()
 
@@ -108,7 +108,8 @@ let rec justJump strategy ?(backupStrategy=GlobalUniformAttachment) sgraph degr 
     with Not_found -> 
       jumpBack "Not_found" "FOFSocCapAttachment"
     end
-  | NoAttachment -> leprintf "*** justJump called with NoAttachment ***"
+  | NoAttachment -> leprintfln "*** justJump called with NoAttachment ***"
+  | Buckets      -> leprintfln "*** justJump called with Buckets ***"
 
 
 (* NB we're implementing 1 smoothing here.  It means someone with 1 mention will be twice as likely
@@ -125,12 +126,12 @@ let makeInDegreeProportions: udegr -> users -> int_proportions =
   
   
 (* NB shares the meat with makeFsocs and dcaps.mature_caps -- factor out? *)
-let makeSocCapProportions: day -> float -> day -> user_stats -> float_proportions =
+let makeSocCapProportions: day -> float -> day ->
+  (* ?(sort=false) -> ?(desc=false) ->  *)
+  user_stats -> float_proportions =
   fun minDays minCap day ustats ->
-  H.map begin fun _ {socUS =cap; dayUS =sincetDay} ->
-    if day - sincetDay > minDays then cap
-    else minCap
-  end ustats |> H.enum |>
+  Ustats.mature_caps minDays minCap ustats day |> H.enum |>
+  (* if sort then sortHEnum ~desc else identity |> *)
   Proportional.floatRangeLists
 
       
@@ -139,6 +140,13 @@ let makeFNums: user_stats -> fnums =
   H.map begin fun _ {totUS =tot} ->
     H.length tot 
   end ustats
+
+
+let makeBuckets: day -> float -> day -> user_stats -> buckets =
+  fun minDays minCap day ustats ->
+  Ustats.mature_caps minDays minCap ustats day |>
+  Cranks.rankList |>
+  Topsets.buckets
 
   
 (* may avoid separate fnums altogether and compute fnum as
@@ -255,6 +263,8 @@ let computeStrategyData genOpts degr ustats day newUsers =
                       { degr with fsocsDG=Some fsocs }
      | x when x = fscofsSF    -> let fscofs = makeFscofs (degrFsocs degr) in
                       { degr with fscofsDG=Some fscofs }
+     | x when x = bucketsSF -> let buckets = makeBuckets minDays minCap day ustats in
+                      { degr with bucketsDG = Some buckets }
      | x -> failwith (sprintf "an impossible strategy feature %s is needed!" x)
   end degr strategyFeatures
   
@@ -264,21 +274,58 @@ let basicDegr inDegree outDegree =
     inDePropsDG=None; socCapPropsDG=None;
     fnumsDG=None;     fnofsDG=None;
     fnumMentsDG=None; fnofMentsDG=None;
-    fsocsDG=None;     fscofsDG=None }
-     
+    fsocsDG=None;     fscofsDG=None;
+    bucketsDG=None }
+
+
+ (* 1-based bucket numers as powers of 10 *)
+let keepUser: ?keepBuckets:bool -> buckets -> buckno -> user -> bool =
+  fun ?(keepBuckets=true) buckets buckno user ->
+  let rec aux ns =
+    match ns with
+    (* buckets are given by users as 1-based, powers of 10, List.nth is 0-based *)
+    | n::ns when n < L.length buckets && S.mem user (L.nth buckets (pred n)) -> true
+    | _::ns -> aux ns
+    | _ -> false in
+  let res =  
+  match buckno with
+  (* the way to specify keep none is buckno=Some []; keepBuckets := false *)
+  | None -> false
+  | Some bucknums -> aux bucknums in
+  if keepBuckets
+    then res 
+    else not res
+  
+  
+let copyEdges degr edgeCount fromUser day dreps1 sgraph =
+  match Dreps.getUserDay fromUser day dreps1 with
+  | None -> ()
+  | Some reps -> 
+    H.iter begin fun toUser n ->
+      addEdge sgraph degr edgeCount day fromUser ~n toUser;
+      hashInc ~n edgeCount asIsEC
+    end reps
+       
 
 let growUtility genOpts degr sgraph day newUsers userNEdges =
-    let {jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
-         globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy} = genOpts in
+    let {initDrepsGO      =initDreps;
+         jumpProbUtilGO   =jumpProbUtil;   jumpProbFOFGO =jumpProbFOF;
+         globalStrategyGO =globalStrategy; fofStrategyGO =fofStrategy;
+         bucketsGO =buckets; keepBucketsGO =keepBuckets} = genOpts in
     let {ustatsSG =ustats} = sgraph in
 
     let degr = computeStrategyData genOpts degr ustats day newUsers in
 
-    
-    
     let edgeCount =  edgeCountNamesList |> L.enum |> E.map (fun x -> x,0) |> H.of_enum in
+    
     H.iter begin fun fromUser numEdges ->
       if numEdges > 0 then begin
+        
+        (* NB error on the Some,None case in the top driver when checking options *)
+        match buckets,initDreps with
+        | Some bucknums, Some drepsOrig when keepUser ~keepBuckets (degrBuckets degr) buckets fromUser ->
+          copyEdges degr edgeCount fromUser day drepsOrig sgraph
+        | _ -> 
         let {outsUS =outs} = ustats --> fromUser in
         E.iter begin fun _ ->
           if jumpProbUtil <> 0.0 && begin
@@ -315,6 +362,6 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
             hashInc edgeCount stayEC
           end
         end (1 -- numEdges)
-      end else ()
+      end else () (* have edges at all *)
     end userNEdges;
     edgeCount

@@ -100,6 +100,8 @@ type int_rates      = ints list   (* TODO rename as: int_table *)
 type float3         = float * float * float
 type float4         = float * float * float * float
 type rates4         = rates * rates * rates * rates
+type bucket_numbers = int list
+type buckno         = bucket_numbers option
 
 (* starrank *)
 

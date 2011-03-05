@@ -98,4 +98,3 @@ let show_rates rates =
     else
       leprintfln "rate has wrongfully enormous length %d" (L.length rate)
   end rates
-  

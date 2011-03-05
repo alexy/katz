@@ -58,13 +58,16 @@ let rankHash: user_reals -> ranked_users =
      and handle NaNs a lá Soc_run *)
   A.sort (fun (k1,_) (k2,_) -> compare k2 k1) a;
   A.enum a |> E.map (fun (_,users) -> users)
+  
+let rankList x = rankHash x |> L.of_enum  
+  
 
 (* first, we can save the array of daily rankings as is,
-   converting daily enums to lists for ease of inspectopn *)
+   converting daily enums to lists for ease of inspection *)
 let aranks: int -> float -> user_day_reals -> day_rank_users =
   fun maturity minimum dcaps ->
   let byday = matureDayUserReals maturity minimum dcaps in
-  A.map (rankHash |- L.of_enum) byday
+  A.map rankList byday
 
 (* then, we rewrite dcaps as dranks, 
    replacing capitals with ranks, processing enums directly *)

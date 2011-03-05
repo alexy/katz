@@ -12,6 +12,13 @@ let leprintfLn        = eprintf "\n%!"
 (* this is slow since it doesn't specify a possibly large initial length
    instead, we can have an optional parameter and first H.create with that,
    and then List.iter ... H.add *)
+   
+let list_of_enum = L.of_enum
+let listEnum = list_of_enum
+
+let list_of_option x = Option.enum x |> L.of_enum
+let listOption = list_of_option
+
 let hash_of_list x = x |> List.enum |> H.of_enum
 let list_of_hash h = h |> H.enum |> List.of_enum
 
@@ -23,9 +30,9 @@ let arrayHash = array_of_hash
 
 let showSomeInt x = match x with | Some i -> string_of_int i | _ -> "none"
 
-let hashInc h k =
+let hashInc ?(n=1) h k =
   let v = H.find_default h k 0 in
-  H.replace h k (succ v)
+  H.replace h k (v + n)
 
 let hashAdd h k n =
   let v = H.find_default h k 0 in
@@ -317,3 +324,18 @@ let mayMkDir ?(verbose=false) ?(perm=0o755) optDir =
   match optDir with
   | Some dirName -> mkDirP ~verbose ~perm dirName
   | _ -> ()
+  
+let compAsc  x y = compare x y
+let compDesc x y = compare y x
+
+let sortHEnum ?(desc=false) he =
+  let comp = if desc 
+    then compDesc 
+    else compAsc in
+  let a = A.of_enum he in
+  A.sort (fun (_,x) (_,y) -> comp x y) a;
+  A.enum a
+  
+let constantly x y = x
+
+let parseIntList ?(sep=";") x = String.nsplit x sep |> L.map int_of_string

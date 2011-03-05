@@ -2,15 +2,17 @@ open Common
 open Soc_run_fof
 open Getopt
 
-let byMass'  = ref true
-let minDays' = ref 7
-let minCap'  = ref 1e-35
+let byMass'       = ref true
+let minDays'      = ref 7
+let minCap'       = ref 1e-35
 let jumpProbUtil' = ref 0.5 (* maximize utility or just jump in general *)
 let jumpProbFOF'  = ref 0.2 (* atach globally after first jump vs FOF-based *)
 let globalStrat'  = ref GlobalUniformAttachment
 let fofStrat'     = ref FOFUniformAttachment
-let denums2'   = ref false
-let saveMents' = ref false
+let denums2'      = ref false
+let saveMents'    = ref false
+let buckets'      = ref None
+let keepBuckets'  = ref false
 let mark' = ref ""
 
 let specs =
@@ -29,6 +31,8 @@ let specs =
   (noshort,"fofmen", (set fofStrat'    FOFMentionsAttachment),   None);
   (noshort,"fofcap", (set fofStrat'    FOFSocCapAttachment),     None);
   (noshort,"fofnone",(set fofStrat'    NoAttachment),            None);
+  ('b',"buckets",None, Some (fun x -> buckets' := Some (parseIntList x)));
+  (noshort,"keepbuckets",(set keepBuckets' (not !keepBuckets')), None);
   ('2',"denums",(set denums2' (not !denums2')), None);
   ('m',"ments",(set saveMents' (not !saveMents')),None);
   ('r',"rand",None,Some (fun x -> randInit (int_of_string x)))
@@ -40,8 +44,8 @@ let () =
   let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
       !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
   
-  let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat =
-      !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat' in
+  let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat,   buckets =
+      !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat', !buckets' in
       
   let dstartsName,denumsName,saveBase,dreps',day' =
   match args with
@@ -76,28 +80,32 @@ let () =
       loadData denumsName in
   let tLoadDRnums  =  Some "-- loaded denums timing: "  |> getTiming in
   
-  let (initDrepsO,initDayO) = match dreps' with
-  | Some drepsName ->
-          let day = day' |> Option.get |> int_of_string in
-          leprintfln "based on %s through day %d" drepsName day;
-          let dreps: graph = loadData drepsName in
-          (Some dreps, Some day)
-  | _ -> (None, None) in
+  let initDrepsOpt = Option.map begin
+  fun drepsName ->
+    leprintf "based on %s" drepsName;
+    let dreps: graph = loadData drepsName in
+    dreps
+  end dreps' in
 
+  let initDayOpt = Option.map int_of_string day' in
+  match initDayOpt with | Some day ->  leprintfln " through day %d" day | _ -> leprintfLn;
                              
-  let strategies = [globalStrat;fofStrat] in
+  let strategies = [globalStrat;fofStrat] @ (listOption (Option.map (constantly Buckets) buckets)) in
+  
   let strategyFeatures = computeStrategyFeatures strategyFeaturesInOrder strategies in
   L.print ~first:"overall strategy features to compute, in order:\n  "
   ~sep:", " ~last:"\n" String.print stderr strategyFeatures;
   
-  let opts = {optSocRun with (* maxDaysSR= maxDays; *) byMassSR= byMass;
-                             initDrepsSR= initDrepsO; initDaySR= initDayO;
+  let opts = {optSocRun with (* maxDaysSR= maxDays; *) 
+                             byMassSR= byMass;
+                             initDrepsSR= initDrepsOpt; initDaySR= initDayOpt;
                              minCapSR= minCap;
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
                              minCapDaysSR= minDays;
                              jumpProbUtilSR= jumpProbUtil;jumpProbFOFSR= jumpProbFOF;
                              globalStrategySR= globalStrat; fofStrategySR= fofStrat;
-                             strategyFeaturesSR= strategyFeatures }
+                             strategyFeaturesSR= strategyFeatures; 
+                             bucketsSR= buckets }
                              in
                              
   let {drepsSG =dreps; dmentsSG =dments},
