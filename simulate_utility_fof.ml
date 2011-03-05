@@ -26,7 +26,7 @@ let addEdge: sgraph -> degr -> edge_counts -> day -> user -> ?n:int -> user -> u
     let toDay = Dreps.userDay  dments toUser day in
     hashInc ~n toDay fromUser;
     hashInc ~n inDegree toUser;
-    hashInc edgeCount totalEC;
+    hashInc ~n edgeCount totalEC;
     if (edgeCount --> totalEC) mod 10000 = 0 then leprintf "." else ()
 
 exception NotFound  of string
