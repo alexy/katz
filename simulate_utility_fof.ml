@@ -2,7 +2,6 @@ open Common
 open Sgraph
 open Suds_local
 include Attachment_fof
-let oget=Option.get
 
 
 let edgeCountNames = ("total","jump","stay","backup",
