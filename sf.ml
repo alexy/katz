@@ -82,7 +82,8 @@ let () =
   
   let initDrepsOpt = Option.map begin
   fun drepsName ->
-    leprintf "based on %s" drepsName;
+    (* the trailing space for the stderr output from loadData *)
+    leprintf "based on %s " drepsName;
     let dreps: graph = loadData drepsName in
     dreps
   end dreps' in

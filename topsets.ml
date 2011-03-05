@@ -29,7 +29,7 @@ let buckets: rank_users -> buckets =
   
   leprintf "buckets size: %d " (L.length res);
   List.print Int.print stderr (L.map S.cardinal res |> L.take 20);
-  leprintfln "";
+  leprintfLn;
   res
 
 
