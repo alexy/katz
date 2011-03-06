@@ -1,5 +1,5 @@
-#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=6                     fg5cf1cb6f1wk   ../ereps/ereps/dreps.mlb 7
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=6       --keepbuckets fg5cf1cb6t1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=6                     fg5cf1cb6f1wk   ../ereps/ereps/dreps.mlb 7
+#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=6       --keepbuckets fg5cf1cb6t1wk   ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=7                     fg5cf1cb7f1wk   ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=7       --keepbuckets fg5cf1cb7t1wk   ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets=5                     fg5cf1cb5f1wk   ../ereps/ereps/dreps.mlb 7

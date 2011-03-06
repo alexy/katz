@@ -75,8 +75,8 @@ let () =
   let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
       !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
   
-  let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat,   buckets =
-      !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat', !buckets' in
+  let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat,   buckets, keepBuckets =
+      !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat', !buckets', !keepBuckets' in
       
   let prefixDreps, outdirDreps, prefixDments, outdirDments, prefixCaps, outdirCaps =
       !prefixDreps', !outdirDreps', !prefixDments', !outdirDments', !prefixCaps', !outdirCaps' in
@@ -100,13 +100,23 @@ let () =
   let skewName   = sprintf "%s-%s" prefixSkew   saveSuffix |> mayPrependDir outdirSkew   in
   let normsName  = sprintf "%s-%s" prefixNorms  saveSuffix |> mayPrependDir outdirNorms  in
   let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
-  leprintfln "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
+  
+  leprintfln begin "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\n"^^
+             "caps in %s, skews in %s, norms in %s, jumps in %s\n" end
     dstartsName denumsName drepsName dmentsName capsName skewName normsName jumpName;
     
   let globalStrategyName = showStrategy globalStrat in
   let fofStrategyName    = showStrategy fofStrat in
-  leprintfln "options: byMass=%b, minDays=%d, minCap=%e, jumpProbUtil=%e, jumpProbFOF=%e, globalStrategy=%s, fofStrategy=%s" 
+  
+  leprintf begin "options: byMass %b, minDays %d, minCap %e\n"^^
+             "jumpProbUtil %e, jumpProbFOF %e\n"^^
+             "globalStrategy %s, fofStrategy %s\n" end
     byMass minDays minCap jumpProbUtil jumpProbFOF globalStrategyName fofStrategyName;
+    
+  Option.may begin L.print ~first:"buckets: [" 
+                           ~last:(sprintf "], keepBuckets %b\n" keepBuckets) 
+                           Int.print stderr 
+             end buckets;
   
   let dstarts: starts      = loadData dstartsName in
   let tLoadDStarts =  Some "-- loaded dstarts timing: " |> getTiming in
@@ -144,7 +154,7 @@ let () =
                              jumpProbUtilSR= jumpProbUtil;jumpProbFOFSR= jumpProbFOF;
                              globalStrategySR= globalStrat; fofStrategySR= fofStrat;
                              strategyFeaturesSR= strategyFeatures; 
-                             bucketsSR= buckets }
+                             bucketsSR= buckets; keepBucketsSR= keepBuckets }
                              in
                              
   let {drepsSG =dreps; dmentsSG =dments},
