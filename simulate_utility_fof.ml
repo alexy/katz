@@ -283,7 +283,7 @@ let keepUser: ?keepBuckets:bool -> buckets -> buckno -> user -> bool =
   let rec aux ns =
     match ns with
     (* buckets are given by users as 1-based, powers of 10, List.nth is 0-based *)
-    | n::ns when n < L.length buckets && S.mem user (L.nth buckets (pred n)) -> true
+    | n::ns when n <= L.length buckets && S.mem user (L.nth buckets (pred n)) -> true
     | _::ns -> aux ns
     | _ -> false in
   let res =  
