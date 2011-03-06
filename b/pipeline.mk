@@ -96,6 +96,9 @@ $(DIRS):
 # but since we parameterize all _DIRs here anyways, 
 # might as well apply them explicitly for guaranteed consistency
 
+#for i in caps-*; do ../../doaranks.opt $i; done
+#for i in aranks-*; do ../../save_rbucks.opt $i; done
+
 .INTERMEDIATE: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
 	$(SAVE_DAYS) $^ $(DENUMS_DIR)

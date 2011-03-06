@@ -98,7 +98,7 @@ let () =
   let dmentsName = sprintf "%s-%s" prefixDments saveSuffix |> mayPrependDir outdirDments in
   let capsName   = sprintf "%s-%s" prefixCaps   saveSuffix |> mayPrependDir outdirCaps   in
   let skewName   = sprintf "%s-%s" prefixSkew   saveSuffix |> mayPrependDir outdirSkew   in
-  let normsName  = sprintf "%s-%s" prefixNorms saveSuffix |> mayPrependDir outdirNorms  in
+  let normsName  = sprintf "%s-%s" prefixNorms  saveSuffix |> mayPrependDir outdirNorms  in
   let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
   leprintfln "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
     dstartsName denumsName drepsName dmentsName capsName skewName normsName jumpName;
