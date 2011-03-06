@@ -30,24 +30,24 @@ let mark' = ref ""
 
 let specs =
 [
-  (noshort,"prefixDreps",None,Some (fun x -> prefixDreps' := x));
-  (noshort,"outdirDreps",None,Some (fun x -> outdirDreps' := Some x));
-  (noshort,"nodirDreps", (set outdirDreps' None), None);
+  (noshort,"prefixDreps",None, Some (fun x -> prefixDreps' := x));
+  (noshort,"outdirDreps",None, Some (fun x -> outdirDreps' := Some x));
+  (noshort,"nodirDreps",                 (set outdirDreps' None), None);
   (noshort,"prefixDments",None,Some (fun x -> prefixDments' := x));
   (noshort,"outdirDments",None,Some (fun x -> outdirDments' := Some x));
-  (noshort,"nodirDments", (set outdirDments' None), None);
-  (noshort,"prefixCaps",None,Some (fun x -> prefixCaps' := x));
-  (noshort,"outdirCaps",None,Some (fun x -> outdirCaps' := Some x));
-  (noshort,"nodirCaps", (set outdirDreps' None), None);
-  (noshort,"prefixSkew",None,Some (fun x -> prefixSkew' := x));
-  (noshort,"outdirSkew",None,Some (fun x -> outdirSkew' := Some x));
-  (noshort,"nodirSkew", (set outdirDreps' None), None);
-  (noshort,"prefixNorms",None,Some (fun x -> prefixNorms' := x));
-  (noshort,"outdirNorms",None,Some (fun x -> outdirNorms' := Some x));
-  (noshort,"nodirNorms", (set outdirDreps' None), None);
-  (noshort,"prefixJump",None,Some (fun x -> prefixJump' := x));
-  (noshort,"outdirJump",None,Some (fun x -> outdirJump' := Some x));
-  (noshort,"nodir", (set outdirDreps' None), None);
+  (noshort,"nodirDments",                (set outdirDments' None), None);
+  (noshort,"prefixCaps",None,  Some (fun x -> prefixCaps' := x));
+  (noshort,"outdirCaps",None,  Some (fun x -> outdirCaps' := Some x));
+  (noshort,"nodirCaps",                  (set outdirCaps' None), None);
+  (noshort,"prefixSkew",None,  Some (fun x -> prefixSkew' := x));
+  (noshort,"outdirSkew",None,  Some (fun x -> outdirSkew' := Some x));
+  (noshort,"nodirSkew",                  (set outdirSkew' None), None);
+  (noshort,"prefixNorms",None, Some (fun x -> prefixNorms' := x));
+  (noshort,"outdirNorms",None, Some (fun x -> outdirNorms' := Some x));
+  (noshort,"nodirNorms",                 (set outdirNorms' None), None);
+  (noshort,"prefixJump",None,  Some (fun x -> prefixJump' := x));
+  (noshort,"outdirJump",None,  Some (fun x -> outdirJump' := Some x));
+  (noshort,"nodir",                      (set outdirJump' None), None);
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
