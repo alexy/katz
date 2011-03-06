@@ -13,10 +13,41 @@ let denums2'      = ref false
 let saveMents'    = ref false
 let buckets'      = ref None
 let keepBuckets'  = ref false
+
+let prefixDreps'  = ref "dreps"
+let outdirDreps'  = ref (Some !prefixDreps')
+let prefixDments' = ref "dments"
+let outdirDments' = ref (Some !prefixDments')
+let prefixCaps'   = ref "caps"
+let outdirCaps'   = ref (Some !prefixCaps')
+let prefixSkew'   = ref "skew"
+let outdirSkew'   = ref (Some !prefixSkew')
+let prefixNorms'  = ref "norms"
+let outdirNorms'  = ref (Some !prefixNorms')
+let prefixJump'   = ref "jump"
+let outdirJump'   = ref (Some !prefixJump')
 let mark' = ref ""
 
 let specs =
 [
+  (noshort,"prefixDreps",None,Some (fun x -> prefixDreps' := x));
+  (noshort,"outdirDreps",None,Some (fun x -> outdirDreps' := Some x));
+  (noshort,"nodirDreps", (set outdirDreps' None), None);
+  (noshort,"prefixDments",None,Some (fun x -> prefixDments' := x));
+  (noshort,"outdirDments",None,Some (fun x -> outdirDments' := Some x));
+  (noshort,"nodirDments", (set outdirDments' None), None);
+  (noshort,"prefixCaps",None,Some (fun x -> prefixCaps' := x));
+  (noshort,"outdirCaps",None,Some (fun x -> outdirCaps' := Some x));
+  (noshort,"nodirCaps", (set outdirDreps' None), None);
+  (noshort,"prefixSkew",None,Some (fun x -> prefixSkew' := x));
+  (noshort,"outdirSkew",None,Some (fun x -> outdirSkew' := Some x));
+  (noshort,"nodirSkew", (set outdirDreps' None), None);
+  (noshort,"prefixNorms",None,Some (fun x -> prefixNorms' := x));
+  (noshort,"outdirNorms",None,Some (fun x -> outdirNorms' := Some x));
+  (noshort,"nodirNorms", (set outdirDreps' None), None);
+  (noshort,"prefixJump",None,Some (fun x -> prefixJump' := x));
+  (noshort,"outdirJump",None,Some (fun x -> outdirJump' := Some x));
+  (noshort,"nodir", (set outdirDreps' None), None);
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
@@ -47,6 +78,13 @@ let () =
   let jumpProbUtil,   jumpProbFOF,   globalStrat,   fofStrat,   buckets =
       !jumpProbUtil', !jumpProbFOF', !globalStrat', !fofStrat', !buckets' in
       
+  let prefixDreps, outdirDreps, prefixDments, outdirDments, prefixCaps, outdirCaps =
+      !prefixDreps', !outdirDreps', !prefixDments', !outdirDments', !prefixCaps', !outdirCaps' in
+      
+  let prefixSkew, outdirSkew, prefixNorms, outdirNorms, prefixJump, outdirJump =
+      !prefixSkew', !outdirSkew', !prefixNorms', !outdirNorms', !prefixJump', !outdirJump' in
+  
+      
   let dstartsName,denumsName,saveBase,dreps',day' =
   match args with
   | dstartsName::denumsName::saveBase::dreps'::day'::[] -> 
@@ -55,13 +93,13 @@ let () =
       (dstartsName,denumsName,saveBase,None,None)
   | _ -> failwith "usage: sg dtartsName denumsName saveBase [drepsName initDay]"
   in
-  let saveSuffix = saveBase^".mlb" in
-  let drepsName  = "dreps-"^saveSuffix in
-  let dmentsName = "dments-"^saveSuffix in
-  let capsName   = "caps-"^saveSuffix in
-  let normsName  = "norms-"^saveSuffix in
-  let skewName   = "skew-"^saveSuffix in
-  let jumpName   = "jump-"^saveSuffix in
+  let saveSuffix = saveBase ^ ".mlb" in
+  let drepsName  = sprintf "%s-%s" prefixDreps  saveSuffix |> mayPrependDir outdirDreps  in
+  let dmentsName = sprintf "%s-%s" prefixDments saveSuffix |> mayPrependDir outdirDments in
+  let capsName   = sprintf "%s-%s" prefixCaps   saveSuffix |> mayPrependDir outdirCaps   in
+  let skewName   = sprintf "%s-%s" prefixSkew   saveSuffix |> mayPrependDir outdirSkew   in
+  let normsName  = sprintf "%s-%s" prefixNorms saveSuffix |> mayPrependDir outdirNorms  in
+  let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
   leprintfln "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\ndcaps in %s, dskews in %s, dnorms in %s, dedges in %s" 
     dstartsName denumsName drepsName dmentsName capsName skewName normsName jumpName;
     
@@ -117,17 +155,32 @@ let () =
     
   leprintfln "computed sgraph, now saving dreps in %s, dments in %s, dcaps in %s, dskews in %s, jumps in %s" 
     drepsName dmentsName capsName skewName jumpName;
+
+  mayMkDir outdirDreps;
   saveData dreps  drepsName;
+
   let tSavingDReps  =  Some "-- saved dreps timing: "  |> getTiming in
-  let msg = if saveMents then begin saveData dments dmentsName; "-- saved dments timing: " end
-    else "-- did not save dments, timing: " in
+  let msg = if saveMents then begin 
+    mayMkDir outdirDments;
+    saveData dments dmentsName; "-- saved dments timing: " 
+  end
+  else "-- did not save dments, timing: " in
   let tSavingDMents =  Some msg |> getTiming in
+
+  mayMkDir outdirCaps;
   saveData dcaps  capsName;
+
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
+
+  mayMkDir outdirSkew;
   saveData dskews skewName;
+
   let tSavingDSkews =  Some "-- saved dskews timing: " |> getTiming in
   
+  mayMkDir outdirNorms;
   saveData norms      normsName;
+  
+  mayMkDir outdirJump;
   saveData edgeCounts jumpName;
   
   let ts = List.rev (tSavingDSkews::tSavingDCaps::tSavingDMents::tSavingDReps::tSocRun@[tLoadDRnums;tLoadDStarts]) in
