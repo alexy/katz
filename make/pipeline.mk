@@ -19,7 +19,7 @@ LBUCKS_DIR=lbucks
 LBLENS_DIR=lblens
 RBLENS_DIR=rblens
 OVERX_DREPS_DIR=overx
-OVERX_XREPS_DIR=$(OVERX_DREPS_DIR)
+OVERX_SELF_DIR=$(OVERX_DREPS_DIR)
 
 DIRS= \
   $(DREPS_DIR)  \
@@ -75,16 +75,22 @@ LBUCKS=$(BASES:%=$(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
 RBLENS=$(BASES:%=$(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb)
 OVERX_DREPS=$(BASES:%=$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb)
-OVERX_SELF=$
 
-all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
+# assumes OROOTS are defined
+# NB BASES can be defined in terms of OROOTS, with the caveat of 0 not available in buckets-specific simulations
+
+O01=$(OROOTS:%=$(if $(wildcard $(DREPS_DIR)/dreps-%.mlb),$(OVERX_SELF_DIR)/overx-%0-%1wk.mlb))
+O12=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%1wk-%2wk.mlb)
+O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%2wk-%3wk.mlb)
+O34=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%3wk-%4wk.mlb)
+OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
+
+all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
-	@echo lblens: $(LBLENS)
-	@echo lbucks: $(LBUCKS)
-	@echo jcaps:  $(JCAPS)
+	@echo overx_self: $(OVERX_SELF)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
@@ -117,7 +123,25 @@ $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-
 rbucks2: $(RBUCKS)
   
 $(OVERX_DREPS): $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb):  $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-  $(DOVERSETS) $^ $(OVERX_DREPS_DIR)
+  $(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_DIR)
+
+overx_dreps2: $(OVERX_DREPS)
+
+# $(shell ls $(DREPS_DIR)/dreps-%.mlb) could be used instead of wildcard, especially since there's no wild cards in it!
+
+$(O01): $(OVERX_SELF_DIR)/overx-%0-%1wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb
+	$(DOVERSETS) $^ $*0-$*1wk $(OVERX_SELF_DIR)
+
+$(O12): $(OVERX_SELF_DIR)/overx-%1wk-%2wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb
+	$(DOVERSETS) $^ $*1wk-$*2wk $(OVERX_SELF_DIR)
+
+$(O23): $(OVERX_SELF_DIR)/overx-%2wk-%3wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb
+	$(DOVERSETS) $^ $*2wk-$*3wk $(OVERX_SELF_DIR)
+
+$(O34): $(OVERX_SELF_DIR)/overx-%3wk-%4wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%4wk.mlb
+	$(DOVERSETS) $^ $*3wk-$*4wk $(OVERX_SELF_DIR)
+
+overx_self2: $(OVERX_SELF)
 
 .INTERMEDIATE: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
