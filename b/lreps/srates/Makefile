@@ -1,4 +1,4 @@
 INPUT_PATH=lreps/srates/tex
 LIST=lreps-srates.list
 
-include ../../rates1.mk
+include ../../../make/rates1.mk

@@ -1,4 +1,4 @@
 INPUT_PATH=ereps/srates/tex
 LIST=ereps-srates.list
 
-include ../../rates1.mk
+include ../../../make/rates1.mk
