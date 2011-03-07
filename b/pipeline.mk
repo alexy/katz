@@ -35,6 +35,8 @@ DIRS= \
   $(LBLENS_DIR) \
   $(RBLENS_DIR) \
 
+DOARANKS=$(CMD_DIR)/doaranks.opt
+SAVE_RBUCKS=$(CMD_DIR)/save_rbucks.opt
 SAVE_DAYS=$(CMD_DIR)/save_days.opt
 DOVOLS2=$(CMD_DIR)/dovols2.opt
 DOB2BS=$(CMD_DIR)/dob2bs.opt
@@ -45,7 +47,8 @@ DOCBUCKS=$(CMD_DIR)/docbucks.opt
 DOLBLENS=$(CMD_DIR)/dolblens.opt
 DORBLENS=$(CMD_DIR)/dorblens.opt
 
-RBUCKS_PREFIX=rbucks-aranks-caps
+ARANKS_PREFIX=aranks-caps
+RBUCKS_PREFIX=rbucks-$(ARANKS_PREFIX)
 DENUMS_PREFIX=denums-dreps
 VOLS4_PREFIX=vols4-$(RBUCKS_PREFIX)
 B2BR_PREFIX=b2br-$(RBUCKS_PREFIX)
@@ -57,6 +60,7 @@ LBLENS_PREFIX=le$(LBUCKS_PREFIX)
 RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
+ARANKS=$(BASES:%=$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
 DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
 VOLS4= $(BASES:%=$(VOLS4_DIR)/$(VOLS4_PREFIX)-%.mlb)
@@ -98,6 +102,15 @@ $(DIRS):
 
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
+
+.INTERMEDIATE: $(ARANKS)
+$(ARANKS): $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb
+	$(DOARANKS) $^ $(ARANKS_DIR)
+
+$(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
+	$(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
+
+rbucks2: $(RBUCKS)
 
 .INTERMEDIATE: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
