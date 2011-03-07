@@ -90,7 +90,8 @@ all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
-	@echo overx_self: $(OVERX_SELF)
+	@echo overx_dreps: $(OVERX_DREPS)
+	@echo overx_self:  $(OVERX_SELF)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
@@ -129,7 +130,7 @@ overx_dreps2: $(OVERX_DREPS)
 
 # $(shell ls $(DREPS_DIR)/dreps-%.mlb) could be used instead of wildcard, especially since there's no wild cards in it!
 
-$(O01): $(OVERX_SELF_DIR)/overx-%0-%1wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb
+$(O01): $(OVERX_SELF_DIR)/overx-%0-*1wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb
 	$(DOVERSETS) $^ $*0-$*1wk $(OVERX_SELF_DIR)
 
 $(O12): $(OVERX_SELF_DIR)/overx-%1wk-%2wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb
