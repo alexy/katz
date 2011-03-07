@@ -39,6 +39,7 @@ DIRS= \
 
 DOARANKS=$(CMD_DIR)/doaranks.opt
 SAVE_RBUCKS=$(CMD_DIR)/save_rbucks.opt
+DOVERSETS=$(CMD_DIR)/doversets.opt
 SAVE_DAYS=$(CMD_DIR)/save_days.opt
 DOVOLS2=$(CMD_DIR)/dovols2.opt
 DOB2BS=$(CMD_DIR)/dob2bs.opt

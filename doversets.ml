@@ -2,31 +2,59 @@ open Common
 open Topsets
 open Getopt
 
-let oratesNow' = ref true
-let saveOverY' = ref false
+let oratesNow'    = ref true
+let saveOverY'    = ref false
+let mark'         = ref ""
+let prefixOvers'  = ref "overs"
+let outdirOvers'  = ref (Some !prefixOvers')
+let prefixOrates' = ref "orates"
+let outdirOrates' = ref (Some !prefixOrates')
+let prefixOverx'  = ref "overx"
+let outdirOverx'  = ref (Some !prefixOverx')
+let prefixOvery'  = ref "overy"
+let outdirOvery'  = ref (Some !prefixOvery')
 
 let specs =
 [
+  (noshort,"prefixOvers",None,Some (fun x ->  prefixOvers' := x));
+  (noshort,"outdirOvers",None,Some (fun x ->  outdirOvers' := Some x));
+  (noshort,"nodirOvers",                (set  outdirOvers' None), None);
+  (noshort,"prefixOrates",None,Some (fun x -> prefixOrates' := x));
+  (noshort,"outdirOrates",None,Some (fun x -> outdirOrates' := Some x));
+  (noshort,"nodirOrates",                (set outdirOrates' None), None);
+  (noshort,"prefixOverx",None,Some (fun x ->  prefixOverx' := x));
+  (noshort,"outdirOverx",None,Some (fun x ->  outdirOverx' := Some x));
+  (noshort,"nodirOverx",                 (set outdirOverx' None), None);
+  (noshort,"prefixOvery",None,Some (fun x ->  prefixOvery' := x));
+  (noshort,"outdirOvery",None,Some (fun x ->  outdirOvery' := Some x));
+  (noshort,"nodirOvery",                 (set outdirOvery' None), None);
   ('o',"orates",(set oratesNow' (not !oratesNow')),None);
-  ('y',"orates",(set saveOverY' (not !saveOverY')),None)
+  ('y',"orates",(set saveOverY' (not !saveOverY')),None);
+  ('k',"mark",None,Some (fun x -> mark' := x))
 ]
 
 let () =
   let args = getOptArgs specs in
   
-  let oratesNow,   saveOverY = 
-      !oratesNow', !saveOverY' in
+  let oratesNow,   saveOverY,   mark = 
+      !oratesNow', !saveOverY', !mark' in
+      
+  let prefixOvers,   outdirOvers,   prefixOrates,   outdirOrates =
+      !prefixOvers', !outdirOvers', !prefixOrates', !outdirOrates' in
+  let prefixOverx,   outdirOverx,   prefixOvery,    outdirOvery =
+      !prefixOverx', !outdirOverx', !prefixOvery',  !outdirOvery' in
 
-  let b1Name,b2Name,saveBase =
+  let b1Name,b2Name,saveBase,outdirOverx =
   match args with
-    | b1Name::b2Name::saveBase::restArgs -> (b1Name,b2Name,saveBase)
+    | b1Name::b2Name::saveBase::outdirOverx::restArgs -> b1Name,b2Name,saveBase,Some outdirOverx
+    | b1Name::b2Name::saveBase::restArgs -> b1Name,b2Name,saveBase,outdirOverx
     | _ -> failwith "usage: doverlaps b1Name b2Name saveBase"
   in
   let saveSuffix = saveBase^".mlb" in
-  let osetsName  = "overs-"^saveSuffix  in
-  let oratesName = "orates-"^saveSuffix in
-  let overxName  = "overx-"^saveSuffix  in
-  let overyName  = "overy-"^saveSuffix  in
+  let osetsName  = sprintf "%s-%s%s" prefixOvers  mark saveSuffix  in
+  let oratesName = sprintf "%s-%s%s" prefixOrates mark saveSuffix  in
+  let overxName  = sprintf "%s-%s%s" prefixOverx  mark saveSuffix  in
+  let overyName  = sprintf "%s-%s%s" prefixOvery  mark saveSuffix  in
   
   leprintf "reading buckets from %s and %s, saving fraction to left in %s, "
     b1Name b2Name overxName;
