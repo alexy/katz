@@ -82,10 +82,10 @@ OVERX_DREPS=$(BASES:%=$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb)
 
 # We could define the Os with foreach, with two substitutions instead of one, but cannot have a pattern rule with two stems,
 # even when they are identical!  Renaming to one stem, also more compact
-O01=$(foreach $(root), $(OROOTS), (if $(wildcard $(DREPS_DIR)/dreps-$(root)0.mlb), $(OVERX_SELF_DIR)/overx-$(root)-01wk.mlb))
+O01=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)0.mlb), $(OVERX_SELF_DIR)/overx-$(root)-01wk.mlb))
 O12=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-12wk.mlb)
 O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
-O34=$(foreach $(root), $(OROOTS), (if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
+O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
 all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
