@@ -79,10 +79,10 @@ OVERX_DREPS=$(BASES:%=$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb)
 # assumes OROOTS are defined
 # NB BASES can be defined in terms of OROOTS, with the caveat of 0 not available in buckets-specific simulations
 
-O01=$(OROOTS:%=$(if $(wildcard $(DREPS_DIR)/dreps-%.mlb),$(OVERX_SELF_DIR)/overx-%0-%1wk.mlb))
-O12=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%1wk-%2wk.mlb)
-O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%2wk-%3wk.mlb)
-O34=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%3wk-%4wk.mlb)
+O01=$(foreach root, $OROOTS, $(if $(wildcard $(DREPS_DIR)/dreps-$(root).mlb), $(OVERX_SELF_DIR)/overx-$(root)1wk-$(root)2wk.mlb))
+O12=$(foreach root, $OROOTS, $(OVERX_SELF_DIR)/overx-$(root)1wk-$(root)2wk.mlb)
+O23=$(foreach root, $OROOTS, $(OVERX_SELF_DIR)/overx-$(root)2wk-$(root)3wk.mlb)
+O34=$(foreach root, $OROOTS, $(OVERX_SELF_DIR)/overx-$(root)3wk-$(root)4wk.mlb)
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
 all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
@@ -129,16 +129,16 @@ overx_dreps2: $(OVERX_DREPS)
 
 # $(shell ls $(DREPS_DIR)/dreps-%.mlb) could be used instead of wildcard, especially since there's no wild cards in it!
 
-$(O01): $(OVERX_SELF_DIR)/overx-%\0-%\1wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\1wk.mlb
+$(O01): $(OVERX_SELF_DIR)/overx-%0-%1wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb
 	$(DOVERSETS) $^ $*0-$*1wk $(OVERX_SELF_DIR)
 
-$(O12): $(OVERX_SELF_DIR)/overx-%\1wk-%\2wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\1wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\2wk.mlb
+$(O12): $(OVERX_SELF_DIR)/overx-%1wk-%2wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb
 	$(DOVERSETS) $^ $*1wk-$*2wk $(OVERX_SELF_DIR)
 
-$(O23): $(OVERX_SELF_DIR)/overx-%\2wk-%\3wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\2wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\3wk.mlb
+$(O23): $(OVERX_SELF_DIR)/overx-%2wk-%3wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb
 	$(DOVERSETS) $^ $*2wk-$*3wk $(OVERX_SELF_DIR)
 
-$(O34): $(OVERX_SELF_DIR)/overx-%\3wk-%\4wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\3wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%\4wk.mlb
+$(O34): $(OVERX_SELF_DIR)/overx-%3wk-%4wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%4wk.mlb
 	$(DOVERSETS) $^ $*3wk-$*4wk $(OVERX_SELF_DIR)
 
 overx_self2: $(OVERX_SELF)
