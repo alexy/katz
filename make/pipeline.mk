@@ -18,8 +18,8 @@ JCAPS_DIR=jcaps
 LBUCKS_DIR=lbucks
 LBLENS_DIR=lblens
 RBLENS_DIR=rblens
-OVERX_DREPS_DIR=overx
-OVERX_SELF_DIR=$(OVERX_DREPS_DIR)
+OVERX_DREPS_DIR=overx-dreps
+OVERX_SELF_DIR=overx-self
 
 DIRS= \
   $(DREPS_DIR)  \
