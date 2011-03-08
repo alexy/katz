@@ -1,5 +1,8 @@
 .PHONY: all denums vols b2br b2bm sbucks
 
+OVERX_DREPS_SUFFIX=dreps
+OVERX_SELF_SUFFIX=self
+
 CMD_DIR=../..
 DREPS_DIR=dreps
 CAPS_DIR=caps
@@ -18,8 +21,8 @@ JCAPS_DIR=jcaps
 LBUCKS_DIR=lbucks
 LBLENS_DIR=lblens
 RBLENS_DIR=rblens
-OVERX_DREPS_DIR=overx-dreps
-OVERX_SELF_DIR=overx-self
+OVERX_DREPS_DIR=overx-$(OVERX_DREPS_SUFFIX)
+OVERX_SELF_DIR=overx-$(OVERX_SELF_SUFFIX)
 
 DIRS= \
   $(DREPS_DIR)  \
@@ -130,23 +133,23 @@ $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-
 rbucks2: $(RBUCKS)
   
 $(OVERX_DREPS): $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_DIR)
+	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_SUFFIX)
 
 overx_dreps2: $(OVERX_DREPS)
 
 # $(shell ls $(DREPS_DIR)/dreps-%.mlb) could be used instead of wildcard, especially since there's no wild cards in it!
 
 $(O01): $(OVERX_SELF_DIR)/overx-%-01wk.mlb:   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%0.mlb   $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb
-	$(DOVERSETS) $^ $*-01wk $(OVERX_SELF_DIR)
+	$(DOVERSETS) $^ $*-01wk $(OVERX_SELF_SUFFIX)
 
 $(O12): $(OVERX_SELF_DIR)/overx-%-12wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%1wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb
-	$(DOVERSETS) $^ $*-12wk $(OVERX_SELF_DIR)
+	$(DOVERSETS) $^ $*-12wk $(OVERX_SELF_SUFFIX)
 
 $(O23): $(OVERX_SELF_DIR)/overx-%-23wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%2wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb
-	$(DOVERSETS) $^ $*-23wk $(OVERX_SELF_DIR)
+	$(DOVERSETS) $^ $*-23wk $(OVERX_SELF_SUFFIX)
 
 $(O34): $(OVERX_SELF_DIR)/overx-%-34wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%4wk.mlb
-	$(DOVERSETS) $^ $*-34wk $(OVERX_SELF_DIR)
+	$(DOVERSETS) $^ $*-34wk $(OVERX_SELF_SUFFIX)
 
 overx_self2: $(OVERX_SELF)
 
