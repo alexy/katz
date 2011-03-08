@@ -13,6 +13,7 @@ let prefixOverx'  = ref "overx"
 let outdirOverx'  = ref (Some !prefixOverx')
 let prefixOvery'  = ref "overy"
 let outdirOvery'  = ref (Some !prefixOvery')
+let outdirSuffix' = ref None
 
 let specs =
 [
@@ -28,6 +29,8 @@ let specs =
   (noshort,"prefixOvery",None,Some (fun x ->  prefixOvery' := x));
   (noshort,"outdirOvery",None,Some (fun x ->  outdirOvery' := Some x));
   (noshort,"nodirOvery",                 (set outdirOvery' None), None);
+  ('s',"outdirSuffix",   None,Some (fun x ->  outdirSuffix' := Some x));
+  (noshort,"nodirSuffix",                (set outdirSuffix' None), None);
   ('o',"orates",(set oratesNow' (not !oratesNow')),None);
   ('y',"orates",(set saveOverY' (not !saveOverY')),None);
   ('k',"mark",None,Some (fun x -> mark' := x))
@@ -39,8 +42,8 @@ let () =
   let oratesNow,   saveOverY,   mark = 
       !oratesNow', !saveOverY', !mark' in
       
-  let prefixOvers,   outdirOvers,   prefixOrates,   outdirOrates =
-      !prefixOvers', !outdirOvers', !prefixOrates', !outdirOrates' in
+  let prefixOvers,   outdirOvers,   prefixOrates,   outdirOrates,   outdirSuffix =
+      !prefixOvers', !outdirOvers', !prefixOrates', !outdirOrates', !outdirSuffix' in
   let prefixOverx,   outdirOverx,   prefixOvery,    outdirOvery =
       !prefixOverx', !outdirOverx', !prefixOvery',  !outdirOvery' in
 
@@ -51,10 +54,10 @@ let () =
     | _ -> failwith "usage: doverlaps b1Name b2Name saveBase"
   in
   let saveSuffix = saveBase^".mlb" in
-  let osetsName  = sprintf "%s-%s%s" prefixOvers  mark saveSuffix  in
-  let oratesName = sprintf "%s-%s%s" prefixOrates mark saveSuffix  in
-  let overxName  = sprintf "%s-%s%s" prefixOverx  mark saveSuffix  in
-  let overyName  = sprintf "%s-%s%s" prefixOvery  mark saveSuffix  in
+  let osetsName  = sprintf "%s-%s%s" prefixOvers  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOvers  ~infix:"-" outdirSuffix) in
+  let oratesName = sprintf "%s-%s%s" prefixOrates mark saveSuffix |> mayPrependDir (mayOptAppend outdirOrates ~infix:"-" outdirSuffix) in
+  let overxName  = sprintf "%s-%s%s" prefixOverx  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOverx  ~infix:"-" outdirSuffix) in
+  let overyName  = sprintf "%s-%s%s" prefixOvery  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOvery  ~infix:"-" outdirSuffix) in
   
   leprintf "reading buckets from %s and %s, saving fraction to left in %s, "
     b1Name b2Name overxName;

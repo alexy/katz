@@ -308,10 +308,20 @@ let mayPrependDir optDir name =
   | Some dir when not (String.is_empty dir) -> sprintf "%s/%s" dir name
   | _ -> name
   
-let optAppend optStr suffix =
+let optAppend optStr ?(infix="") suffix =
   match optStr with
-  | Some s -> Some (s^suffix)
+  | Some s -> Some (sprintf "%s%s%s"s infix suffix)
   | _ -> None
+
+let mayAppend str ?(infix="") optSuffix =
+  match optSuffix with
+  | Some suffix -> sprintf "%s%s%s" str infix suffix
+  | _ -> str
+
+let mayOptAppend optStr ?(infix="") optSuffix =
+  match optStr,optSuffix with
+  | Some s, Some suffix -> Some (sprintf "%s%s%s" s infix suffix)
+  | _ -> optStr
   
 let mkDirP  ?(verbose=false) ?(perm=0o755) dirName =
   if Sys.file_exists dirName && Sys.is_directory dirName then ()
