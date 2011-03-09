@@ -5,7 +5,7 @@ open Common
 open Getopt
 
 let mark'    = ref ""
-let prefix'  = ref "aranks"
+let prefix'  = ref "rbucks"
 let outdir'  = ref (Some !prefix')
 let specs =
 [

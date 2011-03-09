@@ -70,7 +70,7 @@
 
 \VerbatimFootnotes
 \def\myauthor{Alexy Khrabrov}
-\def\baseheaderlevel{2}
+\def\baseheaderlevel{1}
 \def\format{complete}
 \def\latexxslt{memoir-thesis-xelatex.xslt}
 \def\mytitle{The Mind Economy of Social Networks: Dynamic Graph Analysis of Communications}
@@ -183,7 +183,1311 @@
 \setlength{\parindent}{1em}
 
 \mainmatter
-\chapter{Success is Earned}
+\begin{abstract}
+\label{abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Online social networks are novel mechanisms for distributed interaction that have been enabled by affordable and ubiquitous communications and computing. Facebook has over 500 million members (larger than the US population) and Twitter broadcasts over 100 million ``tweets'' per day (compared with about 600 million pieces of mail the USPS handles daily). Social networks are growing in reach and impact but little is known about their structure, dynamics or users' behaviors. New techniques and approaches are needed to study and understand why these networks attract users and how the networks evolve.
+
+
+This thesis investigates these challenges and its main contributions are:
+
+
+\begin{itemize}
+
+
+\item new algorithms for identification of an individual based on their behaviors;
+
+\item an infrastructure and methodology for understanding communication on graphs;
+
+\item identification and exploration of sub-communities;
+
+\item metrics for identifying effective communicators in dynamic graphs;
+
+\item a new time-sensitive definition of reciprocal social capital and its iterative computation.
+\end{itemize}
+
+These methods have already lead to the discovery of ``mind economies'' within Twitter, where interactions seek to increase user ratings as well as promoting users' topics of interest and subgroups. Reciprocal social capital metrics identify the ``middle class'' of Twitter which does most of the ``long-term'' talking, carrying the bulk of the system-sustaining conversations. Our approach is of interest to computer scientists, social scientists, economists, marketers, and social media builders who want to find and present new ways of exploring, browsing, analyzing, and sustaining online social networks.
+
+
+\pagebreak 
+\end{abstract}
+\clearpage
+% Table of Contents
+\tableofcontents
+\clearpage
+\listoffigures			% activate to include a List of Figures
+\clearpage
+\listoftables			% activate to include a List of Tables
+\clearpage
+
+
+\chapter{Introduction}
+\label{introduction}
+
+\section{Overview}
+\label{overview}
+
+Modern human society is first and foremost a society of the mind --- a social mind, pondering social thoughts.  The thought becomes action after reaching a critical mass of actors.   A concept which becomes action goes through a lifecycle of invention, being noticed by the influencers, spreading, taking hold, and crossing some sort of a phase transition.  A telling feature of any successful idea is its transition from individual to group to global level in the network.  Determining these levels and detecting how people and ideas relate to them is key to understanding network dynamics.
+
+
+Spreading news, knowledge and ideas, arguing about them, and forming groups around them has always been the essence of culture. Political thinkers and rules, artists, and philosophers are examples of the original social networks which circulated relevant knowledge and made a discourse out of it.
+
+
+In a situation where concepts are tangible as reproducible units and can be retranslated, they take on qualities of currency.  For instance, the concepts underlying the backbone of the Internet itself relate to code, and in recent years we saw a dramatic rise in social coding via social coding networks such as {\itshape github}, {\itshape bitbucket.com, \_patch-tag.com}, etc.  Code ideas are often expressed as working snippets (gists) and contain URLs to use and run right away.
+When ideas' traction is quantifiable and idea exchanges lead to measurable change in ranking of both actors and goods being exchanged, an economy inevitably evolves, which we call the Mind Economy and to the study of which we devote this thesis.
+
+
+Our Mind Economy study focuses on the fundamental questions of communication on a network, the goals of each actor and group of actors, and understanding the nature of influence.  Simply put, we want to know
+
+
+\begin{itemize}
+
+
+\item why do people twitter?
+
+\item who has influence on Twitter? 
+
+\item is there a social capital formulation which captures most people's utilities?
+
+\item can we characterize people by their influence and the types of social behaviors related to attaining it?
+\end{itemize}
+
+Since online social networks are driven by software and strongly depend on the algorithmic underpinnings, and produce large volumes of data, a computational approach is required for large-scale data mining.
+
+
+\pagebreak \section{History}
+\label{history}
+
+Social networks exist in some form for as long as human society itself.  What made them subject to our computer treatment is their current online incarnation, whereby their operation is code-based, algorithmically guided, and their data is available in bulk for serious data mining.
+History of social networks is rich and eventful --- in fact, just like human history itself, which can be considered as an evolution of the kinds of social networks humans organize into, such as tribes, businesses, guilds, classes, nations.
+
+
+The first recorded blogger, in our analysis, is Cicero.  While he stayed in Rome, engrossed in the politics of the failing Republic he used to uphold as a consul, his epicurean friend Atticus removed to Athens, following Epicurus' maxim that one has to stay away from politics.  However, Atticus wanted to follow the events back in Rome, and asked Cicero to write him -- almost daily.  A ship from Athens picked up a new letter, often ending with ``you messenger is here so I have to wrap up,'' and delivered it to Athens, where Atticus had a stable of scribes making copies.  The copies were delivered to many prominent Romans all over the Empire for a subscription fee.  That was Atticus' way to enable Cicero to have an income from his talents, but also influence.
+
+
+We see, in Cicero's example, many key features of real influence in a social network -- beyond time and through history.  When we read Cicero, he comes alive, with all his human emotions, failings, and strengths.  He makes his causes your own, enlists you as a participant in his thought works, ambitions, dialogues.  He writes about news and moral issues, forcing you to take sides, making his sympathies and hatreds known unequivocally.  He likes a florid turn of phrase, a soundbite.  He has many friends whom he remembers at the right times.  While most noble Romans had a {\itshape nomenclator} -- a slave who whispered the names of those met in the street -- Cicero needed none, so apt was his social and textual memory.
+
+
+Thanks to Atticus, we have a live chronicle of Roman life of Cicero's times, but we also have many letters which Cicero wrote in reply and to maintain his vast social network. Every effective blogger from our online social networks has some, or (rarely) all, qualities which Cicero demonstrates in his own correspondence:
+
+
+\begin{enumerate}
+
+
+\item a vast network of contacts
+
+\item engagement with topics of the day and issues of public interest
+
+\item piercing intellect, cutting to the heart of the matter
+
+\item emotional engagement, where author's feelings shine through the words and call for empathic (or antipathic!) response from the reader
+
+\item writing for well-defined communities, the political class and the philosophers
+
+\item \label{item:cicero-balance} careful attention to the balance of communications
+\end{enumerate}
+
+While we don't have enough data volume to quantify these points for Cicero, we can quantify most of them in online social networks.  Point~\ref{item:cicero-balance} leads naturally to our reciprocal social capital definition (see Section~\ref{chapter:SocialCapital}).
+
+
+The first online social network of notice which is still going strong today is \href{http://livejournal.com/}{LiveJournal}\footnote{\href{http://livejournal.com/}{http://livejournal.com/}} (LJ), started by Brad Fitzpatrick in 1999 as a way to for friends to share their dairies and notes online.  It pioneered most of the features of online networks we now take for granted, such as
+
+
+\begin{itemize}
+
+
+\item an account for each user with posts along the timeline
+
+\item a mechanism to follow friends, when their updates can be reviewed as a news stream. This predates RSS and is a key feature of LJ.
+
+\item explicit communities. You can create or join a group and then post to it. Communities' membership and posts can be controlled by moderators, e.g.\ be by invitation only, or open for all.
+
+\item Anybody can read anybody else's journal except for the ``friends-only'' or private posts.
+\end{itemize}
+
+These features are present, in some form, in any modern online social network.  Communities may not be explicit, such as Twitter, but then some way to self-organize is always found, such as users adding metadata in the form of {\itshape hashtags} (like \texttt{\#clojure} for the community of Clojure fans).
+
+
+Facebook and Twitter follow up on the basic framework of LiveJournal with their own tweaks. 
+ Facebook is generally closed, ensuring the network grows by expressly approved links.  Photo sharing is integrated into Facebook, making it the largest photosharing site in the world.  The closed nature of Facebook ecosystem necessitates in-network applications, using the API.
+Twitter limits ``posts,'' to 140 character ``tweets.''  URL shortening and media sharing are supported by a plethora of external services.
+Other networks worth mentioning are LinkedIn, Classmates, and various national versions of the above.  E.g., in Russia there're
+
+
+\begin{itemize}
+
+
+\item odnoklassniki.ru (classmates, similar to \href{http://classmates.com}{classmates.com}\footnote{\href{http://classmates.com}{http://classmates.com}})
+
+\item vkontakte.ru (``in touch'', analogous to \href{http://linkedin.com/}{LinkedIn}\footnote{\href{http://linkedin.com/}{http://linkedin.com/}}
+\end{itemize}
+
+\pagebreak \section{Twitter}
+\label{twitter}
+
+Twitter is the key social network of our time, at least as far as the scientific community is concerned.  It's hard to believe now that it all just started in 2006.  Currently Twitter has about a hundred million users worldwide.  When we started getting the gardenhose \ref{StreamingAPI}, a fraction of all tweets, in 2009, we were receiving about 2 million tweets a day; a year later, it was more than 5 million daily.  As opposed to Facebook, Twitter is practically all open to everybody.  (Those using private tweets are a small minority with specific uses, such as explicit chat.)  Anybody can tweet anything to anybody else, given they know their Twitter nickname, such as \texttt{@john}.  The tweet will appear in \texttt{@john}'s stream when he checks his Twitter account.  
+
+
+Originally designed to be ready for transmission via SMS, each ``tweet'' must fit 140 characters.  A significant portion of all tweets contain an URL, making Twitter the largest ever machine for URL transmission.  Due to the limit, various ``URL shortening'' services exist, creating and maintaining mappings of long actual URLs to shorter, unique ones.  (There's a mechanism in the works for ``official'' URL shortening by their authors.)  Some shortening services, such as \href{http://bit.ly}{bit.ly}\footnote{\href{http://bit.ly}{http://bit.ly}}, use the mapping to track clicks and URL percolation.
+
+
+Twitter's online nature shines in the way it has become a vehicle for URL percolation.  Trending often spreads across the Internet subcultures.  E.g., many a YouTube phenomena pick their momentum on Twitter.  Multi-stage processes are possible where in-network and external influence alternate.  Justin Bieber, a son of a single mother from Stratford, Ontario, whose fans' mind economy we study in \ref{thepagerankgeneration}, started as a YouTube boy-singer sensation, was discovered by a talent scouting agency and noticed by Usher, the hip-hop star, eventually sang for \texttt{@barackobama}  and broke into mainstream via the People magazine.   Each stage in life of Justin Bieber's ecosystem, or ``beliebers'', is reflected on Twitter.  
+
+
+Twitter maintains a list of top ten ``trending topics,'' computed by a proprietary algorithm but clearly counting the frequency of mentions with some heavy timing preference to the present.  There are also, added more recently, local trends, per geographic area.  
+
+
+Twitter translates all kinds of trends -- both in-network, such as {\itshape memes}, and projections of the real world, or rather harsh outside reality, such as \texttt{\#michaeljackson}.  The latter often represent major news, and may be distinguished by multiple, almost simultaneous, injection points.  It can be an interesting project to use the injection dynamics for differentiating the externally induced trends, and perhaps also their strength and globality.
+
+
+As Mikhail Gronas, a researcher of Russian folklore and global online discourse, noted \cite{Gronas:2010:Private}, Twitter is a global megaphone, or, as we observe, a global echo chamber, which amplifies trending echoes from the outside world, but also has power to process and project them back into the world as Twitter itself grows in influence.
+
+
+When studying influence, it's important to distinguish between the global mirror and global megaphone behaviors of the network.  It's hard to control for all the externalities on an injected concept.  
+
+
+Examples where Twitter itself drives reality keep piling up with its growth.  Octavia Nasr, a senior Middle Eastern desk editor for CNN, mentioned her respect for a Lebanese Muslim cleric known, among other things, for his defense of women's rights, and was fired since the cleric was also a polarizing figure in Arab-Israeli relations, so taking sides might have created an appearance of impairing her impartiality.  Dmitri Zelenin, a governor of the Russian Tver region, tweeted a photo from a Kremlin reception showing an earth worm in a plate of salad.  He was reprimanded by a President Medvedev's senior aide, who suggested that the list of ``firable'' offenses for governors should be amended with a cause ``for stupid and irresponsible tweets''.  In fact, President Medvedev of Russia is on the highest level of using Twitter in politics -- he visited Twitter's headquarters to open his own account, \texttt{@kremlinrussia}, receiving an iPhone 4 as a gift from Steve Jobs himself on the same trip, and often tweets from meetings, while reprimanding those subordinates who tweet from meetings with him (sometimes though Twitter as well).
+
+
+{\itshape Memes} are real in-network phenomena, often represented by a YouTube clip of quirky, catchy, or paradoxical nature.  They are interesting because of their percolation patterns and staying power.  We collaborate with the \href{http://webecologyproject.org}{Web Ecology Project}\footnote{\href{http://webecologyproject.org}{http://webecologyproject.org}} on online memetics studies.  While a separate and rapidly evolving area with its own conference \href{http://ROFLcon.org}{ROFLcon}\footnote{\href{http://ROFLcon.org}{http://ROFLcon.org}} started by Tim Hwang, online memetics, overall, describes just one  of the complex processes transpiring over Twitter, overlapping with many other complex percolation processes.  Tracking memes requires a different approach than say identifying opinion change based on evidence accumulation, important in political dynamics, or cultural wars \cite{Sudweeks:2010:Cultural}.
+
+
+Users spontaneously or consciously tag their tweets with \#hashtags, allowing searchers to extract {\itshape ad hoc} thematic communities.  It's fascinating to watch how a hashtag spreads through the system virally.  Many communities have an established hashtag or set of hashtags, such as \texttt{\#clojure} or \texttt{\#scala}.  Internet-rich conferences such as \href{http://clojure-conj.org}{Clojure Conj}\footnote{\href{http://clojure-conj.org}{http://clojure-conj.org}} have ``official'' hashtags of their own, in this case \texttt{\#clojureconj}.   It should be kept in mind that any hashtags can be latched on by spammers to promote their tweets.  Hence, content-based community identification is still preferable in addition to hashtags.
+
+
+In {\itshape Twitterverse} (the Twitter universe, an ecosystem of startups around it) there is a service to overcome any limitation and complement any feature.  E.g., to tweet with more than 140 characters, there is \href{http://www.twitlonger.com/}{Twit Longer}\footnote{\href{http://www.twitlonger.com/}{http://www.twitlonger.com/}}.  For self-organizing into ``tribes'', there are \href{http://www.twibes.com/}{Twibes}\footnote{\href{http://www.twibes.com/}{http://www.twibes.com/}}.
+
+
+\pagebreak \section{Rankings}
+\label{rankings}
+
+Whenever a social system self-organizes into any kind of purposeful structure, including online social networks, hierarchies take shape.  Since human relationships are (literally) inherently hierarchical (from the family mechanism and up), each pairwise interaction may say something about the status of the participants.  Similarly, any group solving any kind of problems develops leadership, while ``mere'' discussion groups may stay loosely organized and relatively leaderless.
+
+
+It is also in human nature to identify those ``at the top'' for all kinds of competitive criteria.  Since Twitter allows one to ``follow'' others and shows the counter of your followers, that number had emerged as a first proxy for Twitter influence.  
+
+
+Initial attention to the number of followers had lead to early wars to be on top by having the most of them, e.g.\ the famous battle of Ashton Kutcher vs. CNN.  Playing on the quirky, meme-loving personal dynamics of the early twitterers, Ashton a (celebrity) person, managed to beat CNN, a mighty news corporation.  As of the time of this writing (October 2010), \texttt{@aplusk} has roughly 6 M (million) followers against \texttt{@cnn}'s 1.35 M and \texttt{@cbbbrk} (breaking news) 3.5 M.
+
+
+The number of followers is certainly a measure of popularity, often representing real-world celebrity -- such as \texttt{@barackobama}, who has 5.7 M followers. 
+
+
+However, this number is not the most useful in many cases, as it reflects the global interest in a person who may not be really active on Twitter itself.  E.g., although President Obama has millions of followers,  he has practically no participation in discussions conducted through Twitter.  He's nowhere in our conversational metrics.  Our reciprocal social capital is especially clear on this, as it rewards active and persistent involvement in the day to day business of communication on Twitter as if it were politics -- with careful attention to individual balances of addresses and replies.
+
+
+Maximizing the number of followers as a  criteria of influence had lead to a plethora of spambots following each other and then you, expecting a ``follow back'' from those set to thus {\itshape auto-follow}.  An active market of spamming software has developed to follow and unfollow people {\itshape en masse}, as well as to buy followers outright -- where in fact all you get is a stable of spambots following you.  For these reasons, we prefer not to use on the number of followers as the most important feature of a node on Twitter.
+
+
+Some of the sites in Twitter ecosystem computing various ratings are listed in Twitter ranking services (\autoref{twitterrankingservices}).
+
+
+\begin{table}[htbp]
+\begin{minipage}{\linewidth}
+\setlength{\tymax}{0.5\linewidth}
+\centering
+\small
+\caption{Twitter ranking services}
+\label{twitterrankingservices}
+\begin{tabulary}{\linewidth}{@{}lc@{}} \\ \toprule 
+URL&Ranking kinds \\\midrule
+\href{http://twitturly.com}{Twitturly}\footnote{\href{http://twitturly.com}{http://twitturly.com}}&ranking of URLs in tweets \\
+\href{http://crowdeye.com}{Crowdeye}\footnote{\href{http://crowdeye.com}{http://crowdeye.com}}&Crowdeye Rank, numeric influence \\
+\href{http://klout.com}{Klout}\footnote{\href{http://klout.com}{http://klout.com}}&rankings of influencers in subject areas \\
+\href{http://twitaholic.com}{Twitaholic}\footnote{\href{http://twitaholic.com}{http://twitaholic.com}}&top rankings by followers \\
+\href{http://wefollow.com}{WeFollow}\footnote{\href{http://wefollow.com}{http://wefollow.com}}&rankings by followers per category \\
+\href{http://twinfluence.com}{Twinfluence}\footnote{\href{http://twinfluence.com}{http://twinfluence.com}}&includes Reach, Velocity, Social Capital \\
+
+		\bottomrule
+	\end{tabulary}
+\end{minipage}
+\end{table}
+
+When reviewing various Twitter ranking services, one cannot help noticing that for the majority of the proprietary rankings it's unclear which factors figure in which, and with which weights.  In our discussions with various startups in the area we proposed Open Influence standards and benchmarks.  They would allow to
+
+
+\begin{itemize}
+
+
+\item compare rankings from different services
+
+\item explain how a particular ranking was obtained
+
+\item confirm, for the users of rankings, e.g.\ marketers, that their budgeting is justified if based on such OI-compliant rankings
+
+\item enable competitions to improve the rankings with objective performance metrics for comparison
+\end{itemize}
+
+\pagebreak \section{Communication Networks}
+\label{communicationnetworks}
+
+In this study we focus on direct communications from one person to another (or possibly to a specific target group enumerated by name).  While most {\itshape Twitterverse} services focus on the followers and their number, we look at the actual dialogues taking place in public tweets, for reasons noted above.
+
+
+Conversation is a basic unit of social interaction.  Conversations are fundamental and unfold via the same scenarios regardless of the medium through which they are conducted.  From face to face, to paper mail, to phone, email, instant messaging, and now to online social networks, conversations follow the same essential patterns, and networks arising around them demonstrate the same inherent qualities.  We all know what to expect from a variety of scenarios in conversations, from an unsolicited tweet to a news update with a hash tag for your professional community.  All of our social experiences are translated naturally online, with the standard online caveats of emotional amplification and ``feedback fix'' discovered in other Internet forms of discourse previously
+
+
+Twitter conversations can form regular chains or be episodic.  They can be conducted via {\itshape ad hoc} tweets or systematic {\itshape replies}, with the latters memorizing the ID of the original tweet.
+
+
+We build a {\itshape replier graph} from each user $A$'s messages mentioning another user $B$ (which may be either ``for'' or ``about'' $B$), and study how this graph evolves.  (In a tweet from $A$ mentioning \verb|@B|,  $A$ is the mentioner of$B$, and $B$ is the replier of $A$, in our terminology). 
+
+
+For every day in the study, we compute a pagerank-type score and a \emph{D-Rank}, a dynamic function of the pagerank, for all users, together with a series of features such as the number of mentions a user gives or receives. The daily-versioned features enable exploratory data analysis of the conversational dynamics by looking at the relative decline or growth in specific features for every user every day, separately or relative to others.  For instance, we find the longest periods of growth in the number of times a user $A$ is mentioned by other users on a day $d$, $m=|M(A,d)|$, over a contiguous period of days, and also compute its acceleration over that period, $dm/dt$. Those accelerating the most, or sustaining the longest growth, or both, are worth closer modeling.
+
+
+\pagebreak \section{Network Features}
+\label{networkfeatures}
+
+Most of the work in mining Twitter is exploratory in nature and reflects the desire to discover ``what's going on,'' a fundamental question we set out to tackle from various angles.  Twitter, of all online media, is the closest to a social happening, so the question really makes sense and allows for a variety of answers at several levels of detail; this is how we approach it, as a series of subsequent iterations from individual, to group, to global, and then back to individual with global reference of reciprocal social capital.  Similar path is followed by other researchers.
+
+
+Our friends from the Web Ecology Project look at such features as
+
+
+\begin{itemize}
+
+
+\item memes, such as Old Spice ads and their audience make up
+
+\item Events such as \texttt{\#IranElections} \ref{Gaffney:2010:IranElections}, \texttt{\#WorldCup}, etc.
+
+\item methods of simulating twitter audience
+
+\item detecting sentiment, language, gender
+\end{itemize}
+
+Marketers, such as the \href{http://www.webecologyproject.org/2010/09/140kit-field-reports/}{Old Spice ad creators}\footnote{\href{http://www.webecologyproject.org/2010/09/140kit-field-reports/}{http://www.webecologyproject.org/2010/09/140kit-field-reports/}}, try to latch onto the meme wagon, and model the {\itshape netizens} as an e.g.\ ``high-tech'' audience with certain preferences and reaction patterns thought to be conducive for enjoyment of the potential {\itshape memes}.
+
+
+Due to the sheer volume of Twitter, users tend to self-organize into communities as followers, using hash tags, and conversations.  A variety of algorithms for community identification exists for online networks such as the Web.  Most of them are using link structure only, and majority finds only non-overlapping communities.
+
+
+Flake et al. \cite{Flake:2002:Communities} employ a recursive definition, that a community is a cluster with more inside links than outside, and use network flow to segment the whole network at once.  Baumes, Goldberg at al. \cite{Baumes:2010:Overlapping, Goldberg:2010:OverlappingClusters} allow for overlapping communities, but also rely on the communication graph structure only.  Cazabet et al. \cite{Cazabet:2010:Communities} use network dynamics to detect strongly overlapping communities using the order in which edges are added, still relying purely on the graph structure.
+
+
+Although these approaches are valid and produce meaningful communities, we prefer to mimic actual group-finding process humans employ when trying to find a good fit for themselves in a social network.
+
+
+\pagebreak \section{Language of Life}
+\label{languageoflife}
+
+When we first looked at sensor networks, of which Twitter is an instance, we asked a simple question: given that the data is limited to fairly elementary actions, can we check whether a person is unique in the network, i.e.\ fully identifiable from a subset of his actions, such as a trace sample?  Working with MIT Reality data, we were able to identify about 85\% of the 100 participants of that sensor network.  Since Twitter is a social sensor and vocabulary of a twitterer can be compressed to a finite alphabet fairly easily, we'd like to apply our identification algorithms to it as well.
+
+
+We developed two techniques to identify a sequence of actions:
+
+
+\begin{enumerate}
+
+
+\item $n$-gram perplexity
+
+\item suffix tree
+\end{enumerate}
+
+For $n$-grams, we treat each person's behavioral history as an expression, in a limited alphabet of actions available to him, of a separate language, unique to this person.  For each of the candidates in the study, or ``suspects,'' we build a language model, using industrial-strength toolkit such as SRILM \ref{Ngram:SRILM}.
+
+
+Then, once a trace sample is received, we compute its perplexity in each model from the ``suspect'' set, and the lowest perplexity wins!  Thus, the person in whose ``language'' the sample is most likely, should be the best suspect.
+
+
+Our suffix tree model approaches the problem with direct enumeration of all subsequences in all of the suspects' languages.  Then, once a sample is received, we take all of its contiguous subsequences and follow them down our suffix tree, counting the number of times we pass through each original person's suffix in a node or a leaf.  A leaf means that the subsequence is unique to a single person, highly increasing the chances that that person is the originator of the sample.  An inner node with a limited list of suspects raises the profile of those suspects accordingly.  In the end we aggregate the statistics from all of the sample's subsequences and the most frequent candidate {\itshape by leaves count} wins, with the ties being broken by the {\itshape through nodes} count.
+
+
+The likely patterns identifying people are ways not only to identify, but also to characterize the people.  Our scores, showing how close is a sample to a specific person, can be used to cluster people or pick the most typical patterns of their behavior.
+
+
+\pagebreak \section{{\itshape EDA} for Social Networks}
+\label{eda_forsocialnetworks}
+
+We approach the problem of browsing a social network, similar to data sampling, from the point of view of a typical user new to the network, wishing to find the most interesting set of people discussing the topics also of interest to the user.  It turns out that such people and topics come together, and finding topics helps identifying the people and vice versa.  Furthermore, if people are ``about'' some topics, and we treat their network nodes as ``buckets of ideas,'' they usually hold a fixed set of closely related ideas, at least in their public behavior.  We model these assumptions in our {\itshape topical communities} browsing process.
+
+
+First, we index all of the text in all of our tweets of interest as a single corpus, and, at the same time, build the communication graph from them.   Then we start with a specific topic, expressed as a string of text.  Using our index, we find all of the pairs of users who exchange tweets matching the topic, in at least one or both directions, depending on the strength of the target communities we want to select.  We sort all such communication pairs in the decreasing order of their total number of exchanges, again counting either all or only the topical exchanges.  At the top of the list there's a {\itshape pair of repliers} ${A,B}$.  This pair will be the seed of our topical community.  
+
+
+Once the seed is obtained, we grow the community by inducting each new member $C$, one by one, such that he has ``parents'' ${A,B}$ already in the community and has exchanged the topical tweets with both of them.  We call it {\itshape a triangle rule}.  Our topical communities are pretty coherent and the process converges very quickly.
+
+
+Given the community, we can analyze its combined text, e.g.\ looking for {\itshape Statistically Improbable Phrases} (SIPs) as representative of the communal discourse.  We also introduce the notion of {\itshape Fringe} as those who have just one friend on the community.  Again, treating the Fringe's textual output as a whole, we can identify its own SIPs.  Those sets of SIPs can then become starting points for the next iteration of network browsing.
+
+
+\pagebreak \section{Dynamic Graph Analysis}
+\label{dynamicgraphanalysis}
+
+If social network exploration is similar to statistical data sampling, then our dynamic data analysis is akin to   EDA, the exploratory data analysis of Tukey \cite{Tukey:1977:EDA}.  While topical communities allow for an iterative, localized process to pivot and browse, using the global index for seeding topical repliers and then resuming local community building, now we come to a set of tools to identify globally interesting people.
+
+
+We're interested in people who are influential in some sense.  These are either the people who already wield influence, e.g.\ by ranking higher in some sense than their audience, or are up and coming to a higher position.  We similarly may look for those whose star is declining.
+
+
+Since we work with the communication graph, where \texttt{@alice} replies to, or mentions, \texttt{@bob}, we can start by looking for such \texttt{@bobs} who have the most mentioners.  However, this can change from one day to another -- as every day, thousands of new users hop on Twitter.  Ranking by pure mentions also do not reflect those important nodes who are mentioned by just a few subnodes but with a lot of mentioners of their own, i.e.\ by a few other important nodes.  The latter clearly calls for a {\itshape PagRank}-like measure.  
+
+
+There's still the problem of the graph being dynamic, i.e.\ changing every day, whereas PageRank is a stationary distribution on a given static graph.  We solve this problem by introducing {\itshape D-Rank}, a measure which replaces the PageRank of a node in a given daily snapshot by its rank-order position in the sorted PageRank list for that day, normalized by the list length.
+
+
+D-Rank then becomes a foundation of {\itshape StarRank}, which reflects an individual's importance relative to his audience.  Given the star configuration of a node and its repliers, we first compute the average D-Rank of the audience, weighted by the number of replies each mentioner has contributed to the ``star.''  We then take the ratio of the star's own D-Rank over that average.  The ``star'' in {\itshape StarRank} has two meanings -- the configuration used to compute it, as well as the fact that the ratio will be high for real celebrities, or ``stars.''  
+
+
+D-Rank and StarRank are designed to be comparable across days, so we set out to plot them across days, and then find interesting patterns in the resulting time series.  The kinds of patterns we look for are naturally come to mind:
+
+
+\begin{itemize}
+
+
+\item which people have the longest monotonically increasing or decreasing consecutive runs of D-Rank or StarRank?
+
+\item ---''``--- for nonicreasing/nondecreasing
+
+\item ---''``---, but looking at the acceleration of the value at hand, i.e.\ its rational derivative
+\end{itemize}
+
+Our sorting, filtering, and ranking techniques amount to a simple data model which is at the heart of any EDA.  This is the approach Prof. Mitch Marcus of UPenn was using in his very successful statistical NLP course from at least 1998, piping together Unix command line tools like \texttt{cat | sort | uniq | top} to perform effective NLP tasks.  And for many social networking tasks it remains the most effective approach, especially given the volume of data we work with.  
+
+
+Each day's snapshot can be handled separately, and its PageRank computed.  PageRank is the least parallelizable part here as it reflects the whole graph structure.  After that, however, its derivatives D-Rank and StarRank can be computed in parallel for each node, which our {\itshape Clojure}-based implementation \ref{impl:Clojure} fully exploits, with nearly linear speedup from a single letter \texttt{p}, making a parallel \texttt{pmap} out of a seuential \texttt{map}.
+
+
+Using our simple ranking models we find very interesting, quite unexpected sets of important users, on which we report in the \ref{Influence Findings} and \ref{The Pagerank Generation} sections.  We discover the whole new ``Justin Bieber ecosystem'' with its attending {\itshape Mind Economy}, and then see the presence of similar forms everywhere.
+
+
+\pagebreak \section{Mind Economy}
+\label{mindeconomy}
+
+Finally, we want to move even deeper with our global metrics in the spirit of our dynamic graph analysis, while reflecting the community structure from the exploration techniques even better.  We also want to preserve the inherent temporality of our data set.
+
+
+Using the {\itshape Mind Economy} insights from our analysis of influence, we strive to define a quantitative {\itshape social capital} metric which would revitalize the term from various fuzzy uses it acquired and bootstrap a meaningful virtual economy on top of the real data evolution we observe.  We note that {\itshape capital} can not be just a random count, such as a ``number of friends on a program committee'' \cite{Licamele:2005:Benefit}.  Capital should be made through a certain wealth creation process, and exchanged through transactions where meaningful adjustment occurs, which depends on the parties' amount of capital they'd begun with.  All these requirements lead to our iteratively defined {\itshape Reciprocal Social Capital}.  We literally walk along with the whole original world of Twitter and adjust each node's capital according to our definition from day to day.  In our definition, we focus on reciprocity of communication rewarding those who reply to their mentioners, and whose repliers eventually mention them in return.  We model this balance-conscious system on the village social capital of Tuscany, which has lead to especially cohesive, thriving communities in real life, enduring through history to this day.
+
+
+What we end up with is a revelatory picture of a robust {\itshape middle class} of social networks.  These people carry on conversations concerning and reinforcing their long-term interests and businesses, and shoulder the bulk of purpose-driven Twitter communication.
+
+
+\pagebreak \section{Roadmap}
+\label{roadmap}
+
+In the rest of this thesis we elaborate all of the above points, along the following roadmap.
+
+
+\begin{itemize}
+
+
+\item Chapter \ref{characterization} describes our identification algorithms for the {\itshape Language of Life}, unique to every person in a network
+
+\item Chapter \ref{exploration} goes in detail over our textual network browsing approach, the EDA of social networks
+
+\item Section \ref{influence} shows our dynamic graph analysis, new metrics, resulting influence models, and showcases the results we find -- the whole purpose of this thesis; and they don't disappoint, we hope
+
+\item Chapter \ref{chapter:SocialCapital} describes our revitalizaton of the notion of social capital, with a robust, time sensitive, economic definition, and introduces a mind economy built on it.  We close with the discovery of the middle class of social networks.
+
+\item Chapter \ref{datamininginfrastructure} highlights the computational infrastructure we had put together to overcome the challenges our volumes of data posed.  We direct the reader to the open source projects, themselves hosted on the social coding hub, developed through IRC and Twitter collaboration with many of the same people who built all of the above collaborative and communication-based social media platforms.  Thus research and development come the full circle.
+\end{itemize}
+
+\pagebreak \chapter{Exploration}
+\label{exploration}
+
+One of the first things we do when approaching any new setup is to take stock of it, ``dip one's toes in the water,'' see ``what's going on'' in general.  For example, when considering statistical data, then Exploratory Data Analysis, or EDA, is a standard first cut \cite{Tukey:1977:EDA}.  A good example of a workbench where you can perform statistical EDA is R, the open-source statistical programing language and ecosystem.
+We'd like something like that for social network data.  Given a snapshot, a dynamic dataset, or a stream of OSN data, how do we find things of interest?  How do we begin to define them?
+One way to gain insight into OSNs is to find tweets about a {\itshape topic of interest}.  Tweets can be searched, e.g.\ by keywords, to select those about a topic.  Then people interested in the topic can be found on the end points of those messages.
+Once the dialogues are found, we can grow communities on top of them.  The process works as follows.
+First, we select those dialogues with the highest number of exchanges.  Then, for each conversing pair {A, B} we look for all such Cs which talk both to A and B, preferably on the given topic also.  Growing by mutual connectivity only, in triangles, or by topical ties too can be parameterized.
+
+
+Social networks generally provide an implementation of some kind of groups or communities which users can voluntarily join.  Twitter does not have this functionality, and there is no notion of a formal group or community.  We propose a method for identification of communities and assignment of semantic meaning to the discussion topics of the resulting communities.  Using this analysis method and a sample of roughly a month's worth of Tweets from Twitter's ``gardenhose'' feed, we demonstrate the discovery of meaningful user communities on Twitter.
+
+
+We examine Twitter data streaming in real time and treat it as a sensor.  Twitter is a social network which pioneered microblogging with the messages fitting an SMS, and a variety of clients, browsers, smart phones and PDAs are used for status updates by individuals, businesses, media outlets and even devices all over the world.  Often an aggregate trend of such statuses may represent an important development in the world, which has been demonstrated with the Iran and Moldova elections and the anniversary of the Tiananmen in China.
+
+
+We propose using Twitter as a sensor, tracking individuals and communities of interest, and characterizing individual roles and dynamics of their communications.  We developed a novel algorithm of community identification in social networks based on direct communication, as opposed to linking.  We show ways to find communities of interest and then browse their neighborhoods by either similarity or diversity of individuals and groups adjacent to the one of interest.  We use frequent collocations and statistically improbable phrases to summarize the focus of the community, giving a quick overview of its main topics.  
+
+
+Our methods provide insight into the largest social sensor network in the world and constitute a platform for social sensing.
+
+
+Twitter is a microblogging site and social network. Users of
+Twitter post or ``tweet'' short (up to 140 character) messages. Users
+can follow others tweets and interact with others using the
+directed messages (denoted by @) and {\itshape hashtags} (denoted by HHH).
+Twitter provides a conventional social graph of news updates.
+However, due to its ubiquity, Twitter can also be treated as a
+sensor. Many individuals update their status often enough to
+provide background activity. For brevity, we refer to a message on
+Twitter as a {\itshape twit}, and a twit mentioning another user as a
+{\itshape reply}.
+
+
+Unlike many other social networks, Twitter does not provide any
+kind of explicit structure for community or group organization. As
+such, any notional community must be constructed solely from the
+directionality of the messages on the network and the content of
+those messages. Any such community is necessarily {\itshape ad hoc} and
+dynamic, as a user can connect to many people over time and talk
+about a variety of topics.
+
+
+\pagebreak \section{Exploration Workflow}
+\label{explorationworkflow}
+
+The preprocessing of the social networks creates two fast
+searchable databases for content and structure. It consists of the
+following steps:
+
+
+\begin{enumerate}
+
+
+\item obtain the stream of data from the social network
+
+
+
+
+\item index the twits in a text search engine (Lucene)
+
+
+
+
+\item build the communication graph (Berkeley DB)
+
+
+
+\end{enumerate}
+
+The preprocessing is illustrated in Figure~\ref{figure:spie-preprocessing}.
+Note that the term ``preprocessing'' here does not preclude online
+operation -- the data stream can be indexed continuously, and both
+Lucene and Berkeley DB allow for efficient real-time growth.
+
+
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{figures/spie-preprocessing}
+\caption{Preprocessing social network data for exploration.  Message text is indexed in a full text search index, and the communication graph is stored in a fast associative map database.}
+\label{figure:spie-preprocessing}
+\end{center}
+\end{figure}
+Once those are built, the community sensing workflow proceeds as
+follows:
+
+
+\begin{enumerate}
+
+
+\item come up with a set of keywords to occur in the community of
+interest
+
+
+
+
+\item a seeding pair of repliers about the topic is found
+
+
+
+
+\item a community of replier triangles is grown from the pair
+
+
+
+
+\item the characteristic phrases are found for the community
+discourse
+
+
+
+
+\item the fringe of the community is identified, with the choices of
+pairs or topics for further iterations
+
+
+
+\end{enumerate}
+
+The exploration workflow is shown in Figure~\ref{figure:spie-workflow}.
+
+
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[width=6in]{figures/spie-workflow}
+\caption{Exploration workflow.  A keyword is searched and the pairs using it most are found.  Then a community is grown around such a pair, and its topics are extracted.  The fringe and its topics are also listed, allowing for subsequent pivoting and iteration.}
+\label{figure:spie-workflow}
+\end{center}
+\end{figure}
+We begin the analysis by searching the Lucene index for pairs of
+users who discuss a keyword. All of the twit contents are indexed.
+Various twit fields are treated separately, which allows us to find
+any replies quickly.
+
+
+We explored finding both weak and strong pairs of users. A weak
+user pair is a pair of users who at least once in their corpora use
+the same keyword in at least one of their twits and additionally
+have at least one directed message between them. A strong pair of
+users has at least one directed message between them which uses the
+keyword being searched for. For our analysis we used strong user
+pairs finding that they gave us results more like what we were
+attempting to find as a community. Additionally, before generating
+communities based on these pairs we pruned them based on the number
+of times that the keyword was mentioned between the users.
+
+
+We then used these user pairs as seeds for growing communities. We
+use a recursive community definition based on a triangle property,
+such that a user is a member of a community if they have been sent
+messages by two of the users of the community. If that is the case,
+the ``child'' user is added to the community connected to those two
+``parent'' users. The child users are added recursively, until there
+are no more users to add. Any users which have been sent messages
+by exactly one of the members of the community is considered to be
+on the ``fringe'' outside of the community, or simply the fringe.
+
+
+We perform collocation and Statistically Improbable Phrase (SIP)
+analysis on these communities to find the resulting topics of
+conversation in the communities. These Natural Language Processing
+(NLP) approaches are used to identify the most characteristic
+phrases describing the community discourse, approximating
+``what are they talking about.''
+
+
+\pagebreak \section{Previous Exploration Work}
+\label{previousexplorationwork}
+
+Community identification in graphs with no specific community marking is an active research area. Flake et al. \cite{DBLP:conf/kdd/FlakeLG00} propose a definition of a community as a group with more links inside than outside. It turns out such a definition requires a simultaneous partitioning of the whole graph into communities to work, and the communities cannot overlap. Mishra et al. \cite{DBLP:conf/waw/MishraSST07} overcome this with a notion of $(\alpha,\beta)$ clusters. A subset of vertices forms an $(\alpha,\beta)$-cluster if every vertex in the cluster is adjacent to at least a $\beta$-fraction of the cluster and every vertex outside the cluster is adjacent to at most an $\alpha$-fraction of the cluster. Such clusters can overlap. Backstrom et al. \cite{DBLP:conf/kdd/BackstromHKL06} use self-declaration as criteria for membership: joining a LiveJournal community, which requires explicit joining, or publishing in a conference for DBLP-based communities. Statistically Improbable Phrases (SIPs) are effectively used on Amazon to characterize contents of books, and they give a very good idea of what a book is about. Savell and Cybenko \cite{Savell:2008:Intelligence} provide quantitative formalisms for social behavior in a group context. Khrabrov and Cybenko \cite{Khrabrov:2010:Dynamic} provide metrics of group cohesion and influence. Sociologists have many useful metrics for community formation, with quantitative measures of influence as well -- Bonacich \cite{Bonacich:2001:Coalitions} and Friedkin {Friedkin:Influence} provide metrics which can be applied directly to many Twitter-mining tasks.
+
+
+\section{Text Indexing}
+\label{textindexing}
+
+For topical search, we index the twits and search them with Lucene
+\cite{code:lucene}. Lucene is a powerful open-source search engine which
+uses flat-file inverted indices to provide fast full-text indexing
+and searching. The fundamental unit in Lucene is a document, which
+can have any number of fields, each with a number of indexing
+parameters.
+
+
+We created a custom analyzer for Lucene allowing us to preserve the
+meaningful special characters that appear in twits. The indexer
+tokenizes the text on characters which are neither letters, numbers
+or the @ or \# symbols and creates a full-text search index on
+those tokens. We also store metadata for each twit, including the
+date the twit was posted to the twitter stream, whether the twit
+contains a hashtag, is it directed, and, if so, who it was directed
+to.
+
+
+We created two Lucene indices on a month's worth of twits from the
+Twitter {\itshape gardenhose} stream, containing a statistically
+representative fraction of all twits (which can be as high as a
+fourth). The first index was created with each twit as a document.
+A second index was then created on each user's corpora as a
+document. Using these two indices we created a number of API
+functions to perform textual analysis on the Twitter data.
+
+
+In order to ensure that we would receive meaningful results from
+the analysis of the twitter data we created a custom stop word list
+generator which would generate a stop-word list based on the whole
+corpora of words used in twits, pruning out some entries by hand
+that were clearly meaningful. We created a number of functions
+which performed textual analysis on the dataset.
+
+
+\begin{enumerate}
+
+
+\item {\itshape topChatters} -- gets the users with the most conversation
+messages
+
+
+
+
+\item {\itshape twitUserIds} -- gets all the users and twits for a term
+
+
+
+
+\item {\itshape topWordsByTwit} -- gets the top words in the combined corpora
+of the list of twits
+
+
+
+
+\item {\itshape topWordsByUser} -- gets the top words in the combined corpora
+of the list of users
+
+
+
+
+\item {\itshape userPairTopics} -- gets the top words for pairs of users
+
+
+
+
+\item {\itshape getStopList} -- creates a stop list from the most commonly used
+words in the corpora of all twits
+
+
+
+\end{enumerate}
+
+In addition to the API functions which interact with the full index
+on a per twit basis we created API functions which operate on the
+per user corpora index. These functions primarily use queries with
+very large numbers of terms to perform~cosine similarity analysis
+on the corpora of a single user or a group of users against another
+user or group of users. Through this procedure we are able to
+compare a candidate to join a group to the corpora of the group as
+a whole in order to rank users who are considered to be on the
+fringe of a community for inclusion into the community.
+
+
+\pagebreak \section{Community Detection}
+\label{communitydetection}
+
+Many previous and current popularity metrics for Twitter focus on
+the followers graph. Indeed, twitterers create a datastream,
+similar to RSS news, by subscribing to -- or following -- other
+twitterers. However, as pointed out by Finin et al.
+\cite{DBLP:conf/kdd/JavaSFT07}, the number of followers doesn't
+necessarily predict influence or social bonds. What matters are
+actions -- and in case of Twitter, direct communications, called
+replies.
+
+
+Anybody can address anybody else publicly, by simply inserting the
+addressee's nickname, preceded with @, into the twit (then called
+reply). We can extract replies from all twits and build a
+communication graph out of them. Such a graph can be static, being
+a snapshot at a certain time, or dynamic, where nodes and edges are
+added with timestamps, constituting a multigraph. When looking for
+communities, we propose to do so through the communication graph,
+revealing those engaged with each other, presumably over a set of
+topics.
+
+
+Our exploration workflow, outlined in Figure~\ref{figure:spie-workflow},
+begins with a search phrase, such as ``Glenn Beck.'' We then identify
+pairs of repliers from the communication multigraph who exchange
+this phrase in both directions, and sort the pairs by the number of
+total exchanges they had. The top pair would be the most active,
+and becomes our seed candidate for the community. We grow the
+community from that seed pair as follows.
+
+
+Our community identification algorithms is indirectly inspired by
+Backstrom and Kleinberg \cite{DBLP:conf/kdd/BackstromHKL06}, who made
+the following observation when studying the dynamics of the
+community growth. A new member is much likelier to join a community
+when he has two friends already in the community, not yet connected
+themselves (an open triad). We simplify it by not insisting the two
+friends have no links, but requiring that a prospective member has
+at least two friends already in the community.
+
+
+Hence, the algorithm proceeds as follows. We start (*) with a
+pair, $(A,B)$, in a queue, who are the seed members of the
+community. They may or may not have a link -- e.g., in one version,
+we actually find such pairs which exchanged messages with a topic,
+such as ``Glenn Beck,'' in them, while in another, we seed with two
+unconnected users, independently interested in the topic. (An
+option may further control whether there should be messages in each
+direction, signifying mutual interest, i.e.\ at least two, or one
+will suffice.) After that, we sort friends of $A$ in the decreasing
+order of the total number of messages exchanged, do the same with
+$B$'s friends, and then find the first shared friend in the list,
+$C$. $C$ is then added to the community, and the pairs
+$(A,C), (B,C)$ are added to the queue. The process (*) is then
+repeated until the queue is exhausted.
+
+
+There are certain asymmetries in the communities grown by the
+versions of this algorithm where only one direction of the edges
+are required. If we allow for a single directed edge as a (topical)
+relationship marker, we will get different communities when
+starting with the pair $(A,B)$ rather than $(B,A)$. Such
+differences can be considered as a result of the bias towards $A$
+or $B$, or compensated for by requiring edges in both directions.
+Here we ensure symmetry by requiring both edges.
+
+
+In our studies with several seeding topics, the communities
+saturate fairly quickly, conforming to the idea of a tightly knit
+cluster \cite{DBLP:conf/waw/MishraSST07} being characteristic for a
+community. Figure~\ref{figure:spie-workflow} contains an example where the
+seeding pair, Alice and Bob, both talk to a third user, Pat, the
+most, hence bringing her into the community. The process is
+repeated until no new triangles exist, or until a set limit is
+reached. Two kinds of limits can be set: by the total size of the
+community, or the distance, in generations, from the seeding pair.
+The generations are natural layers, and computed as follows. The
+seeding pair members both are generation 0. In a triangle, the new
+member gets the lowest parent generation plus 1. The process can be
+stopped when a given layer is reached.
+
+
+The fringe of a community is a set of users connected, in the
+communication graph, to at least one member of the community, but
+which themselves are not its members. Once the fringe is detected,
+its twit set can be examined for SIPs. Those can provide a set of
+choices for further exploration, to restart the community building
+process. We outline such a process as a basis of data exploration
+below.
+
+
+Community graphs are build from a set of directed edges --
+$E(from,to,weight)$ -- where weight is the number of messages which
+traversed that edge in the dataset. Since the time sample was so
+long, there is an not insignificant number of edges with low
+weights. Such low weighted edges represent transient communications
+between users and more closely resemble noise than structural
+components of the communities.
+
+
+In order then to create meaningful community structures, the edge
+set $E$ must be trimmed of edges with low weight which can, if
+further analysis is performed, obscure the tightly knit central
+clusters we hope to find. For the data sets used for this paper, we
+chose a cutoff weight based on the obvious threshold in the
+histogram of the weights on the graph, usually a number of twits
+between 1 and 5.
+
+
+\pagebreak \section{Exploration Results}
+\label{explorationresults}
+
+Using the aforementioned analysis procedure we found resulting communities and their related collocations and SIPs for a number of search terms.  We describe one such complete workflow for a political community centered around Glenn Beck.
+
+
+Glenn Beck is a controversial conservative cable television show host on the Fox News network.  We performed a strong pair search for users who used both ``Glenn'' and ``Beck'' in at least one directed twit.  We then grew communities from the set of the 38 seed pairs that resulted, using the recursive community growth algorithm described above.  We expected that because of Glenn Beck's controversial nature we would be able to find distinct communities with little or no cross interaction.
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=6in]{figures/gb5}
+\caption{The full graph for one of the five major communities found for the the Glenn Beck search.  The node labels are the users unique Twitter IDs.}
+\label{figure:gb-full}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=6in]{figures/gb5-reduced}
+\caption{The reduced graph for one of the five major communities found for the the Glenn Beck search.  Edges which did not meet a minimum weight were pruned from the graph.  If a node was unconnected after pruning it does not appear in the graph.  The node labels are the users unique Twitter IDs.}
+\label{figure:gb-reduced}
+\end{center}
+\end{figure}
+The full graph of the 5 interacting communities can be found in Figure~\ref{figure:gb-full}, Appendix A, ``Full Glenn Beck Graph.''
+
+
+\pagebreak \section{Discussion Topics}
+\label{discussiontopics}
+
+For the communities we identify, we look at the typical topics discussed. One way to find the topics is to look at the top {\itshape n-grams} \cite{Ngram:Chen-Goodman} used in the text of the messages exchanged. These will often be trivial and shared across many communities, e.g.\ bigrams such as ``I need{\ldots}'' A more interesting source for characteristic topics are the Statistically Improbable Phrases, or SIPs. They are widely used on Amazon.com to characterize a book. The SIPs are found by looking at n-grams and comparing their actual frequency to the case where the words would happen to be together randomly. Those n-grams where such repeated co-occurrence is very unlikely for random words are ``improbable'' in terms of randomness, i.e.\ they are uncovering some regularity.
+
+
+Some of the Glenn Beck community SIPs are shown in Table~\ref{table:gb-sips}.
+
+
+
+\begin{table}
+\label{table:gb-sips}
+    \centering
+\begin{tabular}{|c|c|}
+    \hline
+    Reining Medical Suits & Freedoms First Rally \\
+    \hline
+    Voting Rights Act & Martin Luther King \\
+    \hline
+    Gitmo Detainee Lawyer & Convo Gitmo Detainee \\
+    \hline
+    Able Bodied One & Payer Health Care \\
+    \hline
+    Speaking Your Truth & Town Hall Friday \\
+    \hline
+    Henry Louis Gates & Gov Mark Sanford \\
+    \hline 
+\end{tabular}
+\caption{Statistically Improbable Phrases from the Glenn Beck community.  The phrases are trigrams which co-occur much more than random three words would.  They are the political issues and personalities of the day, circa Summer of 2009.}
+\end{table}
+Our method is a convenient way to browse through a social network.
+The Twitter data stream receives millions of messages from millions
+of users daily. It's hard to even begin to explore such a
+collection. Given the topical community search, we have both an
+entry point and a pivoting procedure. After a community is seeded,
+grown, and its topics are revealed via SIPs, the explorer can
+either stop there and look at the users of interest, or detect the
+fringe and pick a topic from its SIPs or a pair with one member in
+the community at hand and another a fringe member. That pair, or a
+fringe SIP can be used to seed a new community for the next step of
+browsing, which we call pivoting.
+
+
+When keywords contain spatially or temporally localized topics, our
+workflow can be used for community sensing -- following the
+communities in a specific environment in the topical or
+geographical space. For instance, the 2009 crisis in the New York
+State Senate can be tracked down using the name of a key Democratic
+senator, Pedro Espada Jr., who sided with the Republicans for a
+while, only to come back having extracted certain concessions -- and
+bringing the senate business to a halt in the mean time, causing
+much Twitter debate. Those users who mention his name are likely to
+follow the state politics; similar topics exist for engaging issues
+in every locale.
+
+
+\pagebreak \chapter{Influence}
+\label{influence}
+
+\label{chapter:Influence}
+
+
+The web becomes more and more interactive and real-time every day.  The original static Mosaic pages were replaced by database-driven merchants and blogs.  An early pioneer of web-based conversation, LiveJournal, appeared in 1999 and still has a majority mindshare in countries like Russia and such communities as programmers and journalists, due to the ease of dialogue.  Comments became {\itshape de rigeur} for  blogs, and now new social media such as Twitter and Facebook are essentially comment and status update-driven.  Comments and status updates are inherently two-way communications, and these social networks may supplant SMS and email, becoming full-fledged communication networks.  Traditional communication networks, such as email, still dominate, and in many cases require analysis, such as has been done on the Enron data set.  When presented with such a dataset, an important question is, who's important here and who's not?  Whose influence should we discern behind the dynamics of the network to understand its processes?
+
+
+While forming a social circle on Twitter, people often follow those who are authorities on their professional or personal interests.  Since most of the experts now publish their Twitter {\itshape @nickname} on the Web, it is easy to follow them.  In many cases, people ask questions on Twitter as they used to do on blogs, as on LiveJournal, asking for advice on products to buy, technologies to use, travel destinations, restaurants, etc.  Advice is often sought in conversations, and decision are arrived at via consulting the subject or social authorities.  An influential microblogger can make or break a company's reputation, speed up technology uptake, and accelerate a trend or do the opposite.  Thus it's important for those in the public arena to understand who wields influence in the social networks, how they get there, and how this influence evolves over time.
+
+
+In this paper, we study conversational dynamics influence in communication network graphs.  We use Twitter as a publicly available communication network.  We look at the communication graph formed by messages, or tweets, from one person mentioning another, those replies (or mentions) mapping to an edge in the graph.  We then look at several graph metrics dynamically, computing them for every day in the study, and then look at the users whose metrics dominate, or accelerate faster, or grow longer than others'.  It turns out that such users form interesting classes, and one of our metrics, the {\itshape starrank}, can show when a user becomes a public persona.
+
+
+We believe that this work can be used in a variety of ways:  individuals can track changes and dynamics of their influence as well as their peers' influence; competitive intelligence analysts can analyze the dynamics of consumer opinions about their products and services with a deeper understanding about who has key influence about attitudes and opinions; intelligence analysis of an organization's evolution and changing roles within an organization.
+
+
+Java, Finin, et al., \cite{DBLP:conf/kdd/JavaSFT07} look at the power users of Twitter and find that they are indeed superheroes, their energy activated by more replies.  They emphasize the difference between the declared network of followers and the actual network of social interactions. Backstrom and Kleinberg \cite{DBLP:conf/kdd/BackstromHKL06} studied community growth in two social networks, LiveJournal and DBLP (computer conferences).  They looked at a few temporal snapshots, learned some rules of community growth in between, and found some of the graph structures which make such processes as joining a community more likely.  Khrabrov and Cybenko \cite{DBLP:conf/cse/KhrabrovC09} apply sequence modeling to the cell phone tracks of a group of MIT students, using n-gram models and suffix trees.  Savell \cite{Savell:2008:Intelligence} and Chung \cite{Chung:2006:Tracking} have developed techniques for identifying and analyzing business process dynamics within social networks using a variety of methods including Process Query Systems \cite{PQS:2007}.
+
+
+\pagebreak \section{Dataset and Methodology}
+\label{datasetandmethodology}
+
+We started monitoring Twitter using its new Streaming API from June 2009 onward.  Our subscription level, the so-called ``gardenhose,'' provides a fraction of all tweets, which is quite significant: about 2-3 million tweets a day initially, now reaching 4-5 million tweets daily.  The working set for the studies in this paper consists of a 100 million tweets from October 16 to November 17, 2009.   From those, we compute our metrics on the leading 90 million tweets, spanning three complete weeks (22 days to disregard time zone effects).
+
+
+The replier graph is built from this working set in an incremental way.  For each new day, we add that day's mentions as directed edges, and count them for the source (in number of repliers), and the target (in the number of mentions).  We compute the pagerank \cite{DBLP:journals/cn/BrinP98} of each user at the end of the day, using the Jung2 toolkit \cite{code:jung} with $\alpha=0.15$, over 100 iterations. Given the pagerank for each user, for each day, we define the {\itshape drank} of every user that day as follows:
+
+
+\begin{itemize}
+
+
+\item Sort the {\itshape (user,pagerank)} pairs by increasing pagerank;
+
+\item Replace each user's pagerank by its position (starting from 0);
+
+\item Optionally normalize into 0-1 range by dividing by the list's length.
+\end{itemize}
+
+Table~\ref{table:drank} contains a step-by-step example of the {\itshape drank} computation.
+
+
+
+\begin{table}
+    \caption{\emph{Drank} Computation}
+    \label{table:drank}
+
+    \centering
+
+    \begin{tabular}{|c|p{2in}|}
+    \hline
+        [a:0.1 b:0.02 c:0.3 d:0.2] & original user:pageranks\\
+    \hline
+        [b:0.02 a:0.1 d:0.2 c:0.3] & sorted by pageranks ascending\\
+    \hline
+        [b:0 a:1 d:2 c:3] & pageranks replaced by position, 0-based - this is the \emph{dirank} \\
+    \hline
+        [b:0 a:1/4 d:2/4 c:3/4] & normalized by the list length - this is the \emph{drrank} \\
+    \hline
+    \end{tabular}
+\end{table}
+The number of users with a given pagerank increases daily, as more and more users get on Twitter and engage in conversation.  The daily number of ranked users is shown in Figure~\ref{figure:daily-users}.
+
+
+
+% daily-users
+%(396594,789937,1065252,1358559,1591226,1765756,1936809,2097928,2222221,2341354,2478528,2629111,2767989,2892705,3003975,3087760,3176088,3275556,3380727,3487572,3589058,3681171)
+
+\begin{figure}
+\begin{center}
+\includegraphics{figures/daily-users}
+\caption{Twitter's user base continues to grow significantly}
+\label{figure:daily-users}
+\end{center}
+\end{figure}
+Normalization compensates for the ever growing number of users active on Twitter every day.  However, the effects where such growth is interesting are better observed on the integral {\itshape dranks}.  We refer to the integral, non-normalized {\itshape drank} as {\itshape dirank}, and the rational, normalized one as {\itshape drrank}.
+Simple metrics such as the number of mentions a user gave or received each day are integers, which, in the dynamic contexts, become integer lists.  We look at the number of repliers (different targets mentioned by the same source), mentions (different replies with the same target), and total number of tweets by a user, daily, which translate into integer lists.
+
+
+Those histograms contain only those users whose complete corpus is nondecreasing or increasing; a single daily drop will filter them out.  To look at all users, we partition their lists into longest contiguous nondecreasing or increasing subsequences, and compute the maximal length and/or acceleration of such a subsequence.  The acceleration is a ratio of the last element over the first; since many first elements are 1, we also look at a ``tougher'' version, where the acceleration is with respect to the second element; the minimal length of the subsequence in each case is 3, showing at least two days of growth (or no decrease).
+
+
+Many features related to influence increase or decline along with time, and are represented as a real-valued time series.  Examples are the number of mentions a user receives daily, his {\itshape drrank}, and {\itshape drstarrank}.  Totals such as number of mentions given or received can be counted separately for each day or cumulatively from the beginning of the study.  Below we describe several primitives which we combine for our analyses.
+
+
+\begin{itemize}
+
+
+\item {\itshape Contiguous Longest Increasing (generally Monotonic) Subsequences} -- This operation ({\itshape clis}) takes a sequence, an ordering function -- one of $<,\leq,\geq,>$ and partitions it into subsequences such that each subsequence is ordered according to the predicate.  Acceleration for each subsequence is the ratio of the last element to the first; the {\itshape :tough} variant divides by the second instead, skipping the frequent 1 for temporal count sequences.  We can drop the leading 0s also when computing accelerations, or filter for them by multiplying the ratios out against a threashold.  We denote the maximum length of a {\itshape clis} subsequence as {\itshape maxlen}, and the maximum acceleration as {\itshape maxxel} (or {\itshape maxxel-tough}).  Table~\ref{table:clis} gives an example of the {\itshape clis} transform.
+\end{itemize}
+
+
+\begin{table}
+    \caption{Cont. Longest Increasing Subsequences}
+    \label{table:clis}
+
+    \centering
+
+    \begin{tabular}{|c|p{2in}|}
+    \hline
+        [1 2 3 0 4 5 8] & original sequence\\
+    \hline
+        [[1 2 3][0][4 5 8]] & subseqs partitioned by $<$,\emph{maxlen} $3$  \\
+    \hline
+        $[\frac{3}{1}$ 0 $\frac{8}{4}]$ & subseq accelerations, \emph{maxxel} $3/1$, \emph{maxxel-tough} $8/5$ \\
+    \hline
+    \end{tabular}
+\end{table}
+\begin{itemize}
+
+
+\item {\itshape Grow or Fall} -- This operation ({\itshape growfall}) takes a sequence and counts how many successors are greater or less than their predecessors.  Then a decision is made whether the sequence is mostly ``grow'' or ``fall'' by either the simple ($1:1$) or qualified majority ($2:1$).  Optional {\itshape twice-higher} filter keeps only those sequences where the change between the first and last element is twice or more.  The result can be either categorical -- {\itshape :grow}, {\itshape :fall}, or {\itshape :neutral}; or quantitative -- the rate of change, with 0 for neutrals, and the sequence returned ordered by the rate of change.  Table~\ref{table:growfall} shows an example of the {\itshape growfall} transform.
+\end{itemize}
+
+
+\begin{table}
+    \caption{Grow or Fall}
+    \label{table:growfall}
+
+    \centering
+
+    \begin{tabular}{|c|p{2in}|}
+    \hline
+        [1 2 3 5 0 7 6] & original sequence\\
+    \hline
+         5 pairs up, 2 pairs down & :grow both simple and qualified \\
+    \hline
+        rate of change is $6/1$ & passes :twice-higher filter \\
+    \hline
+    \end{tabular}
+\end{table}
+The {\itshape starrank} considers a user's importance with respect to his neighborhood.  Figure~\ref{figure:starrank} shows a user with his mentioners on a particular day, along with his and their {\itshape drank}s.  The {\itshape starrank} is an average of the neighbors' ranks, weighted by the number of communications with each neighbor for that day.  Depending on the kind of the d-rank we use, we'll get a corresponding {\itshape starrank}.  For instance, a user's {\itshape distarrank} for a day will be an average of the {\itshape dirank}s of her neighbors, i.e.\ of their positions in that day's sorted order of page ranks.
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics{figures/starrank}  
+\caption{Example of \emph{starrank} computation.  The center user with \emph{drank} of 9 is mentioned by 5 other users with the given \emph{drank}, exchanging one or more tweets that day, e.g. $r/n=6/3$ means 3 mentions by a user of \emph{drank} 6.  Then the \emph{distarrank} is the average of $r$s weighted by the $n$s, here $(8*1+6*3+4*4+10*1+4*2)/(1+3+4+1+2)=5.5$}
+\label{figure:starrank}
+\end{center}
+\end{figure}
+\pagebreak \section{Influence Findings}
+\label{influencefindings}
+
+For individual ranks sequences we can look at the longest growth or decline periods.  We partition each sequence into contiguous increasing or decreasing subsequences and take the longest one.  For the number of mentions, we look at the total amount of users for whom it is nondecreasing, and look at their longest runs over days.  
+
+
+Figure~\ref{figure:nnm-hist} shows how many users with all non-decreasing mention runs have full seqauences of at least a given number of days.  Each bucket is the total number of users who achieve that many days of stability or growth.
+
+
+
+%NNM-HIST starts at 3 days
+%c(333355,160407,77648,36657,16797,7293,2985,1145,438,133,40,7,2,1,0,0,0,0,0)
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/nnm-hist}
+    \caption{The number of users whose daily mentions are all nondecreasing, per day}
+    \label{figure:nnm-hist}
+\end{center}
+\end{figure}
+Figure~\ref{figure:irr-hist} shows the same for non-increasing {\itshape dirank}.  The one person who persists to the end is Justin Bieber with the top nondecreasing rank of 0 (see below on the Bieber ``Ecosystem'').
+
+
+
+%IRR-HIST
+%c(2985,1024,393,159,86,53,31,16,9,6,3,1,1,1,1,1,1,1,1)
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/irr-hist}
+    \caption{The number of users whose own daily \emph{diranks} are all nondecreasing, per day}
+    \label{figure:irr-hist}
+\end{center}
+\end{figure}
+The users with the longest period of growth in their {\itshape drrank} include the following:
+
+
+\begin{itemize}
+
+
+\item Brazilians.  Most of our influence growth metrics for repliers bring up a lot of Brazilian journalists, stars, and power users.  Apparently, Brazilian twitterers are more communicative than others, using Twitter more like a conversation medium than a diary.  The top ones include {\itshape @leobarcellos}, a web designer, {\itshape @natyperdomo}, ``Publicitária,'' and more.
+
+\item {\itshape @alfiehitchcock} -- a London photographer posting his pictures via TwitPic
+
+\item {\itshape @Theresamcardle} -- an ``Optimist; Toilet seat marketer at Kohler; UW-Madison MBA student''
+\end{itemize}
+
+Those with the longest contiguous increase in real {\itshape starrank} of mentioners -- i.e.\ losing influence -- include such accounts as \emph{@gm\_web}, an automatic repost of a weather station, and {\itshape @AlexanderFog} -- a self-referential DJ referring to himself in every tweet.
+
+
+The second-order characteristic of growth is acceleration.  Here, for each contiguous increasing or decreasing subsequence, the acceleration is given by the ratio of the final state to the original value.  For a quantity such as the real rank, where growth means decrease, we invert it, so that the bigger acceleration, the better the growth is.  Once again, the pack of {\itshape starrank} acceleration-sorted users is dominated by many of the same Brazilians, showing that the longest active growth also often is the fastest one.  Some of the new faces here are
+
+
+\begin{itemize}
+
+
+\item \emph{@jc\_schuster} -- a country music fan
+
+\item \emph{@drosa\_shannon} -- ``twin,married, love DOOL,BL,American Idol and Tweeting''
+
+\item {\itshape @carlaciccarelli} -- ``Publicit'{a}ria e Produtora de Comerciais,V'{i}deos e Eventos''
+
+\item {\itshape @Dollbabyv} -- a girl writing about her dating, referencing a Blogspot blog
+\end{itemize}
+
+The {\itshape starrank} clearly demonstrates how a star constantly spreads its influence through to ever increasing realms of new users, with lower {\itshape dirank}, thus its average audience rank is increasing.  
+
+
+Figure~\ref{figure:bieber-distarrank} shows the daily {\itshape distarrank} of Justin Bieber, the most influential replier.  It's not normalized to show the effect of the influx of the new users.
+
+
+
+%BIEBER-DI-STAR-RANK
+%c(263266, 491511,655086,808762,934326,1025713,1062641,1138209,1191615,1258979,1359705,1387844,1452082,1594333,1623814,1452615,1703495,1626026,1688772,1857144,1754914,1728743)
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/bieber-distarrank}
+    \caption{The average \emph{dirank} of Justin Bieber's fans, decreasing daily, shows his star power spreading to the masses}
+    \label{figure:bieber-distarrank}
+\end{center}
+\end{figure}
+The normalized {\itshape starrank}, i.e.\ {\itshape drstarrank}, when decreasing for the longest runs over days, shows the cumulative growth in the importance of a community around the user with respect to all others.  When sorted by such a longest run, we get interesting classes of influential users, such as
+
+
+\begin{itemize}
+
+
+\item {\itshape @donniewahlberg} -- leader of the New Kids on the Block band and fans, with far-reaching and active following
+
+\item {\itshape @bowwow614} -- the rapper Bow Wow
+
+\item \emph{@faydra\_deon} -- ``Minister; Computer Applications Trainer; Website Designer; WordPress/Joomla! Customizer; Grammar Queen; Online Bookstore Owner; AKA,'' posting her own ``questions of the day.''
+\end{itemize}
+
+Now we look at the acceleration of the {\itshape starrank}, and find the users with the fastest growing communities by importance.  Some of the top users with the accelerating mentioners are:
+
+
+\begin{itemize}
+
+
+\item {\itshape @JoycePascowitch} -- ``jornalista, glamourosa{\ldots}.e estressada!'', a Brazilian journalist
+
+\item {\itshape @Biofa} -- ``Jornalista cruzeirense que ama futebol, mulher e rock'n roll (meu Deus, como isso '{e} bom!!!!)'', a Brazilian sports journalist
+
+\item {\itshape @Dejdia} -- apparently a photographer in LA, using a Flickr page as the URL, with her own ecosystem of fans
+
+\item \emph{@Minni\_w} -- ``ddub Soldier (Army of NKOTB)'', a fan of {\itshape @DonnieWahlberg}, one of the top-page-ranked users, the band leader for the New Kids On The Block (NKOTB).  She connects with the Bieber network (see below).
+\end{itemize}
+
+The snapshots of the pagerank relationship to number of mentions reveals certain stable patterns.  We cluster the pagerank vs. number of mentions graph into groups of 1000 points, and take the median of $x$s and $y$s to plot, which we call a blocked projection.  Figure~\ref{figure:harp} shows how the resulting graphs form a ``harp'' pattern which stays stable through days 10 and 20.  We filter on $x$ to stay within 25 median mentions on a day, the remaining few clusters group the outliers with exceptional dynamics (or statics).
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=3.5in,width=3.5in]{figures/points-nments-prank-10}
+\includegraphics[height=3.5in,width=3.5in]{figures/points-nments-prank-20}
+\caption{Pagerank improves with the number of mentions only so much, then ratcheting mentions is counterproductive.  The harp pattern persists \label{figure:harp}
+throughout the days}    
+\end{center}
+\end{figure}
+A similar pattern persists for the relationship between the pagerank of a user and the sheer number of twits by that user.  A block projection in Figure~\ref{figure:ctwits-prank} shows that twittering more gets you only so far, and then your ranking starts to fall again.  We show it for day 20, day 10 is similar.
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=3.5in,width=3.5in]{figures/points-ctwits-prank-20}
+\caption{Pagerank improves with the number of twits only so far as well.  X is the cumulative number of twits, Y is the resulting pagerank} 
+\label{figure:ctwits-prank}
+\end{center}
+\end{figure}
+\pagebreak \section{The Pagerank Generation}
+\label{thepagerankgeneration}
+
+The most surprising discovery in the Twitter network we made is the Bieber ecosystem.  Its growth principle can be summarized as: {\itshape You can't be Justin Bieber, but you can be Amanda D}.  The person with pagerank 0, i.e.\ the most influential person in Twitter mentions in our dataset, each day, every day of the study, is Justin Bieber.  Not many people over age 15 know who he is, despite his Christmas 2009 performance at a Washington, D.C. concert for President Obama.  An informal polling of seminar participants and friends over 18 confirms an almost absolute lack of Bieber awareness.  At the same time, Justin Bieber, a YouTube boy singer phenomenon, commands a significant mindshare among the pop culture fans from about 11 to 15 years old, from Brazil to Slovenia, but mostly teen girls in Canada and the US.  
+
+
+The most interesting aspect of the Bieber Ecosphere is that it's the first Twitter generation which grows up with social networks in hand, and adapts to its influence seeking ways almost naturally.  They evolve to efficiently rise in the page ranks.  The second and third daily position by pagerank are most often occupied by several high-caliber fans of Justin Bieber.  One of them, Amanda D., self-billed as a singer and songwriter in the South, is too young to drive, and her parents wouldn't take her to a Justin's concert in the nearest big city, so one of her online goals is to get him to perform in her hometown -- as described on a free blog website with a link offered to Justin and others to share.  What's most fascinating of the self-named ``beliebers'' is their active and incessant manipulation of the pagerank by constantly mentioning each other and growing the followers' network.
+
+
+Mentioning another fan is called a ``shoutout,'' which are offered for trade on a quid pro quo basis -- ``SHOUTOUTS FOR SHOUTOUTS!''  Multiple accounts are created for special purposes, e.g.\ {\itshape @wewanttomeetjustin} is maintained by the two top {\itshape beliebers}, for the purpose of aggregating other fans who want to meet Justin, discussing venues, options, plans, etc.  User {\itshape @BieberFame} has created a separate {\itshape @JBieberCash} account, noting its creation date and that Justin followed the same day, and openly referring to the original account as the creator.  Very common tweets state that the number of followers is almost near e.g.\ 10,300, with only about 50 remaining, so all new followers will get a follow-back and a shoutout.  Many tweets are simply multiple shoutcasts, i.e.\ lists of names.
+
+
+The top {\itshape beliebers} got where they are by active and clever Twitter presence, increasing their influence in a variety of ways.  They trade shouts and create multiple Twitter accounts for focused subgroups, tending them regularly, and team with other top {\itshape beliebers} to do it, positioning themselves at the head of the pack.  They also claim to maintain special relationship with Justin, direct-messaging with him, and offer to relay other fans' question via this exclusive channel.  As far as we can see, these advantages are real -- Justin mentioned both two top {\itshape beliebers}, thus propelling their pageranks to the top.  The {\itshape starrank} pattern of the top fans resembles that of the stars themselves, showing a steady increase of mentions and increase of the average rank of the mentioners, propagating ``into the masses.''  Amanda is so popular and effective that she got her own fan account, ``Amanda D's Army,'' in turn run by one of the top-level Bieber fans using the same techniques which proved to work so well with Bieber's fans.
+
+
+{\itshape @Kekeinaction} shows up high in the list of the longest contiguous growth in {\itshape distarrank} of mentioners, on almost all days of the study (21).  She maintains heavy cooperation with a lot of other Bieber fans, and also was a star of the movie {\itshape ``Akeelah and the Bees.''} This shows how the younger segment of the audience, focused on teenage culture, is densely connected.  Another example is a top fan from Slovenia, \emph{@jbieber\_fever24}, discovered at 7th position of the longest {\itshape distarrank} decreasing runs.  Her bio reads,
+``Hey I'm Tea I'm from Slovenia and I'm 14.I LOVE Justin Bieber!I also like Tay Swift,Miley Cyrus and Sel Gomez!Justin followed me 25/10/2009!''  She uses all the tricks in the book -- trading shoutouts, ramping up the number of followers, maintaining multiple accounts such as  \emph{@JBieber\_Babes}, and inviting other fans to participate in all of those activities together.
+
+
+\chapter{Reciprocal Social Capital}
+\label{reciprocalsocialcapital}
+
+\label{chapter:SocialCapital}
+
+
+Social networks such as Twitter and Facebook increase their mindshare daily, and many online activities are determined by the interactions there. In order to understand the dynamics of social networks (``what's happening''), we want to identify the key players -- those participants who are in some way important, influential, and possess certain social capital. Although these terms are used in sociology and computer analysis of static networks, we need to come up with the new and more rigorous definitions in the face of the new users getting on Twitter daily, making the network inherently dynamic. Our solution is a set of dynamic metrics of importance, called {\itshape D-Rank} and {\itshape StarRank}, which allow ranking over time and in comparison to one's audience (network neighborhood). Using these metrics, we uncover fascinating worlds inside Twitter, such as the Justin Bieber ecosystem and Brazilian sport journalists with their fans. Building upon the insights from those communities, we define our version of Reciprocal Social Capital as an iterative update rule, rewarding those who facilitate balanced and stable communication. Running a complete world emulation with our rules, we end up with the social capital distribution which places the hard-talking ``middle class'' nodes at the top, leading to a new ranking and understanding of the Twitter dynamics.
+
+
+\pagebreak \section{Modeling Social Capital Overview}
+\label{modelingsocialcapitaloverview}
+
+Given a large social network changing over time such as Twitter, how do we find the key people who are important, influential in some sense, and have certain social capital -- and how do we formally define and measure these terms? Computer and social scientists, economists, operation researchers, and educators have all proposed quantitative and qualitative approaches for describing social capital. As a consequence, the term ``social capital'' is so widely (over)used since the 1980s that some researchers shy away from it altogether \cite{jackson2008social}. Furthermore, the three qualities listed often overlap. We define them usefully and distinctly for our networks, applying these new definitions to find interesting phenomena such as fan-based economies of ratings and trends, and multi-modal collaboration of hackers, advancing open-source projects online via social coding.
+
+
+The modern economy is knowledge-based, and knowledge generation closely corresponds to value and wealth creation. The processes where knowledge is created, refined, and made actionable, are increasingly shifted into social networks on the Internet, embedded in social media sites such as Twitter and Facebook, or underlying cooperation on Wikipedia, the social coding portal GitHub, etc. Certain members and groups are key to the value-creating processes in these networks, where people are united by the information they work with. Those individuals contributing the most and best knowledge, or processing it in the best way, are recognized as the main contributors, and get to set the agenda for the whole group. In fact, a lot of communications are questions for the senior members, seeking explanation or coordination. It is important to quantify which members gain importance in these mind economies to know how they work.
+
+
+The quintessential mind economy is the programmers' community. Their industry, spawning startups in the Bay Area, Pacific Northwest and elsewhere, trades in ideas becoming code becoming startups becoming large companies like Amazon and Google. (In turn, the geeks' ethos epitomized by these companies reflects back on the society where they thrive.) The resources traded by hackers are most commonly URLs of code repositories on \href{http://github.com/}{github}\footnote{\href{http://github.com/}{http://github.com/}}, the open-source social coding portal. Github is organized around \texttt{git}, a distributed source code management system (SCM) authored by Linus Torvalds and originally used to develop the Linux kernel. Now it is a {\itshape de facto} platform to collaborate on open-source projects. While github is used to store and modify the code, people working on it often converse on the Internet Relay Chat (IRC) and Twitter. Some of the most active geek communities on Twitter center on advanced programming languages such as {\itshape \#scala}, {\itshape \#clojure}, and {\itshape \#haskell} -- these are the ``hash tags'' used to mark tweets so that they can be found as a group. Coincidentally, these are also the names of the corresponding IRC channels.
+
+
+Another community with high traffic is what we call Justin Bieber ecosystem, discovered and described in \cite{Khrabrov:2010:Dynamic}. Justin Bieber is a boy pop-singer phenomenon, originating on the YouTube and spawning an intense following there and on Twitter. Many of his fans are teenage girls with a variation of ``bieber'' in their Twitter nick and are united in their adoration of \texttt{@justinbieber} and pushing him up into the top 10 trending topics on Twitter. In this process, the members learn to increase their own ratings by swapping shoutouts (mentions) and trading shoutouts for follows. An economy of rating-increasing behavior develops. Those who get followed by Justin Bieber increase their standing among the ``beliebers'' immensely, as do those who organize other fans around better schemes ``how to meet Justin.'' High-intensity group behaviors are key in social dynamics and change, and can be studied for the first time on a coherent social organism of a Twitter community with its drivers and influencers, and the methods they use to direct it.
+
+
+\section{Approach}
+\label{approach}
+
+In this thesis, we approach the problem of importance via dynamic analysis of the communication graphs. We build a communication graph of mentions, where one user talks to another via public tweets. E.g., if \texttt{@alice} tweets: ``\texttt{@bob}, did you see this: http://bit.ly/xyz'', she {\itshape replies} to \texttt{@bob}, who is thus her {\itshape replier}, while she is his {\itshape mentioner}. While many Twitter analyses and ranking sites focus on the number of followers \cite{DBLP:conf/kdd/JavaSFT07}, we prefer communication as a form of active behavior with its many social implications, manifesting itself similarly in social media networks, email networks, and real life.
+
+
+Traditional sociology measures betweenness and centrality on static graphs \cite{bonacich1987power}. Their networks are small and their tools are often Excel spreadsheets and add-ons. By contrast, our data subset consists of a 100 million tweets by 5 million users, with both numbers growing over the period of 35 days. (In turn, our subset is selected from the ``gardenhose,'' a Streaming API for a ``statistically representative'' fraction of Twitter, spewing now 5 million tweets daily, from which we collected billions of tweets.) We have to take temporal nature of these data into account as a key feature of the model.
+
+
+First, we propose a measure of importance we call Dynamic PageRank, or D-Rank \cite{Khrabrov:2010:Dynamic}. For every day in the study, we treat the communication graph as a directed multigraph (as Alice can easily tweet Bob thrice day) and compute the PageRank of all the nodes present that day. We translate such PageRanks into relative ranks, from 0 to 1, showing where the node stands in the overall sorted list of ranks.
+
+
+We then define StarRank as a ratio of a node's D-Rank to the average D-Rank of its communication partners. There are also variations where we count a node's repliers and his mentioners either together or separately. Both D-Rank and StarRank can be compared across days, even though the number of nodes on Twitter increases every day.
+
+
+\pagebreak \section{What is Social Capital}
+\label{whatissocialcapital}
+
+We propose a mathematically well-defined measure of Social Capital, which we call {\itshape Reciprocal Social Capital}.  It accrues for those dialogue participants who better maintain their question-answering balance in conversations -- they do reply to those who address them, and get replies from those to whom they talked before. This capital can also favor stronger ties, where you keep talking to your current interlocutors, or it can reward exploration of new partners. The model is parameterized with weights (rewards) for different kinds of behaviors, and previous capital decays with time.
+
+
+Most definitions of Social Capital are in fact just other kinds of importance measures. E.g. Getoor \cite{Licamele:2005:Benefit} simply uses the term to denote the number of your co-authors on conference program committees. A good review of the definitions of social capital used in computer science is provided in \cite{Motidyang:2007:Thesis}. We model our {\itshape Reciprocal Social Capital} on the social capital of Tuscany villagers who remember how many times they had lent everyday items like salt to each other, versus how many times they got even by borrowing some anchovies, or more salt, in return. A good working description of this kind of local social capital is provided in e.g.\ \cite{Gaggio:2007:Gold}. Every community member in those social-capital-rich areas has a clear mental balance of the favors given and received, which figures in every subsequent social and economic transaction.  The communities are cohesive and mutually supportive, which enhances their quality of life dramatically.  Every Briton or American dreaming of moving to Italy refers to that living social capital as a desirable quality in their real social network.  We'd like to model it in the online ones.
+
+
+Our first computational model is ``reciprocal'' repayment of communications -- instead of a carefully maintained balance of favors, we have a communication network where you repay questions (mentions) by replying (mentioning in return). There's a temporal notion of capital accumulation, along with its decay in the face of inaction.
+
+
+When looking for influence in social networks, several classes of problems turned out to be closely related to our definition of influence in a community. We addressed them in the additional papers on which this thesis also builds.
+
+
+In \cite{Khrabrov:2003:Attacks}, we considered the question of network structure which enables the networks to withstand random faults or malicious attacks, taking out some nodes one by one. It is one of the first papers which studied the malicious attacks on a network, and compared behavior of differently structured networks, such as scale-free or random, under different destructuring scenarios. It is an application of dynamic graph analysis, examining how the influential nodes can help keep the network together.
+
+
+In addition to Twitter, we studied a sensor-based social network, resulting from the MIT Reality experiments \cite{Eagle:2006:Reality}. A fundamental question in dynamic systems is the agents' identity. We address it in \cite{Khrabrov:2009:Language}, where we were able to identify a majority of the MIT Reality participants from just about 10 hops in their cell phone traces. Social importance of the subjects is related to their patterns of action (motion) and resulting interactions.
+
+
+\pagebreak \section{Reciprocal Social Capital Definition}
+\label{reciprocalsocialcapitaldefinition}
+
+Now we will define our metric inductively.
+
+
+{\itshape Repliers} of a node are the addressees of its tweets. {\itshape Mentioners} of a node are those who tweet to it. If a tweet from \texttt{@alice}{\itshape mentions \texttt{@bob}, then \texttt{@bob} is a replier of \texttt{@alice} and \texttt{@alice} is a mentioner of \texttt{@bob}. To recap, replier of a node is someone that that node repliers \_to}. In other words, from a node's perspective, repliers are out-degree, mentioners are in-degree.  We define the following variables.
+
+
+
+\begin{tabular}{|c|p{4in}|}
+\hline 
+symbol & definition\tabularnewline
+\hline
+\hline 
+$S_{v}^{t}$ & Social Capital of node $v$ at time $t$. Superscript $t$ generally
+denotes "by time $t$." Specifically \emph{during} time step
+$t$ is denoted as $@t$.\tabularnewline
+\hline 
+$G^{t}(V,E)$ & graph $G$ with nodes $V$ and edges $E$\tabularnewline
+\hline 
+$w_{uv}^{@t}$ & total weight of directed edges $u\rightarrow v$, i.e. the number
+of tweets from $u$ to $v$ during time step $@t$\tabularnewline
+\hline 
+$W_{uv}$ & total number of undirected edges between $u$ and $v$: $W_{uv}=w_{uv}+w_{vu}$\tabularnewline
+\hline 
+$B_{uv}$ & Balance of back and forth tweets from $u$ to $v$: $B_{uv}=w_{uv}-w_{vu}$\tabularnewline
+\hline 
+$M_{u}$ & $\{v|w_{vu}>0\}$, i.e. the mentioners of $u$\tabularnewline
+\hline 
+$R_{u}^{@t}$ & $\{v|w_{uv}^{@t}>0\}$, i.e. repliers of $u$ specifically during
+the timestep @$t$\tabularnewline
+\hline 
+$O_{uv}^{@t}$ & outgoing activity of a node rewarded by social capital at timestep
+$t$\tabularnewline
+\hline 
+$A_{uv}^{@t}$ & incoming activity in this cycle rewarded just for mentions (all)\tabularnewline
+\hline 
+$B_{uv}^{@t}$ & incoming mentions in this cycle repaying previous replies (balance)\tabularnewline
+\hline 
+$\alpha,\beta,\gamma$ & model parameters\tabularnewline
+\hline
+\end{tabular}
+\begin{eqnarray}
+O_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}O^{@t-1}}\sum_{v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|B_{uv}^{t-1}<0}|B_{uv}^{t-1}|w_{uv}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
+B_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}B^{@t}}\sum_{v\in M_{u}^{@t-1}|B_{uv}^{t-1}>0}B_{uv}^{t-1}w_{vu}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
+A_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}B^{@t}}\sum_{v\in M_{u}^{@t-1}}w_{vu}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
+I_{u}^{@t} & = & \gamma B_{u}^{t-1}+(1-\gamma)A_{u}^{t-1}\\
+S_{u}^{t} & = & \alpha S_{u}^{t-1}+(1-\alpha)(\beta O_{u}^{t-1}+(1-\beta)(\gamma B_{u}^{t-1}+(1-\gamma)A_{u}^{t-1})
+\end{eqnarray}
+
+Some notes on the definitions. $O_{u}^{t}$ is the node $u$'s output gaining social capital, thus we want to reward those who redress an imbalance of input and answer those who addressed you more than you had answered them. The summation is defined exactly over those with whom you have a deficit in replying: $v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|B_{uv}^{t-1}<0$. It means the target node mentioned you at some point prior, you replied to it in this cycle, and before that, you owed it a reply since it tweeted more to you than you did to it. For each such deficit node you replied to, finally, we multiply the number of replies in that cycle, $w_{uv}^{@t-1}$, by the balance you owed, $|B_{uv}^{t-1}|$, the value of the relationship, $W_{uv}^{t-1}$, and the importance of the replier $S_{v}^{t-1}$. We normalize the $O$'s so that they all sum to 1, and reward each node proportionally to the value of the redress in the reply imbalance it actively contributed in this cycle.
+
+Similarly, $I_{u}^{t}$ is the node $u$'s input worth of social capital. We generally consider all input as good — we can't distinguish bad publicity, or consider it all good anyways — but we distinguish mentions redressing the mentioners' own deficit with us as worthing more than just any mention. Those repaying mentions we reward with a multiplier for the balance owed additionally to the usual cycle contribution, relationship value, and the mentioner's social capital.
+
+Note that in the output, we don't have a general activity term for all replies, even those not redressing an imbalance, as we do in the second term of the input. Thus we don't reward random replying, and you won't get social capital by just addressing everybody in volume.
+
+It's easy to see that such a definition of social capital allows for an iterative economy by launching the update rule defining $S_{u}^{t}$ in terms of $S_{u}^{t-1}$ as shown in the last formula above.
+The core questions, which may allow for more quantitative treatment with our metrics:
+
+
+\begin{itemize}
+
+
+\item Why do people twitter? What is the utility and can it be captured by a form of social capital? Can a single definition suffice for all members of a network? Do ``beliebers'' differ from hackers and how, with respect to their forms of social capital and behaviors increasing it?
+
+
+
+
+\item How can you increase your social capital or importance in the fastest, but most robust (``honest,'' irreversible) way? How can we distinguish fake importance from the real thing?
+
+
+
+\end{itemize}
+
+\pagebreak \section{Capital-Based Mining}
+\label{capital-basedmining}
+
+Given our metrics of importance and social capital, we explore interesting individuals from our large Twitter data set and interpret what these metrics mean in real life. 
+
+
+The first results of our full-world Social Capital emulation show a new kind of nodes at the top, in addition to the usual suspects such as Justin Bieber (still in the top 10) -- we call it ``the middle class of social networks.'' These are the people with a certain amount of followers -- though not as many as the stars -- e.g.\ from a 100 to a 1,000, weaving a web of intense dialogues with other such nodes. They provide the core of the ongoing communication, pushing trends and stars up, bringing uninteresting subjects down by not talking about them, integrating other nodes and beginners into the system. We believe our metrics are more interesting than the traditional PageRank in that they reflect the dynamic nature of the conversational networks and highlight the groups making lasting ongoing contributions.
+
+
+A typical example is beauty industry. Two owners of Singapore beauty salons come on top in terms of continuous conversation threads kept the longest. They discuss wedding photos, haircuts, design, etc. They have a constant and purpose-driven market, thousands of followers each, and discuss news of their industry. This way they keep tabs on their market niche, satisfy their followers with specific goals, and stay on top in the ratings.
+
+
+Hence one of the differences in the utility of tweeting. Celebrities, those most followed in a typical definition, often get on top by projection from the real world, YouTube, etc. They don't have to tweet for their supper, so to speak. On the contrary, their top fans and other in-Twitter ``phenomenal'' users have to work for it. While spammers achieve a short-term notoriety by mass following, hoping for automatic follow-backs, we do not register those numbers, since we look for real conversations and mentions. Top celebrities like \texttt{@donniewahlberg} and \texttt{@justinbieber} understand this and cultivate their fan base, encouraging top fans once in a while. The timing feature of our metrics smooth over the spikes typical in social networks and reveal true value.
+
+
+\pagebreak \chapter{Success is Earned}
 \label{successisearned}
 
 \section{Abstract}
@@ -314,156 +1618,6 @@ The remainder of this chapter is structured as follows.
 
 \item Simulation Tables -- a cross-linked hierarchy of 3 levels of tables, referring to and summarizing 457 primary and 30 summary tables with key results.
 \end{itemize}
-
-\pagebreak \section{Reciprocal Social Capital}
-\label{reciprocalsocialcapital}
-
-\label{chapter:SocialCapital}
-
-
-Social networks such as Twitter and Facebook increase their mindshare daily, and many online activities are determined by the interactions there. In order to understand the dynamics of social networks (``what's happening''), we want to identify the key players -- those participants who are in some way important, influential, and possess certain social capital. Although these terms are used in sociology and computer analysis of static networks, we need to come up with the new and more rigorous definitions in the face of the new users getting on Twitter daily, making the network inherently dynamic. Our solution is a set of dynamic metrics of importance, called {\itshape D-Rank} and {\itshape StarRank}, which allow ranking over time and in comparison to one's audience (network neighborhood). Using these metrics, we uncover fascinating worlds inside Twitter, such as the Justin Bieber ecosystem and Brazilian sport journalists with their fans. Building upon the insights from those communities, we define our version of Reciprocal Social Capital as an iterative update rule, rewarding those who facilitate balanced and stable communication. Running a complete world emulation with our rules, we end up with the social capital distribution which places the hard-talking ``middle class'' nodes at the top, leading to a new ranking and understanding of the Twitter dynamics.
-
-
-\pagebreak \subsection{Modeling Social Capital Overview}
-\label{modelingsocialcapitaloverview}
-
-Given a large social network changing over time such as Twitter, how do we find the key people who are important, influential in some sense, and have certain social capital -- and how do we formally define and measure these terms? Computer and social scientists, economists, operation researchers, and educators have all proposed quantitative and qualitative approaches for describing social capital. As a consequence, the term ``social capital'' is so widely (over)used since the 1980s that some researchers shy away from it altogether \cite{jackson2008social}. Furthermore, the three qualities listed often overlap. We define them usefully and distinctly for our networks, applying these new definitions to find interesting phenomena such as fan-based economies of ratings and trends, and multi-modal collaboration of hackers, advancing open-source projects online via social coding.
-
-
-The modern economy is knowledge-based, and knowledge generation closely corresponds to value and wealth creation. The processes where knowledge is created, refined, and made actionable, are increasingly shifted into social networks on the Internet, embedded in social media sites such as Twitter and Facebook, or underlying cooperation on Wikipedia, the social coding portal GitHub, etc. Certain members and groups are key to the value-creating processes in these networks, where people are united by the information they work with. Those individuals contributing the most and best knowledge, or processing it in the best way, are recognized as the main contributors, and get to set the agenda for the whole group. In fact, a lot of communications are questions for the senior members, seeking explanation or coordination. It is important to quantify which members gain importance in these mind economies to know how they work.
-
-
-The quintessential mind economy is the programmers' community. Their industry, spawning startups in the Bay Area, Pacific Northwest and elsewhere, trades in ideas becoming code becoming startups becoming large companies like Amazon and Google. (In turn, the geeks' ethos epitomized by these companies reflects back on the society where they thrive.) The resources traded by hackers are most commonly URLs of code repositories on \href{http://github.com/}{github}\footnote{\href{http://github.com/}{http://github.com/}}, the open-source social coding portal. Github is organized around \texttt{git}, a distributed source code management system (SCM) authored by Linus Torvalds and originally used to develop the Linux kernel. Now it is a {\itshape de facto} platform to collaborate on open-source projects. While github is used to store and modify the code, people working on it often converse on the Internet Relay Chat (IRC) and Twitter. Some of the most active geek communities on Twitter center on advanced programming languages such as {\itshape \#scala}, {\itshape \#clojure}, and {\itshape \#haskell} -- these are the ``hash tags'' used to mark tweets so that they can be found as a group. Coincidentally, these are also the names of the corresponding IRC channels.
-
-
-Another community with high traffic is what we call Justin Bieber ecosystem, discovered and described in \cite{Khrabrov:2010:Dynamic}. Justin Bieber is a boy pop-singer phenomenon, originating on the YouTube and spawning an intense following there and on Twitter. Many of his fans are teenage girls with a variation of ``bieber'' in their Twitter nick and are united in their adoration of \texttt{@justinbieber} and pushing him up into the top 10 trending topics on Twitter. In this process, the members learn to increase their own ratings by swapping shoutouts (mentions) and trading shoutouts for follows. An economy of rating-increasing behavior develops. Those who get followed by Justin Bieber increase their standing among the ``beliebers'' immensely, as do those who organize other fans around better schemes ``how to meet Justin.'' High-intensity group behaviors are key in social dynamics and change, and can be studied for the first time on a coherent social organism of a Twitter community with its drivers and influencers, and the methods they use to direct it.
-
-
-\subsection{Approach}
-\label{approach}
-
-In this thesis, we approach the problem of importance via dynamic analysis of the communication graphs. We build a communication graph of mentions, where one user talks to another via public tweets. E.g., if \texttt{@alice} tweets: ``\texttt{@bob}, did you see this: http://bit.ly/xyz'', she {\itshape replies} to \texttt{@bob}, who is thus her {\itshape replier}, while she is his {\itshape mentioner}. While many Twitter analyses and ranking sites focus on the number of followers \cite{DBLP:conf/kdd/JavaSFT07}, we prefer communication as a form of active behavior with its many social implications, manifesting itself similarly in social media networks, email networks, and real life.
-
-
-Traditional sociology measures betweenness and centrality on static graphs \cite{bonacich1987power}. Their networks are small and their tools are often Excel spreadsheets and add-ons. By contrast, our data subset consists of a 100 million tweets by 5 million users, with both numbers growing over the period of 35 days. (In turn, our subset is selected from the ``gardenhose,'' a Streaming API for a ``statistically representative'' fraction of Twitter, spewing now 5 million tweets daily, from which we collected billions of tweets.) We have to take temporal nature of these data into account as a key feature of the model.
-
-
-First, we propose a measure of importance we call Dynamic PageRank, or D-Rank \cite{Khrabrov:2010:Dynamic}. For every day in the study, we treat the communication graph as a directed multigraph (as Alice can easily tweet Bob thrice day) and compute the PageRank of all the nodes present that day. We translate such PageRanks into relative ranks, from 0 to 1, showing where the node stands in the overall sorted list of ranks.
-
-
-We then define StarRank as a ratio of a node's D-Rank to the average D-Rank of its communication partners. There are also variations where we count a node's repliers and his mentioners either together or separately. Both D-Rank and StarRank can be compared across days, even though the number of nodes on Twitter increases every day.
-
-
-\pagebreak \subsection{What is Social Capital}
-\label{whatissocialcapital}
-
-We propose a mathematically well-defined measure of Social Capital, which we call {\itshape Reciprocal Social Capital}.  It accrues for those dialogue participants who better maintain their question-answering balance in conversations -- they do reply to those who address them, and get replies from those to whom they talked before. This capital can also favor stronger ties, where you keep talking to your current interlocutors, or it can reward exploration of new partners. The model is parameterized with weights (rewards) for different kinds of behaviors, and previous capital decays with time.
-
-
-Most definitions of Social Capital are in fact just other kinds of importance measures. E.g. Getoor \cite{Licamele:2005:Benefit} simply uses the term to denote the number of your co-authors on conference program committees. A good review of the definitions of social capital used in computer science is provided in \cite{Motidyang:2007:Thesis}. We model our {\itshape Reciprocal Social Capital} on the social capital of Tuscany villagers who remember how many times they had lent everyday items like salt to each other, versus how many times they got even by borrowing some anchovies, or more salt, in return. A good working description of this kind of local social capital is provided in e.g.\ \cite{Gaggio:2007:Gold}. Every community member in those social-capital-rich areas has a clear mental balance of the favors given and received, which figures in every subsequent social and economic transaction.  The communities are cohesive and mutually supportive, which enhances their quality of life dramatically.  Every Briton or American dreaming of moving to Italy refers to that living social capital as a desirable quality in their real social network.  We'd like to model it in the online ones.
-
-
-Our first computational model is ``reciprocal'' repayment of communications -- instead of a carefully maintained balance of favors, we have a communication network where you repay questions (mentions) by replying (mentioning in return). There's a temporal notion of capital accumulation, along with its decay in the face of inaction.
-
-
-When looking for influence in social networks, several classes of problems turned out to be closely related to our definition of influence in a community. We addressed them in the additional papers on which this thesis also builds.
-
-
-In \cite{Khrabrov:2003:Attacks}, we considered the question of network structure which enables the networks to withstand random faults or malicious attacks, taking out some nodes one by one. It is one of the first papers which studied the malicious attacks on a network, and compared behavior of differently structured networks, such as scale-free or random, under different destructuring scenarios. It is an application of dynamic graph analysis, examining how the influential nodes can help keep the network together.
-
-
-In addition to Twitter, we studied a sensor-based social network, resulting from the MIT Reality experiments \cite{Eagle:2006:Reality}. A fundamental question in dynamic systems is the agents' identity. We address it in \cite{Khrabrov:2009:Language}, where we were able to identify a majority of the MIT Reality participants from just about 10 hops in their cell phone traces. Social importance of the subjects is related to their patterns of action (motion) and resulting interactions.
-
-
-\pagebreak \subsection{Reciprocal Social Capital Definition}
-\label{reciprocalsocialcapitaldefinition}
-
-Now we will define our metric inductively.
-
-
-{\itshape Repliers} of a node are the addressees of its tweets. {\itshape Mentioners} of a node are those who tweet to it. If a tweet from \texttt{@alice}{\itshape mentions \texttt{@bob}, then \texttt{@bob} is a replier of \texttt{@alice} and \texttt{@alice} is a mentioner of \texttt{@bob}. To recap, replier of a node is someone that that node repliers \_to}. In other words, from a node's perspective, repliers are out-degree, mentioners are in-degree.  We define the following variables.
-
-
-
-\begin{tabular}{|c|p{4in}|}
-\hline 
-symbol & definition\tabularnewline
-\hline
-\hline 
-$S_{v}^{t}$ & Social Capital of node $v$ at time $t$. Superscript $t$ generally
-denotes "by time $t$." Specifically \emph{during} time step
-$t$ is denoted as $@t$.\tabularnewline
-\hline 
-$G^{t}(V,E)$ & graph $G$ with nodes $V$ and edges $E$\tabularnewline
-\hline 
-$w_{uv}^{@t}$ & total weight of directed edges $u\rightarrow v$, i.e. the number
-of tweets from $u$ to $v$ during time step $@t$\tabularnewline
-\hline 
-$W_{uv}$ & total number of undirected edges between $u$ and $v$: $W_{uv}=w_{uv}+w_{vu}$\tabularnewline
-\hline 
-$B_{uv}$ & Balance of back and forth tweets from $u$ to $v$: $B_{uv}=w_{uv}-w_{vu}$\tabularnewline
-\hline 
-$M_{u}$ & $\{v|w_{vu}>0\}$, i.e. the mentioners of $u$\tabularnewline
-\hline 
-$R_{u}^{@t}$ & $\{v|w_{uv}^{@t}>0\}$, i.e. repliers of $u$ specifically during
-the timestep @$t$\tabularnewline
-\hline 
-$O_{uv}^{@t}$ & outgoing activity of a node rewarded by social capital at timestep
-$t$\tabularnewline
-\hline 
-$A_{uv}^{@t}$ & incoming activity in this cycle rewarded just for mentions (all)\tabularnewline
-\hline 
-$B_{uv}^{@t}$ & incoming mentions in this cycle repaying previous replies (balance)\tabularnewline
-\hline 
-$\alpha,\beta,\gamma$ & model parameters\tabularnewline
-\hline
-\end{tabular}
-\begin{eqnarray}
-O_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}O^{@t-1}}\sum_{v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|B_{uv}^{t-1}<0}|B_{uv}^{t-1}|w_{uv}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
-B_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}B^{@t}}\sum_{v\in M_{u}^{@t-1}|B_{uv}^{t-1}>0}B_{uv}^{t-1}w_{vu}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
-A_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}B^{@t}}\sum_{v\in M_{u}^{@t-1}}w_{vu}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
-I_{u}^{@t} & = & \gamma B_{u}^{t-1}+(1-\gamma)A_{u}^{t-1}\\
-S_{u}^{t} & = & \alpha S_{u}^{t-1}+(1-\alpha)(\beta O_{u}^{t-1}+(1-\beta)(\gamma B_{u}^{t-1}+(1-\gamma)A_{u}^{t-1})
-\end{eqnarray}
-
-Some notes on the definitions. $O_{u}^{t}$ is the node $u$'s output gaining social capital, thus we want to reward those who redress an imbalance of input and answer those who addressed you more than you had answered them. The summation is defined exactly over those with whom you have a deficit in replying: $v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|B_{uv}^{t-1}<0$. It means the target node mentioned you at some point prior, you replied to it in this cycle, and before that, you owed it a reply since it tweeted more to you than you did to it. For each such deficit node you replied to, finally, we multiply the number of replies in that cycle, $w_{uv}^{@t-1}$, by the balance you owed, $|B_{uv}^{t-1}|$, the value of the relationship, $W_{uv}^{t-1}$, and the importance of the replier $S_{v}^{t-1}$. We normalize the $O$'s so that they all sum to 1, and reward each node proportionally to the value of the redress in the reply imbalance it actively contributed in this cycle.
-
-Similarly, $I_{u}^{t}$ is the node $u$'s input worth of social capital. We generally consider all input as good — we can't distinguish bad publicity, or consider it all good anyways — but we distinguish mentions redressing the mentioners' own deficit with us as worthing more than just any mention. Those repaying mentions we reward with a multiplier for the balance owed additionally to the usual cycle contribution, relationship value, and the mentioner's social capital.
-
-Note that in the output, we don't have a general activity term for all replies, even those not redressing an imbalance, as we do in the second term of the input. Thus we don't reward random replying, and you won't get social capital by just addressing everybody in volume.
-
-It's easy to see that such a definition of social capital allows for an iterative economy by launching the update rule defining $S_{u}^{t}$ in terms of $S_{u}^{t-1}$ as shown in the last formula above.
-The core questions, which may allow for more quantitative treatment with our metrics:
-
-
-\begin{itemize}
-
-
-\item Why do people twitter? What is the utility and can it be captured by a form of social capital? Can a single definition suffice for all members of a network? Do ``beliebers'' differ from hackers and how, with respect to their forms of social capital and behaviors increasing it?
-
-
-
-
-\item How can you increase your social capital or importance in the fastest, but most robust (``honest,'' irreversible) way? How can we distinguish fake importance from the real thing?
-
-
-
-\end{itemize}
-
-\pagebreak \subsection{Capital-Based Mining}
-\label{capital-basedmining}
-
-Given our metrics of importance and social capital, we explore interesting individuals from our large Twitter data set and interpret what these metrics mean in real life. 
-
-
-The first results of our full-world Social Capital emulation show a new kind of nodes at the top, in addition to the usual suspects such as Justin Bieber (still in the top 10) -- we call it ``the middle class of social networks.'' These are the people with a certain amount of followers -- though not as many as the stars -- e.g.\ from a 100 to a 1,000, weaving a web of intense dialogues with other such nodes. They provide the core of the ongoing communication, pushing trends and stars up, bringing uninteresting subjects down by not talking about them, integrating other nodes and beginners into the system. We believe our metrics are more interesting than the traditional PageRank in that they reflect the dynamic nature of the conversational networks and highlight the groups making lasting ongoing contributions.
-
-
-A typical example is beauty industry. Two owners of Singapore beauty salons come on top in terms of continuous conversation threads kept the longest. They discuss wedding photos, haircuts, design, etc. They have a constant and purpose-driven market, thousands of followers each, and discuss news of their industry. This way they keep tabs on their market niche, satisfy their followers with specific goals, and stay on top in the ratings.
-
-
-Hence one of the differences in the utility of tweeting. Celebrities, those most followed in a typical definition, often get on top by projection from the real world, YouTube, etc. They don't have to tweet for their supper, so to speak. On the contrary, their top fans and other in-Twitter ``phenomenal'' users have to work for it. While spammers achieve a short-term notoriety by mass following, hoping for automatic follow-backs, we do not register those numbers, since we look for real conversations and mentions. Top celebrities like \texttt{@donniewahlberg} and \texttt{@justinbieber} understand this and cultivate their fan base, encouraging top fans once in a while. The timing feature of our metrics smooth over the spikes typical in social networks and reveal true value.
-
 
 \pagebreak \section{Methodology of Influence Studies}
 \label{methodologyofinfluencestudies}
@@ -618,7 +1772,7 @@ We could theoretically optimize over a subset of potential incoming edges, but t
 \pagebreak \section{Actual Simulations}
 \label{actualsimulations}
 
-Using the above strategies as basic elements, we combine them, possibly with one or more jump probability parameters, into actual simulations, discussed below.  The original dynamic graph, recording all of the replies across the {\itshape fromUser $\rightarrow$ day $\rightarrow$ \_toUser} dimensions, is called {\itshape dreps}.  All other simulations lead to a similarly structured dynamic reply graph, and we give it a short root name to distinguish the simulation class.  A suffix is then used to show the combination of the parameters selected, and the week from which the simulation continues the actual {\itshape dreps}.  For every root name, we list all of the suffixes computed for that root class, except for the week designator.
+Using the above strategies as basic elements, we combine them, possibly with one or more jump probability parameters, into actual simulations, discussed below.  The original dynamic graph, recording all of the replies across the {\itshape fromUser} $\rightarrow$ day $\rightarrow$ {\itshape toUser} dimensions, is called {\itshape dreps}.  All other simulations lead to a similarly structured dynamic reply graph, and we give it a short root name to distinguish the simulation class.  A suffix is then used to show the combination of the parameters selected, and the week from which the simulation continues the actual {\itshape dreps}.  For every root name, we list all of the suffixes computed for that root class, except for the week designator.
 
 
 \subsection{Global Uniform Replies --- ureps}
@@ -1067,7 +2221,7 @@ Thus our conclusion is that the influentials, defined with all the assumptions a
 Figures \ref{figure:heatmap-srates-medians-0wk},\ref{figure:heatmap-srates-medians-1wk},\ref{figure:heatmap-srates-medians-2wk},\ref{figure:heatmap-srates-medians-3wk} show the evolution of staying power as the amount of reality seeding increases.  
 
 
-Uniform global strategies coupled with capital-based FOF ones are closer to dreps initially, then mentions-based global ones get closer, and finally capital-capital ones dominate.  It shows that effective communication gets closer to reality when seeded with more history of such communication.
+Uniform global strategies coupled with capital-based {\itshape FOF} ones are closer to {\itshape dreps} initially, then mentions-based global ones get closer, and finally capital-capital ones dominate.  It shows that effective communication gets closer to reality when seeded with more history of such communication.
 
 
 Figure~\ref{figure:heatmap-srates-medians-0wk} shows staying power clustering of all of the basic simulations, run from scratch without mixing any of the {\itshape dreps} reality.
@@ -1106,7 +2260,7 @@ Figure~\ref{figure:heatmap-srates-medians-2wk} shows staying power clustering of
 Figures \ref{figure:heatmap-overx-dreps-medians-0wk},\ref{figure:heatmap-overx-dreps-medians-1wk},\ref{figure:heatmap-overx-dreps-medians-2wk},\ref{figure:heatmap-overx-dreps-medians-3wk} show the evolution of reality overlap as the amount of reality seeding increases.  
 
 
-Global uniform strategies, also coupled with mentions or capital-based FOFs, are closer to reality when starting from scratch, then gradually yielding to global mentions and mentions-mentions-based ones, finally grouping with global capital and capital-capital-based simulations.  Smarter simulations achieve higher overlap with reality, especially when using our reciprocal social capital.
+Global uniform strategies, also coupled with mentions or capital-based {\itshape FOFs}, are closer to reality when starting from scratch, then gradually yielding to global mentions and mentions-mentions ones, finally grouping with global capital and capital-capital simulations.  Smarter simulations achieve higher overlap with reality, especially when using our reciprocal social capital.
 
 
 Figure~\ref{figure:heatmap-overx-dreps-medians-0wk} shows reality overlap clustering of all of the basic simulations, run from scratch without mixing any of the {\itshape dreps} reality itself.
@@ -1153,17 +2307,172 @@ Figure~\ref{figure:heatmap-overx-dreps-medians-3wk} shows reality overlap cluste
     \label{figure:heatmap-overx-dreps-medians-3wk}
 \end{center}
 \end{figure}
+\pagebreak \chapter{Data Mining Infrastructure}
+\label{datamininginfrastructure}
+
+\section{Importance of Social Programs}
+\label{importanceofsocialprograms}
+
+Any massive data mining of social networks has to overcome scaling problems and provide engineering solutions to the challenges which such amount of data poses.  We do not consider algorithmic part of the effort separate from programming -- on the contrary, we firmly believe that the way in which the ideas are formulated in computer science is inseparable from their effective implementation, which includes the lifecycle of a program as a materialized idea.  Efficiency includes not just the performance of a system, but also the ease of its coding, maintenance, understanding, and thus spreading and evolution.
+
+
+Moreover, the modern social media community is driven by a dynamic class of cutting-edge hyperconnected geeks, who co-evolve the networking platforms and software environments enabling their programming, coding, scaling, and presentation.  This co-evolution started with PHP, skyrocketed with Ruby on Rails, and continues with modern {\itshape functional} languages, exceedingly via open-sourced, social coding.  In fact, the rise of the first social coding platform, \href{http://github.com}{github}\footnote{\href{http://github.com}{http://github.com}}, accelerated this process. Many day-to-day discussions among those building the social networks of today and tomorrow happen on Twitter.  Thus following the modern techniques, languages, and tools is key to advancing this revolution.  An example of the process is the Clojure programming language, pushing the envelope on abstraction, software engineering philosophy, new web paradigms, and social coding, which held its first ever conference, \href{http://clojure-conj.org/}{Clojure Conj}\footnote{\href{http://clojure-conj.org/}{http://clojure-conj.org/}} in October 2010.
+
+
+In the spirit of the community, we make all of the code developed throughout this research open source and available on github under the Creative Commons license.
+
+
+\pagebreak \section{Streaming API}
+\label{streamingapi}
+
+\label{StreamingAPI}
+
+
+Gathering and storing Twitter data efficiently is a significant part of the job of analyzing it.  We've investigated several setups before arriving at our current one.  Previously, people used to crawl Twitter, calling the query API provided to get individual users' tweets.  The API has a rate limit for queries, but researchers can have their machines ``whitelisted,'' which actually just raises the limit quite high.  Twitter folks don't like anybody getting a hold of any significant fraction of all tweets, so any attempt to crawl aggressively often hit a permanent ban.  Since many people had a use for tweet streams, Twitter set up a separate Streaming API.  Instead of pulling information with SOAP queries from the web service, Streaming API is pushing a constant stream of tweets over an open HTML channel, which stays open.  There are several levels of streaming:
+
+
+\begin{itemize}
+
+
+\item The {\itshape firehose} being the full set of all tweets, pushed out in near real time.  {\itshape Firehose} is provided on a commercial basis to big players.  
+
+
+
+
+\item The next level is {\itshape gardenhose}, which is, in Twitter's words, ``statistically representative'' of the firehose.  When we started gathering the gardenhose in mid-2009, we collected about 2 million tweets a day; a year later, we were getting more than 5 million tweets daily through it.  The {\itshape gardenhose} seems to be a round-robin sample of the latest tweets, and it does not provide a continuous coverage of any particular individual.  Nevertheless, we found that those who tweet a lot are represented proportionally in the gardenhose.
+
+
+
+
+\item Another stream is called {\itshape shadow}, and allows to follow a set of users completely; our limit of shadowing is the maximum that research access allows, up to 50,000 people.  
+
+
+
+\end{itemize}
+
+When we started our studies, we computed the top pairs of repliers, chosen as follows.  For the replier graph, we looked at all pairs of users engaged in dialogues and having the most exchanges, then sorted them by the descending strength of the dialogues (computed as a function of the daily and total volume).  Then we took the top 50,000 of this ordered list.  It was interesting to see who was on top -- several couples, separated by distance, and also users engaged in explicit talk with several partners simultaneously.  Apparently they used Twitter as a sort of SMS service without realizing it's publicly available; most of them had closed their tweets from the public a few weeks into the study.
+
+
+\pagebreak \section{Storage for Analysis}
+\label{storageforanalysis}
+
+Storing billions of tweets poses unique challenges.  The data comprises both a text corpus and a social graph, and both aspects need to be accessible and cross-linked.  We tested several types of storage, and ended up with several versions of the data suitable for better access and specific purposes.  For the text part, we employed \href{http://lucene.apache.org/}{Lucene}\footnote{\href{http://lucene.apache.org/}{http://lucene.apache.org/}}, the state of the art information retrieval engine.  The original \href{http://dev.twitter.com/pages/streaming_api}{Streaming API}\footnote{\href{http://dev.twitter.com/pages/streaming_api}{http://dev.twitter.com/pages/streaming\_api}} is pushed as either XML or JSON, the latter being the most compact and efficient representation of heterogeneous data.  \href{http://mongodb.org/}{MongoDB}\footnote{\href{http://mongodb.org/}{http://mongodb.org/}} allows for direct storage and indexing of \href{http://json.org/}{JSON}\footnote{\href{http://json.org/}{http://json.org/}}, and goes well with dynamic languages such as Clojure.  Clojure's Mongo interface, \href{http://github.com/somnium/congomongo}{congomongo}\footnote{\href{http://github.com/somnium/congomongo}{http://github.com/somnium/congomongo}} can open Mongo collections as lazy sequences, to be consumed on a when-needed basis.  We also use \href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{Berkeley DB JE}\footnote{\href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}} for parallel serialization, and \href{http://www.1978th.net/tokyocabinet/}{Tokyo Cabinet}\footnote{\href{http://www.1978th.net/tokyocabinet/}{http://www.1978th.net/tokyocabinet/}} with \href{http://code.google.com/apis/protocolbuffers/}{Google Protocol Buffers}\footnote{\href{http://code.google.com/apis/protocolbuffers/}{http://code.google.com/apis/protocolbuffers/}} as values for very fast adjacency list representation of the graph.  The dynamic aspect of our graph has to be taken into account every step of the way; we store exact time stamps of all tweets in the comprehensive representation, and discretize to the daily snapshots in our evolutionary modeling with {\itshape reciprocal social capital} \ref{chapter:SocialCapital}.
+
+
+\pagebreak \section{Platform}
+\label{platform}
+
+\label{impl:Clojure}
+
+
+Our social network exploration platform is developed on the Java Virtual Machine (JVM) technology. We tap into fast and robust databases for storing the vast amounts of data coming daily -- the Berkeley DB Java Edition (BDB JE) \cite{code:berkeleydb}, an in-process persistent hash, and MongoDB \cite{code:mongodb}, a JSON-based client/server with in-memory cache and excellent Java driver. We used two modern JVM languages, {\itshape Scala} \cite{code:scala} and {\itshape Clojure} \cite{code:clojure}, for efficient data mining. Scala is a modern object-functional language, allowing for compact and expressive code while fully interoperable with the Java platform. We previously have successfully developed data mining software with the Functional Programming (FP) paradigm, and Scala FP blends with superior object orientation and Java interoperability.  Scala comes with Erlang-style agents for concurrency, convenient for both local and distributed parallelization.  Clojure is a next-generation Lisp on the JVM, fully interoperable with Java and providing state of the art concurrency mechanisms for shared memory architectures.  It lets us exploit our 64 GB RAM, 8 core server with significant speedup.  The dynamic nature of Clojure makes it especially easy to use in data mining applications, where data types are task-specific.  Clojure syntax has maps, e.g.\ \texttt{{:a 1 :b 2}}, and vectors, \texttt{[1 2 3]}, first-class citizens, easy to explore in the REPL, which is essential in our EDA-based data mining.
+
+
+Several excellent projects under active development in Scala, Clojure, and Java communities help with machine learning and data mining, while others from Java can be fully utilized for NLP jobs:
+
+
+\begin{itemize}
+
+
+\item \href{http://incanter.org}{Incanter}\footnote{\href{http://incanter.org}{http://incanter.org}} -- an R-like data exploratory statistical environment in Clojure
+
+\item \href{http://github.com/bradford/infer}{Infer}\footnote{\href{http://github.com/bradford/infer}{http://github.com/bradford/infer}} -- machine learning algorithms from the founders of Flightcaster and Aria Haghighi
+
+\item \href{http://clojuratica.weebly.com/}{Clojuratica}\footnote{\href{http://clojuratica.weebly.com/}{http://clojuratica.weebly.com/}} -- a two-way Clojure interface with Mathematica
+
+\item \href{http://opennlp.sourceforge.net/}{OpenNLP}\footnote{\href{http://opennlp.sourceforge.net/}{http://opennlp.sourceforge.net/}} -- a mature Java NLP library from UPenn's own Tom Morton and others
+
+\item \href{http://alias-i.com/lingpipe/}{Lingpipe}\footnote{\href{http://alias-i.com/lingpipe/}{http://alias-i.com/lingpipe/}} -- a mature Java NLP library (also related to UPenn)
+
+\item \href{http://www.scalanlp.org/}{ScalaNLP}\footnote{\href{http://www.scalanlp.org/}{http://www.scalanlp.org/}}  -- a collection of libraries for Natural Language Processing, Machine Learning, and Statistics in Scala, based on an efficient new Linear Algebra library Scala.la
+\end{itemize}
+
+Our communication graph is represented as a series of adjacency lists, storing repliers for each source node. An alternative would be to store triplets \texttt{<source,target,weight>}, where weight is any object decorating the edge. When using SQL databases, the triplets are pretty much all you can do. But since we are using either Berkeley DB Java Edition, or Tokyo Cabinet with Protobuffers, capable of storing a variety of JVM objects, we store the adjacency lists directly as hash maps. This makes it significantly faster to get all the repliers for a particular user. We use Java/Scala/Clojure interoperability to store the graph as either Java hash maps or Google Protobuffers, allowing them to be retrieved back from any JVM language. This experience lead to optimizing Berkeley DB JE for Twitter storage by the first author with the Oracle team directly, as reported on the Oracle Java blog \cite{OracleBlog:Khrabrov}, and the ongoing work with \href{http://http://github.com/ninjudd/clojure-protobuf}{clojure-protobuf}\footnote{\href{http://http://github.com/ninjudd/clojure-protobuf}{http://http://github.com/ninjudd/clojure-protobuf}}, \href{http://github.com/ninjudd/jiraph}{jiraph}\footnote{\href{http://github.com/ninjudd/jiraph}{http://github.com/ninjudd/jiraph}} and \href{http://github.com/ninjudd/cake}{cake}\footnote{\href{http://github.com/ninjudd/cake}{http://github.com/ninjudd/cake}} projects.
+
+
+For the $n$-gram models and {\itshape SIP}s, we used {\itshape LingPipe} \cite{code:lingpipe}, an NLP library written in Java. It comes with very well written tutorials on various NLP tasks, built-in tokenizers, and serialization. For text search, we use Lucene, the premier full text search engine originally and currently developed in Java. The $n$-gram models are well-studied in NLP, and they must be compact, fast, and serializable. LingPipe stores both a binary form for efficient perplexity computation and Google $n$-gram format for full count access.
+
+
+We rely on the JVM platform and one of its functional programming languages, \emph{Clojure}, a dynamic Lisp \cite{code:clojure}, taking advantage of the scalability and parallelism it offers.  We receive Twitter data via its Streaming API as JSON and store it in \emph{MongoDB} \cite{code:mongodb}, a modern \emph{NoSQL} document database.  The data mining is performed in Clojure, interfacing with MongoDB via \emph{congomongo} \cite{code:congomongo}.  Any intermediate results can be stored right back as nested maps of maps or vectors in congomongo, allowing for transparent serialization, persistence, and indexing via MongoDB.  
+
+
+A graph with decorated edges is represented as a Clojure map, which, along with a vector, are first-class constructs -- e.g.\ a graph of mentioners from the Figure~\ref{figure:starrank} looks like 
+
+
+
+{\footnotesize
+\begin{verbatim}
+{:s {:a [8 1] :b [6 3] :c [4 4] :d [10 1] :e [4 2]}}    
+\end{verbatim}
+}
+Such maps are subject to Clojure destructuring and functional map/reduce/filter transforms, expressive and concise.  The code for our project is open source and available on github \cite{code:mongol}.  Visualization and model fitting is smoothly handled by Incanter, an R-like statistical environment in Clojure \cite{code:incanter}.
+
+
+\pagebreak \section{Open Source Contributions}
+\label{opensourcecontributions}
+
+The code for this paper is open source and available on github as a series of projects.
+
+
+\begin{itemize}
+
+
+\item \href{http://github.com/alexy/life-language}{LifeLang}\footnote{\href{http://github.com/alexy/life-language}{http://github.com/alexy/life-language}} -- Language of Life identification {\itshape (OCaml)}
+
+\item \href{http://github.com/alexy/tfitter}{Tfitter}\footnote{\href{http://github.com/alexy/tfitter}{http://github.com/alexy/tfitter}} \cite{code:tfitter} -- data storage in BDB JE/PostgreSQL, topic indexing, community detection {\itshape (Scala)}
+
+\item \href{http://github.com/alexy/mongol}{Mongol}\footnote{\href{http://github.com/alexy/mongol}{http://github.com/alexy/mongol}} -- \href{http://www.json.org/}{JSON}\footnote{\href{http://www.json.org/}{http://www.json.org/}} processing with \href{http://www.mongodb.org/}{MongoDB}\footnote{\href{http://www.mongodb.org/}{http://www.mongodb.org/}}, dynamic graph analysis {\itshape (Clojure)}
+
+\item \href{http://github.com/alexy/badjer}{Badjer}\footnote{\href{http://github.com/alexy/badjer}{http://github.com/alexy/badjer}} -- Reciprocal Social Capital in Clojure
+
+\item \href{http://github.com/alexy/clams}{Clams}\footnote{\href{http://github.com/alexy/clams}{http://github.com/alexy/clams}} -- Reciprocal Social Capital in OCaml
+
+\item \href{http://github.com/alexy/husky}{Husky}\footnote{\href{http://github.com/alexy/husky}{http://github.com/alexy/husky}} -- Reciprocal Social Capital in Haskell
+\end{itemize}
+
+Computing Reciprocal Social Capital turned out to be the most computationally demanding process.  We iterate through all of the original Twitter interactions and apply the update rules to the capital values to advance them.  For the working set, it means replaying 100 million tweets over 35 days, one full cycle per day.  Even serializing and deserializing the graphs may take hours, so much effort went into proper storage and retrieval of tweets.  We wrote OCaml and Haskell implementations of the Reciprocal Social Capital, originally developed in Clojure, to verify the complex iterative computation, enable fast loading and storing of the data and results, and bring the computation and result lookup up to natively compiled speeds.  With Twitter's permission, we prepared our communication graph in a portable format, and documented our Reciprocal Social Capital computation thoroughly to create a benchmark our of it, \href{http://fundata1.functional.tv}{FunData1}\footnote{\href{http://fundata1.functional.tv}{http://fundata1.functional.tv}}.  We hope that creating an open-source social networking shootout for functional and other programming languages will advance progress of both the languages and the algorithms, including better data structures.
+
+
+Already {\itshape FunData1} benchmark had lead to the biggest RAM-consuming implementation in Haskell ever, which allowed Microsoft Research, Cambridge, UK to discover an integer overflow bug in Haskell runtime's garbage collector.  We thank Simon Marlow of Haskell core team for finding the bug, with the aid of the largest Amazon Elastic Cloud image available at the moment, with 68 GB of RAM (since the GHC team had no suitable server in MSR Cambridge).
+
+
+{\itshape FunData1} was presented at the first \href{http://clojure-conj.org/}{Clojure Conj}\footnote{\href{http://clojure-conj.org/}{http://clojure-conj.org/}} conference and has caused significant interest already, including thanks from Google researchers who want to use Haskell for similar tasks.  We hope it will lead to improving the infrastructure for processing large volumes of social networking data in all of the languages involved, as it did in Haskell.
+
+
+\pagebreak \chapter{Summary}
+\label{summary}
+
+In this thesis we considered various components which animate a modern online social network.  We started with an individual and traced their steps through basic sequences of sensor outputs and social interactions.  We demonstrated that such sequences can be seen as utterances in the fundamental ``Language of Life'', unique for every participant, who indeed can be identified and characterized by it.  Then we look at the aggregate behavior of groups, or topical communities, which we define as those organized around common topics of interest and maintaining active conversations about them, further strengthened with ``triangular'' membership induction process.  It yields a natural browsing process for exploration.  
+
+
+Then we shift our focus still higher up the ladder of social organization, and devise overall metrics of importance and influence which use network-wise dynamic pageranking measures, {\itshape D-Rank} and {\itshape StarRank}.  These metrics allow us to compare individuals' rise and fall across days, and further compare those by acceleration and length of monotonic runs.  These metrics, taken as aggregates of sorting, filtering, and taking the top results, amount to simple, but computationally efficient, models of influence.  Armed with these models, we uncovered multiple unexpected layers of socio-economic phenomena, dealing with Twitter signals of recognition, conveying higher rankings, and exchanging such signals in clear patterns we dubbed {\itshape the Mind Economy of Social Networks} (hence the thesis title).
+
+
+Noticing that any momentum and trend-like measure leads to the ratings which are prone to celebrity bias, we furthered our metric design to attain features of real capital -- inherent temporality, sensitivity to mutual status of interacting agents, and computability via iterative update rules.  It lets us bootstrap a parallel economy, which can be played along with the actual edge formation in the original dynamic communication graph, with capital values adjusted on each node precisely according to our utility functions.  Utility of various groups can be parameterized and compared in this way.
+
+
+We presented a life language framework for human behavior modeling, and two algorithms for identification with it. Both language model and suffix tree-based identification show high accuracy with enough samples, implying that the underlying patterns are separable and sufficiently unique to individuals. 
+$N$-gram models may achieve high accuracy very quickly, at less than 10 samples, while suffix trees usually need more than 10 samples to get to the higher accuracy, but work faster and also identify author-unique subsequences. Prediction with $n$-grams shows reasonable areas for the future locations, and generally provides much narrower corridors for possible trajectories than generally available, hinting there's a lot of predictability out there waiting to be mined. 
+We also found that a natively compiled OCaml identification system is comparable to C++ in speed and efficiency, and interoperates well with SRILM -- an established C++ library for $n$-gram modeling, while allowing for easier adaptation to different classes of data. We provide our functional framework for sensor data identification as free software at \cite{Suffix:OCaml:Khrabrov,Code:LifeLang:Khrabrov} and hope it can be useful in author-sequence identification in other domains. 
+
+
+We presented methods to explore a social network communication graph by topic and community. Our procedure starts with a topic and builds up a community seeded by a pair of the most active communicators on the topic and their mutual friends (triangles), added recursively. A fringe of such a community represents people related to those organized around the topic, but also pointing to other topics of interest. We used $n$-gram analysis and statistically improbable phrases (SIPs) to characterize the topics of interest in a community and its fringe. The SIPs allow to select communities of interest or further topics for browsing and community building, thus enabling community sensing by pivoting over SIPs. Our workflow provides an effective way to explore a vast social network in an iterative way. When using topics focused temporally or geographically, fine-grained community sensing becomes possible.
+
+
+In our study we applied dynamic graph analysis to the communication graph of Twitter repliers.  We developed metrics for individual users and also their communities which measure the growth of influence over days, by finding the longest runs of growth in mentions, ranks, \emph{StarRank}, and their accelerations.  We found that the \emph{StarRank} is a good indication of influence, and uncovered a whole segment of the Twitter population naturally engaged in rank promotion by increasing the density of the dynamic communication graph, creating multiple accounts, raising the number of followers and repliers, etc.  We also found actively growing national communities, namely in Brazil, and identified types of online personæ -- journalists and musicians -- which quantifiably generate the most engagement from the audience in the social network.  All those metrics are based purely on the graph and temporal structure of the communications.  In our future work, we will use the actual text context of the messages exchanged and $n$-gram modeling to further quantify the dynamics of influence in communication over social networks.
+
+
+We considered metrics of importance and the fundamental questions they should answer. We introduced Reciprocal Social Capital, a currency-like measure which decays with time and rewards socially beneficial behavior. Using this metric, we discovered the ``middle class'' of Twitter -- those whose conversations carry most of the steady discourse. The next steps will explore various forms of this social capital, such as subtracting from the givers and adding to the takers proportionally to their current capital, going further into transitive transfers, and more general theory of such exchanges.  
+
+
+Our iterative Mind Economy provides a powerful platform for discovering individual and group utilities and quantitative modeling of values of individuals, groups, and actions according to any such utility functions, which can be further parameterized as desired.  We believe it will lead to promising research and industrial applications.
+
+
 
 \bibliography{/Users/alexyk/Documents/Thesis/bib/bibdesk/khrabrov-mindeconomy-thesis}
-
-\appendixpage
+\pagebreak \appendixpage*
 \appendix
-\chapter{A}
-\counterwithin{table}{chapter}
-\pagestyle{plain}
-\newgeometry{hmargin=19mm,includefoot,top=1cm,bottom=15pt}
-\input{in-tables-summary}
-\input{in-tables}
+
 %
 % Back Matter
 %

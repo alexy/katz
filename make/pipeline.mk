@@ -153,7 +153,7 @@ $(O34): $(OVERX_SELF_DIR)/overx-%-34wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.
 
 overx_self2: $(OVERX_SELF)
 
-.INTERMEDIATE: $(DENUMS)
+.SECONDARY: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
 	$(SAVE_DAYS) $^ $(DENUMS_DIR)
 
