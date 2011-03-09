@@ -188,7 +188,7 @@ sbucks1:
 	for i in $(BASES); do $(DOSTARBUCKS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb $(STARS_DIR)/$(STARS_PREFIX)-$$i.mlb; done
 
 # .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
-.INTERMEDIATE: $(STARS)
+.SECONDARY: $(STARS)
 $(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) $^ $(STARS_DIR)
 
