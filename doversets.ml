@@ -54,10 +54,14 @@ let () =
     | _ -> failwith "usage: doverlaps b1Name b2Name saveBase"
   in
   let saveSuffix = saveBase^".mlb" in
-  let osetsName  = sprintf "%s-%s%s" prefixOvers  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOvers  ~infix:"-" outdirSuffix) in
-  let oratesName = sprintf "%s-%s%s" prefixOrates mark saveSuffix |> mayPrependDir (mayOptAppend outdirOrates ~infix:"-" outdirSuffix) in
-  let overxName  = sprintf "%s-%s%s" prefixOverx  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOverx  ~infix:"-" outdirSuffix) in
-  let overyName  = sprintf "%s-%s%s" prefixOvery  mark saveSuffix |> mayPrependDir (mayOptAppend outdirOvery  ~infix:"-" outdirSuffix) in
+  let outdirOverx  = mayOptAppend outdirOverx  ~infix:"-" outdirSuffix in
+  let outdirOvery  = mayOptAppend outdirOvery  ~infix:"-" outdirSuffix in
+  let outdirOvers  = mayOptAppend outdirOvers  ~infix:"-" outdirSuffix in
+  let outdirOrates = mayOptAppend outdirOrates ~infix:"-" outdirSuffix in
+  let overxName  = sprintf "%s-%s%s" prefixOverx  mark saveSuffix |> mayPrependDir outdirOverx  in
+  let overyName  = sprintf "%s-%s%s" prefixOvery  mark saveSuffix |> mayPrependDir outdirOvery  in
+  let osetsName  = sprintf "%s-%s%s" prefixOvers  mark saveSuffix |> mayPrependDir outdirOvers  in
+  let oratesName = sprintf "%s-%s%s" prefixOrates mark saveSuffix |> mayPrependDir outdirOrates in
   
   leprintf "reading buckets from %s and %s, saving fraction to left in %s, "
     b1Name b2Name overxName;
