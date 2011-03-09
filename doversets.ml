@@ -47,10 +47,10 @@ let () =
   let prefixOverx,   outdirOverx,   prefixOvery,    outdirOvery =
       !prefixOverx', !outdirOverx', !prefixOvery',  !outdirOvery' in
 
-  let b1Name,b2Name,saveBase,outdirOverx =
+  let b1Name,b2Name,saveBase,outdirSuffix =
   match args with
-    | b1Name::b2Name::saveBase::outdirOverx::restArgs -> b1Name,b2Name,saveBase,Some outdirOverx
-    | b1Name::b2Name::saveBase::restArgs -> b1Name,b2Name,saveBase,outdirOverx
+    | b1Name::b2Name::saveBase::outdirSuffix::restArgs -> b1Name,b2Name,saveBase,Some outdirSuffix
+    | b1Name::b2Name::saveBase::restArgs -> b1Name,b2Name,saveBase,outdirSuffix
     | _ -> failwith "usage: doverlaps b1Name b2Name saveBase"
   in
   let saveSuffix = saveBase^".mlb" in
