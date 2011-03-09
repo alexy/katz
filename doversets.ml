@@ -74,13 +74,19 @@ let () =
   let (osets:day_buckets),(overx:rates),(overy:rates) = bucketOverlapSetsRatios b1 b2 in
   
   show_rates overx;  
+  mayMkDir outdirOverx;
   saveData overx overxName;
 
   if oratesNow then begin
     let orates = Topsets.bucketDynamics osets in
+    mayMkDir outdirOrates;
     saveData orates oratesName
     end
   else
+    mayMkDir outdirOvers;
     saveData osets osetsName;
   
-  if saveOverY then saveData overy overyName
+  if saveOverY then begin
+    mayMkDir outdirOvery;
+    saveData overy overyName
+  end
