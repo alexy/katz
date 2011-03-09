@@ -5,14 +5,14 @@ open Getopt
 let oratesNow'    = ref true
 let saveOverY'    = ref false
 let mark'         = ref ""
-let prefixOvers'  = ref "overs"
-let outdirOvers'  = ref (Some !prefixOvers')
-let prefixOrates' = ref "orates"
-let outdirOrates' = ref (Some !prefixOrates')
 let prefixOverx'  = ref "overx"
 let outdirOverx'  = ref (Some !prefixOverx')
 let prefixOvery'  = ref "overy"
 let outdirOvery'  = ref (Some !prefixOvery')
+let prefixOvers'  = ref "overs"
+let outdirOvers'  = ref (Some !prefixOvers')
+let prefixOrates' = ref "orates"
+let outdirOrates' = ref (Some !prefixOrates')
 let outdirSuffix' = ref None
 
 let specs =
@@ -86,9 +86,10 @@ let () =
     mayMkDir outdirOrates;
     saveData orates oratesName
     end
-  else
+  else begin
     mayMkDir outdirOvers;
-    saveData osets osetsName;
+    saveData osets osetsName
+  end;
   
   if saveOverY then begin
     mayMkDir outdirOvery;
