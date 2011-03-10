@@ -132,10 +132,10 @@ $(DIRS):
 
 .SECONDARY: $(CAPS)
 .INTERMEDIATE: $(ARANKS)
-$(ARANKS): $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb
+$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
-$(ARANKS): $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
+$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
 $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
