@@ -40,11 +40,11 @@
 
 #../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"                 fg5cf1cb56f1wk  ../ereps/ereps/dreps.mlb 7
 #../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"                 fg5cf1cb56f2wk  ../ereps/ereps/dreps.mlb 14
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"                 fg5cf1cb56f3wk  ../ereps/ereps/dreps.mlb 21
+#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"                 fg5cf1cb56f3wk  ../ereps/ereps/dreps.mlb 21
 
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t1wk  ../ereps/ereps/dreps.mlb 7
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t2wk  ../ereps/ereps/dreps.mlb 14
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t3wk  ../ereps/ereps/dreps.mlb 21
+#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t1wk  ../ereps/ereps/dreps.mlb 7
+#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t2wk  ../ereps/ereps/dreps.mlb 14
+#../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="5;6"   --keepbuckets fg5cf1cb56t3wk  ../ereps/ereps/dreps.mlb 21
 
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="6;7"                 fg5cf1cb67f1wk  ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/drnums/nr-dreps.mlb -j 0.5 -J 0.1 --glocap --fofcap --buckets="6;7"                 fg5cf1cb67f2wk  ../ereps/ereps/dreps.mlb 14
