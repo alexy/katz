@@ -229,7 +229,10 @@ lblens1:
 	for i in $(BASES); do $(DOLBLENS) $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-$$i.mlb; done
 
 .INTERMEDIATE: $(JCAPS)
-$(JCAPS): $(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb
+$(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb
+	$(SAVE_CAPS) $^ $(JCAPS_DIR)
+
+$(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
 	$(SAVE_CAPS) $^ $(JCAPS_DIR)
 
 .SECONDARY: $(LBUCKS)
