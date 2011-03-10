@@ -74,7 +74,7 @@ RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
 CAPS_BASE=  $(BASES:%=$(CAPS_DIR)/caps-%.mlb)
-CAPS     = $(foreach cap,$(CAPS_BASE),$(wildcard $(CAPS_DIR)/$(cap)))
+CAPS     = $(foreach cap,$(CAPS_BASE),$(wildcard $(cap)*))
 ARANKS=$(BASES:%=$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
 DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
