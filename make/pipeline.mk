@@ -200,14 +200,20 @@ sbucks1:
 
 # .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
 .SECONDARY: $(STARS_REPS)
-$(STARS_REPS):  $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+	$(DOSRANKS) $^ $(STARS_REPS_DIR)
+
+$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb.xz
 	$(DOSRANKS) $^ $(STARS_REPS_DIR)
 
 $(SBUCKS_REPS): $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb
 	$(DOSTARBUCKS) $^ $(SBUCKS_REPS_DIR)
 
 .SECONDARY: $(STARS_MENTS)
-$(STARS_MENTS):  $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
+
+$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb.xz
 	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
 
 $(SBUCKS_MENTS): $(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb
