@@ -44,7 +44,7 @@ let () =
     | _ -> failwith "usage: dosranks drepsName dcapsName [outdir]"      
   in  
 
-  let baseName = cutPath drepsName in
+  let baseName = cutPathZ drepsName in
   let ok,baseName = 
     if invert
       then String.replace ~str:baseName ~sub:drepsInfix ~by:dmentsInfix

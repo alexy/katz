@@ -28,7 +28,7 @@ let () =
     | _ -> failwith "usage: save_rbucks aranksName [outdir]"      
   in  
 
-  let baseName = cutPath aranksName in
+  let baseName = cutPathZ aranksName in
   let bucksName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   leprintfln "reading aranks from %s, saving buckets in %s" 
     aranksName bucksName;

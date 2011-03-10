@@ -299,8 +299,12 @@ let randInit i = begin
   leprintfln "Random.init %d" i;
 end
 
-let cutPath s =
+let cutPath ?(drops=[]) s =
+  let s = L.fold_left (flip dropText) s drops in
   String.right s (String.length s - (try String.rfind s "/" with _ -> -1) - 1)
+  
+let cutPathZ s =
+  cutPath ~drops:[".xz";".bz2";".gz"] s
   
 let mayPrependDir optDir name =
   match optDir with

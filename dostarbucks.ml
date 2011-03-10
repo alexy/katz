@@ -29,7 +29,7 @@ let () =
     | _ -> failwith "usage: dostarbucks bucksName starsName [outdir]"      
   in  
 
-  let baseName = cutPath starsName in
+  let baseName = cutPathZ starsName in
   let sbucksName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   leprintfln "reading bucks from %s, starrank from %s, storing starbucks in %s" bucksName starsName sbucksName;
 

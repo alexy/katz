@@ -25,7 +25,7 @@ let () =
     | _ -> failwith "usage: dorblens bucksName [outdir]"      
   in  
 
-  let baseName = cutPath bucksName in
+  let baseName = cutPathZ bucksName in
   let lensName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   leprintfln "reading buckets from %s, saving lengths in %s" 
     bucksName lensName;

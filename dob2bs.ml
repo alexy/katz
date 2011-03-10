@@ -35,7 +35,7 @@ let () =
     | _ -> failwith "usage: dob2bs drepsName bucksName [outdir]"      
   in  
 
-  let baseName = cutPath bucksName in
+  let baseName = cutPathZ bucksName in
   let b2bName = sprintf "%s%s-%s" prefix mark baseName |> mayPrependDir outdir in
 
   let dreps: graph = let g: graph = loadData drepsName in

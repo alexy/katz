@@ -20,7 +20,7 @@ let () =
     | _ -> failwith "usage: volume dnumsName bucksName"      
   in  
 
-  let baseName = cutPath bucksName in
+  let baseName = cutPathZ bucksName in
   let volsName = (if byMents then "m" else "r")^"vols2-"^baseName in
   leprintfln "reading dnums from %s, using %s, bucks from %s, saving volumes in %s" 
     dnumsName (if byMents then "mentions" else "replies") bucksName volsName;

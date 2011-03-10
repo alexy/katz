@@ -39,7 +39,7 @@ let () =
   | _ -> failwith "usage: save_days drepsName [outdirDenums]"
   in
    
-  let baseName = cutPath drepsName in
+  let baseName = cutPathZ drepsName in
   let edgeName = sprintf "%s-%s" prefixByday  baseName |> mayPrependDir outdirByday in
   let numsName = sprintf "%s-%s" prefixDenums baseName |> mayPrependDir outdirDenums in
   leprintfln "reading graph from %s, saving byday edges in %s and edge nums in %s" drepsName edgeName numsName;

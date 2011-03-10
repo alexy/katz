@@ -33,7 +33,7 @@ let () =
     | _ -> failwith "usage: doaranks dcapsName [outdir]"      
   in        
 
-  let baseName = cutPath dcapsName in
+  let baseName = cutPathZ dcapsName in
   let aranksName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   
   leprintfln "reading dcaps from %s, saving daily ranks (aranks) in %s" 

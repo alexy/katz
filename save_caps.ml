@@ -33,7 +33,7 @@ let () =
     | _ -> failwith "usage: save_caps [-d mindays] [-c mincap] dcapsName [outdir]"    
   in        
   (* j is for just caps *)
-  let baseName = cutPath dcapsName in
+  let baseName = cutPathZ dcapsName in
   let capsName = sprintf "%s%s%s" prefix mark baseName |> mayPrependDir outdir in
   let sort = true in
   

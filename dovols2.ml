@@ -33,7 +33,7 @@ let () =
     | _ -> failwith "usage: volume denumsName bucksName [outdir]"      
   in  
 
-  let baseName = cutPath bucksName in
+  let baseName = cutPathZ bucksName in
   let volsName = sprintf "%s-%s" prefix baseName |> mayPrependDir outdir in
   leprintfln "reading denums from %s, bucks from %s, saving volumes in %s" 
     denumsName bucksName volsName;

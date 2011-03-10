@@ -25,7 +25,7 @@ let () =
     | _ -> failwith "usage: dobucks jcapsName [outdir]"      
   in  
 
-  let baseName = cutPath jcapsName in
+  let baseName = cutPathZ jcapsName in
   let bucksName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   leprintfln "reading jcaps from %s, saving buckets in %s" 
     jcapsName bucksName;
