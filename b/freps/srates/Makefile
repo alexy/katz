@@ -1,4 +1,5 @@
 INPUT_PATH=freps/srates/tex
-LIST=freps-srates.list
+LIST1=freps-srates4.list
+LIST2=freps-srates3.list
 
-include ../../../make/rates1.mk
+include ../../../make/rates2.mk
