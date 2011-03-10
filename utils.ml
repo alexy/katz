@@ -299,6 +299,7 @@ let randInit i = begin
   leprintfln "Random.init %d" i;
 end
 
+(* NB swapping order in dropText as dropText str sub would avoid flip: *)
 let cutPath ?(drops=[]) s =
   let s = L.fold_left (flip dropText) s drops in
   String.right s (String.length s - (try String.rfind s "/" with _ -> -1) - 1)
