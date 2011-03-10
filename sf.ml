@@ -137,7 +137,7 @@ let () =
   end dreps' in
 
   let initDayOpt = Option.map int_of_string day' in
-  begin match initDayOpt with | Some day ->  leprintfln " through day %d" day | _ -> leprintfLn end;
+  begin match initDayOpt with | Some day ->  leprintfln " through day %d" day | _ -> le_newline end;
                              
   let strategies = [globalStrat;fofStrat] @ (listOption (Option.map (constantly Buckets) buckets)) in
   

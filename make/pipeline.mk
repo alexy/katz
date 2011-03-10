@@ -73,7 +73,8 @@ LBLENS_PREFIX=le$(LBUCKS_PREFIX)
 RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
-CAPS=  $(BASES:%=$(CAPS_DIR)/caps-%.mlb)
+CAPS_MLB=  $(BASES:%=$(CAPS_DIR)/caps-%.mlb)
+CAPS    = $(foreach cap,$(CAPS),$(wildcard $(CAPS_DIR)/$(cap)))
 ARANKS=$(BASES:%=$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
 DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
@@ -106,8 +107,7 @@ all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 show:
-	@echo overx_dreps: $(OVERX_DREPS)
-	@echo overx_self:  $(OVERX_SELF)
+	@echo caps: $(CAPS)
 
 denums1:
 	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done

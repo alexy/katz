@@ -7,7 +7,7 @@ open Getopt
 
 let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
-let leprintfLn        = eprintf "\n%!"
+let le_newline        = eprintf "\n%!"
 
 (* this is slow since it doesn't specify a possibly large initial length
    instead, we can have an optional parameter and first H.create with that,
@@ -349,3 +349,16 @@ let sortHEnum ?(desc=false) he =
 let constantly x y = x
 
 let parseIntList ?(sep=";") x = String.nsplit x sep |> L.map int_of_string
+
+(* let load_mlbxz mlbfile = let pin = Unix.open_process_in ("xzcat " ^ mlbfile) in let r = Marshal.from_channel pin in Unix.close_process_in pin; r 
+   -- from kaustuv, a better-paranoia-hardened version: *)
+
+type 'a res = Success of 'a | Error of exn
+
+let load_mlbxz mlbfile =
+  let pin = Unix.open_process_in ("xzcat " ^ mlbfile) in
+  let res = try Success (Marshal.from_channel pin) with xn -> Error xn in
+  ignore (Unix.close_process_in pin);
+  match res with
+    | Success x -> x
+    | Error xn -> raise xn
