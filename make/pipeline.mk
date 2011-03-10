@@ -11,6 +11,7 @@ JUMP_DIR=jump
 NORMS_DIR=norms
 ARANKS_DIR=aranks
 RBUCKS_DIR=rbucks
+SRATES_DIR=srates
 DENUMS_DIR=denums
 VOLS4_DIR=vols4
 B2BR_DIR=b2br
@@ -31,6 +32,7 @@ DIRS= \
   $(CAPS_DIR)   \
   $(ARANKS_DIR) \
   $(RBUCKS_DIR) \
+  $(SRATES_DIR) \
   $(DENUMS_DIR) \
   $(VOLS4_DIR)  \
   $(B2BR_DIR)   \
@@ -46,6 +48,7 @@ DIRS= \
 
 DOARANKS=$(CMD_DIR)/doaranks.opt
 SAVE_RBUCKS=$(CMD_DIR)/save_rbucks.opt
+DOSRATES=$(CMD_DIR)/dorates.opt
 DOVERSETS=$(CMD_DIR)/doversets.opt
 SAVE_DAYS=$(CMD_DIR)/save_days.opt
 DOVOLS2=$(CMD_DIR)/dovols2.opt
@@ -59,6 +62,7 @@ DORBLENS=$(CMD_DIR)/dorblens.opt
 
 ARANKS_PREFIX=aranks-caps
 RBUCKS_PREFIX=rbucks-$(ARANKS_PREFIX)
+SRATES_PREFIX=srates-$(RBUCKS_PREFIX)
 OVERX_DREPS_PREFIX=overx-dreps
 DENUMS_PREFIX=denums-dreps
 VOLS4_PREFIX=vols4-$(RBUCKS_PREFIX)
@@ -77,6 +81,7 @@ CAPS_BASE=  $(BASES:%=$(CAPS_DIR)/caps-%.mlb)
 CAPS     = $(foreach cap,$(CAPS_BASE),$(wildcard $(cap)*))
 ARANKS=$(BASES:%=$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
+SRATES=$(BASES:%=$(SRATES_DIR)/$(SRATES_PREFIX)-%.mlb)
 DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
 VOLS4= $(BASES:%=$(VOLS4_DIR)/$(VOLS4_PREFIX)-%.mlb)
 B2BR=  $(BASES:%=$(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb)
@@ -102,7 +107,7 @@ O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
 O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
-all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
+all:  $(DREPS) $(RBUCKS) $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
@@ -142,6 +147,11 @@ $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-
 	$(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
 
 rbucks2: $(RBUCKS)
+  
+$(SRATES): $(SRATES_DIR)/$(SRATES_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+  $(DOSRATES) $^ $(SRATES_DIR)
+  
+srates2: $(SRATES)
   
 $(OVERX_DREPS): $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_SUFFIX)

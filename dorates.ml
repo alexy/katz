@@ -4,26 +4,33 @@ open Getopt
 (* srates stand for staying rates *)
 
 let prefix' = ref "srates"
+let outdir' = ref (Some !prefix')
+let mark'   = ref ""
 let specs =
 [
-  ('p',"prefix",None,Some (fun x -> prefix' := x))
+  (noshort,"prefix",None,Some (fun x -> prefix' := x));
+  (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
+  (noshort,"nodir", (set outdir' None), None);
+  ('k',"mark",None,Some (fun x -> mark' := x))
 ]
 
 let () =
   let args = getOptArgs specs in
   
-  let prefix = !prefix' in
-  
-  let bucksName =
+  let prefix, outdir, mark =
+      !prefix', !outdir', !mark' in
+
+  let bucksName,outdir =
   match args with
-    | bucksName::restArgs -> bucksName
-    | _ -> failwith "usage: dorates bucksName"
-  in
-  
+    | bucksName::outdir::restArgs -> bucksName,Some outdir
+    | bucksName::restArgs ->         bucksName,outdir
+    | _ -> failwith "usage: dorates bucksName [outdir]"      
+  in  
+
   let baseName = cutPath bucksName in
-  let saveName = sprintf "%s-%s" prefix baseName in
+  let saveName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   leprintfln "reading bucks from %s, saving rates in %s" 
-  bucksName saveName;
+    bucksName saveName;
 
   let bucks: day_buckets = loadData bucksName in
 
@@ -32,4 +39,5 @@ let () =
   
   Topsets.show_rates rates;
   
+  mayMkDir outdir;
   saveData rates saveName
