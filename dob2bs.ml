@@ -14,8 +14,8 @@ let specs =
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
   (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir", (set outdir' None), None);
-  ('k',"mark",None,Some (fun x -> mark' := x));
-  ('i',"invert",(set invert' (not !invert')),None)
+  ('i',"invert",(set invert' (not !invert')),None);
+  ('k',"mark",None,Some (fun x -> mark' := x))
 ]
 
 let () =

@@ -194,7 +194,7 @@ $(B2B).opt: lib.cmxa invert.cmx bucket_power.cmx $(B2B).ml
 $(OPT).opt: $(OPT).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
-$(STARS).opt: lib.cmxa starrank.cmx $(STARS).ml
+$(STARS).opt: lib.cmxa invert.cmx starrank.cmx $(STARS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(SBUCKS).opt: lib.cmxa starrank.cmx $(SBUCKS).ml

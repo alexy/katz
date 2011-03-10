@@ -15,8 +15,10 @@ DENUMS_DIR=denums
 VOLS4_DIR=vols4
 B2BR_DIR=b2br
 B2BM_DIR=b2bm
-STARS_DIR=stars
-SBUCKS_DIR=sbucks
+STARS_REPS_DIR=  stars-reps
+STARS_MENTS_DIR= stars-ments
+SBUCKS_REPS_DIR= sbucks-reps
+SBUCKS_MENTS_DIR=sbucks-ments
 JCAPS_DIR=jcaps
 LBUCKS_DIR=lbucks
 LBLENS_DIR=lblens
@@ -33,8 +35,10 @@ DIRS= \
   $(VOLS4_DIR)  \
   $(B2BR_DIR)   \
   $(B2BM_DIR)   \
-  $(STARS_DIR)  \
-  $(SBUCKS_DIR) \
+  $(STARS_REPS_DIR)  \
+  $(STARS_MENTS_DIR)  \
+  $(SBUCKS_REPS_DIR) \
+  $(SBUCKS_MENTS_DIR) \
   $(JCAPS_DIR)  \
   $(LBUCKS_DIR) \
   $(LBLENS_DIR) \
@@ -60,8 +64,10 @@ DENUMS_PREFIX=denums-dreps
 VOLS4_PREFIX=vols4-$(RBUCKS_PREFIX)
 B2BR_PREFIX=b2br-$(RBUCKS_PREFIX)
 B2BM_PREFIX=b2bm-$(RBUCKS_PREFIX)
-STARS_PREFIX=stars-dreps
-SBUCKS_PREFIX=sbucks-$(STARS_PREFIX)
+STARS_REPS_PREFIX=stars-dreps
+STARS_MENTS_PREFIX=stars-dments
+SBUCKS_REPS_PREFIX=sbucks-$(STARS_REPS_PREFIX)
+SBUCKS_MENTS_PREFIX=sbucks-$(STARS_MENTS_PREFIX)
 LBUCKS_PREFIX=lb-jcaps
 LBLENS_PREFIX=le$(LBUCKS_PREFIX)
 RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
@@ -74,8 +80,10 @@ DENUMS=$(BASES:%=$(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb)
 VOLS4= $(BASES:%=$(VOLS4_DIR)/$(VOLS4_PREFIX)-%.mlb)
 B2BR=  $(BASES:%=$(B2BR_DIR)/$(B2BR_PREFIX)-%.mlb)
 B2BM=  $(BASES:%=$(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb)
-STARS= $(BASES:%=$(STARS_DIR)/$(STARS_PREFIX)-%.mlb)
-SBUCKS=$(BASES:%=$(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb)
+STARS_REPS=  $(BASES:%=$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb)
+STARS_MENTS= $(BASES:%=$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb)
+SBUCKS_REPS= $(BASES:%=$(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb)
+SBUCKS_MENTS=$(BASES:%=$(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb)
 JCAPS= $(BASES:%=$(JCAPS_DIR)/jcaps-%.mlb)
 LBUCKS=$(BASES:%=$(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
@@ -93,7 +101,7 @@ O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
 O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
-all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS) $(LBLENS) $(RBLENS)
+all:  $(DREPS) $(RBUCKS) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
@@ -188,14 +196,23 @@ sbucks1:
 	for i in $(BASES); do $(DOSTARBUCKS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb $(STARS_DIR)/$(STARS_PREFIX)-$$i.mlb; done
 
 # .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
-.SECONDARY: $(STARS)
-$(STARS):  $(STARS_DIR)/$(STARS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
-	$(DOSRANKS) $^ $(STARS_DIR)
+.SECONDARY: $(STARS_REPS)
+$(STARS_REPS):  $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+	$(DOSRANKS) $^ $(STARS_REPS_DIR)
 
-$(SBUCKS): $(SBUCKS_DIR)/$(SBUCKS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_DIR)/$(STARS_PREFIX)-%.mlb
-	$(DOSTARBUCKS) $^ $(SBUCKS_DIR)
+$(SBUCKS_REPS): $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb
+	$(DOSTARBUCKS) $^ $(SBUCKS_REPS_DIR)
 
-sbucks2: $(SBUCKS)
+.SECONDARY: $(STARS_MENTS)
+$(STARS_MENTS):  $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
+
+$(SBUCKS_MENTS): $(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb
+	$(DOSTARBUCKS) $^ $(SBUCKS_MENTS_DIR)
+
+sbucks_reps2:  $(SBUCKS_REPS)
+sbucks_ments2: $(SBUCKS_MENTS)
+sbucks2: sbucks_reps2 sbucks_ments2
 
 lblens1:
 	for i in $(BASES); do $(SAVE_CAPS) $(CAPS_DIR)/caps-$$i.mlb; done
