@@ -1,7 +1,7 @@
 DEBUG=-g
 #PROFILE=-p
 OPTFLAGS=-inline 100 $(PROFILE)
-PACKAGES=batteries
+PACKAGES=batteries,getopt
 
 OC=overclass
 RN=rownumber
@@ -16,5 +16,5 @@ all: $(ALL:%=%.opt)
 $(OC).opt: $(OC).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) $^ -o $@
 
-$(RN).opt: $(RN).cmx
+$(RN).opt: $(RN).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@

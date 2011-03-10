@@ -1,7 +1,7 @@
 N1 ?= 5
 N2 ?= 5
 
-include ../../tex.mk
+include ../../../tex-defs.mk
 .PHONY: tex txt
 
 tex:

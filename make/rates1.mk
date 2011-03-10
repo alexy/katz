@@ -1,4 +1,4 @@
-include ../../../make/tex.mk
+include ../../../make/tex-defs.mk
 .PHONY: tex txt
 tex:
 	mkdir -p tex
