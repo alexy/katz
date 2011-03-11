@@ -1,30 +1,31 @@
-CUTPOS ?= 7-
-CUT=cut -c $(CUTPOS)
+include $(MK_DIR)/list1.mk
+TXT_DIR=txt
 
-BASE_LIST=$(foreach base,$(BASES),$(shell cat ../$(base).list))
-MLB_LIST=$(filter %.mlb, $(BASE_LIST))
+AVG_LIST_TXT=$(LINE_LIST:%.mlb=$(TXT_DIR)/averages-%.txt)
+MED_LIST_TXT=$(AVG_LIST_TXT:$(TXT_DIR)/averages-%=$(TXT_DIR)/medians-%)
 
-AVG_LIST=$(MLB_LIST:%.mlb=averages-%.txt)
-MED_LIST=$(AVG_LIST:averages-%=medians-%)
-
-AVG_TXT=$(BASES:%=%-averages.txt)
-MED_TXT=$(BASES:%=%-medians.txt)
+AVG_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-averages.txt)
+MED_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-medians.txt)
 
 TXT=$(AVG_TXT) $(MED_TXT)
 
-.PHONY: echo
-  
-all: $(TXT)
-  
-echo:
-	@echo AVG_LIST: $(AVG_LIST)
-	@echo MED_LIST: $(MED_LIST)
+# overx-
+CUTPOS   ?= 1
+CUT=cut -c $(CUTPOS)-
 
-$(AVG_TXT): $(AVG_LIST)
+.PHONY: sum-txt show-sum-txt clean-sum-txt
+  
+sum-txt: $(TXT)
+  
+show-sum-txt:
+	@echo AVG_LIST_TXT: $(AVG_LIST_TXT)
+	@echo MED_LIST_TXT: $(MED_LIST_TXT)
+
+$(AVG_TXT): $(AVG_LIST_TXT)
 	cat $^ | $(CUT) > $@
 
-$(MED_TXT): $(MED_LIST)
+$(MED_TXT): $(MED_LIST_TXT)
 	cat $^ | $(CUT) > $@
 
-clean:
+clean-sum-txt:
 	rm -f $(TXT)

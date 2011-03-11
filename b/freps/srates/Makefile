@@ -1,6 +1,7 @@
-INPUT_PATH=freps/srates/tex
-LIST1=freps-srates4.list
-LIST2=freps-srates3.list
-N2=4
+include base.mk
+MK_DIR=../../../make
+LS_DIR=../../list
 
-include ../../../make/rates2.mk
+include $(MK_DIR)/rates2.mk
+include $(MK_DIR)/tex2.mk
+include $(MK_DIR)/txt.mk

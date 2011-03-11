@@ -1,5 +1,8 @@
 include base.mk
-INPUT_PATH=freps/overx-self/tex
-LIST=$(BASE).list
+MK_DIR=../../../make
+LS_DIR=.
+CUTPOS=7
 
-include ../../../make/rates1.mk
+include $(MK_DIR)/rates1.mk
+include $(MK_DIR)/tex.mk
+include $(MK_DIR)/txt.mk

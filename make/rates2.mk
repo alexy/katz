@@ -1,15 +1,17 @@
-N1 ?= 5
-N2 ?= 5
+include $(MK_DIR)/list2.mk
+include $(MK_DIR)/tex-defs.mk
 
-include ../../../tex-defs.mk
+XARGS_N1 ?= 5
+XARGS_N2 ?= 4
+
 .PHONY: tex txt
 
 tex:
 	mkdir -p tex
-	cat $(LIST1) | xargs -n$(N1) $(TEX4RATES) -t -i $(INPUT_PATH)
-	cat $(LIST2) | xargs -n$(N2) $(TEX4RATES) -t -i $(INPUT_PATH)
+	echo $(LIST1) | xargs -n$(XARGS_N1) $(TEX4RATES) -t -i $(INPUT_PATH)
+	echo $(LIST2) | xargs -n$(XARGS_N2) $(TEX4RATES) -t -i $(INPUT_PATH)
 
 txt:
 	mkdir -p txt
-	cat $(LIST1) | xargs -n$(N1) $(TEX4RATES) --nomatrix --precise
-	cat $(LIST2) | xargs -n$(N2) $(TEX4RATES) --nomatrix --precise
+	echo $(LIST1) | xargs -n$(XARGS_N1) $(TEX4RATES) --nomatrix --precise
+	echo $(LIST2) | xargs -n$(XARGS_N2) $(TEX4RATES) --nomatrix --precise

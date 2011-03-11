@@ -1,1 +1,11 @@
-BASE=freps-overx-self
+REPS=freps
+QUE_PASA=overx-self
+BASE=$(REPS)-$(QUE_PASA)
+
+#QUAD_PREFIX=
+#QUAD_SUFFIX=
+#DROP=
+#TABLE_PREFIX=overx-self
+
+SUMMARY_PREFIX=$(BASE)
+INPUT_PATH=$(REPS)/$(QUE_PASA)/tex

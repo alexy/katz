@@ -1,38 +1,41 @@
-ROWNUMBER=../../../../tex/rownumber.opt
-CUT=cut -c 7-
+include $(MK_DIR)/list1.mk
+TEX_DIR=tex
 
-BASE_LIST=$(foreach base,$(BASES),$(shell cat ../$(base).list))
-MLB_LIST=$(filter %.mlb, $(BASE_LIST))
+AVG_LIST_TEX=$(LINE_LIST:%.mlb=$(TEX_DIR)/averages-%.tex)
+MED_LIST_TEX=$(AVG_LIST_TEX:$(TEX_DIR)/averages-%=$(TEX_DIR)/medians-%)
 
-AVG_LIST=$(MLB_LIST:%.mlb=averages-%.tex)
-MED_LIST=$(AVG_LIST:averages-%=medians-%)
-
-AVG_TEX=$(BASES:%=%-averages.tex)
-MED_TEX=$(BASES:%=%-medians.tex)
+AVG_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-averages.tex)
+MED_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-medians.tex)
 
 RAW_TEX=$(AVG_TEX) $(MED_TEX)
 
-N_AVG_TEX=$(AVG_TEX:%=n-%)
-N_MED_TEX=$(MED_TEX:%=n-%)
+N_AVG_TEX=$(AVG_TEX:$(TEX_DIR)/%=$(TEX_DIR)/n-%)
+N_MED_TEX=$(MED_TEX:$(TEX_DIR)/%=$(TEX_DIR)/n-%)
   
 NUMBERED=$(N_AVG_TEX) $(N_MED_TEX)
 
-.PHONY: echo
-  
-all: $(NUMBERED)
-  
-echo:
-	@echo AVG_LIST: $(AVG_LIST)
-	@echo MED_LIST: $(MED_LIST)
+# overx-
+CUTPOS   ?= 1
+CUT=cut -c $(CUTPOS)-
+ROWNUMBER=../../../tex/rownumber.opt
+HLINE    ?= -h4
 
-$(AVG_TEX): $(AVG_LIST)
+.PHONY: sum-tex show-sum-tex clean-sum-tex
+  
+sum-tex: $(NUMBERED)
+  
+show-sum-tex:
+	@echo AVG_LIST_TEX: $(AVG_LIST_TEX)
+	@echo MED_LIST_TEX: $(MED_LIST_TEX)
+
+$(AVG_TEX): $(AVG_LIST_TEX)
 	cat $^ | $(CUT) > $@
 
-$(MED_TEX): $(MED_LIST)
+$(MED_TEX): $(MED_LIST_TEX)
 	cat $^ | $(CUT) > $@
 
-$(N_AVG_TEX) $(N_MED_TEX): n-%: %
+$(N_AVG_TEX) $(N_MED_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
 	$(ROWNUMBER) $(HLINE) < $^ > $@
 
-clean:
+clean-sum-tex:
 	rm -f $(RAW_TEX) $(NUMBERED)
