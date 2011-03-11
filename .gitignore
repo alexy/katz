@@ -18,3 +18,13 @@ look
 *.pdf
 *.xz
 *.mlb
+*.txt
+*.bbl
+*~
+*.out
+*.idx
+*.toc
+*.glo
+*.blg
+*.lof
+*.brf
