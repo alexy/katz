@@ -8,13 +8,15 @@ let getOptArgs specs =
   parse_cmdline specs pushArg;
   List.of_enum restArgsE |> List.rev
 
-let init   = ref 0
-let hlines = ref None
+let init'   = ref 0
+let inc'    = ref false
+let hlines' = ref None
 let specs  =
 [
-  ('n',"start",None,Some (fun x -> init := int_of_string x));
-  ('h',"hlines",None,Some (fun x -> hlines := Some (int_of_string x)));
-  (noshort,"nohlines",(set hlines None),None)
+  ('n',"start",None,Some (fun x -> init' := int_of_string x));
+  ('i',"inc",(set inc' (not !inc')),None);
+  ('h',"hlines",None,Some (fun x -> hlines' := Some (int_of_string x)));
+  (noshort,"nohlines",(set hlines' None),None)
 ]
 
 
@@ -26,17 +28,19 @@ let rec go hlines sawHlines number ic =
       go hlines true number ic
     end
     else begin
-      let number = succ number in
       printf "%d & %s\n" number line;
       begin match hlines with 
       | Some n when not sawHlines && number mod n = 0 -> printf "\\hline\n"
       | _ -> ()
       end;
-      go hlines sawHlines number ic
+      go hlines sawHlines (succ number) ic
     end
   with End_of_file -> ()
 
   
 let () =
   let _ = getOptArgs specs in
-  go !hlines false !init stdin
+  let inc,init,hlines = !inc',!init',!hlines' in
+  
+  let n = if inc then succ init else init in
+  go hlines false n stdin
