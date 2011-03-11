@@ -8,7 +8,7 @@ let getOptArgs specs =
   parse_cmdline specs pushArg;
   List.of_enum restArgsE |> List.rev
 
-let init   = ref 1
+let init   = ref 0
 let hlines = ref None
 let specs  =
 [
@@ -26,12 +26,13 @@ let rec go hlines sawHlines number ic =
       go hlines true number ic
     end
     else begin
+      let number = succ number in
       printf "%d & %s\n" number line;
       begin match hlines with 
       | Some n when not sawHlines && number mod n = 0 -> printf "\\hline\n"
       | _ -> ()
       end;
-      go hlines sawHlines (succ number) ic
+      go hlines sawHlines number ic
     end
   with End_of_file -> ()
 

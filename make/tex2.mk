@@ -56,7 +56,7 @@ $(N_AVG1_TEX) $(N_MED1_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
 	$(ROWNUMBER) $(HLINE1) < $^ > $@
 
 $(N_AVG2_TEX) $(N_MED2_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
-	$(ROWNUMBER) -n"`wc -l $(AVG1_TEX)`" $(HLINE2) < $^ > $@
+	for i in `wc -l $(AVG1_TEX) | cut -c -8`; do $(ROWNUMBER) -n$$i $(HLINE2) < $^ > $@; done
 
 clean-sum-tex:
 	rm -f $(RAW_TEX) $(NUMBERED)
