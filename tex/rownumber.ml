@@ -8,9 +8,11 @@ let getOptArgs specs =
   parse_cmdline specs pushArg;
   List.of_enum restArgsE |> List.rev
 
+let init   = ref 1
 let hlines = ref None
 let specs  =
 [
+  ('n',"start",None,Some (fun x -> init := int_of_string x));
   ('h',"hlines",None,Some (fun x -> hlines := Some (int_of_string x)));
   (noshort,"nohlines",(set hlines None),None)
 ]
@@ -36,4 +38,4 @@ let rec go hlines sawHlines number ic =
   
 let () =
   let _ = getOptArgs specs in
-  go (!hlines) false 1 stdin
+  go !hlines false !init stdin
