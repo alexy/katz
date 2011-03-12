@@ -85,3 +85,55 @@ let bucket_lens: day_buckets -> int_rates =
     A.to_list bucks |> L.map begin fun bucket ->
       L.map S.cardinal bucket
     end
+
+
+let newBucketMoves: day -> bucket_moves =
+  fun day -> { sinceBM=day; trackBM=[] }
+
+
+let moving: day_buckets -> moving =
+  fun bucks ->
+  let h = H.create Constants.usersN in
+  A.iteri begin fun day buckets ->
+    L.iteri begin fun bucket_pos bucket ->
+      S.iter begin fun user ->
+        let { trackBM =track} as m = 
+        match H.find_option h user with
+          | Some m -> m
+          | _ -> 
+            begin
+               let m = newBucketMoves day in
+               H.add h user m;
+               m
+            end in
+        let track =
+          if L.is_empty track then [(bucket_pos,1)]
+          else
+            match L.hd track with
+            | b,n when b = bucket_pos -> (b,succ n)::(L.tl track)
+            | _ ->                   (bucket_pos,1)::track in
+        H.replace h user {m with trackBM=track}
+      end bucket
+    end buckets
+  end bucks;
+  h
+  
+  
+let movingRanks: moving -> moving_ranks =
+  let h = H.create Constants.movingRanksN in
+  fun umoves ->
+  H.iter begin fun user { trackBM=track } ->
+    let firstBucket = match (L.backwards track |> E.peek) with
+    | Some (b,_) -> b
+    | _ -> failwith "cannot have empty track in movingRanks" in
+    let lastBucket = match track with
+    | (b,_)::_ -> b
+    | _ -> failwith "cannot have empty track in movingRanks" in
+    let rank = lastBucket - firstBucket in
+    let rankSet = H.find_default h rank S.empty in
+    let rankSet = S.add user rankSet in
+    H.replace h rank rankSet
+  end umoves;
+  let a = H.enum h |> A.of_enum in
+  A.sort compPairAsc1 a;
+  a

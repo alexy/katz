@@ -3,9 +3,9 @@
 open Common
 open Getopt
 
-let mark'   = ref ""
 let prefix' = ref "sbucks"
 let outdir' = ref (Some !prefix')
+let mark'   = ref ""
 let specs =
 [
   (noshort,"prefix",None,Some (fun x -> prefix' := x));

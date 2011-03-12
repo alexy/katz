@@ -42,10 +42,10 @@ type day_user_reals = user_reals array
 
 module S=Set.StringSet
 let floatSize = S.cardinal |- float
-
-(* (float list) list <=> float list list *)
+(* FYI, (float list) list <=> float list list *)
 type rates          = (float list) list
-type buckets        = S.t list
+type user_set       = S.t
+type buckets        = user_set list
 type day_buckets    = buckets array
 
 
@@ -125,3 +125,11 @@ type udegr = user_int_hash
 type fnums = user_int_hash
 type fnofs = (user,int_proportions) H.t
 type fsocs = (user,float_proportions) H.t
+
+(* moving *)
+
+type bucket_pos   = int
+type bucket_track = (bucket_pos * int) list
+type bucket_moves = { sinceBM : day; trackBM: bucket_track }
+type moving       = (user, bucket_moves) H.t
+type moving_ranks = (int * user_set) array

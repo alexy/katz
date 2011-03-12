@@ -50,7 +50,7 @@ let userDailyTotals: graph -> daily_ints =
   fun g ->
   g |> H.map begin fun user days ->
       let a = H.enum days |> A.of_enum in
-      A.sort (fun (day1,_) (day2,_) -> compare day1 day2) a;
+      A.sort compPairAsc1 a;
       let e = E.empty () in
       let n = 0 in
       A.iter begin fun (day,reps) ->

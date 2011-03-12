@@ -56,7 +56,7 @@ let rankHash: user_reals -> ranked_users =
   (* sort descending
      NB for floats, we may choose equality within an epsilon,
      and handle NaNs a lá Soc_run *)
-  A.sort (fun (k1,_) (k2,_) -> compare k2 k1) a;
+  A.sort compPairDesc1 a;
   A.enum a |> E.map (fun (_,users) -> users)
   
 let rankList x = rankHash x |> L.of_enum  

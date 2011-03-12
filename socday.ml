@@ -41,7 +41,7 @@ let socDay socUserDaySum sgraph params day =
          nreps,nments
        end ins |> H.values |> A.of_enum in
 
-       A.sort (fun (_,x) (_,y) -> compare y x) rewards_contributions;
+       A.sort compPairDesc2 rewards_contributions;
        let rewards, contributions = array_split rewards_contributions in
        let skew'  = Skew.skew ~by_mass ~skew_times rewards contributions in
        if skew' <> [] then skews <-- (user,skew') else ()

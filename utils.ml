@@ -9,6 +9,13 @@ let leprintf   format = eprintf (format ^^ "%!")
 let leprintfln format = eprintf (format ^^ "\n%!")
 let le_newline        = eprintf "\n%!"
 
+let compAsc   x y = compare x y
+let compDesc  x y = compare y x
+let compPairAsc1  (x,_) (y,_) = compare x y
+let compPairDesc1 (x,_) (y,_) = compare y x
+let compPairAsc2  (_,x) (_,y) = compare x y
+let compPairDesc2 (_,x) (_,y) = compare y x
+
 (* this is slow since it doesn't specify a possibly large initial length
    instead, we can have an optional parameter and first H.create with that,
    and then List.iter ... H.add *)
@@ -175,7 +182,7 @@ let safeDivide x y = let res = x /. y in
 
 (* hashMergeWithImp changes the first hashtbl given to it with the second 
    we have to add x as a point for OCaml compiler to see these as functions *)
-let addMaps x     = hashMergeWithImp (+) x
+let addMaps x      = hashMergeWithImp (+) x
 (* this was a cause of a subtle bug where in hashMergeWithImp 
    we added positive balance for yinteo and geokotophia *)
 let subtractMaps x = hashMergeWithDefImp (-) 0 x
@@ -191,7 +198,7 @@ let power10 times = E.fold ( * ) 1 (E.repeat ~times 10)
 let schwartzSortIntHashDesc: ('a,int) H.t -> ('a * int) array =
   fun h ->
   let a = array_of_hash h in
-  A.sort begin fun (_,x) (_,y) -> compare y x end a;
+  A.sort compPairDesc2 a;
   a
 
 let getOptArgs specs =
@@ -340,15 +347,12 @@ let mayMkDir ?(verbose=false) ?(perm=0o755) optDir =
   | Some dirName -> mkDirP ~verbose ~perm dirName
   | _ -> ()
   
-let compAsc  x y = compare x y
-let compDesc x y = compare y x
-
 let sortHEnum ?(desc=false) he =
   let comp = if desc 
     then compDesc 
     else compAsc in
   let a = A.of_enum he in
-  A.sort (fun (_,x) (_,y) -> comp x y) a;
+  A.sort compPairAsc2 a;
   A.enum a
   
 let constantly x y = x

@@ -5,3 +5,7 @@ let repsN   = 10
 (* by_day *)
 let daysTotal = 35
 let usersDaily = 1000000
+
+(* moving *)
+
+let movingRanksN = 10
