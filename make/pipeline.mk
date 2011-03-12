@@ -146,6 +146,9 @@ $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
 
 $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
 	$(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
+	
+$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+	xz $^
 
 rbucks2: $(RBUCKS)
   
