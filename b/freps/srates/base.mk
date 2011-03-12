@@ -1,4 +1,5 @@
-REPS=freps
+# REPS
+include ../reps.mk
 BASE1=$(REPS)-4
 BASE2=$(REPS)-3
 BASES=$(BASE1) $(BASE2)

@@ -62,3 +62,7 @@ d.3wk <- m[c("dreps",d.sims.wk3),]
 # ds  <- c(d.0wk,...) fails as it glues them together!  Need a list instead:
 ds <- list(d.0wk,d.1wk,d.2wk,d.3wk)
 for (i in c(0,1,2,3)) { pdf(paste("heatmap-overx-dreps-medians-",i,"wk.pdf",sep="")); heatclust(ds[[i+1]]); dev.off() }
+
+cb.rows <- m.rows[grep("cb",m.rows)]
+m.cb <- m[cb.rows,]
+m.cb.d <- rbind(m.cb,dreps=rep(1.0,7))

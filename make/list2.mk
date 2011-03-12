@@ -16,6 +16,9 @@ MLB2_LIST =$(filter %.mlb, $(PRE2_LIST))
 
 LINE1_LIST=$(if $(DROP),$(subst $(DROP),,$(MLB1_LIST)),$(MLB1_LIST))
 LINE2_LIST=$(if $(DROP),$(subst $(DROP),,$(MLB2_LIST)),$(MLB2_LIST))
+LINE_LIST =$(LINE1_LIST) $(LINE2_LIST)
 
 LIST1     =$(PRE1_LIST:%$(FROM_QUAD_SUFFIX)=%$(QUAD_SUFFIX))
 LIST2     =$(PRE2_LIST:%$(FROM_QUAD_SUFFIX)=%$(QUAD_SUFFIX))
+LIST      =$(LIST1) $(LIST2) 
+DIR_LIST  =$(filter-out %.mlb,$(LIST))

@@ -1,6 +1,6 @@
-include $(MK_DIR)/list2.mk
-
 TEX_DIR=tex
+include $(MK_DIR)/list2.mk
+include $(MK_DIR)/dir.mk
 
 AVG1_LIST_TEX=$(LINE1_LIST:%.mlb=$(TEX_DIR)/averages-%.tex)
 AVG2_LIST_TEX=$(LINE2_LIST:%.mlb=$(TEX_DIR)/averages-%.tex)
@@ -56,7 +56,7 @@ $(N_AVG1_TEX) $(N_MED1_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
 	$(ROWNUMBER) $(HLINE1) < $^ > $@
 
 $(N_AVG2_TEX) $(N_MED2_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
-	for i in `wc -l $(AVG1_TEX) | cut -c -8`; do $(ROWNUMBER) -n$$i $(HLINE2) < $^ > $@; done
+	for i in `wc -l $(AVG1_TEX) | cut -c -8`; do $(ROWNUMBER) -i -n$$i $(HLINE2) < $^ > $@; done
 
 clean-sum-tex:
 	rm -f $(RAW_TEX) $(NUMBERED)

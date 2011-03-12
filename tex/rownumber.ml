@@ -8,7 +8,7 @@ let getOptArgs specs =
   parse_cmdline specs pushArg;
   List.of_enum restArgsE |> List.rev
 
-let init'   = ref 0
+let init'   = ref 1
 let inc'    = ref false
 let hlines' = ref None
 let specs  =
@@ -20,20 +20,20 @@ let specs  =
 ]
 
 
-let rec go hlines sawHlines number ic =
+let rec go hlines sawHlines number count ic =
   try
     let line = input_line ic in
     if String.starts_with line "\\hline" then begin
       printf "%s\n" line;
-      go hlines true number ic
+      go hlines true number count ic
     end
     else begin
       printf "%d & %s\n" number line;
       begin match hlines with 
-      | Some n when not sawHlines && number mod n = 0 -> printf "\\hline\n"
+      | Some n when not sawHlines && count mod n = 0 -> printf "\\hline\n"
       | _ -> ()
       end;
-      go hlines sawHlines (succ number) ic
+      go hlines sawHlines (succ number) (succ count) ic
     end
   with End_of_file -> ()
 
@@ -43,4 +43,4 @@ let () =
   let inc,init,hlines = !inc',!init',!hlines' in
   
   let n = if inc then succ init else init in
-  go hlines false n stdin
+  go hlines false n 1 stdin

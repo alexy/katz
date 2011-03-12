@@ -1,5 +1,8 @@
-REPS=freps
-QUE_PASA=overx-self
+# REPS
+include ../reps.mk
+WHATS_UP=overx
+DIR_DROP=-self
+QUE_PASA=$(WHATS_UP)$(DIR_DROP)
 BASE=$(REPS)-$(QUE_PASA)
 
 #QUAD_PREFIX=
