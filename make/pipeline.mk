@@ -136,8 +136,8 @@ $(DIRS):
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
 
-.SECONDARY: $(CAPS)
-.SECONDARY: $(ARANKS)
+.SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS) $(STARS_REPS) $(DENUMS) $(STARS_MENTS)
+
 $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
@@ -193,7 +193,7 @@ $(OVERX_SELF_DIR)/overx-%-34wk.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%3wk.mlb.xz $
 
 overx_self2: $(OVERX_SELF)
 
-.SECONDARY: $(DENUMS)
+# .SECONDARY: $(DENUMS)
 $(DENUMS): $(DENUMS_DIR)/$(DENUMS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb
 	$(SAVE_DAYS) $^ $(DENUMS_DIR)
 
@@ -234,7 +234,7 @@ sbucks1:
 	for i in $(BASES); do $(DOSTARBUCKS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb $(STARS_DIR)/$(STARS_PREFIX)-$$i.mlb; done
 
 # .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
-.SECONDARY: $(STARS_REPS) $(STARS_REPS:%=%.xz)
+# .SECONDARY: $(STARS_REPS) $(STARS_REPS:%=%.xz)
 $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) $^ $(STARS_REPS_DIR)
 
@@ -247,7 +247,7 @@ $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%
 $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb.xz
 	$(DOSTARBUCKS) $^ $(SBUCKS_REPS_DIR)
 
-.SECONDARY: $(STARS_MENTS) $(STARS_MENTS:%=%.xz)
+# .SECONDARY: $(STARS_MENTS) $(STARS_MENTS:%=%.xz)
 $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
 	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
 
