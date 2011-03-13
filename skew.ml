@@ -78,7 +78,8 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
   
 let rec compareSkew xs ys =
 	match xs,ys with
-	| x::xs,y::ys when x = -1. && y = -1. ->  0
+	| x::xs,y::ys when x = -1. && y = -1. ->
+		compare xs ys
 	| x::xs,y::ys when x = -1.            ->  1
 	| x::xs,y::ys when            y = -1. -> -1
 	| x::xs,y::ys                         -> 
@@ -105,3 +106,12 @@ let byDay: ?daysN:int -> (user, (day * 'a) list) H.t -> (user * 'a) list array =
 	end ds;
 	let maxDay = H.keys h |> L.of_enum |> L.max in
 	A.init (succ maxDay) (fun i -> H.find_default h i [])
+
+
+let sort_dskews dskews =
+	byDay dskews |>
+	A.map begin fun x -> 
+		let a = A.of_list x in 
+		A.sort (fun (_,x) (_,y) -> compareSkew x y) a; 
+		a
+	end
