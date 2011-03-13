@@ -93,3 +93,15 @@ let skew_sort: skew list -> skew array =
 	let a = A.of_list skew in
 	A.sort compareSkew a;
 	a
+	
+	
+let byDay: ?daysN:int -> (user, (day * 'a) list) H.t -> (user * 'a) list array =
+	fun ?(daysN=10) ds ->
+	let h = H.create daysN in
+	H.map begin fun user day_xs ->
+		L.iter begin fun (day,x) ->
+			H.replace h day ((user,x)::(H.find_default h day []))
+		end day_xs
+	end ds;
+	let maxDay = H.keys h |> L.of_enum |> L.max in
+	A.init (succ maxDay) (fun i -> H.find_default h i [])
