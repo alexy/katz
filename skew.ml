@@ -98,7 +98,7 @@ let skew_sort: skew list -> skew array =
 let byDay: ?daysN:int -> (user, (day * 'a) list) H.t -> (user * 'a) list array =
 	fun ?(daysN=10) ds ->
 	let h = H.create daysN in
-	H.map begin fun user day_xs ->
+	H.iter begin fun user day_xs ->
 		L.iter begin fun (day,x) ->
 			H.replace h day ((user,x)::(H.find_default h day []))
 		end day_xs
