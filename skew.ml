@@ -74,3 +74,22 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
   let a4 = [|8;7;6;5;4;3;2;1|] in
   let a5 = [|1;2;3;4;5;6;7;8|] in
   skew a1 b *)
+  
+  
+let rec compareSkew xs ys =
+	match xs,ys with
+	| x::xs,y::ys when x = -1. && y = -1. ->  0
+	| x::xs,y::ys when x = -1.            ->  1
+	| x::xs,y::ys when            y = -1. -> -1
+	| x::xs,y::ys                         -> 
+		let c = compare x y in if c = 0 then compare xs ys else c
+	| x::xs,_                             ->  1
+	| _,y::ys                             -> -1
+	| _                                   ->  0
+
+
+let skew_sort: skew list -> skew array =
+	fun skew ->
+	let a = A.of_list skew in
+	A.sort compareSkew a;
+	a
