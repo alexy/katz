@@ -163,6 +163,9 @@ srates2: $(SRATES)
 $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb    $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_SUFFIX)
 
+$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb.xz $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_SUFFIX)
+
 $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb.xz $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DOVERSETS) $^ dreps-$* $(OVERX_DREPS_SUFFIX)
 
