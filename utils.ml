@@ -349,10 +349,10 @@ let mayMkDir ?(verbose=false) ?(perm=0o755) optDir =
   
 let sortHEnum ?(desc=false) he =
   let comp = if desc 
-    then compDesc 
-    else compAsc in
+    then compPairDesc2 
+    else compPairAsc2 in
   let a = A.of_enum he in
-  A.sort compPairAsc2 a;
+  A.sort comp a;
   A.enum a
   
 let constantly x y = x
