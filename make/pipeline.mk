@@ -1,3 +1,5 @@
+include reps.mk
+
 .PHONY: all denums vols b2br b2bm sbucks
 
 OVERX_DREPS_SUFFIX=dreps
@@ -107,8 +109,10 @@ O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
 O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
-# took out $(RBUCKS) from all as they are now compressed
-all:  $(DREPS) $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
+# took out $(RBUCKS) from all as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
+
+ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
+all: $(ALL)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
@@ -320,3 +324,9 @@ order: $(DIRS)
 	mv lb-*     $(LBUCKS_DIR)
 	mv lelb-*   $(LBLENS_DIR)
 	mv rblens-* $(RBLENS_DIR)
+	
+	
+$(MLBPACK): $(ALL)
+	tar Jcf $(REPS)-mlb.tar.xz $^
+
+pack: $(MLBPACK)
