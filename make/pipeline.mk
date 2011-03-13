@@ -2,6 +2,8 @@ include reps.mk
 
 .PHONY: all denums vols b2br b2bm sbucks
 
+MLBPACK=$(REPS)-mlb.tar.xz
+
 OVERX_DREPS_SUFFIX=dreps
 OVERX_SELF_SUFFIX=self
 
@@ -327,6 +329,6 @@ order: $(DIRS)
 	
 	
 $(MLBPACK): $(ALL)
-	tar Jcf $(REPS)-mlb.tar.xz $^
+	tar Jcf $@ $^
 
 pack: $(MLBPACK)
