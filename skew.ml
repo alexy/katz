@@ -76,7 +76,7 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
   skew a1 b *)
   
   
-let rec compareSkew xs ys =
+let rec compareSkew ?(lengthFirst=true) xs ys =
 	let rec aux xs ys =
 		match xs,ys with
 		| x::xs,y::ys when x = -1. && y = -1. ->
@@ -89,9 +89,12 @@ let rec compareSkew xs ys =
 		| _,y::ys                             -> -1
 		| _                                   ->  0
 	in
-	let c = compare (L.length xs) (L.length ys) in
-	if c <> 0 then c else aux xs ys
-	
+	if lengthFirst then begin
+		let c = compare (L.length xs) (L.length ys) in
+		if c <> 0 then c else aux xs ys
+		end
+	else
+		aux xs ys
 
 let skew_sort: skew list -> skew array =
 	fun skew ->
