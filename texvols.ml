@@ -17,7 +17,7 @@ let outDir'      = ref ""
 let inputPath'   = ref None   (* input path to encode in the matrix' input statements *)
 let masterLine'  = ref true
 let drop'        = ref (Some "rbucks-aranks-caps-")
-let scientific'  = ref false   (* stoggle cientific notation %e vs. %f *)
+let scientific'  = ref false   (* toggle scientific notation %e vs. %f *)
 let precise'     = ref false
 let verbose'     = ref false
 

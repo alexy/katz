@@ -1,8 +1,9 @@
 MK_DIR=../../../make
-LS_DIR=.
+LS_DIR=../../list
 
-include $(MK_DIR)/base.overx-self.mk
+WHATS_UP=vols4
 
+include $(MK_DIR)/base.vols4.mk
 include $(MK_DIR)/list1.mk
 include $(MK_DIR)/rates1.mk
 include $(MK_DIR)/tex.mk

@@ -1,0 +1,14 @@
+# REPS
+include ../reps.mk
+include $(MK_DIR)/tex-defs.mk
+
+QUE_PASA=$(WHATS_UP)$(DIR_DROP)
+
+BASE=$(REPS)
+
+QUAD_PREFIX=$(QUE_PASA)-
+TABLE_PREFIX=$(QUAD_PREFIX)$(DROP)
+
+SUMMARY_PREFIX=$(BASE)
+INPUT_PATH=$(REPS)/$(QUE_PASA)/tex
+

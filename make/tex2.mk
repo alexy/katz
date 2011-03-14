@@ -1,5 +1,4 @@
 TEX_DIR=tex
-include $(MK_DIR)/list2.mk
 include $(MK_DIR)/dir.mk
 
 AVG1_LIST_TEX=$(LINE1_LIST:%.mlb=$(TEX_DIR)/averages-%.tex)

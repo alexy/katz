@@ -1,16 +1,7 @@
-# REPS
-include ../reps.mk
 WHATS_UP=overx
 DIR_DROP=-self
-QUE_PASA=$(WHATS_UP)$(DIR_DROP)
-BASE=$(REPS)-$(QUE_PASA)
 
-#QUAD_PREFIX=
-#QUAD_SUFFIX=
-#DROP=
-#TABLE_PREFIX=overx-self
+include $(MK_DIR)/base.mk
 
-SUMMARY_PREFIX=$(BASE)
-INPUT_PATH=$(REPS)/$(QUE_PASA)/tex
-
+TEXIT=$(TEX4RATES)
 CUTPOS=7
