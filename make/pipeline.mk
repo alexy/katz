@@ -274,7 +274,7 @@ $(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)
 
 sbucks_reps2:  $(SBUCKS_REPS)
 sbucks_ments2: $(SBUCKS_MENTS)
-sbucks2: sbucks_reps2 sbucks_ments2
+sbucks2:       sbucks_reps2 sbucks_ments2
 
 lblens1:
 	for i in $(BASES); do $(SAVE_CAPS) $(CAPS_DIR)/caps-$$i.mlb; done
@@ -328,7 +328,7 @@ order: $(DIRS)
 	mv rblens-* $(RBLENS_DIR)
 	
 	
-$(MLBPACK): $(ALL)
+$(MLBPACK): $(ALL) $(JUMP_DIR) $(NORMS_DIR)
 	tar Jcf $@ $^
 
 pack: $(MLBPACK)
