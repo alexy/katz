@@ -8,8 +8,10 @@ let takeDays'  = ref (Some 33)
 let dropDays'  = ref (Some 7)
 let latex'     = ref false
 let tableDoc'  = ref false
-let matrix'    = ref false
+let matrix'    = ref true
 let matrixDoc' = ref false
+let summary'   = ref true
+let showTables'= ref true
 let averages'  = ref false
 let outDir'    = ref ""
 let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
@@ -27,8 +29,11 @@ let specs =
   (noshort,"nodropdays",(set dropDays' None),None);
   ('t',"tex",       (set latex'     true), None);
   ('T',"tdoc",      (set tableDoc'  true), None);
-  ('m',"matrix",    (set matrix'    true), None);
+  ('m',"matrix",    (set matrix'    (not !matrix')), None);
+  (noshort,"nomatrix",(set matrix'      false),               None);
   ('d',"mdoc",      (set matrixDoc' true), None);
+  ('s',"summary",   (set summary'     (not !summary')),     None);
+  ('S',"showTables",(set showTables'  (not !showTables')),  None);
   ('a',"averages",  (set averages'  true), None); 
   ('o',"outdir",    None, Some (fun x -> outDir' := x));
   ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
@@ -52,6 +57,9 @@ let _ =
 
   let takeDays,   dropDays,   scientific,   precise =
       !takeDays', !dropDays', !scientific', !precise' in
+      
+  let summary,   showTables =
+      !summary', !showTables' in
   
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -83,7 +91,8 @@ let _ =
   
   let floatPrint = pickFloatPrint scientific precise in
   
-  printShowTables tex ~verbose floatPrint tables ~startRow outDir tableNames;
+  if showTables then printShowTables tex ~verbose floatPrint tables ~startRow outDir tableNames else ();
+	if summary then tableSummaries tex ~verbose ~outDir floatPrint tables tableNames else ();
 
   if matrix then begin
     let includeNames = listNames saveInfix prefixes in

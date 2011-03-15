@@ -56,8 +56,6 @@ CUTPOS_N = 15
 CUT_I=cut -c $(CUTPOS_I)-
 CUT_N=cut -c $(CUTPOS_N)-
 
-HLINE ?= -h5
-
 .PHONY: sum-tex show-sum-tex clean-sum-tex
   
 sum-tex: $(NUMBERED)
