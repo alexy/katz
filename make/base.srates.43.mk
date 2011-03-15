@@ -1,7 +1,6 @@
 WHATS_UP=srates
 
-#DIR_DROP=
-#QUAD_SUFFIX=
+FROM_QUAD_SUFFIX=-suffix
 
 DROP=rbucks-aranks-caps-
 
