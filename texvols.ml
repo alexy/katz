@@ -99,7 +99,7 @@ let _ =
   end
   else begin
     if showTables then printShowTables tex ~verbose Int.print  tables       ~startRow outDir tableNames else ();
-    if summary then intTableSummaries tex ~verbose ~outDir floatPrint tables tableNames else ()
+    if summary then intTableSummaries tex ~verbose ~outDir roundedPrint tables tableNames else ()
   end;
 
   if matrix then begin

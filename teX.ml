@@ -24,6 +24,7 @@ let fileSuffix ?(dot=false) tex =
 
 let floatPrint          oc x = fprintf oc "%5.2f" x
 let sciencePrint        oc x = fprintf oc "%5.2e" x
+let roundedPrint        oc x = fprintf oc "%5.0f" x
 let preciseFloatPrint   oc x = fprintf oc "%18.15f" x
 let preciseSciencePrint oc x = fprintf oc "%22.15e" x
 

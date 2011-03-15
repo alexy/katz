@@ -8,7 +8,7 @@ $(if $(FROM_QUAD_SUFFIX),\
 		$(if $(findstring $(FROM_QUAD_SUFFIX),$(base)),\
 			$(QUAD_PREFIX)$(base:%$(FROM_QUAD_SUFFIX)=%$(QUAD_SUFFIX)),\
 			$(TABLE_PREFIX)$(base).mlb)),\
-  $(BASE2_LIST:%=$(TABLE_PREFIX)%.mlb))
+  $(BASE_LIST:%=$(TABLE_PREFIX)%.mlb))
 
 
 MLB_LIST  =$(filter %.mlb, $(LIST))
