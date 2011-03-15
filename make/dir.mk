@@ -6,3 +6,6 @@ $(DIR_TEX): $(LINE_LIST_TEX)
 	cat $^ > $@
 
 dir-tex: $(DIR_TEX)
+
+clean-dir-tex:
+	rm -f $(DIR_TEX)

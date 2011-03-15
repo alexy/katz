@@ -1,9 +1,9 @@
-TXT_DIR=TXT
+TXT_DIR=txt
 
 AVG_LIST_REI_TXT=$(LIST_REI:%=$(TXT_DIR)/averages-%.txt)
 AVG_LIST_RUI_TXT=$(LIST_RUI:%=$(TXT_DIR)/averages-%.txt)
 AVG_LIST_MEI_TXT=$(LIST_MEI:%=$(TXT_DIR)/averages-%.txt)
-AVG_LIST_MEI_TXT=$(LIST_MUI:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_MUI_TXT=$(LIST_MUI:%=$(TXT_DIR)/averages-%.txt)
 AVG_LIST_REN_TXT=$(LIST_REN:%=$(TXT_DIR)/averages-%.txt)
 AVG_LIST_RUN_TXT=$(LIST_RUN:%=$(TXT_DIR)/averages-%.txt)
 AVG_LIST_MEN_TXT=$(LIST_MEN:%=$(TXT_DIR)/averages-%.txt)
@@ -12,7 +12,7 @@ AVG_LIST_MUN_TXT=$(LIST_MUN:%=$(TXT_DIR)/averages-%.txt)
 MED_LIST_REI_TXT=$(LIST_REI:%=$(TXT_DIR)/medians-%.txt)
 MED_LIST_RUI_TXT=$(LIST_RUI:%=$(TXT_DIR)/medians-%.txt)
 MED_LIST_MEI_TXT=$(LIST_MEI:%=$(TXT_DIR)/medians-%.txt)
-MED_LIST_MEI_TXT=$(LIST_MUI:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_MUI_TXT=$(LIST_MUI:%=$(TXT_DIR)/medians-%.txt)
 MED_LIST_REN_TXT=$(LIST_REN:%=$(TXT_DIR)/medians-%.txt)
 MED_LIST_RUN_TXT=$(LIST_RUN:%=$(TXT_DIR)/medians-%.txt)
 MED_LIST_MEN_TXT=$(LIST_MEN:%=$(TXT_DIR)/medians-%.txt)
@@ -51,7 +51,7 @@ HLINE    ?= -h4
 
 .PHONY: sum-txt clean-sum-txt
   
-sum-txt: $(NUMBERED)
+sum-txt: $(TXT)
   
 $(AVG_REI_TXT): $(AVG_LIST_REI_TXT)
 	cat $^ | $(CUT) > $@
@@ -77,5 +77,30 @@ $(AVG_MEN_TXT): $(AVG_LIST_MEN_TXT)
 $(AVG_MUN_TXT): $(AVG_LIST_MUN_TXT)
 	cat $^ | $(CUT) > $@
 
+$(MED_REI_TXT): $(MED_LIST_REI_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_RUI_TXT): $(MED_LIST_RUI_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_MEI_TXT): $(MED_LIST_MEI_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_MUI_TXT): $(MED_LIST_MUI_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_REN_TXT): $(MED_LIST_REN_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_RUN_TXT): $(MED_LIST_RUN_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_MEN_TXT): $(MED_LIST_MEN_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_MUN_TXT): $(MED_LIST_MUN_TXT)
+	cat $^ | $(CUT) > $@
+
+
 clean-sum-txt:
-	rm -f $(TXT) $(DIR_TXT)
+	rm -f $(TXT)

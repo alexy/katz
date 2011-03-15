@@ -56,8 +56,7 @@ CUTPOS_N = 15
 CUT_I=cut -c $(CUTPOS_I)-
 CUT_N=cut -c $(CUTPOS_N)-
 
-ROWNUMBER=../../../tex/rownumber.opt
-HLINE    ?= -h5
+HLINE ?= -h5
 
 .PHONY: sum-tex show-sum-tex clean-sum-tex
   
@@ -116,4 +115,4 @@ $(N_AVG_TEX) $(N_MED_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
 	$(ROWNUMBER) $(HLINE) < $^ > $@
 
 clean-sum-tex:
-	rm -f $(RAW_TEX) $(NUMBERED) $(DIR_TEX)
+	rm -f $(RAW_TEX) $(NUMBERED)

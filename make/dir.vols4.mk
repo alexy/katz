@@ -10,4 +10,9 @@ $(DIR_INT_TEX):  $(LINE_INT_LIST)
 $(DIR_NORM_TEX): $(LINE_NORM_LIST)
 	cat $^ > $@
 
-dir-tex: $(DIR_INT_TEX) $(DIR_NORM_TEX)
+DIR_TEX = $(DIR_INT_TEX) $(DIR_NORM_TEX)
+dir-tex: $(DIR_TEX)
+
+clean-dir-tex: 
+	rm -f $(DIR_TEX)
+

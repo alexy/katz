@@ -23,11 +23,11 @@ N_MED2_TEX=$(MED2_TEX:$(TEX_DIR)/%=$(TEX_DIR)/n-%)
 NUMBERED=$(N_AVG1_TEX) $(N_MED1_TEX) $(N_AVG2_TEX) $(N_MED2_TEX)
 
 # overx-
-CUTPOS   ?= 1
+CUTPOS ?= 1
 CUT=cut -c $(CUTPOS)-
-ROWNUMBER=../../../tex/rownumber.opt
-HLINE1   ?= -h4
-HLINE2   ?= -h3
+
+HLINE1 ?= -h4
+HLINE2 ?= -h3
 
 .PHONY: sum-tex show-sum-tex clean-sum-tex
   

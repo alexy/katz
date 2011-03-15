@@ -15,10 +15,10 @@ N_MED_TEX=$(MED_TEX:$(TEX_DIR)/%=$(TEX_DIR)/n-%)
 NUMBERED=$(N_AVG_TEX) $(N_MED_TEX)
 
 # overx-
-CUTPOS   ?= 1
+CUTPOS ?= 1
 CUT=cut -c $(CUTPOS)-
-ROWNUMBER=../../../tex/rownumber.opt
-HLINE    ?= -h4
+
+HLINE  ?= -h4
 
 .PHONY: sum-tex show-sum-tex clean-sum-tex
   
@@ -40,4 +40,4 @@ $(N_AVG_TEX) $(N_MED_TEX): $(TEX_DIR)/n-%: $(TEX_DIR)/%
 	$(ROWNUMBER) $(HLINE) < $^ > $@
 
 clean-sum-tex:
-	rm -f $(RAW_TEX) $(NUMBERED) $(DIR_TEX)
+	rm -f $(RAW_TEX) $(NUMBERED)
