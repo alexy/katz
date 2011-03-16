@@ -47,7 +47,6 @@ TXT=$(AVG_TXT) $(MED_TXT)
 # overx-
 CUTPOS   ?= 1
 CUT=cut -c $(CUTPOS)-
-HLINE    ?= -h4
 
 .PHONY: sum-txt clean-sum-txt
   

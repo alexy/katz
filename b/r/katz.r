@@ -66,3 +66,50 @@ for (i in c(0,1,2,3)) { pdf(paste("heatmap-overx-dreps-medians-",i,"wk.pdf",sep=
 cb.rows <- m.rows[grep("cb",m.rows)]
 m.cb <- m[cb.rows,]
 m.cb.d <- rbind(m.cb,dreps=rep(1.0,7))
+
+s <- read.table("sbucks-ments-star-med-medians.txt",row.names=1,col.names=bucket.names)
+s.sims <- rownames(s)
+s.sims.wk0 <- s.sims[grep("0$",s.sims)]
+s.sims.wk1 <- s.sims[grep("1wk",s.sims)]
+s.sims.wk2 <- s.sims[grep("2wk",s.sims)]
+s.sims.wk3 <- s.sims[grep("3wk",s.sims)]
+s.0wk <- s[c("dreps",s.sims.wk0),]
+s.1wk <- s[c("dreps",s.sims.wk1),]
+s.2wk <- s[c("dreps",s.sims.wk2),]
+s.3wk <- s[c("dreps",s.sims.wk3),]
+
+s <- abs(log(s))
+s <- s[apply(s,1,function(row) max(row) < Inf),]
+
+v <- read.table("vols4-re-norm-medians.txt",row.names=1,col.names=bucket.names)
+v.sims <- rownames(v)
+v.sims.wk0 <- v.sims[grep("0$",v.sims)]
+v.sims.wk1 <- v.sims[grep("1wk",v.sims)]
+v.sims.wk2 <- v.sims[grep("2wk",v.sims)]
+v.sims.wk3 <- v.sims[grep("3wk",v.sims)]
+v.0wk <- v[c("dreps",v.sims.wk0),]
+v.1wk <- v[c("dreps",v.sims.wk1),]
+v.2wk <- v[c("dreps",v.sims.wk2),]
+v.3wk <- v[c("dreps",v.sims.wk3),]
+
+s0 <- s
+s <- s[1:172,]
+
+...
+
+s <- s0[173:238,]
+some.ereps <- c("dreps","ureps0","ureps1wk","ureps2wk","ureps3wk","ereps0","ereps1wk","ereps2wk","ereps3wk","rreps7m0","rreps7m1wk","rreps7m2wk","rreps7m3wk","fg5uf1m0","fg5uf1m1wk", "fg5uf1m2wk","fg5uf1m3wk","fg5mf1m0","fg5mf1m1wk","fg5mf1m2wk","fg5mf1m3wk","fg8uf05c0d0","fg8uf05c0d1wk","fg8uf05c0d2wk","fg8uf05c0d3wk","fg5cf1cA0","fg5cf1cA1wk","fg5cf1cA2wk","fg5cf1cA3wk")
+ereps.breps <- c(some.ereps,rownames(s0)[173:238])
+
+s <- s0[s.ereps.breps,]
+
+v.rownames <- rownames(v)
+breps <- v.rownames[grep("cb",v.rownames)]
+ereps.breps <- c(some.ereps,breps)
+
+v0 <- v
+v <- v0[ereps.breps,]
+...
+nobs <- !(rownames(v0) %in% breps)
+v <- v0[nobs,]
+...
