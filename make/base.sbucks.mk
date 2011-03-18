@@ -1,5 +1,5 @@
-DREPS=d$(REPS_KIND)
-DROP=stars-$(DREPS)-
+DREPS ?= d$(REPS_KIND)
+DROP  =  stars-$(DREPS)-
 
 SUMMARY_PREFIX = $(REPS)-$(WHATS_UP)-$(REPS_KIND)
 

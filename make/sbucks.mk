@@ -9,3 +9,8 @@ include $(MK_DIR)/list.sbucks.mk
 include $(MK_DIR)/tex.sbucks.mk
 include $(MK_DIR)/dir.sbucks.mk
 include $(MK_DIR)/txt.sbucks.mk
+
+clean:
+	rm -fr tex txt
+	
+text: tex txt sum-tex dir-tex sum-txt

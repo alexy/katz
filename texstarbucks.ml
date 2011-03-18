@@ -86,7 +86,7 @@ let _ =
   let self,star,auds = 
     carveTL fst3 triples, carveTL snd3 triples, carveTL trd3 triples in
 
-  let tables: rates list = [self;auds;star] in
+  let tables: rates list = [self;star;auds] in
   let startRow,tables = dayRanges ~takeDays ~dropDays tables in
   
   let floatPrint = pickFloatPrint scientific precise in

@@ -92,19 +92,11 @@ v.1wk <- v[c("dreps",v.sims.wk1),]
 v.2wk <- v[c("dreps",v.sims.wk2),]
 v.3wk <- v[c("dreps",v.sims.wk3),]
 
-s0 <- s
-s <- s[1:172,]
 
-...
-
-s <- s0[173:238,]
 some.ereps <- c("dreps","ureps0","ureps1wk","ureps2wk","ureps3wk","ereps0","ereps1wk","ereps2wk","ereps3wk","rreps7m0","rreps7m1wk","rreps7m2wk","rreps7m3wk","fg5uf1m0","fg5uf1m1wk", "fg5uf1m2wk","fg5uf1m3wk","fg5mf1m0","fg5mf1m1wk","fg5mf1m2wk","fg5mf1m3wk","fg8uf05c0d0","fg8uf05c0d1wk","fg8uf05c0d2wk","fg8uf05c0d3wk","fg5cf1cA0","fg5cf1cA1wk","fg5cf1cA2wk","fg5cf1cA3wk")
-ereps.breps <- c(some.ereps,rownames(s0)[173:238])
 
-s <- s0[s.ereps.breps,]
-
-v.rownames <- rownames(v)
-breps <- v.rownames[grep("cb",v.rownames)]
+v.sims      <- rownames(v)
+breps       <- v.sims[grep("cb",v.sims)]
 ereps.breps <- c(some.ereps,breps)
 
 v0 <- v
@@ -113,3 +105,40 @@ v <- v0[ereps.breps,]
 nobs <- !(rownames(v0) %in% breps)
 v <- v0[nobs,]
 ...
+
+heatmaps <- function(m,infix) {
+	m.sims <- rownames(m)
+	m.sims.wk0 <- m.sims[grep("0$",m.sims)]
+	m.sims.wk1 <- m.sims[grep("1wk",m.sims)]
+	m.sims.wk2 <- m.sims[grep("2wk",m.sims)]
+	m.sims.wk3 <- m.sims[grep("3wk",m.sims)]
+	m.0wk <- m[c("dreps",m.sims.wk0),]
+	m.1wk <- m[c("dreps",m.sims.wk1),]
+	m.2wk <- m[c("dreps",m.sims.wk2),]
+	m.3wk <- m[c("dreps",m.sims.wk3),]	
+
+	ms <- list(m.0wk,m.1wk,m.2wk,m.3wk)
+	for (i in c(0,1,2,3)) { 
+		pdf(paste("heatmap-",infix,"-",i,"wk.pdf",sep="")); 
+		heatclust(ms[[i+1]]); 
+		dev.off() 
+	}
+}
+
+s <- read.table("sbucks-ments-star-med-medians.txt",row.names=1,col.names=bucket.names)
+#s10a <- abs(log10(s))
+s10a <- log10(s)
+# all(is.finite(x)) would work here too, but not generally for not all-numeric rows?
+s10 <- s10a[apply(s10a,1,function(x) !any(is.infinite(x))),]
+
+heatmaps(s10,"sbucks-ments-star-med-medians")
+
+s10.sims    <- rownames(s10)
+breps       <- s10.sims[grep("cb",s10.sims)]
+ereps.breps <- c(some.ereps,breps)
+nobs        <- !(s10.sims %in% breps)
+
+heatmaps(s10[ereps.breps,],"sbucks-ments-star-med-medians-bs")
+heatmaps(s10[nobs,],       "sbucks-ments-star-med-medians-nobs")
+
+

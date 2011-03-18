@@ -45,6 +45,7 @@ $(VOLS_1): $(VOLS_LIST_1)
 	cat $^ > $@
 	
 sbucks1: $(SBUCKS_1)
+sbucks2: $(SBUCKS_2)
 vols1:   $(VOLS_1)
 
 cp:
