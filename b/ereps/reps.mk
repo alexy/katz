@@ -1,2 +1,3 @@
 REPS=ereps
 HLINE=-H"1;1;5;1"
+HLINE4=-H"1;1;3;1;4;1"

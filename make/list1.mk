@@ -1,4 +1,4 @@
-BASES             ?= $(BASE)
+BASES ?= $(BASE)
 
 BASE_LIST=$(foreach base,$(BASES),$(shell cat $(LS_DIR)/$(base).list))
 
