@@ -11,6 +11,9 @@ let le_newline        = eprintf "\n%!"
 
 let compAsc   x y = compare x y
 let compDesc  x y = compare y x
+let do_firsts  f (x,_) (y,_)  = f x y
+let do_seconds f (_,x) (_,y)  = f x y
+(* let compPairAsc1 a b = do_firsts compare a b *)
 let compPairAsc1  (x,_) (y,_) = compare x y
 let compPairDesc1 (x,_) (y,_) = compare y x
 let compPairAsc2  (_,x) (_,y) = compare x y

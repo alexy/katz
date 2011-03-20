@@ -1,2 +1,3 @@
 REPS=freps
-include $(LS_DIR)/$(REPS).hline.mk
+HLINE=-h4
+HLINE4=-H"5;19;3;22"

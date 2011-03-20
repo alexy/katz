@@ -115,10 +115,43 @@ let byDay: ?daysN:int -> (user, (day * 'a) list) H.t -> (user * 'a) list array =
 	A.init (succ maxDay) (fun i -> H.find_default h i [])
 
 
+let byDayHash: ?daysN:int -> ?usersN:int -> (user, (day * 'a) list) H.t -> (user,'a) H.t array =
+	fun ?(daysN=10) ?(usersN=1000000) ds ->
+	let h = H.create daysN in
+	H.iter begin fun user day_xs ->
+		L.iter begin fun (day,x) ->
+			let dh = try H.find h day 
+			with Not_found -> let dh = H.create usersN in begin H.add h day dh; dh end in
+			H.add dh user x (* user should not have been present *)
+		end day_xs
+	end ds;
+	let maxDay = H.keys h |> L.of_enum |> L.max in
+	A.init (succ maxDay) (fun i -> H.find_default h i (H.create 0))
+
+
 let sort_dskews dskews =
 	byDay dskews |>
 	A.map begin fun x -> 
 		let a = A.of_list x in 
-		A.sort (fun (_,x) (_,y) -> compareSkew x y) a; 
+		A.sort (do_seconds compareSkew) a; 
 		a
 	end
+	
+	
+let sort_dcaps dcaps =
+	byDay dcaps |>
+	A.map begin fun x ->
+		let a = A.of_list x in 
+		A.sort compPairAsc2 a; 
+		a
+	end
+	
+	
+let kendall_tau dcaps dskews =
+	let ca = sort_dcaps  dcaps  in
+	let sa = byDayHash   dskews in
+	A.map2 begin fun c s ->
+		let cv = A.map snd c in
+		let sv = A.map fst c |> A.map (H.find s) in
+		Kendall.tau2 cv sv
+	end ca sa

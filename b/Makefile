@@ -8,6 +8,11 @@ RDIR = r
 REPS=ereps lreps freps
 
 
+ODREPS_NAME=overx-dreps
+ODREPS_NAME_1=$(ODREPS_NAME)-medians
+ODREPS_LIST=$(foreach reps,$(REPS),$(reps)/overx-dreps/txt/$(reps)-$(ODREPS_NAME_1).txt)
+ODREPS=$(RDIR)/$(ODREPS_NAME_1).txt
+
 SBUCKS_KIND_1=sbucks-ments
 SBUCKS_NAME_1=$(SBUCKS_KIND_1)-star-med-medians
 SBUCKS_LIST_1=$(foreach reps,$(REPS),$(reps)/$(SBUCKS_KIND_1)/txt/$(reps)-$(SBUCKS_NAME_1).txt)
@@ -35,6 +40,9 @@ $(ALL):
 show:
 	@echo $(ALL)
 	
+$(ODREPS): $(ODREPS_LIST)
+	cat $^ > $@
+	
 $(SBUCKS_1): $(SBUCKS_LIST_1)
 	cat $^ > $@
 
@@ -44,9 +52,10 @@ $(SBUCKS_2): $(SBUCKS_LIST_2)
 $(VOLS_1): $(VOLS_LIST_1)
 	cat $^ > $@
 	
+odreps:  $(ODREPS)	
 sbucks1: $(SBUCKS_1)
 sbucks2: $(SBUCKS_2)
 vols1:   $(VOLS_1)
 
 cp:
-	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis-katz-watts-chapter-appendix.pdf
+	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis.pdf
