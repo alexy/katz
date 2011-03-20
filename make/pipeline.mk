@@ -30,6 +30,7 @@ LBLENS_DIR=lblens
 RBLENS_DIR=rblens
 OVERX_DREPS_DIR=overx-$(OVERX_DREPS_SUFFIX)
 OVERX_SELF_DIR=overx-$(OVERX_SELF_SUFFIX)
+CSTAU_DIR=cstau
 
 DIRS= \
   $(DREPS_DIR)  \
@@ -49,6 +50,7 @@ DIRS= \
   $(LBUCKS_DIR) \
   $(LBLENS_DIR) \
   $(RBLENS_DIR) \
+  $(CSTAU_DIR)
 
 DOARANKS=$(CMD_DIR)/doaranks.opt
 SAVE_RBUCKS=$(CMD_DIR)/save_rbucks.opt
@@ -63,8 +65,10 @@ SAVE_CAPS=$(CMD_DIR)/save_caps.opt
 DOCBUCKS=$(CMD_DIR)/docbucks.opt
 DOLBLENS=$(CMD_DIR)/dolblens.opt
 DORBLENS=$(CMD_DIR)/dorblens.opt
+DOSKA=$(CMD_DIR)/doska.opt
 
-ARANKS_PREFIX=aranks-caps
+CAPS_PREFIX=caps
+ARANKS_PREFIX=aranks-$(CAPS_PREFIX)
 RBUCKS_PREFIX=rbucks-$(ARANKS_PREFIX)
 SRATES_PREFIX=srates-$(RBUCKS_PREFIX)
 OVERX_DREPS_PREFIX=overx-dreps
@@ -76,12 +80,15 @@ STARS_REPS_PREFIX=stars-dreps
 STARS_MENTS_PREFIX=stars-dments
 SBUCKS_REPS_PREFIX=sbucks-$(STARS_REPS_PREFIX)
 SBUCKS_MENTS_PREFIX=sbucks-$(STARS_MENTS_PREFIX)
-LBUCKS_PREFIX=lb-jcaps
+JCAPS_PREFIX=jcaps
+LBUCKS_PREFIX=lb-$(JCAPS_PREFIX)
 LBLENS_PREFIX=le$(LBUCKS_PREFIX)
 RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
+SKEW_PREFIX=skew
+CSTAU_PREFIX=cstau-$(SKEW_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
-CAPS_BASE=  $(BASES:%=$(CAPS_DIR)/caps-%.mlb)
+CAPS_BASE=  $(BASES:%=$(CAPS_DIR)/$CAPS_PREFIX)-%.mlb)
 CAPS     = $(foreach cap,$(CAPS_BASE),$(wildcard $(cap)*))
 ARANKS=$(BASES:%=$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb)
 RBUCKS=$(BASES:%=$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb)
@@ -94,7 +101,7 @@ STARS_REPS=  $(BASES:%=$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb)
 STARS_MENTS= $(BASES:%=$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb)
 SBUCKS_REPS= $(BASES:%=$(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb)
 SBUCKS_MENTS=$(BASES:%=$(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb)
-JCAPS= $(BASES:%=$(JCAPS_DIR)/jcaps-%.mlb)
+JCAPS= $(BASES:%=$(JCAPS_DIR)/$(JCAPS_PREFIX)-%.mlb)
 LBUCKS=$(BASES:%=$(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb)
 LBLENS=$(BASES:%=$(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb)
 RBLENS=$(BASES:%=$(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb)
@@ -102,7 +109,6 @@ OVERX_DREPS=$(BASES:%=$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb)
 
 # assumes OROOTS are defined
 # NB BASES can be defined in terms of OROOTS, with the caveat of 0 not available in buckets-specific simulations
-
 # We could define the Os with foreach, with two substitutions instead of one, but cannot have a pattern rule with two stems,
 # even when they are identical!  Renaming to one stem, also more compact
 O01=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)0.mlb), $(OVERX_SELF_DIR)/overx-$(root)-01wk.mlb))
@@ -111,10 +117,17 @@ O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
 O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
-# took out $(RBUCKS) from all as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
+CSTAU=$(BASES:%=$(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb)
 
-ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS)
+# took out $(RBUCKS) from ALL as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
+ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS) $(CSTAU)
 all: $(ALL)
+
+XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
+XZED   = $(XZABLE:%=%.xz)
+
+%.xz: %
+	xz $^
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
@@ -144,10 +157,10 @@ $(DIRS):
 
 .SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS) $(RBUCKS:%=%.xz )$(STARS_REPS) $(DENUMS) $(STARS_MENTS)
 
-$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb
+$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
-$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
+$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
 $(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
@@ -242,15 +255,15 @@ $(B2BM): $(B2BM_DIR)/$(B2BM_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(RBUCKS_DIR
 b2bm2: $(B2BM)
 
 sbucks1:
-	for i in $(BASES); do $(DOSRANKS) $(DREPS_DIR)/dreps-$$i.mlb $(CAPS_DIR)/caps-$$i.mlb; done
+	for i in $(BASES); do $(DOSRANKS) $(DREPS_DIR)/dreps-$$i.mlb $(CAPS_DIR)/$CAPS_PREFIX)-$$i.mlb; done
 	for i in $(BASES); do $(DOSTARBUCKS) $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-$$i.mlb $(STARS_DIR)/$(STARS_PREFIX)-$$i.mlb; done
 
 # .INTERMEDIATE can be used instead of .SECONDARY to rm those when done
 # .SECONDARY: $(STARS_REPS) $(STARS_REPS:%=%.xz)
-$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(DOSRANKS) $^ $(STARS_REPS_DIR)
 
-$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb.xz
+$(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 	$(DOSRANKS) $^ $(STARS_REPS_DIR)
 
 $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb    $(STARS_REPS_DIR)/$(STARS_REPS_PREFIX)-%.mlb
@@ -260,10 +273,10 @@ $(SBUCKS_REPS_DIR)/$(SBUCKS_REPS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%
 	$(DOSTARBUCKS) $^ $(SBUCKS_REPS_DIR)
 
 # .SECONDARY: $(STARS_MENTS) $(STARS_MENTS:%=%.xz)
-$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb
+$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
 
-$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/caps-%.mlb.xz
+$(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb: $(DREPS_DIR)/dreps-%.mlb $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 	$(DOSRANKS) -i $^ $(STARS_MENTS_DIR)
 
 $(SBUCKS_MENTS_DIR)/$(SBUCKS_MENTS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb    $(STARS_MENTS_DIR)/$(STARS_MENTS_PREFIX)-%.mlb
@@ -277,19 +290,19 @@ sbucks_ments2: $(SBUCKS_MENTS)
 sbucks2:       sbucks_reps2 sbucks_ments2
 
 lblens1:
-	for i in $(BASES); do $(SAVE_CAPS) $(CAPS_DIR)/caps-$$i.mlb; done
-	for i in $(BASES); do $(DOCBUCKS) $(JCAPS_DIR)/jcaps-$$i.mlb; done
+	for i in $(BASES); do $(SAVE_CAPS) $(CAPS_DIR)/$CAPS_PREFIX)-$$i.mlb; done
+	for i in $(BASES); do $(DOCBUCKS) $(JCAPS_DIR)/$(JCAPS_PREFIX)-$$i.mlb; done
 	for i in $(BASES); do $(DOLBLENS) $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-$$i.mlb; done
 
 .INTERMEDIATE: $(JCAPS)
-$(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb
+$(JCAPS_DIR)/$(JCAPS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(SAVE_CAPS) $^ $(JCAPS_DIR)
 
-$(JCAPS_DIR)/jcaps-%.mlb: $(CAPS_DIR)/caps-%.mlb.xz
+$(JCAPS_DIR)/$(JCAPS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 	$(SAVE_CAPS) $^ $(JCAPS_DIR)
 
 .INTERMEDIATE: $(LBUCKS)
-$(LBUCKS): $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb: $(JCAPS_DIR)/jcaps-%.mlb
+$(LBUCKS): $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb: $(JCAPS_DIR)/$(JCAPS_PREFIX)-%.mlb
 	$(DOCBUCKS) $^ $(LBUCKS_DIR)
 
 $(LBLENS): $(LBLENS_DIR)/$(LBLENS_PREFIX)-%.mlb: $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-%.mlb
@@ -306,6 +319,12 @@ $(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 
 $(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DORBLENS) $^ $(RBLENS_DIR)
+
+$(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
+	$(DOSKA) $^ $(DOSKA_DIR)
+
+$(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
+	$(DOSKA) $^ $(DOSKA_DIR)
 
 
 order: $(DIRS)
