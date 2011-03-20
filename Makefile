@@ -1,12 +1,14 @@
 #CC=/usr/bin/gcc-4.2
+DEBUG=-g
+#SHARED=-shared
+#PROFILE=-p
+OPTFLAGS=-inline 100 $(PROFILE)
+PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix,bigarray
+
 SAVE_GRAPH=save_graph
 INVERT_GRAPH=invert_graph
 SC=sc
 LOOK=look
-DEBUG=-g
-#PROFILE=-p
-OPTFLAGS=-inline 100 $(PROFILE)
-PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix,bigarray
 BYDAY=save_days
 STARTS=save_starts
 SIM1=sim
@@ -246,7 +248,7 @@ $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 	
 $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
-	ocamlfind ocamlopt -verbose -shared $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt '-L.' $^ -o $@
+	ocamlfind ocamlopt -verbose $(SHARED) $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt '-L.' $^ -o $@
 
 kendall_c.cmxa kendall_c.cma: kendall_c.cmx kendall_c.cmo $(KENDALL_C_OBJ)
 	ocamlmklib -o kendall_c $^
