@@ -41,7 +41,7 @@ let () =
   let day_user_caps = 
   match minDays with
   | Some md -> begin
-  		leprintfln "maturizing capitals younger than %d days to %f"  md minCap;
+  		leprintfln "maturizing capitals younger than %d days to %e"  md minCap;
 			Dcaps.mature_day_user_caps md minCap ~sort:true dcaps
   	end
   | _ -> Skew.sort_dcaps dcaps in
