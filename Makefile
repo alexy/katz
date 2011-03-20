@@ -50,6 +50,7 @@ all: $(ALL:%=%.opt)
 common.cmx: binary_graph.cmx h.cmx utils.cmx t.cmx
 load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
 skew_c.cmx: kendall_c.cmx skew.cmx
+skew_c.cmo: kendall_c.cmo skew.cmo
 
 %.opt: common.cmx
 
@@ -247,7 +248,7 @@ $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
 	ocamlfind ocamlopt -verbose -shared $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt '-L.' $^ -o $@
 
-kendall_c.cmxa: kendall_c.cmx $(KENDALL_C_OBJ)
+kendall_c.cmxa kendall_c.cma: kendall_c.cmx kendall_c.cmo $(KENDALL_C_OBJ)
 	ocamlmklib -o kendall_c $^
 
 $(KENDALL_C_OBJ): %.o: %.c

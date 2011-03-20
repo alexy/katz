@@ -387,3 +387,5 @@ let hash_find_warn_kstr default h k =
 	| Some v -> v
 	| _ -> leprintfln "key %s is not found" k; 
 	       default
+
+let bigarray_of_array_float a = Bigarray.Array1.of_array Bigarray.float64 Bigarray.c_layout a
