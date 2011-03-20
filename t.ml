@@ -61,8 +61,12 @@ type ranked_users   = users E.t
 
 (* dcaps *)
 
-type caps            = float list
+type cap             = float
+type caps            = cap list
 type day_caps        = caps array
+type user_caps_list  = (user * cap) list
+type user_caps_array = (user * cap) array
+type day_user_caps   = user_caps_array array
 type log_buckets     = (float * int) list
 type day_log_buckets = log_buckets array
 

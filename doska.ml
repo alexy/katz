@@ -20,6 +20,9 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
 
+  let minDays,   minCap =
+      !minDays', !minCap' in
+
   let dcapsName,dskewsName,outdir =
   match args with
     | dcapsName::dskewsName::outdir::restArgs -> dcapsName,dskewsName,Some outdir
@@ -34,9 +37,17 @@ let () =
     dcapsName dskewsName saveName;
     
   let dcaps:   user_day_reals = loadData dcapsName in
-  let dskews:  dskews         = loadData dskewsName in
   
-  let cstau :  float array = Skew_c.kendall_tau dcaps dskews in
+  let day_user_caps = 
+  match minDays with
+  | Some md -> begin
+  		leprintfln "maturizing capitals younger than %d days to %f"  md minCap;
+			Dcaps.mature_day_user_caps md minCap ~sort:true dcaps
+  	end
+  | _ -> Skew.sort_dcaps dcaps in
+  
+  let dskews:  dskews         = loadData dskewsName in
+  let cstau :  float array = Skew_c.kendall_tau day_user_caps dskews in
   
   mayMkDir outdir;
   saveData cstau saveName

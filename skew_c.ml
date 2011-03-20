@@ -1,9 +1,8 @@
 open Common
 open Skew
 
-let kendall_tau ?(usersN=1000000) dcaps dskews =
-	let ca = sort_dcaps  dcaps  in
-	let sa = byDayHash   dskews in
+let kendall_tau ?(usersN=1000000) ca dskews =
+	let sa  = byDayHash   dskews in
 	let day = ref 0 in
 	A.map2 begin fun cd sd ->
 		let cv = A.map snd cd in
@@ -23,7 +22,7 @@ let kendall_tau ?(usersN=1000000) dcaps dskews =
 			| Some s -> H.find vh s
 			| _ -> 0.
 		in
-		let sv = A.map fst cd |> A.map skew_score in
+		let sv = A.map (fst |- skew_score) cd in
 		let s = bigarray_of_array_float sv in
 		leprintfln "day %d" !day; incr day;
 		Kendall_c.tau c s

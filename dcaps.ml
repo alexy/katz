@@ -1,6 +1,6 @@
 open Common
 
-(* normalizes dcaps throughout *)
+(* normalizes dcaps throughout, saves capitas only, no users *)
 let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
   fun mindays mincap ?(sort=false) dcaps ->
 
@@ -12,13 +12,36 @@ let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
     L.iter begin fun (day,x) -> 
       let c = if (day - day0) >= mindays then x else mincap in
       res.(day) <- c::res.(day)
-      end ordered;
+    end ordered;
   end dcaps;
-  if sort 
-  then
-    A.iteri (fun i e -> res.(i)  <- L.sort e) res
+  if sort then
+    A.iteri (fun i e -> res.(i) <- L.sort e) res
   else ();
   res
+  
+
+(* normalizes dcaps throughout, preserves by day, saves as (user,cap) list for each day *)
+let mature_day_user_caps: int -> float -> ?sort:bool -> user_day_reals -> day_user_caps =
+  fun mindays mincap ?(sort=false) dcaps ->
+
+  let res = Array.create Constants.daysTotal ([]: user_caps_list) in
+
+  H.iter begin fun user days ->
+    let ordered = L.rev days in
+    let day0 = ordered |> L.hd |> fst in
+    L.iter begin fun (day,x) -> 
+      let c = if (day - day0) >= mindays then x else mincap in
+      res.(day) <- (user,c)::res.(day)
+    end ordered;
+  end dcaps;
+  A.map begin fun li ->
+  	let a = A.of_list li in
+		if sort then
+			A.sort compPairAsc2 a
+		else ();
+		a
+	end res
+  
   
 (* create a real-valued list for users to attach proportionally,
    normalizes just the last cap and returns the last ones only *)
