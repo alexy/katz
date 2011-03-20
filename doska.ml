@@ -38,16 +38,17 @@ let () =
     
   let dcaps:   user_day_reals = loadData dcapsName in
   
+  let sort = true in
   let day_user_caps = 
   match minDays with
   | Some md -> begin
   		leprintfln "maturizing capitals younger than %d days to %e"  md minCap;
-			Dcaps.mature_day_user_caps md minCap ~sort:true dcaps
+			Dcaps.mature_day_user_caps md minCap ~sort dcaps
   	end
-  | _ -> Skew.sort_dcaps dcaps in
+  | _ -> Skew.day_user_caps ~sort dcaps in
   
   let dskews:  dskews         = loadData dskewsName in
-  let cstau :  float array = Skew_c.kendall_tau day_user_caps dskews in
+  let cstau :  float array = Skew_c.kendall_tau_days day_user_caps dskews in
   
   mayMkDir outdir;
   saveData cstau saveName

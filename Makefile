@@ -43,9 +43,11 @@ SU=su
 SF=sf
 MOVE=domoves
 SKA=doska
+SKABS=doskabs
+
 KENDALL_C_OBJ=kendall/tau.o kendall_tau.o 
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS)
 
 all: $(ALL:%=%.opt)
 
@@ -248,7 +250,10 @@ $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 	
 $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
-	ocamlfind ocamlopt -verbose $(SHARED) $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt '-L.' $^ -o $@
+	ocamlfind ocamlopt -verbose $(SHARED) $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
+	
+$(SKABS).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKABS).ml
+	ocamlfind ocamlopt -verbose $(SHARED) $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
 
 kendall_c.cmxa kendall_c.cma: kendall_c.cmx kendall_c.cmo $(KENDALL_C_OBJ)
 	ocamlmklib -o kendall_c $^

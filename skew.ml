@@ -145,10 +145,10 @@ let sort_dskews dskews =
 	end
 	
 	
-let sort_dcaps dcaps =
+let day_user_caps ?(sort=false) dcaps =
 	byDay dcaps |>
 	A.map begin fun x ->
 		let a = A.of_list x in 
-		A.sort compPairAsc2 a; 
+		if sort then A.sort compPairAsc2 a else ();
 		a
 	end

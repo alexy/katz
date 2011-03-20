@@ -2,6 +2,7 @@ open Batteries_uni
 open Utils
   
 let loadData fileName =
+  (* NB added ln to leprintfln, le_newline does nothing for now *)
   leprintfln "loading data from file %s" fileName;
   if String.ends_with fileName ".xz" then begin
     leprintfln " via xzcat";

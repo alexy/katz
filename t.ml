@@ -47,7 +47,7 @@ type rates          = (float list) list
 type user_set       = S.t
 type buckets        = user_set list
 type day_buckets    = buckets array
-
+type rbucks         = day_buckets
 
 (* cranks *)
 
@@ -141,3 +141,7 @@ type moving_ranks = (int * user_set) array
 (* Kendall Tau C *)
 
 type big_float = (float, Bigarray.float64_elt, Bigarray.c_layout) Bigarray.Array1.t
+type tau = float
+type day_taus = tau array
+type tau_bucks = tau list
+type day_tau_bucks = tau_bucks array (* tau list array *)
