@@ -1,3 +1,4 @@
+CC=/usr/bin/gcc-4.2
 SAVE_GRAPH=save_graph
 INVERT_GRAPH=invert_graph
 SC=sc
@@ -5,7 +6,7 @@ LOOK=look
 DEBUG=-g
 #PROFILE=-p
 OPTFLAGS=-inline 100 $(PROFILE)
-PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix
+PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix,bigarray
 BYDAY=save_days
 STARTS=save_starts
 SIM1=sim
@@ -40,6 +41,7 @@ SU=su
 SF=sf
 MOVE=domoves
 SKA=doska
+KENDALL_C_OBJ=kendall/tau.o kendall_tau.o 
 
 ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA)
 
@@ -47,11 +49,12 @@ all: $(ALL:%=%.opt)
 
 common.cmx: binary_graph.cmx h.cmx utils.cmx t.cmx
 load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
+skew_c.cmx: kendall_c.cmx skew.cmx
 
 %.opt: common.cmx
-  
+
 %.cmo %.cmx: %.cmi
-  
+
 %.cmo: %.ml
 	ocamlfind ocamlc   $(DEBUG) -package $(PACKAGES) -c $^ -o $@
 
@@ -80,28 +83,40 @@ invert.cmx by_day.cmx: utils.cmx graph.cmx
 simulate.cmx: dreps.cmx proportional.cmx
   
 topsets.cmx: cranks.cmx
-  
-  
-lib: h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo
-	ocamlfind ocamlc -a -o lib.cma $^
 
-lib.cma: lib
-  
+#lib.cma lib.cmxa: lib
+#lib: kendall_tau.o kendall/tau.o \
+#     h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo \
+#     h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx \
+#	ocamlmklib -o lib $^
+
+lib: lib.cma
+lib.cma:  h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo
+	ocamlfind ocamlc -a -o $@ $^
 lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
+#anygraph.cma anygraph.cmxa: anygraph
+#anygraph:  json_graph.cmo tokyo_graph.cmo load_graph.cmo \
+#           json_graph.cmx tokyo_graph.cmx load_graph.cmx
+#	ocamlmklib -o anygraph $^
+
 anygraph.cma:  json_graph.cmo tokyo_graph.cmo load_graph.cmo
 	ocamlfind ocamlc -a -o $@ $^
-    
 anygraph.cmxa: json_graph.cmx tokyo_graph.cmx load_graph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
-sgraph.cma: soc_run_common.cmo ustats.cmo sgraph.cmo
+
+#sgraph.cma sgraph.cmxa: sgraph
+#sgraph: soc_run_common.cmo ustats.cmo sgraph.cmo \
+#        soc_run_common.cmx ustats.cmx sgraph.cmx
+#	ocamlmklib -o sgraph $^
+
+sgraph.cma:  soc_run_common.cmo ustats.cmo sgraph.cmo
 	ocamlfind ocamlc -a -o $@ $^
-  
 sgraph.cmxa: soc_run_common.cmx ustats.cmx sgraph.cmx
 	ocamlfind ocamlopt -a -o $@ $^
-        
+
 clean:
 	rm -f *.cmi *.cmo *.cmx *.o *.opt *.cma *.cmxa
 
@@ -189,13 +204,13 @@ $(STAY).opt: lib.cmxa topsets.cmx bucket_power.cmx $(STAY).ml
 
 $(TEXR).opt: lib.cmxa topsets.cmx teX.cmx $(TEXR).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-  
+
 $(B2B).opt: lib.cmxa invert.cmx bucket_power.cmx $(B2B).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-  
+
 $(OPT).opt: $(OPT).cmx
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-  
+
 $(STARS).opt: lib.cmxa invert.cmx starrank.cmx $(STARS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
@@ -229,8 +244,18 @@ $(SF).opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa suds_local.cmx
 $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 	
-$(SKA).opt: lib.cmxa $(SKA).ml
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+$(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt -L. $^ -o $@
 
-  
-  
+kendall_c.cmxa: kendall_c.cmx $(KENDALL_C_OBJ)
+	ocamlmklib -o kendall_c $^
+
+$(KENDALL_C_OBJ): %.o: %.c
+	$(CC) -O3 -c -I`ocamlc -where` -m64 -fPIC $^ -o $@
+
+kendall.a: $(KENDALL_C_OBJ)
+	ar rc $@ $^
+	ranlib $@
+
+clean-c:
+	rm -f $(KENDALL_C_OBJ)

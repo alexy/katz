@@ -133,3 +133,7 @@ type bucket_track = (bucket_pos * int) list
 type bucket_moves = { sinceBM : day; trackBM: bucket_track }
 type moving       = (user, bucket_moves) H.t
 type moving_ranks = (int * user_set) array
+
+(* Kendall Tau C *)
+
+type big_float = (float, Bigarray.float64_elt, Bigarray.c_layout) Bigarray.Array1.t

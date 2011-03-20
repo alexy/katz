@@ -36,7 +36,7 @@ let () =
   let dcaps:   user_day_reals = loadData dcapsName in
   let dskews:  dskews         = loadData dskewsName in
   
-  let cstau :  float array = Skew.kendall_tau dcaps dskews in
+  let cstau :  float array = Skew_c.kendall_tau dcaps dskews in
   
   mayMkDir outdir;
   saveData cstau saveName

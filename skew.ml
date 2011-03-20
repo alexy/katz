@@ -103,6 +103,13 @@ let skew_sort: skew list -> skew array =
 	a
 	
 	
+let skew_sort_enum: skew E.t -> skew array =
+	fun skew ->
+	let a = A.of_enum skew in
+	A.sort compareSkew a;
+	a
+	
+	
 let byDay: ?daysN:int -> (user, (day * 'a) list) H.t -> (user * 'a) list array =
 	fun ?(daysN=10) ds ->
 	let h = H.create daysN in
@@ -145,16 +152,3 @@ let sort_dcaps dcaps =
 		A.sort compPairAsc2 a; 
 		a
 	end
-	
-	
-let kendall_tau dcaps dskews =
-	let ca = sort_dcaps  dcaps  in
-	let sa = byDayHash   dskews in
-	let r = A.map2 begin fun c s ->
-		let cv = A.map snd c in
-		let sv = A.map fst c |> A.map (hash_find_warn_kstr [] s) in
-		leprintf ".";
-		Kendall.tau2 ~comp:compareSkew cv sv
-	end ca sa in
-	le_newline;
-	r
