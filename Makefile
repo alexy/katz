@@ -1,4 +1,4 @@
-CC=/usr/bin/gcc-4.2
+#CC=/usr/bin/gcc-4.2
 SAVE_GRAPH=save_graph
 INVERT_GRAPH=invert_graph
 SC=sc
