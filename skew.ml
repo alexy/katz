@@ -153,5 +153,5 @@ let kendall_tau dcaps dskews =
 	A.map2 begin fun c s ->
 		let cv = A.map snd c in
 		let sv = A.map fst c |> A.map (H.find s) in
-		Kendall.tau2 cv sv
+		Kendall.tau2 ~comp:compareSkew cv sv
 	end ca sa

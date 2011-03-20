@@ -30,7 +30,7 @@ let () =
   let baseName = cutPathZ dskewsName in
   let saveName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   
-  leprintfln "reading dcaps from %s, dskews from %s, saving Kentall's taus between them in %s" 
+  leprintfln "reading dcaps from %s, dskews from %s, saving Kendall's Tau between their days in %s" 
     dcapsName dskewsName saveName;
     
   let dcaps:   user_day_reals = loadData dcapsName in

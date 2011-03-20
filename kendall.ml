@@ -40,15 +40,15 @@ http://www.amazon.com/Cluster-Analysis-Researchers-Charles-Romesburg/dp/14116061
    
 *)
 
-
-let tau1 ?(sort=false) x y =
+let tau1 ?(sort=false) ?(comp=compare) x y =
+	let less,greater = lt_gt_of comp in	
 	let     n = A.length x in
 	assert (n = A.length y);
 	let a = A.map2 (fun x y -> (x,y)) x y in
 	if sort then  A.sort compPairAsc1 a else ();
 	let _,dcd = A.fold_left begin fun (vals,total) (_,v) ->
-		let lt   = L.filter ((<) v) vals |> L.length in
-		let gt   = L.filter ((>) v) vals |> L.length in
+		let lt   = L.filter (less    v) vals |> L.length in
+		let gt   = L.filter (greater v) vals |> L.length in
 		let diff = gt - lt in
 		(* NB can we enumerate over A prefix, in second, and not allocate vals at all? *)
 		v::vals, total + diff
@@ -61,7 +61,8 @@ let countPrefix a n v f =
 	A.enum a |> E.take n |> E.filter (f v) |> E.count
 	
 
-let tau2 ?(sort=false) x y =
+let tau2 ?(sort=false) ?(comp=compare) x y =
+	let less,greater = lt_gt_of comp in	
 	let     n = A.length x in
 	assert (n = A.length y);
 	let a = A.map2 (fun x y -> (x,y)) x y in
@@ -82,7 +83,7 @@ let tau2 ?(sort=false) x y =
 	(float dcd) *. 2. /. (n' *. (n' -. 1.))
 
 
-let kendall_tau_test: (?sort:bool -> 'a array -> 'b array -> float) -> unit =
+let kendall_tau_test: (?sort:bool -> ?comp:('b -> 'b -> int) -> 'a array -> 'b array -> float) -> unit =
 	fun f ->
 	let sort = true in
 	assert begin

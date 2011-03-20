@@ -374,3 +374,10 @@ let load_mlbxz mlbfile =
   match res with
     | Success x -> x
     | Error xn -> raise xn
+    
+
+(* let less comp = comp |- ((>) 0) *)
+let lt_of comp x y = (comp x y) < 0
+let gt_of comp x y = (comp x y) > 0
+let lt_gt_of comp = lt_of comp, gt_of comp
+
