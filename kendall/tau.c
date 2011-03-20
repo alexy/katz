@@ -39,7 +39,7 @@
 #include <string.h>
 #include <math.h>
 
-#define kendallTest
+// #define kendallTest
 
 /* Comparator function for qsortDoubles.*/
 static int qsortDoubleComp(const void* lhs, const void* rhs) {
