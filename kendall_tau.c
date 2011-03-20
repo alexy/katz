@@ -9,5 +9,5 @@ value kendall_tau(value a, value b) {
 	CAMLparam2(a,b);
 	int len = Bigarray_val(a)->dim[0];
 	double ktau = kendallNlogN(Data_bigarray_val(a),Data_bigarray_val(b),len);
-	CAMLreturn (Val_double(ktau));
+	CAMLreturn (caml_copy_double(ktau));
 }

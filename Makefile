@@ -245,7 +245,7 @@ $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 	
 $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt -L. $^ -o $@
+	ocamlfind ocamlopt -verbose -ccopt '-shared' $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg -ccopt '-L.' $^ -o $@
 
 kendall_c.cmxa: kendall_c.cmx $(KENDALL_C_OBJ)
 	ocamlmklib -o kendall_c $^
