@@ -4,13 +4,13 @@ open Skew
 let kendall_tau ?(usersN=1000000) dcaps dskews =
 	let ca = sort_dcaps  dcaps  in
 	let sa = byDayHash   dskews in
+	let day = ref 0 in
 	A.map2 begin fun cd sd ->
 		let cv = A.map snd cd in
 		let c = bigarray_of_array_float cv in
 		let ss = H.values sd |> skew_sort_enum in
 		let vh = H.create usersN in
 		let v = ref 0. in
-		let day = ref 0 in
 		A.iter begin fun x ->
 			if H.mem vh x then ()
 			else begin
