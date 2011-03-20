@@ -38,12 +38,13 @@ let kendall_tau_bucks: ?usersN:int -> day_user_caps -> dskews -> rbucks -> day_t
   fun ?(usersN=1000000) ca dskews rbucks ->
 	let sa  = byDayHash dskews in
 	A.mapi begin fun day buckets ->
+		leprintfln "day %d" day;
 		let cd = ca.(day) in
 		let sd = sa.(day) in
 		L.map begin fun bucket ->
 			let cdb = A.filter (fst |- flip S.mem bucket) cd in
 			A.sort compPairAsc2 cdb;
-			(* no need to filter sd into sdb, it will be used where needed! *)
+			(* no need to filter sd into sdb, it will be picked where needed! *)
 			kendall_tau_cs ~usersN cdb sd
 		end buckets
 	end rbucks
