@@ -381,3 +381,9 @@ let lt_of comp x y = (comp x y) < 0
 let gt_of comp x y = (comp x y) > 0
 let lt_gt_of comp = lt_of comp, gt_of comp
 
+
+let hash_find_warn_kstr default h k =
+	match H.find_option h k with
+	| Some v -> v
+	| _ -> leprintfln "key %s is not found" k; 
+	       default

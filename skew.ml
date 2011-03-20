@@ -150,8 +150,11 @@ let sort_dcaps dcaps =
 let kendall_tau dcaps dskews =
 	let ca = sort_dcaps  dcaps  in
 	let sa = byDayHash   dskews in
-	A.map2 begin fun c s ->
+	let r = A.map2 begin fun c s ->
 		let cv = A.map snd c in
-		let sv = A.map fst c |> A.map (H.find s) in
+		let sv = A.map fst c |> A.map (hash_find_warn_kstr [] s) in
+		leprintf ".";
 		Kendall.tau2 ~comp:compareSkew cv sv
-	end ca sa
+	end ca sa in
+	le_newline;
+	r
