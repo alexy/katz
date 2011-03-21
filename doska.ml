@@ -1,14 +1,17 @@
 open Common
 open Getopt
 
+let buckets' = ref false
 let length'  = ref true
 let minDays' = ref (Some 7)
 let minCap'  = ref 1e-35
 let mark'    = ref ""
 let prefix'  = ref "cstau"
 let outdir'  = ref (Some !prefix')
+let bucketSuffix = "bs"
 let specs =
 [
+	('b',"buckets",(set buckets' (not !buckets')),None);	
 	('l',"length",(set length' (not !length')),None);
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
   (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
@@ -22,25 +25,43 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
 
-  let length,   minDays,   minCap =
-      !length', !minDays', !minCap' in
+  let buckets,   length,   minDays,   minCap =
+      !buckets', !length', !minDays', !minCap' in
 
-  let dcapsName,dskewsName,outdir =
-  match args with
-    | dcapsName::dskewsName::outdir::restArgs -> dcapsName,dskewsName,Some outdir
-    | dcapsName::dskewsName::restArgs ->         dcapsName,dskewsName,outdir
-    | _ -> failwith "usage: doska dcapsName dskewsName [outdir]"      
-  in        
+  let prefix,outdir = 
+  	if buckets 
+  		then prefix^bucketSuffix, optAppend outdir bucketSuffix
+  		else prefix, outdir in
+
+
+  let dcapsName,dskewsName,rbucksName,outdir =
+  if buckets then  
+		match args with
+			| dcapsName::dskewsName::rbucksName::outdir::restArgs -> dcapsName,dskewsName,rbucksName,Some outdir
+			| dcapsName::dskewsName::rbucksName::restArgs ->         dcapsName,dskewsName,rbucksName,outdir
+			| _ -> failwith "usage: doska --buckets dcapsName dskewsName rbucksName [outdir]"      
+	else
+		match args with
+			| dcapsName::dskewsName::outdir::restArgs -> dcapsName,dskewsName,"",Some outdir
+			| dcapsName::dskewsName::restArgs ->         dcapsName,dskewsName,"",outdir
+			| _ -> failwith "usage: doska dcapsName dskewsName [outdir]"      
+  in
+  
 
   let baseName = cutPathZ dskewsName in
   let saveName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   
-  leprintfln "reading dcaps from %s, dskews from %s, saving Kendall's Tau between their days in %s" 
-    dcapsName dskewsName saveName;
-    
+  leprintfln begin "reading dcaps from %s, dskews from %s, rbucks from %s,\n"^^
+  						"saving Kendall's Tau per day, %s, in %s,\n"^^
+  						"%susing length in compareSkew" end
+    dcapsName dskewsName rbucksName
+    (if buckets then "per bucket" else "whole")
+    saveName 
+    (if length then "" else "not ");
+
   let dcaps:   user_day_reals = loadData dcapsName in
   
-  let sort = true in
+  let sort = not buckets in
   let day_user_caps = 
   match minDays with
   | Some md -> begin
@@ -50,7 +71,15 @@ let () =
   | _ -> Skew.day_user_caps ~sort dcaps in
   
   let dskews:  dskews         = loadData dskewsName in
-  let cstau :  float array = Skew_c.kendall_tau_days ~length day_user_caps dskews in
-  
+
   mayMkDir outdir;
-  saveData cstau saveName
+
+  if buckets then
+	  let rbucks:   rbucks      = loadData rbucksName in
+	  let cstaubs:  day_tau_bucks = 
+	  Skew_c.kendall_tau_bucks ~length day_user_caps dskews rbucks in
+		saveData cstaubs saveName
+	else		
+	  let cstau: day_taus = 
+	  Skew_c.kendall_tau_days ~length day_user_caps dskews in
+    saveData cstau saveName
