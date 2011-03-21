@@ -76,7 +76,7 @@ let skew ?(by_mass=false) ?(skew_times=4) a b =
   skew a1 b *)
   
   
-let rec compareSkew ?(lengthFirst=true) xs ys =
+let rec compareSkew ?(length=true) xs ys =
 	let rec aux xs ys =
 		match xs,ys with
 		| x::xs,y::ys when x = -1. && y = -1. ->
@@ -89,24 +89,25 @@ let rec compareSkew ?(lengthFirst=true) xs ys =
 		| _,y::ys                             -> -1
 		| _                                   ->  0
 	in
-	if lengthFirst then begin
+	if length then begin
 		let c = compare (L.length xs) (L.length ys) in
 		if c <> 0 then c else aux xs ys
 		end
 	else
 		aux xs ys
 
-let skew_sort: skew list -> skew array =
-	fun skew ->
+
+let skew_sort: ?length:bool -> skew list -> skew array =
+	fun ?(length=true) skew ->
 	let a = A.of_list skew in
-	A.sort compareSkew a;
+	A.sort (compareSkew ~length) a;
 	a
 	
 	
-let skew_sort_enum: skew E.t -> skew array =
-	fun skew ->
+let skew_sort_enum: ?length:bool -> skew E.t -> skew array =
+	fun ?(length=true) skew ->
 	let a = A.of_enum skew in
-	A.sort compareSkew a;
+	A.sort (compareSkew ~length) a;
 	a
 	
 	
@@ -136,11 +137,11 @@ let byDayHash: ?daysN:int -> ?usersN:int -> (user, (day * 'a) list) H.t -> (user
 	A.init (succ maxDay) (fun i -> H.find_default h i (H.create 0))
 
 
-let sort_dskews dskews =
+let sort_dskews ?(length=true) dskews =
 	byDay dskews |>
 	A.map begin fun x -> 
 		let a = A.of_list x in 
-		A.sort (do_seconds compareSkew) a; 
+		A.sort (do_seconds (compareSkew ~length)) a; 
 		a
 	end
 	

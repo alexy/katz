@@ -73,8 +73,8 @@ let tau2 ?(sort=false) ?(comp=compare) x y =
 	else y in
 	let _,dcd = A.fold_left begin fun (n,total) (_,v) ->
 		let scan = countPrefix y n v in
-		let lt   = scan (<) in
-		let gt   = scan (>) in
+		let lt   = scan less in
+		let gt   = scan greater in
 		let diff = gt - lt in
 		(* NB can we enumerate over A prefix, in second, and not allocate vals at all? *)
 		succ n, total + diff

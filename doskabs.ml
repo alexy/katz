@@ -1,6 +1,7 @@
 open Common
 open Getopt
 
+let length'  = ref true
 let minDays' = ref (Some 7)
 let minCap'  = ref 1e-35
 let mark'    = ref ""
@@ -8,6 +9,7 @@ let prefix'  = ref "cstaubs"
 let outdir'  = ref (Some !prefix')
 let specs =
 [
+	('l',"length",(set length' (not !length')),None);
   (noshort,"prefix",None,Some (fun x -> prefix' := x));
   (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir", (set outdir' None), None);
@@ -20,8 +22,8 @@ let () =
   let prefix, outdir, mark =
       !prefix', !outdir', !mark' in
 
-  let minDays,   minCap =
-      !minDays', !minCap' in
+  let length,   minDays,   minCap =
+      !length', !minDays', !minCap' in
 
   let dcapsName,dskewsName,rbucksName,outdir =
   match args with
@@ -48,7 +50,7 @@ let () =
   
   let dskews:   dskews        = loadData dskewsName in
   let rbucks:   rbucks        = loadData rbucksName in
-  let cstaubs:  day_tau_bucks = Skew_c.kendall_tau_bucks day_user_caps dskews rbucks in
+  let cstaubs:  day_tau_bucks = Skew_c.kendall_tau_bucks ~length day_user_caps dskews rbucks in
   
   mayMkDir outdir;
   saveData cstaubs saveName
