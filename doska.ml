@@ -51,10 +51,11 @@ let () =
   let baseName = cutPathZ dskewsName in
   let saveName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   
-  leprintfln begin "reading dcaps from %s, dskews from %s, rbucks from %s,\n"^^
+  leprintfln begin "reading dcaps from %s, dskews from %s%s,\n"^^
   						"saving Kendall's Tau per day, %s, in %s,\n"^^
   						"%susing length in compareSkew" end
-    dcapsName dskewsName rbucksName
+    dcapsName dskewsName 
+    (if buckets then sprintf ", rbucks from %s" rbucksName else "")
     (if buckets then "per bucket" else "whole")
     saveName 
     (if length then "" else "not ");
