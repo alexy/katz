@@ -35,8 +35,10 @@ let () =
   let baseName = cutPathZ dskewsName in
   let saveName = sprintf "%s-%s%s" prefix mark baseName |> mayPrependDir outdir in
   
-  leprintfln "reading dcaps from %s, dskews from %s, rbucks from %s,\nsaving Kendall's Tau per day-buckets in %s" 
-    dcapsName dskewsName rbucksName saveName;
+  leprintfln begin "reading dcaps from %s, dskews from %s, rbucks from %s,\n"^^
+  						"saving Kendall's Tau per day-buckets in %s,\n"^^
+  						"%susing length in compareSkew" end
+    dcapsName dskewsName rbucksName saveName (if length then "" else "not ");
     
   let dcaps: user_day_reals = loadData dcapsName in
   
