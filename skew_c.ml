@@ -38,7 +38,7 @@ let kendall_tau_days ?(length=true) ?(usersN=1000000) ca dskews =
 	let day = ref 0 in
 	A.map2 begin fun cd sd ->
 		leprintfln "day %d" !day; incr day;
-		kendall_tau_cs ~usersN cd sd
+		kendall_tau_cs ~length ~usersN cd sd
 	end ca sa
 
 
@@ -54,6 +54,6 @@ let kendall_tau_bucks: ?length:bool -> ?usersN:int -> day_user_caps -> dskews ->
 			let cdb = A.filter (fst |- flip S.mem bucket) cd in
 			A.sort compPairAsc2 cdb;
 			let se = H.enum sd |> E.filter (fst |- flip S.mem bucket) in
-			kendall_tau_cs ~usersN cdb ~limit ~se sd
+			kendall_tau_cs ~length ~usersN cdb ~limit ~se sd
 		end buckets
 	end rbucks
