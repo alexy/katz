@@ -30,7 +30,7 @@ VOLS_1=$(RDIR)/vols4-$(VOLS_KIND_1).txt
 
 ALL=$(SRATES) $(OVERX)
 
-.PHONY: all
+.PHONY: all $(REPS)
 
 all: $(REPS)
     

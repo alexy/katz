@@ -128,7 +128,9 @@ CSTAU=$(BASES:%=$(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb)
 CSTAUBS=$(BASES:%=$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb)
 
 # took out $(RBUCKS) from ALL as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
-ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS) $(CSTAU)
+ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) \
+     $(LBLENS) $(RBLENS) $(CSTAU) $(CSTAUBS)
+     
 all: $(ALL)
 
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
