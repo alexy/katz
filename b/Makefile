@@ -1,10 +1,10 @@
-ROOTS=ereps lreps freps ureps-deux freps-deux
+ROOTS=ereps lreps freps
 SRATES=${ROOTS:%=%/srates}
 OVERX_DREPS=${ROOTS:%=%/overx-dreps}
 OVERX_SELF=${ROOTS:%=%/overx-self}
 OVERX=$(OVERX_DREPS) $(OVERX_SELF)
 
-RDIR = r
+RDIR=r
 REPS=ereps lreps freps
 
 
@@ -30,7 +30,7 @@ VOLS_1=$(RDIR)/vols4-$(VOLS_KIND_1).txt
 
 ALL=$(SRATES) $(OVERX)
 
-.PHONY: all $(ALL)
+.PHONY: all
 
 all: $(REPS)
     
@@ -57,5 +57,5 @@ sbucks1: $(SBUCKS_1)
 sbucks2: $(SBUCKS_2)
 vols1:   $(VOLS_1)
 
-cp:
+cpt:
 	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis.pdf
