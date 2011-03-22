@@ -389,3 +389,15 @@ let hash_find_warn_kstr default h k =
 	       default
 
 let bigarray_of_array_float a = Bigarray.Array1.of_array Bigarray.float64 Bigarray.c_layout a
+
+let newline oc = String.print oc "\n"
+
+let nonneg x = if x < 0 then 0 else x
+
+let arrayRange ?(take=None) ?(drop=None) a =
+	let lena   = A.length a in
+	let realLast = pred lena in
+	let first = Option.default 0 drop |> min lena in
+	let last  = Option.default lena take |> pred |> min realLast in
+	let len = last - first + 1 |> min (lena - first) |> nonneg in
+	A.sub a first len

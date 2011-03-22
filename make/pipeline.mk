@@ -31,6 +31,8 @@ RBLENS_DIR=rblens
 OVERX_DREPS_DIR=overx-$(OVERX_DREPS_SUFFIX)
 OVERX_SELF_DIR=overx-$(OVERX_SELF_SUFFIX)
 CSTAU_DIR=cstau
+BUCKET_SUFFIX=bs
+CSTAUBS_DIR=$(CSTAU_DIR)$(BUCKET_SUFFIX)
 
 DIRS= \
   $(DREPS_DIR)  \
@@ -50,7 +52,8 @@ DIRS= \
   $(LBUCKS_DIR) \
   $(LBLENS_DIR) \
   $(RBLENS_DIR) \
-  $(CSTAU_DIR)
+  $(CSTAU_DIR)  \
+  $(CSTAUBS_DIR)
 
 DOARANKS=$(CMD_DIR)/doaranks.opt
 SAVE_RBUCKS=$(CMD_DIR)/save_rbucks.opt
@@ -66,6 +69,7 @@ DOCBUCKS=$(CMD_DIR)/docbucks.opt
 DOLBLENS=$(CMD_DIR)/dolblens.opt
 DORBLENS=$(CMD_DIR)/dorblens.opt
 DOSKA=$(CMD_DIR)/doska.opt
+DOSKABS=$(CMD_DIR)/doska.opt --buckets
 
 CAPS_PREFIX=caps
 ARANKS_PREFIX=aranks-$(CAPS_PREFIX)
@@ -85,7 +89,10 @@ LBUCKS_PREFIX=lb-$(JCAPS_PREFIX)
 LBLENS_PREFIX=le$(LBUCKS_PREFIX)
 RBLENS_PREFIX=rblens-$(RBUCKS_PREFIX)
 SKEW_PREFIX=skew
-CSTAU_PREFIX=cstau-$(SKEW_PREFIX)
+CSTAU_PREFIX_PROPER=cstau
+CSTAU_PREFIX=$(CSTAU_PREFIX_PROPER)-$(SKEW_PREFIX)
+CSTAUBS_PREFIX_PROPER=$(CSTAU_PREFIX_PROPER)BS
+CSTAUBS_PREFIX=$(CSTAUBS_PREFIX_PROPER)-$(SKEW_PREFIX)
 
 DREPS= $(BASES:%=$(DREPS_DIR)/dreps-%.mlb)
 CAPS_BASE=  $(BASES:%=$(CAPS_DIR)/$CAPS_PREFIX)-%.mlb)
@@ -118,6 +125,7 @@ O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.
 OVERX_SELF=$(O01) $(O12) $(O23) $(O34)
 
 CSTAU=$(BASES:%=$(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb)
+CSTAUBS=$(BASES:%=$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb)
 
 # took out $(RBUCKS) from ALL as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
 ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) $(LBLENS) $(RBLENS) $(CSTAU)
@@ -321,11 +329,20 @@ $(RBLENS_DIR)/$(RBLENS_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DORBLENS) $^ $(RBLENS_DIR)
 
 $(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
-	$(DOSKA) $^ $(DOSKA_DIR)
+	$(DOSKA) $^ $(CSTAU_DIR)
 
 $(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
-	$(DOSKA) $^ $(DOSKA_DIR)
+	$(DOSKA) $^ $(CSTAU_DIR)
 
+cstau: $(CSTAU)
+
+$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
+	$(DOSKABS) $^ $(CSTAUBS_DIR)
+
+$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb
+	$(DOSKABS) $^ $(CSTAUBS_DIR)
+
+cstaubs: $(CSTAUBS)
 
 order: $(DIRS)
 	mv dreps-*  $(DREPS_DIR)

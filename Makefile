@@ -44,10 +44,16 @@ SF=sf
 MOVE=domoves
 SKA=doska
 SKABS=doskabs
+TEXT=textau
 
 KENDALL_C_OBJ=kendall/tau.o kendall_tau.o 
 
-ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS)
+ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
+    $(CRANKS) $(ARANKS) $(RATES) $(SCAPS) $(CBUCKS) $(LBLENS) $(RBLENS) \
+    $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) \
+    $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) \
+    $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
+    $(TEXT)
 
 all: $(ALL:%=%.opt)
 
@@ -267,3 +273,6 @@ kendall.a: $(KENDALL_C_OBJ)
 
 clean-c:
 	rm -f $(KENDALL_C_OBJ)
+	
+$(TEXT).opt: lib.cmxa teX.cmx $(TEXT).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
