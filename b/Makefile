@@ -32,9 +32,9 @@ ALL=$(SRATES) $(OVERX)
 
 .PHONY: all $(ALL)
 
-all: $(ALL)
+all: $(REPS)
     
-$(ALL):
+$(REPS):
 	$(MAKE) --directory=$@ $(TARGET)
 
 show:
