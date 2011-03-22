@@ -10,7 +10,7 @@ let byMass'        = ref true
 let specs =
 [
   ('m',"ments",None,Some (fun x -> dmentsNameOpt' := Some x));
-  ('c',"caps",(set saveCaps' (not !caps'),None);
+  ('c',"caps",(set saveCaps' (not !saveCaps')),None);
   (noshort,"bymass",(set byMass' (not !byMass')), None)
 ]
 
@@ -49,10 +49,10 @@ let () =
   leprintfln "dments has length %d" (H.length dments);
   let norms,dcaps,dskews,tSocRun = 
     socRun dreps dments {optSocRun with maxDaysSR= maxDays; byMassSR= byMass} in
-  leprintfln "computed sgraph" capsName skewName;
+  leprintfln "computed sgraph";
   if saveCaps then
-  	saveData dcaps  apsName 
-  else ()
+  	saveData dcaps capsName 
+  else ();
   let tSavingDCaps  =  Some "-- saved dcaps timing: "  |> getTiming in
   saveData dskews skewName;
   let tSavingDSkews =  Some "-- saved dskews timing: " |> getTiming in
