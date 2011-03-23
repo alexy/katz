@@ -438,3 +438,10 @@ let string_chars s = String.enum s |> L.of_enum
 let ord d = int_of_char d - int_of_char '0'
 
 let array_fsum a = A.fold_left (+.) 0. a
+
+let string_of_boolean ?(short=true) x =
+	match x with
+	| true when short -> "T"
+	| true -> "TRUE"
+	| false when short -> "F"
+	| _ -> "FALSE"

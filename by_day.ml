@@ -1,8 +1,8 @@
 open Common
 
-let daysTotal  = Constants.daysTotal
-let usersDaily = Constants.usersDaily
-let repsN      = Constants.repsN
+let daysTotal  = Const.daysTotal
+let usersDaily = Const.usersDaily
+let repsN      = Const.repsN
 
 let by_day: graph -> days = fun g ->
 

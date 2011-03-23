@@ -2,9 +2,9 @@ open Common
 
 let getUserDay = Dreps.getUserDay
 
-let emptyTalk : talk_balance = H.create Constants.repsN
+let emptyTalk : talk_balance = H.create Const.repsN
 
-let orderN       = Constants.usersN
+let orderN       = Const.usersN
 let usersHash () = H.create orderN
 
 let updateUserDaily dcaps day user v =

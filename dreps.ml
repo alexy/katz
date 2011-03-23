@@ -1,7 +1,7 @@
 open Common
 
-let daysN = Constants.daysN
-let repsN = Constants.repsN
+let daysN = Const.daysN
+let repsN = Const.repsN
 
 let userDays: graph -> user -> adjlist =
   fun g user ->

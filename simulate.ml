@@ -1,8 +1,8 @@
 open Common
 open Sgraph
 
-let usersN = Constants.usersN
-let daysN  = Constants.daysN
+let usersN = Const.usersN
+let daysN  = Const.daysN
 
 let simulate ?(dreps_day=(H.create usersN,0)) ?duvals ?uniform dstarts denums =
   assert (A.length dstarts = A.length denums);

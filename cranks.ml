@@ -32,7 +32,7 @@ let matureCapsTC ?(days=5) dcaps toName =
 let matureDayUserReals: int -> float -> user_day_reals -> day_user_reals =
   fun maturity minimum dcaps ->
 
-  let res = Array.init Constants.daysTotal (fun _ -> H.create Constants.usersDaily) in
+  let res = Array.init Const.daysTotal (fun _ -> H.create Const.usersDaily) in
 
   H.iter begin fun user days ->
     let ordered = L.rev days in

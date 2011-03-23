@@ -93,7 +93,7 @@ let newBucketMoves: day -> bucket_moves =
 
 let moving: day_buckets -> moving =
   fun bucks ->
-  let h = H.create Constants.usersN in
+  let h = H.create Const.usersN in
   A.iteri begin fun day buckets ->
     L.iteri begin fun bucket_pos bucket ->
       S.iter begin fun user ->
@@ -120,7 +120,7 @@ let moving: day_buckets -> moving =
   
   
 let movingRanks: moving -> moving_ranks =
-  let h = H.create Constants.movingRanksN in
+  let h = H.create Const.movingRanksN in
   fun umoves ->
   H.iter begin fun user { trackBM=track } ->
     let firstBucket = match (L.backwards track |> E.peek) with

@@ -4,7 +4,7 @@ open Common
 let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
   fun mindays mincap ?(sort=false) dcaps ->
 
-  let res = Array.create Constants.daysTotal ([]: caps) in
+  let res = Array.create Const.daysTotal ([]: caps) in
 
   H.iter begin fun user days ->
     let ordered = L.rev days in
@@ -24,7 +24,7 @@ let mature_day_caps: int -> float -> ?sort:bool -> user_day_reals -> day_caps =
 let mature_day_user_caps: int -> float -> ?sort:bool -> user_day_reals -> day_user_caps =
   fun mindays mincap ?(sort=false) dcaps ->
 
-  let res = Array.create Constants.daysTotal ([]: user_caps_list) in
+  let res = Array.create Const.daysTotal ([]: user_caps_list) in
 
   H.iter begin fun user days ->
     let ordered = L.rev days in

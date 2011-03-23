@@ -56,7 +56,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
     $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
     $(TEXT) $(DFCB)
 
-all: $(ALL:%=%.opt)
+all: $(ALL:%=%.opt) lib
 
 common.cmx: binary_graph.cmx h.cmx utils.cmx t.cmx
 load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
@@ -98,14 +98,14 @@ topsets.cmx: cranks.cmx
 
 #lib.cma lib.cmxa: lib
 #lib: kendall_tau.o kendall/tau.o \
-#     h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo \
-#     h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx \
+#     h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo const.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo \
+#     h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx const.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx \
 #	ocamlmklib -o lib $^
 
 lib: lib.cma
-lib.cma:  h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo constants.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo
+lib.cma:  h.cmo graph.cmo utils.cmo binary_graph.cmo t.cmo common.cmo const.cmo by_day.cmo dranges.cmo dreps.cmo proportional.cmo dcaps.cmo kendall.cmo skew.cmo mathy.cmo soc_run_common.cmo
 	ocamlfind ocamlc -a -o $@ $^
-lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx constants.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx
+lib.cmxa: h.cmx graph.cmx utils.cmx binary_graph.cmx t.cmx common.cmx const.cmx by_day.cmx dranges.cmx dreps.cmx proportional.cmx dcaps.cmx kendall.cmx skew.cmx mathy.cmx soc_run_common.cmx
 	ocamlfind ocamlopt -a -o $@ $^
 
 #anygraph.cma anygraph.cmxa: anygraph
@@ -280,3 +280,6 @@ $(TEXT).opt: lib.cmxa teX.cmx $(TEXT).ml
 
 $(DFCB).opt: lib.cmxa teX.cmx $(DFCB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(DFCB).byte: lib.cma teX.cmo $(DFCB).ml
+	ocamlfind ocamlc $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -o $@
