@@ -57,5 +57,8 @@ sbucks1: $(SBUCKS_1)
 sbucks2: $(SBUCKS_2)
 vols1:   $(VOLS_1)
 
+clean-odreps:
+	rm -f $(ODREPS)
+	
 cpt:
 	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis.pdf

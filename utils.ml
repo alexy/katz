@@ -394,6 +394,15 @@ let newline oc = String.print oc "\n"
 
 let nonneg x = if x < 0 then 0 else x
 
+let make_step_counter init =
+	let counter = ref (pred init) in
+	((fun () -> incr counter),
+	 (fun () -> !counter))
+	
+let make_counter init =
+	let counter = ref (pred init) in
+	(fun () -> incr counter; !counter)
+
 let arrayRange ?(take=None) ?(drop=None) a =
 	let lena   = A.length a in
 	let realLast = pred lena in
@@ -401,3 +410,31 @@ let arrayRange ?(take=None) ?(drop=None) a =
 	let last  = Option.default lena take |> pred |> min realLast in
 	let len = last - first + 1 |> min (lena - first) |> nonneg in
 	A.sub a first len
+	
+	
+
+let read_lines_bzaarr ?skip ?maxn filename =
+	let ic = open_in filename in
+	let step,ctr = make_step_counter 0 in
+	E.from_while begin fun () ->
+		try 
+			match skip,maxn with
+			| (Some s, _)    when ctr () < s -> 
+				ignore (input_line ic); step (); Some None 
+			| (skip, Some n) when n > 0 && ctr () - (Option.default 0 skip) = n -> 
+				close_in ic; None
+			| _ -> 
+				let line = input_line ic in step (); Some (Some line)
+		with End_of_file -> close_in ic; None
+	end |> 
+	E.filter_map identity |> L.of_enum
+
+
+let read_lines ?(skip=0) ?(maxn=max_int) filename = 
+	File.lines_of filename |> Enum.skip skip |> Enum.take maxn
+	
+let string_chars s = String.enum s |> L.of_enum
+
+let ord d = int_of_char d - int_of_char '0'
+
+let array_fsum a = A.fold_left (+.) 0. a

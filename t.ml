@@ -41,7 +41,13 @@ type day_user_reals = user_reals array
 (* topsets *)
 
 module S=Set.StringSet
+
 let floatSize = S.cardinal |- float
+
+module IS=Set.IntSet
+
+let floatSizeIS = IS.cardinal |- float
+
 (* FYI, (float list) list <=> float list list *)
 type rates          = (float list) list
 type user_set       = S.t

@@ -23,3 +23,12 @@ let list_average l =
 let list_median l =
   let a = A.of_list l in
   array_median a
+
+
+let sqr x = x *. x
+
+let euclidian_distance_list x y =
+	L.map2 (-.) x y |> L.map sqr |> L.fsum |> sqrt
+	
+let euclidian_distance_array x y =
+	A.map2 (-.) x y |> A.map sqr |> array_fsum |> sqrt

@@ -3,7 +3,7 @@ DEBUG=-g
 #SHARED=-shared
 #PROFILE=-p
 OPTFLAGS=-inline 100 $(PROFILE)
-PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix,bigarray
+PACKAGES=batteries,tokyo_cabinet,otoky,json-wheel,getopt,unix,bigarray,mikmatch_pcre
 
 SAVE_GRAPH=save_graph
 INVERT_GRAPH=invert_graph
@@ -45,6 +45,7 @@ MOVE=domoves
 SKA=doska
 SKABS=doskabs
 TEXT=textau
+DFCB=dataframe
 
 KENDALL_C_OBJ=kendall/tau.o kendall_tau.o 
 
@@ -53,7 +54,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
     $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) \
     $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) \
     $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
-    $(TEXT)
+    $(TEXT) $(DFCB)
 
 all: $(ALL:%=%.opt)
 
@@ -276,3 +277,6 @@ clean-c:
 	
 $(TEXT).opt: lib.cmxa teX.cmx $(TEXT).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(DFCB).opt: lib.cmxa teX.cmx $(DFCB).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
