@@ -140,7 +140,7 @@ all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
 XZED   = $(XZABLE:%=%.xz)
-RBUCKS_XZ=$(RBUCKS:=%.xz)
+RBUCKS_XZ=$(RBUCKS:%=%.xz)
 
 rbucks_xz: $(RBUCKS_XZ)
 
