@@ -68,8 +68,8 @@ SAVE_CAPS=$(CMD_DIR)/save_caps.opt
 DOCBUCKS=$(CMD_DIR)/docbucks.opt
 DOLBLENS=$(CMD_DIR)/dolblens.opt
 DORBLENS=$(CMD_DIR)/dorblens.opt
-DOSKA=$(CMD_DIR)/doska.opt
-DOSKABS=$(CMD_DIR)/doska.opt --buckets
+DOSKA=$(CMD_DIR)/uberdoska.opt
+DOSKABS=$(DOSKA) --buckets
 
 CAPS_PREFIX=caps
 ARANKS_PREFIX=aranks-$(CAPS_PREFIX)
@@ -140,10 +140,12 @@ all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
 XZED   = $(XZABLE:%=%.xz)
+
 RBUCKS_XZ=$(RBUCKS:%=%.xz)
+CAPS_XZ=$(CAPS:%=%.xz)
 
 rbucks_xz: $(RBUCKS_XZ)
-
+caps_xz:   $(CAPS_XZ)
 
 show:
 	@echo caps: $(CAPS)

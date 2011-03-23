@@ -44,6 +44,7 @@ SF=sf
 MOVE=domoves
 SKA=doska
 SKABS=doskabs
+USKA=uberdoska
 TEXT=textau
 DFCB=dataframe
 
@@ -54,7 +55,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
     $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) \
     $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) \
     $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
-    $(TEXT) $(DFCB)
+    $(USKA) $(TEXT) $(DFCB)
 
 all: $(ALL:%=%.opt) lib
 
@@ -260,6 +261,9 @@ $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
 	ocamlfind ocamlopt -verbose $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
 	
 $(SKABS).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKABS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
+
+$(USKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(USKA).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
 
 kendall_c.cmxa kendall_c.cma: kendall_c.cmx kendall_c.cmo $(KENDALL_C_OBJ)
