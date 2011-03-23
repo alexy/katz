@@ -1,0 +1,104 @@
+TXT_DIR=txt
+
+AVG_LIST_ABS_BEFR_TXT=$(LIST_ABS_BEFR:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_ABS_AFTR_TXT=$(LIST_ABS_AFTR:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_ABS_SELF_TXT=$(LIST_ABS_SELF:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_ABS_SREL_TXT=$(LIST_ABS_SREL:%=$(TXT_DIR)/averages-%.txt)
+MED_LIST_ABS_BEFR_TXT=$(LIST_ABS_BEFR:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_ABS_AFTR_TXT=$(LIST_ABS_AFTR:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_ABS_SELF_TXT=$(LIST_ABS_SELF:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_ABS_SREL_TXT=$(LIST_ABS_SREL:%=$(TXT_DIR)/medians-%.txt)
+
+AVG_LIST_REL_BEFR_TXT=$(LIST_REL_BEFR:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_REL_AFTR_TXT=$(LIST_REL_AFTR:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_REL_SELF_TXT=$(LIST_REL_SELF:%=$(TXT_DIR)/averages-%.txt)
+AVG_LIST_REL_SABS_TXT=$(LIST_REL_SABS:%=$(TXT_DIR)/averages-%.txt)
+MED_LIST_REL_BEFR_TXT=$(LIST_REL_BEFR:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_REL_AFTR_TXT=$(LIST_REL_AFTR:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_REL_SELF_TXT=$(LIST_REL_SELF:%=$(TXT_DIR)/medians-%.txt)
+MED_LIST_REL_SABS_TXT=$(LIST_REL_SABS:%=$(TXT_DIR)/medians-%.txt)
+
+
+AVG_ABS_BEFR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(BEFR)-$(ABS)-averages.txt)
+AVG_ABS_AFTR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(AFTR)-$(ABS)-averages.txt)
+AVG_ABS_SELF_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SELF)-$(ABS)-averages.txt)
+AVG_ABS_SREL_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SREL)-$(ABS)-averages.txt)
+MED_ABS_BEFR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(BEFR)-$(ABS)-medians.txt)
+MED_ABS_AFTR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(AFTR)-$(ABS)-medians.txt)
+MED_ABS_SELF_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SELF)-$(ABS)-medians.txt)
+MED_ABS_SREL_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SREL)-$(ABS)-medians.txt)
+
+AVG_REL_BEFR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(BEFR)-$(REL)-averages.txt)
+AVG_REL_AFTR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(AFTR)-$(REL)-averages.txt)
+AVG_REL_SELF_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SELF)-$(REL)-averages.txt)
+AVG_REL_SABS_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SABS)-$(REL)-averages.txt)
+MED_REL_BEFR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(BEFR)-$(REL)-medians.txt)
+MED_REL_AFTR_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(AFTR)-$(REL)-medians.txt)
+MED_REL_SELF_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SELF)-$(REL)-medians.txt)
+MED_REL_SABS_TXT=$(SUMMARY_PREFIX:%=$(TXT_DIR)/%-$(SABS)-$(REL)-medians.txt)
+
+AVG_ABS_TXT=$(AVG_ABS_BEFR_TXT) $(AVG_ABS_AFTR_TXT) $(AVG_ABS_SELF_TXT) $(AVG_ABS_SREL_TXT)
+MED_ABS_TXT=$(MED_ABS_BEFR_TXT) $(MED_ABS_AFTR_TXT) $(MED_ABS_SELF_TXT) $(MED_ABS_SREL_TXT)
+AVG_REL_TXT=$(AVG_REL_BEFR_TXT) $(AVG_REL_AFTR_TXT) $(AVG_REL_SELF_TXT) $(AVG_REL_SABS_TXT)
+MED_REL_TXT=$(MED_REL_BEFR_TXT) $(MED_REL_AFTR_TXT) $(MED_REL_SELF_TXT) $(MED_REL_SABS_TXT)
+        
+TXT=$(AVG_ABS_TXT) $(MED_ABS_TXT) $(AVG_REL_TXT) $(MED_REL_TXT)
+
+CUTPOS ?= 1
+CUT=cut -c $(CUTPOS)-
+
+.PHONY: sum-txt show-sum-txt clean-sum-txt
+  
+sum-txt: $(TXT)
+  
+$(AVG_ABS_BEFR_TXT): $(AVG_LIST_ABS_BEFR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_AFTR_TXT): $(AVG_LIST_ABS_AFTR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_SELF_TXT): $(AVG_LIST_ABS_SELF_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_SREL_TXT): $(AVG_LIST_ABS_SREL_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_BEFR_TXT): $(MED_LIST_ABS_BEFR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_AFTR_TXT): $(MED_LIST_ABS_AFTR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_SELF_TXT): $(MED_LIST_ABS_SELF_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_SREL_TXT): $(MED_LIST_ABS_SREL_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_BEFR_TXT): $(AVG_LIST_REL_BEFR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_AFTR_TXT): $(AVG_LIST_REL_AFTR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_SELF_TXT): $(AVG_LIST_REL_SELF_TXT)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_SABS_TXT): $(AVG_LIST_REL_SABS_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_BEFR_TXT): $(MED_LIST_REL_BEFR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_AFTR_TXT): $(MED_LIST_REL_AFTR_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_SELF_TXT): $(MED_LIST_REL_SELF_TXT)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_SABS_TXT): $(MED_LIST_REL_SABS_TXT)
+	cat $^ | $(CUT) > $@
+
+
+clean-sum-txt:
+	rm -f $(TXT)

@@ -1,0 +1,113 @@
+TEX_DIR=tex
+#include $(MK_DIR)/dir.b2b.mk
+
+AVG_LIST_ABS_BEFR_TEX=$(LIST_ABS_BEFR:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_ABS_AFTR_TEX=$(LIST_ABS_AFTR:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_ABS_SELF_TEX=$(LIST_ABS_SELF:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_ABS_SREL_TEX=$(LIST_ABS_SREL:%=$(TEX_DIR)/averages-%.tex)
+MED_LIST_ABS_BEFR_TEX=$(LIST_ABS_BEFR:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_ABS_AFTR_TEX=$(LIST_ABS_AFTR:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_ABS_SELF_TEX=$(LIST_ABS_SELF:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_ABS_SREL_TEX=$(LIST_ABS_SREL:%=$(TEX_DIR)/medians-%.tex)
+
+AVG_LIST_REL_BEFR_TEX=$(LIST_REL_BEFR:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_REL_AFTR_TEX=$(LIST_REL_AFTR:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_REL_SELF_TEX=$(LIST_REL_SELF:%=$(TEX_DIR)/averages-%.tex)
+AVG_LIST_REL_SABS_TEX=$(LIST_REL_SABS:%=$(TEX_DIR)/averages-%.tex)
+MED_LIST_REL_BEFR_TEX=$(LIST_REL_BEFR:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_REL_AFTR_TEX=$(LIST_REL_AFTR:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_REL_SELF_TEX=$(LIST_REL_SELF:%=$(TEX_DIR)/medians-%.tex)
+MED_LIST_REL_SABS_TEX=$(LIST_REL_SABS:%=$(TEX_DIR)/medians-%.tex)
+
+show:
+	@echo MED_LIST_REL_SABS_TEX: $(MED_LIST_REL_SABS_TEX)
+
+
+AVG_ABS_BEFR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(BEFR)-$(ABS)-averages.tex)
+AVG_ABS_AFTR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(AFTR)-$(ABS)-averages.tex)
+AVG_ABS_SELF_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SELF)-$(ABS)-averages.tex)
+AVG_ABS_SREL_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SREL)-$(ABS)-averages.tex)
+MED_ABS_BEFR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(BEFR)-$(ABS)-medians.tex)
+MED_ABS_AFTR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(AFTR)-$(ABS)-medians.tex)
+MED_ABS_SELF_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SELF)-$(ABS)-medians.tex)
+MED_ABS_SREL_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SREL)-$(ABS)-medians.tex)
+
+AVG_REL_BEFR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(BEFR)-$(REL)-averages.tex)
+AVG_REL_AFTR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(AFTR)-$(REL)-averages.tex)
+AVG_REL_SELF_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SELF)-$(REL)-averages.tex)
+AVG_REL_SABS_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SABS)-$(REL)-averages.tex)
+MED_REL_BEFR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(BEFR)-$(REL)-medians.tex)
+MED_REL_AFTR_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(AFTR)-$(REL)-medians.tex)
+MED_REL_SELF_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SELF)-$(REL)-medians.tex)
+MED_REL_SABS_TEX=$(SUMMARY_PREFIX:%=$(TEX_DIR)/%-$(SABS)-$(REL)-medians.tex)
+
+AVG_ABS_TEX=$(AVG_ABS_BEFR_TEX) $(AVG_ABS_AFTR_TEX) $(AVG_ABS_SELF_TEX) $(AVG_ABS_SREL_TEX)
+MED_ABS_TEX=$(MED_ABS_BEFR_TEX) $(MED_ABS_AFTR_TEX) $(MED_ABS_SELF_TEX) $(MED_ABS_SREL_TEX)
+AVG_REL_TEX=$(AVG_REL_BEFR_TEX) $(AVG_REL_AFTR_TEX) $(AVG_REL_SELF_TEX) $(AVG_REL_SABS_TEX)
+MED_REL_TEX=$(MED_REL_BEFR_TEX) $(MED_REL_AFTR_TEX) $(MED_REL_SELF_TEX) $(MED_REL_SABS_TEX)
+        
+RAW_TEX=$(AVG_ABS_TEX) $(MED_ABS_TEX) $(AVG_REL_TEX) $(MED_REL_TEX)
+
+NUMBERED=$(RAW_TEX:$(TEX_DIR)/%=$(TEX_DIR)/n-%)
+  
+CUTPOS ?= 1
+CUT=cut -c $(CUTPOS)-
+
+.PHONY: sum-tex show-sum-tex clean-sum-tex
+  
+sum-tex: $(NUMBERED)
+  
+$(AVG_ABS_BEFR_TEX): $(AVG_LIST_ABS_BEFR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_AFTR_TEX): $(AVG_LIST_ABS_AFTR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_SELF_TEX): $(AVG_LIST_ABS_SELF_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_ABS_SREL_TEX): $(AVG_LIST_ABS_SREL_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_BEFR_TEX): $(MED_LIST_ABS_BEFR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_AFTR_TEX): $(MED_LIST_ABS_AFTR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_SELF_TEX): $(MED_LIST_ABS_SELF_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_ABS_SREL_TEX): $(MED_LIST_ABS_SREL_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_BEFR_TEX): $(AVG_LIST_REL_BEFR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_AFTR_TEX): $(AVG_LIST_REL_AFTR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_SELF_TEX): $(AVG_LIST_REL_SELF_TEX)
+	cat $^ | $(CUT) > $@
+
+$(AVG_REL_SABS_TEX): $(AVG_LIST_REL_SABS_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_BEFR_TEX): $(MED_LIST_REL_BEFR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_AFTR_TEX): $(MED_LIST_REL_AFTR_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_SELF_TEX): $(MED_LIST_REL_SELF_TEX)
+	cat $^ | $(CUT) > $@
+
+$(MED_REL_SABS_TEX): $(MED_LIST_REL_SABS_TEX)
+	cat $^ | $(CUT) > $@
+
+
+$(NUMBERED): $(TEX_DIR)/n-%: $(TEX_DIR)/%
+	$(ROWNUMBER) $(HLINE) < $^ > $@
+
+clean-sum-tex:
+	rm -f $(RAW_TEX) $(NUMBERED)

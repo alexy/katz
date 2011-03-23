@@ -16,3 +16,6 @@ $(if $(FROM_QUAD_SUFFIX),\
 MLB_LIST  =$(filter %.mlb, $(LIST))
 LINE_LIST =$(if $(DROP),$(subst $(DROP),,$(MLB_LIST)),$(MLB_LIST))
 DIR_LIST  =$(filter-out %.mlb,$(LIST))
+
+list:
+	@echo LIST: $(LIST)

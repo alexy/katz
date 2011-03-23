@@ -1,0 +1,26 @@
+ABS=abs
+REL=rel
+
+BEFR=befr
+AFTR=aftr
+SELF=self
+SREL=srel
+SABS=sabs
+
+KIND_LIST=$(BASE_LIST:%=$(WHATS_UP)-%)
+
+kind_list:
+	@echo KIND_LIST: $(KIND_LIST)
+
+LIST_ABS=$(KIND_LIST:%=$(ABS)-%)
+LIST_REL=$(KIND_LIST:%=$(REL)-%)
+
+LIST_ABS_BEFR=$(LIST_ABS:%=$(BEFR)-%)
+LIST_ABS_AFTR=$(LIST_ABS:%=$(AFTR)-%)
+LIST_ABS_SELF=$(LIST_ABS:%=$(SELF)-%)
+LIST_ABS_SREL=$(LIST_ABS:%=$(SREL)-%)
+
+LIST_REL_BEFR=$(LIST_REL:%=$(BEFR)-%)
+LIST_REL_AFTR=$(LIST_REL:%=$(AFTR)-%)
+LIST_REL_SELF=$(LIST_REL:%=$(SELF)-%)
+LIST_REL_SABS=$(LIST_REL:%=$(SABS)-%)
