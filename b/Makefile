@@ -38,32 +38,33 @@ VOLS=$(VOLS_1) $(VOLS_2)
 
 
 B2B_KIND_1=b2br
-B2B_NAME_1=$(B2B_KIND_1)-befr-rel-averages
+B2B_MEASURES=medians
+B2B_NAME_1=$(B2B_KIND_1)-befr-rel-$(B2B_MEASURES)
 B2B_LIST_1=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_1)/txt/$(reps)-$(B2B_NAME_1).txt)
 B2B_1=$(RDIR)/$(B2B_NAME_1).txt
 
 B2B_KIND_2=b2br
-B2B_NAME_2=$(B2B_KIND_2)-aftr-rel-averages
+B2B_NAME_2=$(B2B_KIND_2)-aftr-rel-$(B2B_MEASURES)
 B2B_LIST_2=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_2)/txt/$(reps)-$(B2B_NAME_2).txt)
 B2B_2=$(RDIR)/$(B2B_NAME_2).txt
 
 B2B_KIND_3=b2br
-B2B_NAME_3=$(B2B_KIND_3)-self-rel-averages
+B2B_NAME_3=$(B2B_KIND_3)-self-rel-$(B2B_MEASURES)
 B2B_LIST_3=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_3)/txt/$(reps)-$(B2B_NAME_3).txt)
 B2B_3=$(RDIR)/$(B2B_NAME_3).txt
 
 B2B_KIND_4=b2bm
-B2B_NAME_4=$(B2B_KIND_4)-befr-rel-averages
+B2B_NAME_4=$(B2B_KIND_4)-befr-rel-$(B2B_MEASURES)
 B2B_LIST_4=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_4)/txt/$(reps)-$(B2B_NAME_4).txt)
 B2B_4=$(RDIR)/$(B2B_NAME_4).txt
 
 B2B_KIND_5=b2bm
-B2B_NAME_5=$(B2B_KIND_5)-aftr-rel-averages
+B2B_NAME_5=$(B2B_KIND_5)-aftr-rel-$(B2B_MEASURES)
 B2B_LIST_5=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_5)/txt/$(reps)-$(B2B_NAME_5).txt)
 B2B_5=$(RDIR)/$(B2B_NAME_5).txt
 
 B2B_KIND_6=b2bm
-B2B_NAME_6=$(B2B_KIND_6)-self-rel-averages
+B2B_NAME_6=$(B2B_KIND_6)-self-rel-$(B2B_MEASURES)
 B2B_LIST_6=$(foreach reps,$(REPS),$(reps)/$(B2B_KIND_6)/txt/$(reps)-$(B2B_NAME_6).txt)
 B2B_6=$(RDIR)/$(B2B_NAME_6).txt
 

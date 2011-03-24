@@ -1,0 +1,5 @@
+MK_DIR=../../../make
+
+include $(MK_DIR)/v2x4.mk
+
+include $(MK_DIR)/vols4.$(v2x4)mk

@@ -1,1 +1,1 @@
-../../../make/vols4.mk
+../../../make/make.vols4
