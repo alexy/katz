@@ -145,3 +145,5 @@ heatmaps(s10[nobs,],       "sbucks-ments-star-med-medians-nobs")
 good.ments <- function(d,a,b) { d27 <- no.nan.df(d[,a:b]); no.inf.df(log10(d27))}
 heatmaps(good.ments(b1,2,7),"b2bm-aftr-rel-averages-log10")
 heatmaps(good.ments(b2,1,6),"b2bm-aftr-rel-averages-log10")
+heatmaps(good.ments(b3,1,7),"b2bm-self-rel-averages-log10")
+

@@ -44,62 +44,62 @@ MED_TXT=$(MED_REI_TXT) $(MED_RUI_TXT) $(MED_MEI_TXT) $(MED_MUI_TXT) \
         
 TXT=$(AVG_TXT) $(MED_TXT)
 
-# overx-
-CUTPOS   ?= 1
-CUT=cut -c $(CUTPOS)-
+CUTPOS_I = 14
+CUTPOS_N = 15
+CUT_I=cut -c $(CUTPOS_I)-
+CUT_N=cut -c $(CUTPOS_N)-
 
-.PHONY: sum-txt clean-sum-txt
+.PHONY: sum-txt show-sum-txt clean-sum-txt
   
 sum-txt: $(TXT)
   
 $(AVG_REI_TXT): $(AVG_LIST_REI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(AVG_RUI_TXT): $(AVG_LIST_RUI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(AVG_MEI_TXT): $(AVG_LIST_MEI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(AVG_MUI_TXT): $(AVG_LIST_MUI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(AVG_REN_TXT): $(AVG_LIST_REN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(AVG_RUN_TXT): $(AVG_LIST_RUN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(AVG_MEN_TXT): $(AVG_LIST_MEN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(AVG_MUN_TXT): $(AVG_LIST_MUN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(MED_REI_TXT): $(MED_LIST_REI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(MED_RUI_TXT): $(MED_LIST_RUI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(MED_MEI_TXT): $(MED_LIST_MEI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(MED_MUI_TXT): $(MED_LIST_MUI_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_I) > $@
 
 $(MED_REN_TXT): $(MED_LIST_REN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(MED_RUN_TXT): $(MED_LIST_RUN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(MED_MEN_TXT): $(MED_LIST_MEN_TXT)
-	cat $^ | $(CUT) > $@
+	cat $^ | $(CUT_N) > $@
 
 $(MED_MUN_TXT): $(MED_LIST_MUN_TXT)
-	cat $^ | $(CUT) > $@
-
+	cat $^ | $(CUT_N) > $@
 
 clean-sum-txt:
 	rm -f $(TXT)
