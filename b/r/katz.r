@@ -141,4 +141,7 @@ nobs        <- !(s10.sims %in% breps)
 heatmaps(s10[ereps.breps,],"sbucks-ments-star-med-medians-bs")
 heatmaps(s10[nobs,],       "sbucks-ments-star-med-medians-nobs")
 
-
+# b2bm
+good.ments <- function(d,a,b) { d27 <- no.nan.df(d[,a:b]); no.inf.df(log10(d27))}
+heatmaps(good.ments(b1,2,7),"b2bm-aftr-rel-averages-log10")
+heatmaps(good.ments(b2,1,6),"b2bm-aftr-rel-averages-log10")

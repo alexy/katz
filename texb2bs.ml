@@ -13,6 +13,7 @@ let matrixDoc' = ref false
 let summary'   = ref true
 let showTables'= ref true
 let absNorm'   = ref false
+let rogue'     = ref true
 let outDir'    = ref ""
 let inputPath' = ref None   (* input path to encode in the matrix' input statements *)
 let masterLine'= ref true
@@ -34,7 +35,9 @@ let specs =
   ('d',"mdoc",      (set matrixDoc' true), None);
   ('s',"summary",   (set summary'     (not !summary')),     None);
   ('S',"showTables",(set showTables'  (not !showTables')),  None);
-  ('a',"absNorm",   (set absNorm'   true), None); 
+  ('a',"absNorm",   (set absNorm'   true), None);
+  (noshort,"rogue",   (set rogue' true),  None);
+  (noshort,"norogue", (set rogue' false), None);
   ('o',"outdir",    None, Some (fun x -> outDir'    := x));
   ('i',"inputpath", None, Some (fun x -> inputPath' := Some x));
   ('L',"masterline",(set masterLine' (not !masterLine')),None);
@@ -54,8 +57,8 @@ let _ =
   let outDir,   inputPath,   masterLine,  drop,   verbose =
       !outDir', !inputPath', !masterLine', !drop', !verbose' in
 
-  let takeDays,   dropDays,   scientific,   precise =
-      !takeDays', !dropDays', !scientific', !precise' in
+  let takeDays,   dropDays,   scientific,   precise,   rogue =
+      !takeDays', !dropDays', !scientific', !precise', !rogue' in
 
   let summary,   showTables =
       !summary', !showTables' in
@@ -73,7 +76,12 @@ let _ =
 
   let saveInfix, saveSuffix = saveBase ~mark ~drop suffix b2bName in  
   
-  let roguePrefix = if absNorm then "srel" else "sabs" in
+  let roguePrefix = 
+  	if rogue 
+  		then 
+				if absNorm then "srel" 
+									 else "sabs" 
+			else "srev" in
   let prefixes    = ["befr";"self";"aftr";roguePrefix] in
   
   let tableNames = listNames saveSuffix prefixes in
