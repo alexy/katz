@@ -1,14 +1,11 @@
 LS_DIR=../../list
 
 WHATS_UP=b2b$(REPS_KIND)
+
+include $(MK_DIR)/head.2x4.mk
+
 ROGUE=--norogue
 include $(MK_DIR)/base.b2b.mk
-
-# safe separate dirs for 2x4 testing
-V2      = -2x4
-TEX_DIR = tex$(V2)
-TXT_DIR = txt$(V2)
-
 include $(MK_DIR)/list1.mk
 include $(MK_DIR)/rates1.mk
 
@@ -20,10 +17,7 @@ K2=aftr
 K3=self
 K4=srev
 
-include $(MK_DIR)/list.2x4.mk
-include $(MK_DIR)/tex.2x4.mk
-include $(MK_DIR)/dir.2x4.mk
-include $(MK_DIR)/txt.2x4.mk
+include $(MK_DIR)/tail.2x4.mk
 
 clean:
 	rm -fr $(TEX_DIR) $(TXT_DIR)

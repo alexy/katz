@@ -2,10 +2,7 @@ LS_DIR=../../list
 
 WHATS_UP=sbucks
 
-# safe separate dirs for 2x4 testing
-V2      = -2x4
-TEX_DIR = tex$(V2)
-TXT_DIR = txt$(V2)
+include $(MK_DIR)/head.2x4.mk
 
 include $(MK_DIR)/base.sbucks.mk
 include $(MK_DIR)/list1.mk
@@ -22,10 +19,7 @@ K3=auds
 KIND_BASE = $(DREPS)
 DIR_BASE  = $(DREPS)
 
-include $(MK_DIR)/list.2x4.mk
-include $(MK_DIR)/tex.2x4.mk
-include $(MK_DIR)/dir.2x4.mk
-include $(MK_DIR)/txt.2x4.mk
+include $(MK_DIR)/tail.2x4.mk
 
 clean:
 	rm -fr tex txt
