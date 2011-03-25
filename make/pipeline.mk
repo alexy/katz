@@ -118,7 +118,7 @@ OVERX_DREPS=$(BASES:%=$(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb)
 # NB BASES can be defined in terms of OROOTS, with the caveat of 0 not available in buckets-specific simulations
 # We could define the Os with foreach, with two substitutions instead of one, but cannot have a pattern rule with two stems,
 # even when they are identical!  Renaming to one stem, also more compact
-O01=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)0.mlb), $(OVERX_SELF_DIR)/overx-$(root)-01wk.mlb))
+O01=$(foreach $(root), $(OROOTS), $(if $(wildcard "$(DREPS_DIR)/dreps-$(root)0.mlb)", $(OVERX_SELF_DIR)/overx-$(root)-01wk.mlb))
 O12=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-12wk.mlb)
 O23=$(OROOTS:%=$(OVERX_SELF_DIR)/overx-%-23wk.mlb)
 O34=$(foreach $(root), $(OROOTS), $(if $(wildcard $(DREPS_DIR)/dreps-$(root)4wk.mlb), $(OVERX_SELF_DIR)/overx-$(root)-34wk.mlb))

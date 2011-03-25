@@ -8,5 +8,5 @@ include $(MK_DIR)/base.mk
 
 TEXIT=$(TEX4RATES)
 CUTPOS=13
-HLINE=$(HLINE4)
+HLINE=$(HLINE_DREPS)
 

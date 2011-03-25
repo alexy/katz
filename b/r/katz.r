@@ -147,3 +147,13 @@ heatmaps(good.ments(b1,2,7),"b2bm-aftr-rel-averages-log10")
 heatmaps(good.ments(b2,1,6),"b2bm-aftr-rel-averages-log10")
 heatmaps(good.ments(b3,1,7),"b2bm-self-rel-averages-log10")
 
+
+mu0 <- scan(...)
+cc0 <- scan(...)
+yrange<-range(c(mu0,cc0))
+
+pdf("kendall-tau-fg5mf1u0-fg5cf1c0.pdf")
+plot(mu0,ylim=yrange,xlab="days",ylab="Kendall Tau",main="Kendall Tau of Capital vs Skew",col=1)
+points(cc0,col=2)
+legend(x="bottomleft",c("fg5mf1u0","fg5cf1c0"),col=c(1,2),pch=c(1,1))
+dev.off()

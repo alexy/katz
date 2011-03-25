@@ -9,3 +9,4 @@ include $(MK_DIR)/base.mk
 
 TEXIT=$(TEX4RATES)
 CUTPOS=7
+HLINE := $(if, $(HLINE_SELF), $(HLINE_SELF), $(HLINE))

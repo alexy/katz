@@ -1,16 +1,15 @@
-ROOTS=ereps lreps freps
-SRATES=${ROOTS:%=%/srates}
-OVERX_DREPS=${ROOTS:%=%/overx-dreps}
-OVERX_SELF=${ROOTS:%=%/overx-self}
-OVERX=$(OVERX_DREPS) $(OVERX_SELF)
-
-RDIR=r
 REPS=ereps lreps freps
+RDIR=r
+
+SRATES_NAME=srates
+SRATES_NAME_1=$(SRATES_NAME)-medians
+SRATES_LIST=$(foreach reps,$(REPS),$(reps)/$(SRATES_NAME)/txt/$(reps)-$(SRATES_NAME_1).txt)
+SRATES=$(RDIR)/$(SRATES_NAME_1).txt
 
 
 ODREPS_NAME=overx-dreps
 ODREPS_NAME_1=$(ODREPS_NAME)-medians
-ODREPS_LIST=$(foreach reps,$(REPS),$(reps)/overx-dreps/txt/$(reps)-$(ODREPS_NAME_1).txt)
+ODREPS_LIST=$(foreach reps,$(REPS),$(reps)/$(ODREPS_NAME)/txt/$(reps)-$(ODREPS_NAME_1).txt)
 ODREPS=$(RDIR)/$(ODREPS_NAME_1).txt
 
 SBUCKS_KIND_1=sbucks-ments
@@ -83,6 +82,9 @@ $(REPS):
 show:
 	@echo $(ALL)
 	
+$(SRATES): $(SRATES_LIST)
+	cat $^ > $@
+	
 $(ODREPS): $(ODREPS_LIST)
 	cat $^ > $@
 	
@@ -119,13 +121,17 @@ $(B2B_6): $(B2B_LIST_6)
 	cat $^ > $@
 
 	
-odreps: $(ODREPS)	
+odreps: $(ODREPS)
+srates: $(SRATES)
 sbucks: $(SBUCKS)
 vols:   $(VOLS)
 b2b:    $(B2B)
 
 clean-odreps:
 	rm -f $(ODREPS)
+	
+clean-srates:
+	rm -f $(SRATES)
 	
 cpt:
 	cp -p t.pdf ~/Dropbox/Public/Thesis/khrabrov-mindeconomy-thesis.pdf

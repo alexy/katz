@@ -18,7 +18,8 @@ NUMBERED=$(N_AVG_TEX) $(N_MED_TEX)
 CUTPOS ?= 1
 CUT=cut -c $(CUTPOS)-
 
-HLINE  ?= -h4
+HLINE ?= -h4
+HLINE := $(if $(HLINE),$(HLINE),-h4)
 
 .PHONY: sum-tex show-sum-tex clean-sum-tex
   

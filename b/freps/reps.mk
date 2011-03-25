@@ -1,3 +1,3 @@
 REPS=freps
 HLINE=-h4
-HLINE4=-H"5;19;3;22"
+HLINE_DREPS=-H"5;19;3;22"
