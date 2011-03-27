@@ -135,8 +135,8 @@ all: $(ALL)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
-%.xz: %
-	xz $^
+#%.xz: %
+#	xz $^
 
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
 XZED   = $(XZABLE:%=%.xz)
