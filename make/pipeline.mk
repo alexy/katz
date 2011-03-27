@@ -135,8 +135,8 @@ all: $(ALL)
 
 all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
-#%.xz: %
-#	xz $^
+%.xz: %
+	xz $^
 
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
 XZED   = $(XZABLE:%=%.xz)
@@ -342,11 +342,11 @@ $(CSTAU_DIR)/$(CSTAU_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_D
 cstau: $(CSTAU)
 
 
-$(CSTAUBS): $(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
+$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
-#$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-#	$(DOSKABS) $^ $(CSTAUBS_DIR)
+$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
+	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
 #$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
 #	$(DOSKABS) $^ $(CSTAUBS_DIR)
