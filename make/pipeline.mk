@@ -352,6 +352,8 @@ $(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SK
 #	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
 cstaubs: $(CSTAUBS)
+show:
+	@echo CSTAUBS: $(CSTAUBS)
 
 order: $(DIRS)
 	mv dreps-*  $(DREPS_DIR)
