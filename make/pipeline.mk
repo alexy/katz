@@ -168,7 +168,7 @@ $(DIRS):
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
 
-.SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS)  $(RBUCKS_XZ) $(STARS_REPS) $(DENUMS) $(STARS_MENTS)
+.SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS) $(RBUCKS_XZ) $(STARS_REPS) $(DENUMS) $(STARS_MENTS)
 
 $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(DOARANKS) $^ $(ARANKS_DIR)
@@ -176,7 +176,7 @@ $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
-$(RBUCKS): $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
+$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
 	$(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
 	
 $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
