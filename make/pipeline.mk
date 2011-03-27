@@ -353,6 +353,7 @@ $(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SK
 
 cstaubs: $(CSTAUBS)
 show:
+	@echo CSTAUBS_DIR/CSTAUBS_PREFIX: $(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)
 	@echo CSTAUBS: $(CSTAUBS)
 
 order: $(DIRS)
