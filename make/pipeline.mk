@@ -168,7 +168,7 @@ $(DIRS):
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
 
-.SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS) $(STARS_REPS) $(DENUMS) $(STARS_MENTS)
+.SECONDARY: $(CAPS) $(ARANKS) $(RBUCKS)  $(RBUCKS_XZ) $(STARS_REPS) $(DENUMS) $(STARS_MENTS)
 
 $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 	$(DOARANKS) $^ $(ARANKS_DIR)
@@ -345,11 +345,11 @@ cstau: $(CSTAU)
 $(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
-$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-	$(DOSKABS) $^ $(CSTAUBS_DIR)
+#$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+#	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
-$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
-	$(DOSKABS) $^ $(CSTAUBS_DIR)
+#$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz $(SKEW_DIR)/$(SKEW_PREFIX)-%.mlb $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
+#	$(DOSKABS) $^ $(CSTAUBS_DIR)
 
 cstaubs: $(CSTAUBS)
 

@@ -12,6 +12,13 @@ ODREPS_NAME_1=$(ODREPS_NAME)-medians
 ODREPS_LIST=$(foreach reps,$(REPS),$(reps)/$(ODREPS_NAME)/txt/$(reps)-$(ODREPS_NAME_1).txt)
 ODREPS=$(RDIR)/$(ODREPS_NAME_1).txt
 
+OSELF_NAME=overx-self
+OSELF_MEASURE=medians
+OSELF_NAME_1=$(OSELF_NAME)-$(OSELF_MEASURE)
+OSELF_BASE_1=overx-$(OSELF_MEASURE)
+OSELF_LIST=$(foreach reps,$(REPS),$(reps)/$(OSELF_NAME)/txt/$(reps)-$(OSELF_BASE_1).txt)
+OSELF=$(RDIR)/$(OSELF_NAME_1).txt
+
 SBUCKS_KIND_1=sbucks-ments
 SBUCKS_NAME_1=$(SBUCKS_KIND_1)-star-med-medians
 SBUCKS_LIST_1=$(foreach reps,$(REPS),$(reps)/$(SBUCKS_KIND_1)/txt/$(reps)-$(SBUCKS_NAME_1).txt)
@@ -69,6 +76,11 @@ B2B_6=$(RDIR)/$(B2B_NAME_6).txt
 
 B2B=$(B2B_1) $(B2B_2) $(B2B_3) $(B2B_4) $(B2B_5) $(B2B_6)
 
+CSTAU_NAME=cstau
+# this can be set to "txt" if used like that in the pipeline:
+CSTAU_TXT=
+CSTAU_LIST=$(foreach root,$(REPS),$(root)/$(CSTAU_NAME)/$(CSTAU_TXT)/$(root)-$(CSTAU_NAME).txt)
+CSTAU=$(RDIR)/$(CSTAU_NAME).txt
 
 ALL=$(SRATES) $(OVERX)
 
@@ -86,6 +98,9 @@ $(SRATES): $(SRATES_LIST)
 	cat $^ > $@
 	
 $(ODREPS): $(ODREPS_LIST)
+	cat $^ > $@
+	
+$(OSELF): $(OSELF_LIST)
 	cat $^ > $@
 	
 $(SBUCKS_1): $(SBUCKS_LIST_1)
@@ -119,13 +134,18 @@ $(B2B_5): $(B2B_LIST_5)
 
 $(B2B_6): $(B2B_LIST_6)
 	cat $^ > $@
+	
+$(CSTAU): $(CSTAU_LIST)
+	cat $^ > $@
 
 	
 odreps: $(ODREPS)
+oself:  $(OSELF)
 srates: $(SRATES)
 sbucks: $(SBUCKS)
 vols:   $(VOLS)
 b2b:    $(B2B)
+cstau:  $(CSTAU)
 
 clean-odreps:
 	rm -f $(ODREPS)

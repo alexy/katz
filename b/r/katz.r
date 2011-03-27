@@ -10,6 +10,44 @@ heatclust <- function(m) {
   heatmap.2(as.matrix(m), Rowv=as.dendrogram(hc),col=heatcol,trace="none",RowSideColors=ccols)
 }
 
+heatmaps <- function(m,infix) {
+	m.sims <- rownames(m)
+	m.sims.wk0 <- m.sims[grep("0$",m.sims)]
+	m.sims.wk1 <- m.sims[grep("1wk",m.sims)]
+	m.sims.wk2 <- m.sims[grep("2wk",m.sims)]
+	m.sims.wk3 <- m.sims[grep("3wk",m.sims)]
+	m.0wk <- m[c("dreps",m.sims.wk0),]
+	m.1wk <- m[c("dreps",m.sims.wk1),]
+	m.2wk <- m[c("dreps",m.sims.wk2),]
+	m.3wk <- m[c("dreps",m.sims.wk3),]	
+
+	ms <- list(m.0wk,m.1wk,m.2wk,m.3wk)
+	for (i in c(0,1,2,3)) { 
+		pdf(paste("heatmap-",infix,"-",i,"wk.pdf",sep="")); 
+		heatclust(ms[[i+1]]); 
+		dev.off() 
+	}
+}
+
+heatmaps.oself <- function(m,infix) {
+	m.sims <- rownames(m)
+	m.sims.wk1 <- m.sims[grep("1wk",m.sims)]
+	m.sims.wk2 <- m.sims[grep("2wk",m.sims)]
+	m.sims.wk3 <- m.sims[grep("3wk",m.sims)]
+	m.sims.wk4 <- m.sims[grep("4wk",m.sims)]
+	m.1wk <- m[c("dreps",m.sims.wk1),]
+	m.2wk <- m[c("dreps",m.sims.wk2),]
+	m.3wk <- m[c("dreps",m.sims.wk3),]	
+	m.4wk <- m[c("dreps",m.sims.wk4),]	
+
+	ms <- list(m.1wk,m.2wk,m.3wk,m.4wk)
+	for (i in c(0,1,2,3)) { 
+		pdf(paste("heatmap-",infix,"-",i,"wk.pdf",sep="")); 
+		heatclust(ms[[i+1]]); 
+		dev.off() 
+	}
+}
+
 bucket.names <- c("sim","10","100","1000","10K","100K","1M","10M")
 
 df <- read.table("sims-features.txt",header=T,row.names=1,na.strings="-")
@@ -106,24 +144,6 @@ nobs <- !(rownames(v0) %in% breps)
 v <- v0[nobs,]
 ...
 
-heatmaps <- function(m,infix) {
-	m.sims <- rownames(m)
-	m.sims.wk0 <- m.sims[grep("0$",m.sims)]
-	m.sims.wk1 <- m.sims[grep("1wk",m.sims)]
-	m.sims.wk2 <- m.sims[grep("2wk",m.sims)]
-	m.sims.wk3 <- m.sims[grep("3wk",m.sims)]
-	m.0wk <- m[c("dreps",m.sims.wk0),]
-	m.1wk <- m[c("dreps",m.sims.wk1),]
-	m.2wk <- m[c("dreps",m.sims.wk2),]
-	m.3wk <- m[c("dreps",m.sims.wk3),]	
-
-	ms <- list(m.0wk,m.1wk,m.2wk,m.3wk)
-	for (i in c(0,1,2,3)) { 
-		pdf(paste("heatmap-",infix,"-",i,"wk.pdf",sep="")); 
-		heatclust(ms[[i+1]]); 
-		dev.off() 
-	}
-}
 
 s <- read.table("sbucks-ments-star-med-medians.txt",row.names=1,col.names=bucket.names)
 #s10a <- abs(log10(s))

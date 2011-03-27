@@ -280,7 +280,7 @@ clean-c:
 	rm -f $(KENDALL_C_OBJ)
 	
 $(TEXT).opt: lib.cmxa teX.cmx $(TEXT).ml
-	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(DFCB).opt: lib.cmxa teX.cmx $(DFCB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
