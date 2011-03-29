@@ -177,3 +177,11 @@ plot(mu0,ylim=yrange,xlab="days",ylab="Kendall Tau",main="Kendall Tau of Capital
 points(cc0,col=2)
 legend(x="bottomleft",c("fg5mf1u0","fg5cf1c0"),col=c(1,2),pch=c(1,1))
 dev.off()
+
+# pie charts for weatlth
+# http://sociology.ucsc.edu/whorulesamerica/power/wealth.html
+# net worth
+pie(c(35,27,11,12,15),labels=c("(1) top 1%\n35% of net worth","(2) 4%\n27% of net worth","(3) 5%\n11% of net worth","(4) 10%\n12% of net worth","(5) bottom 80%\n15% of net worth"),main="US Wealth Hierarchy",col=c(5,3,3,3,2))
+
+# fin.wealth
+pie(c(43,29,11,10,7),labels=c("(1) top 1%\n43% of fin. wealth","(2) 4%\n29% of fin. wealth","(3) 5%\n11% of fin. wealth","(4) 10%\n10% of fin. wealth","(5) bottom 80%\n7% of fin. wealth"),main="US Financial Wealth Hierarchy",col=c(5,3,3,3,2))

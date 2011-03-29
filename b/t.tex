@@ -54,6 +54,7 @@
 % for tables in the appendix
 \usepackage[section]{placeins}
 \usepackage{geometry}
+\usepackage{listings}
 
 
 %\geometry{landscape}			% Activate for rotated page geometry
@@ -67,6 +68,8 @@
 \def\mykeywords{}
 \def\mybibliostyle{plain}
 \def\bibliocommand{}
+
+\usepackage{local}
 
 \VerbatimFootnotes
 \def\myauthor{Alexy Khrabrov}
@@ -142,16 +145,17 @@
 \chapterstyle{\mychapterstyle}
 \pagestyle{\mypagestyle}
 
+
 %
 %		Front Matter
 %
 
 \frontmatter
 
-
 % Title Page
 
-\maketitle
+\titlepage
+%\maketitle
 \clearpage
 
 % Copyright Page
@@ -187,10 +191,13 @@
 \label{abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Online social networks are novel mechanisms for distributed interaction that have been enabled by affordable and ubiquitous communications and computing. Facebook has over 500 million members (larger than the US population) and Twitter broadcasts over 100 million ``tweets'' per day (compared with about 600 million pieces of mail the USPS handles daily). Social networks are growing in reach and impact but little is known about their structure, dynamics or users' behaviors. New techniques and approaches are needed to study and understand why these networks attract users and how the networks evolve.
+\begin{Spacing}{2}
 
 
-This thesis investigates these challenges and its main contributions are:
+Online social networks are novel mechanisms for distributed interaction that have been enabled by affordable and ubiquitous communications and computing. Facebook has over 500 million members (larger than the US population) and Twitter broadcasts over 100 million ``tweets'' per day, projected to reach a daily 1 billion within a year (compared with about 600 million pieces of mail the USPS handles daily). Social networks are growing in reach and impact but little is known about their structure, dynamics or users' behaviors. New techniques and approaches are needed to study and understand why these networks attract users' persistent attention, and how the networks evolve.
+
+
+This thesis investigates the questions arising when modeling human behavior in social networks, and its main contributions are:
 
 
 \begin{itemize}
@@ -205,22 +212,68 @@ This thesis investigates these challenges and its main contributions are:
 \item a new definition of dynamic, reciprocal social capital and its iterative computation
 
 \item a methodology to study influence in social networks in detail, using 
-\begin{itemize}
-
 
 \item a class hierarchy established by social capital
 
 \item simulations mixed with reality across time and capital classes
 
 \item various attachment strategies, e.g.\ via friends-of-friends or full utility optimization
-\end{itemize}
-
-
 
 \item a framework for answering questions such as ``are these influentials accidental,'' by performing multiple simulations, with various starting conditions from reality, and seeing how various rules lead to new worlds where the new winners might, or might not, overlap with the real ones, segmenting the factors contributing to success and their randomness or stability
+
+
+
+
+\item discovery of the ``middle class'' of social networks, which is the real influential in many processes, as shown with our new metrics and simulations
+
+
+
 \end{itemize}
 
 These methods have already lead to the discovery of ``mind economies'' within Twitter, where interactions are designed to increase ratings as well as promoting  topics of interest and whole subgroups. Reciprocal social capital metrics identify the ``middle class'' of Twitter which does most of the ``long-term'' talking, carrying the bulk of the system-sustaining conversations. We show that this middle class wields the most of the actual influence we should care about --- these are not ``accidental influentials.''  Our approach is of interest to computer scientists, social scientists, economists, marketers, recruiters, and social media builders who want to find and present new ways of exploring, browsing, analyzing, and sustaining online social networks.
+
+
+\end{Spacing}
+
+
+\chapter*{Acknowledgments}
+This thesis is a synthesis of many years of research and industrial experience, which had begun with my arrival in the United States at the invitation of Prof. George Cybenko of Thayer School of Engineering, Dartmouth College.  Now, coming a full circle, I am a researcher at Thayer again, and a citizen of the United States myself, with the new citizens --- our children Edward and Eva --- added already with my wife Olga (and more on the way).  I want to thank George for the great opportunity he opened, his scientific guidance, and sharing his wisdom and ability to see what's really important.  When working with him, you appreciate how invariably sharp, patient and understanding George is with people in any project he undertakes.  As a great scientist himself with strong computational contributions and a mathematical view of the world, managing multiple large-scale projects without ever losing his cool, George is always the example to follow for me.
+
+
+I want to thank my new country, the United States of America, for upholding freedom and liberty, leading the world in innovation, and providing people of all backgrounds with amazing opportunities to come together and do great things for the world and each other.  Through its democratic system and appreciation of science and technology, the US enables such great institutions of learning as the University of Pennsylvania and Dartmouth College, and such singular laboratories of the Internet innovation as the Silicon Valley --- where we're headed next.
+
+
+I thank Professor Emeritus Noah Prywes, one of the founders of the CIS, who gave me my first job at CCCC, one of the oldest computer companies in the US, and recommended me to the CIS program at Penn.  Bonnie Webber was my original Penn advisor.  Her knowledge, focus on medical research applications, and engaging manner illuminated my first year at Penn, and with her I also started working with Curt Langlotz, one of the first MD/PhDs using natural language processing in medical domain --- my first application of functional programming with both academic and industrial impact, a tradition continued throughout my career and in this thesis.   Bonnie had left for Edinburgh and was succeeded by Lyle Ungar. When I took my first AI class with Lyle, I wished this lively guy in plaid shirt could be my advisor --- which did happen, and Lyle had become one of the most engaging scientists I was lucky to work with.  Lyle fuses broad knowledge of data mining and machine learning with very practical approach to problem solving --- and he enables it by being one of the best communicators inside and outside of science I've ever met.  I'm glad he had put up with me through all these years, with so many ideas --- and I'm positive we'll find more areas of collaboration going forward.
+
+
+My committee is an amazing group of experts in social networks, data mining, and computational linguistics.  Mark Liberman was supportive of my research at Dartmouth and had asked the key question --- are these Accidental Influentials, by any chance? --- which employed our Reciprocal Social Capital metics to the fullest.  Jonathan Smith, the chair, grounds it in all-encompassing computer networking expertise, and Shawndra Hill adds an operational and business perspective which, as you can see, is the most welcome pattern here.
+
+
+Professor Rajiv Alur, the former graduate chair, has outlined the graduation plan for me to execute at Dartmouth, which I followed.  Professor Jianbo Shi, the current graduate chair, guided it through completion and took the time to listen to the whole presentation in advance, providing insightful feedback.
+
+
+Alexandrin Popescul and Andrew Schein are steadfast friends and colleagues since the Ph.D. program under Lyle, and now future neighbors, --- with Alex also a colleague again, --- in the Bay Area.  Alex and Andrew provided numerous hours of discussion of the technologies and also their purposes and applications.  Their successful application of data mining in industry is the best use of what Lyle and others had taught us and an example to follow, again.
+
+
+Val Tannen had first introduced me to ML, which I'm using to this day (and in this thesis extensively).  He and Jean Gallier provided steadfast academic support at Penn, and Norm Badler and Rajiv Alur helped my candidacy come around and track to the plan, keeping the eyes on the prize.  Eduardo Glandt had always made things nicer with his charm, and oversees SEAS and CIS through amazing advances, making it an even better place to graduate from.
+
+
+My father, Professor Victor Khrabrov, is a physicist and the inventor of the first electric rocket flown into space.  I owe my interests in science and engineering, as well as in Cicero, literature, arts, and much more, to him.  He was always a supreme optimist and was happy to see me following through with my Ph.D.  I hope he'll be proud of me from wherever he is now.  My mother, Anna Khrabrova (Drabkina), was always supportive and believed in me to the extent she'd become a resident of Philadelphia too.  To her, my Penn odyssey had a benefit of my regular visits (by train!), and enjoying Philly together, including its great classical orchestra at the beautiful Kimmel Center.  I have to thank the city of Philadelphia here, for being a home city, a social network enabling science and creativity and inseparable from the Penn experience.  Dartmouth, as my first home in the US, and then our first long-term family home, is also a special place like no other.  (Snowshoeing!)
+
+
+Dmitri Levonian, a founding partner at Renova Capital (now Svarog Capital Advisors), is a rare example of a deep thinker and successful financier who can implement his vision via scaling a global business.  Working with him I got a chance to attend to all aspects of an R\&D enterprise, go together to the Machine Learning Summit in Copenhagen, and do focused computational research of English and Russian.
+
+
+My friends and colleagues at Amazon.com, notably Dean Kassmann, Chris Jones, Ryan Rawson, and Jacob Nelson, taught me that you can --- and should! --- apply advanced concepts in process control, supply chain management, personalization, and functional programming to reality at scale to improve productivity and do better.
+
+
+Peter Yianilos has brought me to the NECI, with the startup idea of a global, eternal, indestructible Intermemory -- whose time is still to come one day.  Peter is awesome, and can make things clear simply by the tone of his voice; his math skills are a stellar match to his pioneering business record, and overall he is a great example to follow.  The team at NECI included Lee Giles, a father figure to us all, Steve Lawrence (now at Google) and Dave Pennock (now at Yahoo Research), all great friends.  Gary Flake went on to found and lead industrial labs at Yahoo and Microsoft, showing how to scale serious research in practice.
+
+
+The teams at Google, Microsoft, Efficient Frontier, and TopProspect had all shown interest in the research presented here.  I've chosen the latter, for its startup spirit and vision, but I respect all of them and see them as my future colleagues in the field of practical social network mining.
+
+
+In closing, I have to mention those whom I always remember --- my grandfathers who fought in the World War II and defended our lives.  My paternal grandfather, Alexander Khrabrov, was lost in action in 1941, defending Moscow.  My maternal grandfather, Semion Drabkin, had become a war hero, delivering the ultimatum at Stalingrad, personally capturing Nazi criminals who testified at Nuremberg, liberating cities, and working together with the Allies in the denazification of Germany.  He went on to become a chief missile designer, --- but it were his grandsons, not his missiles, which ended up in the US.  His perseverance at Stalingrad had inspired my own through the Ph.D. process.
 
 
 \pagebreak 
@@ -238,7 +291,30 @@ These methods have already lead to the discovery of ``mind economies'' within Tw
 \chapter{Introduction}
 \label{introduction}
 
-\section{Overview}
+\begin{Spacing}{2}
+
+
+On March 25th, 2011, ``The Fifth Down,'' an NFL blog of the New York Times, opened as follows \cite{tanier2011ochocinco}.
+
+
+\begin{quote}
+An independent research company called Twitalizer ranked Bengals wide receiver Chad Ochocinco as the second-most influential personality on Twitter, according to David Leonhardt's article on The 6th Floor blog on Thursday.
+
+
+Ochocinco ranks behind the Brazilian comedian Rafinha Bastos. He ranks well ahead of President Obama, Justin Bieber, Oprah Winfrey, Sarah Palin, and yes, Charlie Sheen. Twitalizer doesn't just track followers (Lada Gaga and Bieber have the most), but ``mentions'' and other criteria that determine who is making real contributions to the discussion.
+
+
+Leonhardt's article barely mentions Johnson --- he appears in the top-ten list --- but the football world quickly picked up the story of his influence. Let's face it, we do not have much else to do. What makes Johnson more influential than, say, Terrell Owens or Aaron Rodgers, let alone Bieber or Palin? Take it from a longtime Chad Johnson/Ochocinco psychoanalyst: the recipe for Internet domination is simple.
+\end{quote}
+
+
+Written off season, during an NFL lockout, this column indicates the reach of social networks, their mainstream appeal, and the fact that many people care about influence in such networks.
+
+
+How did we end up here?  What can it possibly mean to ``have influence'' in a ``social network''?  Did Chad Ochocinco get to the top by accident, or does he deserve to be there?  These are the key themes of this thesis.
+
+
+\pagebreak \section{Overview}
 \label{overview}
 
 Modern human society is first and foremost a society of the mind --- a social mind, a new collective ecosystem self-organizing and communicating via the Internet, as well as comprehending itself and organizing various collective actions.  The thought becomes action after reaching a critical mass of actors.   A concept which becomes action goes through a lifecycle of invention, being noticed by the influencers, spreading, taking hold, and crossing some sort of a phase transition.  A telling feature of any successful idea is its transition from individual to group to global level in the network.  Determining these levels and detecting how people and ideas relate to them is key to understanding network dynamics.
@@ -280,6 +356,42 @@ In their seminal 1955 book ``Personal Influence,'' Katz and Lazarsfeld \cite{kat
 We look at a basic form of influence, showing how effective a communicator a person is in the social network.  We use our own reciprocal social capital as a metric keeping track how a person prioritizes his or her replies, paying attention to ``communication balances'' owed and to whom -- e.g., answering questions of somebody with a high social capital more often.  Any such metric induces a ranking among the users, and we build a class system on top of this ranking, resembling a human hierarchy of wealth.
 
 
+In the US, top 1\% of population by wealth has 35\% of all net worth, while top 10\% has 63\%.  The second 10\% of people has 12\% of net worth, and the bottom 80\% have only 15\%.  Figure~\ref{figure:us-net-worth-hierarchy} is taken from  G. William Domhoff, a professor at UCSC and the author of ``Who Rules America'' \cite{domhoff2006rules}, keeping track of these statistics over the years, now in its 6th edition.  His web site, \url{whorulesamerica.net} \cite{domhoff2011whorules}, contains many instructive graphs segmenting the wealth hierarchy in the US and other countries.  They follow the same law, with different exponents.  Figure~\ref{figure:us-fin-wealth-hierarchy} shows financial wealth, which is the net worth without the real estate used by the owners, comprising the bulk of the middle class equity.
+
+
+Such division causes emotional reactions.  Bob Herbert, an almost 18 years columnist for the New York Times, cites these statistics as follows in his March 26, 2011 column ``Losing Our Way'':
+
+
+\begin{quote}
+There is plenty of economic activity in the U.S., and plenty of wealth. But like greedy children, the folks at the top are seizing virtually all the marbles. Income and wealth inequality in the U.S. have reached stages that would make the third world blush. As the Economic Policy Institute has reported, the richest 10 percent of Americans received an unconscionable 100 percent of the average income growth in the years 2000 to 2007, the most recent extended period of economic expansion.
+Americans behave as if this is somehow normal or acceptable. It shouldn't be, and didn't used to be. Through much of the post-World War II era, income distribution was far more equitable, with the top 10 percent of families accounting for just a third of average income growth, and the bottom 90 percent receiving two-thirds. That seems like ancient history now.
+The current maldistribution of wealth is also scandalous. In 2009, the richest 5 percent claimed 63.5 percent of the nation's wealth. The overwhelming majority, the bottom 80 percent, collectively held just 12.8 percent.
+\end{quote}
+Herbert ends his column (as this text and as a series) to address the imbalance:
+\begin{quote}
+This is my last column for The New York Times after an exhilarating, nearly 18-year run. I'm off to write a book and expand my efforts on behalf of working people, the poor and others who are struggling in our society.
+\end{quote}
+
+
+While policy opinions differ on what to do with such distributions, there are many such hierarchies in nature and society, caused by many factors.  In economics, such distributions are commonplace, and we use a Zipfian hierarchy when modeling the distribution of social capital wealth.
+
+
+
+\begin{figure}[ht]
+\minipage[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.5]{figures/us-net-worth-pie}
+    \caption{A small percentage owns the majority of US net worth}
+    \label{figure:us-net-worth-hierarchy}
+\endminipage\hfill%
+%
+\minipage[b]{0.5\linewidth}
+    \centering
+    \includegraphics[scale=0.5]{figures/us-fin-wealth-pie-5pm}
+    \caption{A small percentage owns the majority of US financial wealth, following the Zipf law.}
+    \label{figure:us-fin-wealth-hierarchy}
+\endminipage
+\end{figure}
 In order to see whether the influence hierarchy is random or not, we simulate many parallel worlds, where users talk to each other based on various global and local optimization criteria.  Some of these criteria are simple, such as attaching randomly, or proportionally to the global in-degrees; some are complex, such as attach to a friend of a friend proportionally to their own mentions or social capital; or, ultimately, optimize your local capital gain locally, using the same reward function which is the foundation of the final ranking.  We either simulate the new worlds from scratch, or seed them with a few weeks of the real dynamic graph.  In all cases, we preserve the order of users joining the network and their out-degrees for each day.
 
 
@@ -310,12 +422,12 @@ Our conclusions are as follows.
 
 
 
-\item the middle and upper middle classes of social networks is less random across the more intelligent simulations, and is the main discovery of this thesis.  They carry 40\% of all communications, while comprising (roughly) only 20-25\% of population.  These users are the actual majority influencers, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy demands.  In that sense, we conclude that success is earned.
+\item the middle and upper middle classes of social networks are less random across the more intelligent simulations.  The middle class of social networks is the main discovery of this thesis.  It carries 40\% of all communications, while comprising (roughly) only 20-25\% of population.  These users are the actual majority influencers, and they got where they are due to a diligent attention to communication, its priorities, dynamics, and energy demands.  In that sense, we conclude that success is earned.
 
 
 
 
-\item bucketed simulations allow tracking strategies how they apply to separate classes, or any combination of classes, either preserved or simulated.
+\item bucketed simulations allow tracking how composite strategies apply to separate classes, or any combination of classes, either preserved or simulated.
 
 
 
@@ -326,14 +438,14 @@ Our conclusions are as follows.
 
 \end{itemize}
 
-Figure~\ref{figure:heatmap-srates-medians-3wk} shows how several groups of simulations, loosely corresponding to either Katz-Lazarsfeld or Watts-Dodds models, relate to reality and each other.  Or social-capital based models, taking into account many feature of influencers as effective communicators, end up close to each other and reality, as compared to many simpler simulations, based on either uniform, or mentions-based attachment, such as the simulations of Watts-Dodds.
+Figure~\ref{figure:heatmap-srates-medians-3wk} shows how several groups of simulations, loosely corresponding to either Katz-Lazarsfeld or Watts-Dodds models, relate to reality and each other.  Our social-capital based models, taking into account many features of influencers as effective communicators, end up close to each other and reality, as compared to many simpler simulations, based on either uniform, or mentions-based attachment, such as the simulations of Watts-Dodds.
 
 
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-srates-medians-3wk}
-    \caption{Clustering of all simulations seeded by 3 weeks of reality, by staying power.  \emph{Dreps}, the reality, ends up together with our most intelligent capital-based worlds (red), reflecting Katz-Lazarsfeld better,  while uniform or mentions-based worlds (blue), similar to Watts-Dodds simulations, end up in a more distant cluster.}
+    \includegraphics{figures/heatmap-overx-dreps-medians-3wk}
+    \caption{Clustering of all simulations seeded by 3 weeks of reality, by overlap with reality.  \emph{Dreps}, the reality itself, ends up closer to our most intelligent capital-based worlds (red), including the simulated middle class.  Simpler networks, including those using only global attachment strategies, end up in a more distant cluster.}
     \label{figure:heatmap-srates-medians-3wk}
 \end{center}
 \end{figure}
@@ -344,13 +456,13 @@ Social networks exist in some form for as long as human society itself.  What ma
 History of social networks is rich and eventful --- in fact, just like human history itself, which can be considered as an evolution of the kinds of social networks humans organize into, such as tribes, businesses, guilds, classes, nations.
 
 
-The first recorded blogger, in our analysis, is Cicero.  While he stayed in Rome, engrossed in the politics of the failing Republic he used to uphold as a consul, his epicurean friend Atticus removed to Athens, following Epicurus' maxim that one has to stay away from politics in order to be happy (among other things).  However, Atticus wanted to follow the events back in Rome, and asked Cicero to write him -- almost daily.  A messenger from Atticus picked up a new letter, often ending with ``you messenger is here so I have to wrap up,'' and delivered it to Athens, where Atticus had a stable of scribes making copies.  The copies were delivered to many prominent Romans all over the Empire for a subscription fee.  That was Atticus' way to enable Cicero to have an income from his talents -- and also spread his influence.
+The first recorded blogger, in our analysis, is Cicero.  While he stayed in Rome, engrossed in the politics of the failing Republic he used to uphold as a consul, his epicurean friend Atticus removed to Athens, following Epicurus' maxim that one has to stay away from politics in order to be happy (among other things).  However, Atticus wanted to follow the events back in Rome, and asked Cicero to write him -- almost daily \cite{butler2002cicero}.  According to some accounts, a messenger from Atticus picked up a new letter, often ending with ``you messenger is here so I have to wrap up,'' and delivered it to Athens, where Atticus had a stable of scribes making copies.  The copies were delivered to many prominent Romans all over the Empire for a subscription fee.  That was Atticus' way to enable Cicero to have an income from his talents -- and also spread his influence \cite{phillips1986atticus}.
 
 
-We see, in Cicero's example, many key features of real influencer in a social network.  When we read Cicero, he comes alive, with all his human emotions, failings, and strengths.  He makes his causes your own, enlists you as a participant in his thought works, ambitions, dialogues.  He writes about news and moral issues, forcing you to take sides, making his sympathies and hatreds known unequivocally.  He likes a florid turn of phrase, a soundbite.  He has many friends whom he remembers at the right times.  While most noble Romans had a {\itshape nomenclator} -- a slave who whispered the names of those encountered in the street in their forgetful master's ear -- Cicero needed none, so apt was his social memory.
+We see, in Cicero's example, many key features of real influencer in a social network.  When we read Cicero, he comes alive, with all his human emotions, failings, and strengths --- not unlike Chad Ochocinco of today. He has many friends whom he remembers at the right times.  (While most noble Romans had a {\itshape nomenclator} -- a slave who whispered the names of those encountered in the street in their forgetful master's ear -- Cicero needed none.)
 
 
-Thanks to Atticus, we have a live chronicle of Roman life in Cicero's time, but we also have many letters which Cicero wrote in reply and to maintain his vast social network. Every effective blogger from our online social networks has some, or (hardly) all, qualities which Cicero demonstrates in his own correspondence:
+Thanks to Atticus, we have a live chronicle of Roman life in Cicero's time, but we also have many letters which Cicero wrote in reply and to maintain his vast social network. Every effective blogger from our online social networks has some, rarely all, qualities which Cicero demonstrates in his own correspondence:
 
 
 \begin{enumerate}
@@ -360,16 +472,16 @@ Thanks to Atticus, we have a live chronicle of Roman life in Cicero's time, but 
 
 \item engagement with topics of the day and issues of public interest
 
-\item piercing intellect, cutting to the heart of the matter
+\item high-intensity writing, frequent and consistent in time
 
-\item emotional engagement, where author's feelings shine through the words and call for empathic (or antipathic!) response from the reader
+\item engagement with the readers
 
 \item writing for well-defined communities, the political class and the philosophers
 
 \item \label{item:cicero-balance} careful attention to the balance of communications
 \end{enumerate}
 
-While we don't have enough data volume to quantify these points for Cicero, we can quantify most of them in online social networks.  Point~\ref{item:cicero-balance} leads naturally to our reciprocal social capital definition (see Section~\ref{chapter:SocialCapital}).
+While we don't have enough data volume to quantify these points for Cicero, we can quantify most of them in online social networks.  Point~\ref{item:cicero-balance} leads naturally to our reciprocal social capital definition (see Section~\ref{chapter:social-capital}).
 
 
 The first online social network of notice which is still going strong today is \href{http://livejournal.com/}{LiveJournal}\footnote{\href{http://livejournal.com/}{http://livejournal.com/}} (LJ), started by Brad Fitzpatrick in 1999 as a way to for friends to share their dairies and notes online.  It pioneered most of the features of online networks we now take for granted, such as
@@ -532,7 +644,7 @@ Our friends from the Web Ecology Project look at such features as
 
 \item memes, such as Old Spice ads and their audience make up
 
-\item Events such as \texttt{\#IranElections} \ref{Gaffney:2010:IranElections}, \texttt{\#WorldCup}, etc.
+\item Events such as \texttt{\#IranElections} \cite{Gaffney:2010:IranElections}, \texttt{\#WorldCup}, etc.
 
 \item methods of simulating twitter audience
 
@@ -603,7 +715,7 @@ Our sorting, filtering, and ranking techniques amount to a simple data model whi
 Each day's snapshot can be handled separately, and its PageRank computed.  PageRank is the least parallelizable part here as it reflects the whole graph structure.  After that, however, its derivatives D-Rank and StarRank can be computed in parallel for each node, which our {\itshape Clojure}-based implementation \ref{impl:Clojure} fully exploits, with nearly linear speedup from a single letter \texttt{p}, making a parallel \texttt{pmap} out of a seuential \texttt{map}.
 
 
-Using our simple ranking models we find very interesting, quite unexpected sets of important users, on which we report in the \ref{Influence Findings} and \ref{The Pagerank Generation} sections.  We discover the whole new ``Justin Bieber ecosystem'' with its attending {\itshape Mind Economy}, and then see the presence of similar forms everywhere.
+Using our simple ranking models we find very interesting, quite unexpected sets of important users, on which we report in the \ref{section:influence-findings} and \ref{section:pagerank-generation} sections.  We discover the whole new ``Justin Bieber ecosystem'' with its attending {\itshape Mind Economy}, and then see the presence of similar forms everywhere.
 
 
 \pagebreak \section{Mind Economy}
@@ -638,10 +750,137 @@ In the rest of this thesis we elaborate all of the above points, along the follo
 \item Chapter \ref{chapter:datamining-infrastructure} highlights the computational infrastructure we had put together to overcome the challenges our volumes of data posed.  We direct the reader to the open source projects, themselves hosted on the social coding hub, developed through IRC and Twitter collaboration with many of the same people who built all of the above collaborative and communication-based social media platforms.  Thus research and development come the full circle.
 \end{itemize}
 
-\pagebreak \chapter{Accidental Influentials}
+\pagebreak \chapter{Previous Work}
+\label{previouswork}
+
+\section{Influence}
+\label{influence}
+
+Influence in social networks is a problem studied from many angles by now, yet influence is most often understood as an ability to affect a diffusion process, such as  push a {\itshape meme} and/or an URL toward world fame ``on teh internets'' (sic).
+
+
+Kempe, Kleinberg, et al. \cite{Kempe:2005:Nodes} consider the question of maximizing influence diffusion by selecting an initial set of $k$ users such that the final affected audience will be the largest.  They look at two established models of influence processes:
+
+
+\begin{itemize}
+
+
+\item Linear Threshold Model, pioneered by Granovetter and Schelling
+
+\item Independent Cascade Model, analyzed by Goldenberg, Libai, and Muller
+\end{itemize}
+
+Both models deal with a simplified case where there are two states, $a$ and $b$, and switching depends on the state of the neighbors talking to a node.  In the Linear Threshold model, everybody has a threshold, and if the sum of incoming edges form the activated neighbors exceeds it, a switch occurs.  In the Independent Cascade model, such a switch is governed by a table of pairwise conditional probabilities.  Kempe et al. show that they can get within 2/3 of the ideal maximal influence set by following a greedy startegy of adding a node with maximum influence at each stage. 
+
+
+Cosley, Kleinberg, et al. look at continuous sequential data versus snapshots when tracking influence.   They consider two of the most fundamental definitions of influence, one based on a small set of ``snapshot'' observations of a social network and the other based on detailed temporal dynamics. The former is particularly useful because large-scale social network data sets are often available only in snapshots or crawls. The latter however provides a more detailed process model of how influence spreads. They study the relationship between these two ways of measuring influence, in particular establishing how to infer the more detailed temporal measure from the more readily observable snapshot measure. The analysis is validated using the history of social interactions on Wikipedia; the result is the first large-scale study to exhibit a direct relationship between snapshot and temporal models of social influence.
+
+
+Bakshy, Watts, et al. \cite{bakshy2011everyone} track diffusion events that took place on the Twitter follower graph over a two month interval in 2009. They find that the largest cascades tend to be generated by users who have been influential in the past and who have a large number of followers. They also find that URLs that were rated more interesting and/or elicited more positive feelings by workers on Mechanical Turk were more likely to spread. Inspite of these intuitive results, however, they find that predictions of which particular user or URL will generate large cascades are relatively unreliable. They conclude, therefore, that word- of-mouth diffusion can only be harnessed reliably by targeting large numbers of potential influencers, thereby capturing average effects. Finally, they consider a family of hypothetical marketing strategies, defined by the relative cost of identifying versus compensating potential ``influencers.'' They find that although under some circumstances, the most influential users are also the most cost-effective, under a wide range of plausible assumptions the most cost-effective performance can be realized using ``ordinary influencers''--- individuals who exert average or even less-than-average influence.
+
+
+\pagebreak \section{Sociology}
+\label{sociology}
+
+Tarde (1898) famously started to seek {\itshape statistique de conversation}  as justification and method of understanding the public opinion formation.  In the words of Katz,
+
+
+\begin{quote}
+Both Tarde (1898) \cite{tarde1969communication} and Habermas (1989) \cite{habermas1989structural} may be said to have theorized a public sphere based on the sequence media-conversation-decision-action.  In Tarde's scheme, the media deliver a menu of political issues to the cafés and coffee shops and salons.  Discussion of these issues percolate more ``considered opinions.''  These opinions circulate from café to café until they crystallize into Public Opinion, which feeds back to government, the media, and individual decisions.  As already noted, it is obvious that the ``two-step flow'' --- media to conversation to opinion --- has a major presence in these theories. 
+\end{quote}
+
+
+George Kingsley Zipf, in his visionary book ``Human behavior and the principle of least effort: An introduction to human ecology'' \cite{zipf1949humanbehavior}, establish many important principles which are used in our work directly:
+
+
+\begin{itemize}
+
+
+\item principle of simple utility optimization leading to complex system behaviors
+
+\item power laws resulting from various human distributions (now called Zipf law)
+\end{itemize}
+
+\pagebreak \section{Network Structure}
+\label{networkstructure}
+
+Barabási's paper in Science \cite{barabasi1999scaling} started a whole area of structural network studies, focusing on network generation processes and resulting behaviors which depend on that structure.  His work covers both theoretical properties of scale-free networks and real large-scale networks, such as mobility patterns of cell phone users at country scales.  Most people have a fixed mobility pattern, which a small number of regular locales and patterns of travels between them, which can be matched by scaling and rotation.
+
+
+An important insight from Barabási's work is that specific human behavior patterns lead to identifiable patterns at the group and society level.  In the same vein, we show how basic elementary strategies of attachment (selecting conversation partners) in communication networks lead to clear stratification of social capital.
+
+
+Khrabrov, Ungar et al. \cite{Khrabrov:2003:Attacks} show that the underlying attachment strategy leads to different network degrading behaviors under random faults or enemy attacks.  From the hindsight vantage point of human behavior modeling it is an interesting inversion, showing how different network topologies can react to different external behaviors, degrading either gracefully or abruptly in the face of faults or attacks.  If we consider node removal detachment, or negative attachment, we can see how attachment patterns governed by simple strategies -- such as detach the hubs -- can lead to long-term patterns in network overall performance, such as the diameter of the connected component growing rapidly or slowly.  These effects are true for attachment as well.
+
+
+Marc Smith and others created NodeXL \cite{smith2011nodexl}, a social-networking analysis plugin for Excel, implementing many centrality features in practice.  Their book is a great practical report on social network analysis.  It shows how communities of researchers and corporations are employing network behavior metrics for knowledge discovery and driving business, fusing theory and practice.  Having met Marc at the first SocialCom, I watch his practical weaving of social networks and his meta-observation of them, using real time analyses of social networking conferences on themselves, in fascination.  He provides a recursive insight into what makes these environments tick, leading by example. 
+
+
+\pagebreak \section{Social Capital}
+\label{socialcapital}
+
+Motidyang, in his thesis \cite{Motidyang:2007:Thesis}, examines the notion of the social capital in virtual communities, defining it in the following way.
+
+
+\begin{quote}
+For more than a decade, researchers use the term to mean the set of trust, institutions, social norms, social networks, and organizations that shape the interactions of actors within a society and that are considered to be useful and assets for communities to prosper both economically and socially. Despite growing popularity of social capital especially, among researchers in the social sciences and the humanities, the concept remains ill-defined and its operation and benefits limited to terrestrial communities. In addition, proponents of social capital often use different approaches to analyze it and each approach has its own limitations.
+\end{quote}
+
+
+His thesis examines social capital within the context of technology-mediated communities (also known as virtual communities). It presents a computational model of social capital, which serves as a first step in the direction of understanding, formalizing, computing and discussing social capital. The thesis employs an eclectic set of approaches and procedures to explore, analyze, understand and model social capital in two types of virtual communities: virtual learning communities (VLCs) and distributed communities of practice (DCoP).
+
+
+Key findings from the various studies in the thesis indicated that SC is a multi-layered, multivariate, multidimensional, imprecise and ill-defined construct that has emerged from a rather murky swamp of terminology but it is still useful for exploring and understanding social networking issues that can possibly influence our understanding of collaboration and learning in virtual communities. Further, the model predictions and sensitivity analysis suggest variables such as trust, different forms of awareness, social protocols and the type of the virtual community are all important in discussion of SC in virtual communities but each variable has different level of sensitivity to social capital.
+
+
+The major contributions of the thesis are the detailed exploration of social capital in virtual communities and the use of an integrated set of approaches in studying and modelling it. Further, the Bayesian Belief Network approach applied in the thesis can be extended to model similar complex online social systems.
+
+
+The overview presented in this thesis shows a variety of things and approaches called ``social capital.''  As noted by Jackson, such disparity is one of the reason why the term is not used in his book.  We define our own Reciprocal Social Capital in a manner opposite to most of those soft notions summarized above, respecting the following economic considerations:
+
+
+\begin{itemize}
+
+
+\item pairwise transactions
+
+\item value decays with time unless more activity occurs
+
+\item transactional adjustment takes into account the capitals of both parties
+
+\item iterative definition launches a dynamic economy on all nodes through time 
+\end{itemize}
+
+Mobius, Quoc-Anh, and Rosenblat \cite{Mobius:2004:Capital} define social capital as follows:
+
+
+\begin{quote}
+Social capital helps to internalize externalities for which there is no market and where transactions costs are too high to write complete contracts. Informal credit arrangements, financial and in-kind assistance to neighbors and friends or invest- ments in public goods are just one of the many examples of social capital.
+\end{quote}
+
+
+They provide a simple definition of social capital within a community, and measure social capital in a real-world social network using a series of experiments by building on the work of Andreoni and Miller.
+
+
+The methodology distinguishes between two sources of social capital: preference- based and cooperative social capital. Preference-based social capital is based on simple altruism -- agents can internalize the externalities if they take each other's utility into account. However, the strength of altruism is expected to vary systematically with the relative position of agents within the social structure,  which makes the empirical calibration of such a model interesting. How strongly do agents care about the utility of their friends, cliques or people who live close to them?
+
+
+Cooperative social capital arises from repeated interactions between pairs or groups of agents. This makes agents appear to act like altruists even if they have perfectly selfish preferences. Due to the multiplicity of equilibria in repeated games the empirical calibration of the model provides interesting insights into the extent and relative important of cooperative social capital.
+
+
+There is evidence of both cooperative and preference-based social capital. While there is considerable heterogeneity in the base level of altruism amongst agents, the authors find that preference-based social capital increases the weight on a friend's utility by about 15\% while cooperative social capital adds another 5\%.
+
+
+While applying to a small-scale network of students with terrestrial sociological methods of eliciting utilities, the game-theoretic underpinnings distinguish this approach as a serious attempt at a quantitative definition of social capital.  If lacking dynamicity or currency qualities, it is because of the strict definition adopted by the authors.  It is a promising avenue of investigation, capable of many potential intersections with our reciprocal social capital.
+
+
+In his monograph ``Social and Economic Networks,'' Matthew Jackson considers a wide spectrum of models regarding network formation.  Random networks and generative models are covered very well.  Especially interesting is the economic approach, which puts a maintenance price and benefits on the links, and then examines, for a variety of costs and rewards, the resulting network topologies.  This approach shows how common-sense assumptions on elementary transactions between the network members can lead to specific higher-level structures following from them, and we do similar things with our reciprocal social capital. 
+
+
+\pagebreak \section{Accidental Influentials}
 \label{accidentalinfluentials}
 
-The question of personal influence in a social network, in its modern sense, is usually traced back to the seminal 1955 book ``Personal Influence'' by Elihu Katz and Peter Lazarsfeld \~cite{katz1955influence}.  The main concept this book is credited for is the two-step influence model, defining ``influentials'' as those community leaders who filter and structure media streams for consumption by their local audiences.
+The question of personal influence in a social network, in its modern sense, is usually traced back to the seminal 1955 book ``Personal Influence'' by Elihu Katz and Peter Lazarsfeld~\cite{katz1955influence}.  The main concept this book is credited for is the two-step influence model, defining ``influentials'' as those community leaders who filter and structure media streams for consumption by their local audiences.
 
 
 However, another important contribution, emphasized by Katz and Lazarsfeld, goes largely overshadowed by the fame of the influentials.  In Katz's own words,
@@ -652,7 +891,7 @@ However, another important contribution, emphasized by Katz and Lazarsfeld, goes
 \end{quote}
 
 
-We would like to point out that community leadership is a structural characteristic of a person, not limited to their ability to diffuse information, and role of leaders can change depending on the context.  Leaders over the poor sometimes are followers if the rich, in our social capital terms.  Katz says:
+We would like to point out that community leadership is a structural characteristic of a person, not limited to their ability to diffuse information, and role of leaders can change depending on the context.  Leaders of the poor sometimes are followers of the rich, in our social capital terms.  Katz says:
 
 
 \begin{quote}
@@ -698,7 +937,7 @@ But diffusing an opinion to change one's mind is different from forwarding memes
 The kind of influence we focus on relates to the fundamental properties of human social networks -- they are always used for communication.   We believe that before anything deep can happen in such a network, such as an information cascade, the communication routes must already exist, or at least be determined to a large degree.  Our analogy is with transport network -- before you study traffic, you need to establish where the routes are.
 
 
-We look at how important and reliable individual links are by assigning value to individuals based on how well they maintain such links with other, possibly also effective, individuals.  We study replies which are basic communication elements, as opposed to following RSS feeds and other activities based on network-specific artefacts.  Replying follows the same dynamics as any other human conversation, with the same set of expectations of the need to reply and everything else it entails, as we describe in detail in Chapter~\ref{sec:social-capital}. 
+We look at how important and reliable individual links are by assigning value to individuals based on how well they maintain such links with other, possibly also effective, individuals.  We study replies which are basic communication elements, as opposed to following RSS feeds and other activities based on network-specific artefacts.  Replying follows the same dynamics as any other human conversation, with the same set of expectations of the need to reply and everything else it entails, as we describe in detail in Chapter~\ref{chapter:social-capital}. 
 
 
 Katz notes how social network analysis, including Watts', is a natural evolution of their studies:
@@ -707,110 +946,6 @@ Katz notes how social network analysis, including Watts', is a natural evolution
 \begin{quote}
 By now, there's a flourishing field of research on social networks (Watts, 2003), inspired, in part, by the Columbia tradition (Kadushin, 1976; Burt, 1999).  While diffusion is one of the applications of this work, even here -- as in reception studies -- only little effort is being made to bring the media back in.  It is interesting to note, again, how the media have almost dropped out of sight: compare the evolutionary  course that led from selectivity to gratifications to reception with the course that led from interpersonal relations to diffusion to social networks.
 \end{quote}
-
-
-\pagebreak \chapter{Previous Work}
-\label{previouswork}
-
-Influence in social networks is a problem studied from many angles by now, yet influence is most often understood as an ability to affect a diffusion process, such as  push a meme and/or an URL toward wolrd fame ``on the internets.''
-
-
-Kempe, Kleinberg, et al. \cite{Kempe:2005:Nodes} consider the question of maximizing influence diffusion by selecting an initial set of $k$ users such that the final affected audience will be the largest.  The look at two established models of influence processes:
-
-
-\begin{itemize}
-
-
-\item Linear Threshold Model, pioneered by Granovetter and Schelling
-
-\item Independent Cascade Model, analyzed by Goldenberg, Libai, and Muller
-\end{itemize}
-
-Both models deal with a simplified case where there are two states, $a$ and $b$, and switching depends on the state of the neighbors talking to a node.  In the Linear Threshold model, everybody has a threshold, and if the sum of incoming edges form the activated neighbors exceed it, a switch occurs.  In the Independent Cascade model, such a switch is governed by a table of pairwise conditional probabilities.  Kempe et al. show that they can get within 2/3 of the ideal maximal influence set by following a greedy startegy of adding a node with maximum influence at each stage. 
-
-
-Cosley, Kleinberg, et al. look at continuous sequential data versus snapshots when tracking influence.   They consider two of the most fundamental definitions of influence, one based on a small set of ``snapshot'' observations of a social network and the other based on detailed temporal dynamics. The former is particularly useful because large-scale social network data sets are often available only in snapshots or crawls. The latter however provides a more detailed process model of how influence spreads. They study the relationship between these two ways of measuring influence, in particular establishing how to infer the more detailed temporal measure from the more readily observable snapshot measure. They validate our analysis using the history of social interactions on Wikipedia; the result is the first large-scale study to exhibit a direct relationship be- tween snapshot and temporal models of social influence.
-
-
-Bakshy, Watts, et al. \cite{bakshy2011everyone} track diffusion events that took place on the Twitter follower graph over a two month interval in 2009. They find that the largest cascades tend to be generated by users who have been influential in the past and who have a large number of followers. They also find that URLs that were rated more interesting and/or elicited more positive feelings by workers on Mechanical Turk were more likely to spread. They spite of these intuitive results, however, they find that predictions of which particular user or URL will generate large cascades are relatively unreliable. They conclude, therefore, that word- of-mouth diffusion can only be harnessed reliably by targeting large numbers of potential influencers, thereby capturing average effects. Finally, they consider a family of hypothetical marketing strategies, defined by the relative cost of identifying versus compensating potential ``influencers.'' They find that although under some circumstances, the most influential users are also the most cost-effective, under a wide range of plausible assumptions the most cost-effective performance can be realized using ``ordinary influencers''--- individuals who exert average or even less-than-average influence.
-
-
-Tarde (1898) famously started to seek {\itshape statistique de conversation}  as justification and method of understanding the public opinion formation.  In the words of Katz,
-
-
-\begin{quote}
-Both Tarde (1898) \cite{tarde1969communication} and Habermas (1989) \cite{habermas1989structural} may be said to have theorized a public sphere based on the sequence media-conversation-decision-action.  In Tarde's scheme, the media deliver a menu of political issues to the cafés and coffee shops and salons.  Discussion of these issues percolate more ``considered opinions.''  These opinions circulate from café to café until they crystallize into Public Opinion, which feeds back to government, the media, and individual decisions.  As already noted, it is obvious that the ``two-step flow'' --- media to conversation to opinion --- has a major presence in these theories. 
-\end{quote}
-
-
-George Kingsley Zipf, in his visionary book ``Human behavior and the principle of least effort: An introduction to human ecology'' \cite{zipf1949humanbehavior}, establish many important principles which are used in our work directly:
-
-
-\begin{itemize}
-
-
-\item principle of simple utility optimization leading to complex system behaviors
-
-\item power laws resulting from various human distributios (now called Zipf law)
-\end{itemize}
-
-Barabási's paper in Science \cite{barabasi1999scaling} started a whole area of structural network studies, focusing on network generation processes and resulting behaviors which depend on that structure.
-
-
-Khrabrov, Ungar et al. \cite{Khrabrov:2003:Attacks} show that the underlying attachment strategy leads to different network degrading behaviors under random faults or enemy attacks.
-
-
-Marc Smith and others created NodeXL, a social-networking analysis plugin for Excel, implementing many centrality features in practice.  
-
-
-Motidyang, in his thesis \cite{Motidyang:2007:Thesis}, examines the notion of the social capital in virtual communities as follows.
-
-
-\begin{quote}
-For more than a decade, researchers use the term to mean the set of trust, institutions, social norms, social networks, and organizations that shape the interactions of actors within a society and that are considered to be useful and assets for communities to prosper both economically and socially. Despite growing popularity of social capital especially, among researchers in the social sciences and the humanities, the concept remains ill-defined and its operation and benefits limited to terrestrial communities. In addition, proponents of social capital often use different approaches to analyze it and each approach has its own limitations.
-\end{quote}
-
-
-His thesis examines social capital within the context of technology-mediated communities (also known as virtual communities). It presents a computational model of social capital, which serves as a first step in the direction of understanding, formalizing, computing and discussing social capital. The thesis employs an eclectic set of approaches and procedures to explore, analyze, understand and model social capital in two types of virtual communities: virtual learning communities (VLCs) and distributed communities of practice (DCoP).
-
-
-Key findings from the various studies in the thesis indicated that SC is a multi-layered, multivariate, multidimensional, imprecise and ill-defined construct that has emerged from a rather murky swamp of terminology but it is still useful for exploring and understanding social networking issues that can possibly influence our understanding of collaboration and learning in virtual communities. Further, the model predictions and sensitivity analysis suggest variables such as trust, different forms of awareness, social protocols and the type of the virtual community are all important in discussion of SC in virtual communities but each variable has different level of sensitivity to social capital.
-
-
-The major contributions of the thesis are the detailed exploration of social capital in virtual communities and the use of an integrated set of approaches in studying and modelling it. Further, the Bayesian Belief Network approach applied in the thesis can be extended to model similar complex online social systems.
-
-
-The overview presented in this thesis shows a variety of things and approaches called ``social capital.''  As noted by Jackson, such disparity is one of the reason why the term is not used in his book.  We define our Reciprocal Social Capital in a manner opposite to most of those soft notions with respect to the following economic considerations:
-
-
-\begin{itemize}
-
-
-\item pairwise transactions
-
-\item value decays with time unless more activity occurs
-
-\item transactional adjustment takes into account the capitals of both parties
-
-\item iterative definition launches a dynamic economy on all nodes through time 
-\end{itemize}
-
-Mobius, Quoc-Anh, and Rosenblat \cite{Mobius:2004:Capital} define social capital as follows:
-
-
-\begin{quote}
-Social capital helps to internalize externalities for which there is no market and where transactions costs are too high to write complete contracts. Informal credit arrangements, financial and in-kind assistance to neighbors and friends or invest- ments in public goods are just one of the many examples of social capital.
-\end{quote}
-
-
-They provide a simple definition of social capital with a community or social network and measure social capital in a real-world social network using a series of experiments by building on the work of Andreoni and Miller (2002).
-The methodology distinguishes between two sources of social capital: preference- based and cooperative social capital. Preference-based social capital is based on simple altruism - agents can obviously internalize externalities if they take each other's utility into account. However, we expect the strength of altruism to vary systematically with the relative position of agents within the social structure which makes the empirical calibration of such a model interesting. How strongly do agents care about the utility of their friends, cliques or people who live close to them?
-Cooperative social capital arises from repeated interactions between pairs or groups of agents. This makes agents appear to act like altruists even if they have perfectly selfish preferences. Due to the multiplicity of equilibria in repeated games the empirical calibration of our model provides interesting insights into the extent and relative important of cooperative social capital.
-They find evidence of both cooperative and preference-based social capital. While there is considerable heterogeneity in the base level of altruism amongst agents we find that preference-based social capital increases the weight on a friend's utility by about 15 percent while cooperative social capital adds another 5 percent.
-
-
-In the monograph ``Social and Economic Networks,'' Matthew Jackson considers a wide spectrum of models regarding network formation. \\
-NB
 
 
 \pagebreak \chapter{Exploration}
@@ -1418,6 +1553,9 @@ The {\itshape starrank} considers a user's importance with respect to his neighb
 \pagebreak \section{Influence Findings}
 \label{influencefindings}
 
+\label{section:influence-findings}
+
+
 For individual ranks sequences we can look at the longest growth or decline periods.  We partition each sequence into contiguous increasing or decreasing subsequences and take the longest one.  For the number of mentions, we look at the total amount of users for whom it is nondecreasing, and look at their longest runs over days.  
 
 
@@ -1551,7 +1689,10 @@ A similar pattern persists for the relationship between the pagerank of a user a
 \pagebreak \section{The Pagerank Generation}
 \label{thepagerankgeneration}
 
-The most surprising discovery in the Twitter network we made is the Bieber ecosystem.  Its growth principle can be summarized as: {\itshape You can't be Justin Bieber, but you can be Amanda D}.  The person with pagerank 0, i.e.\ the most influential person in Twitter mentions in our dataset, each day, every day of the study, is Justin Bieber.  Not many people over age 15 know who he is, despite his Christmas 2009 performance at a Washington, D.C. concert for President Obama.  An informal polling of seminar participants and friends over 18 confirms an almost absolute lack of Bieber awareness.  At the same time, Justin Bieber, a YouTube boy singer phenomenon, commands a significant mindshare among the pop culture fans from about 11 to 15 years old, from Brazil to Slovenia, but mostly teen girls in Canada and the US.  
+\label{section:pagerank-generation}
+
+
+The most surprising discovery in the Twitter network we made is the Bieber ecosystem.  Its growth principle can be summarized as: {\itshape You can't be Justin Bieber, but you can be Amanda D}.  The person with pagerank 0, i.e.\ the most influential person in Twitter mentions in our dataset, each day, every day of the study, is Justin Bieber.  Not many people over age 15 know who he is, despite his Christmas 2009 performance at a Washington, D.C. concert for President Obama.  An informal polling of seminar participants and friends over 18 confirms an almost absolute lack of Bieber awareness.  At the same time, Justin Bieber, a YouTube boy singer phenomenon, commands a significant mindshare among the pop culture fans from about 11 to 15 years old, from Brazil to Slovenia, but mostly teen girls in Canada and the US.
 
 
 The most interesting aspect of the Bieber Ecosphere is that it's the first Twitter generation which grows up with social networks in hand, and adapts to its influence seeking ways almost naturally.  They evolve to efficiently rise in the page ranks.  The second and third daily position by pagerank are most often occupied by several high-caliber fans of Justin Bieber.  One of them, Amanda D., self-billed as a singer and songwriter in the South, is too young to drive, and her parents wouldn't take her to a Justin's concert in the nearest big city, so one of her online goals is to get him to perform in her hometown -- as described on a free blog website with a link offered to Justin and others to share.  What's most fascinating of the self-named ``beliebers'' is their active and incessant manipulation of the pagerank by constantly mentioning each other and growing the followers' network.
@@ -1567,7 +1708,7 @@ The top {\itshape beliebers} got where they are by active and clever Twitter pre
 ``Hey I'm Tea I'm from Slovenia and I'm 14.I LOVE Justin Bieber!I also like Tay Swift,Miley Cyrus and Sel Gomez!Justin followed me 25/10/2009!''  She uses all the tricks in the book -- trading shoutouts, ramping up the number of followers, maintaining multiple accounts such as  \emph{@JBieber\_Babes}, and inviting other fans to participate in all of those activities together.
 
 
-\chapter{Reciprocal Social Capital}
+\pagebreak \chapter{Reciprocal Social Capital}
 \label{reciprocalsocialcapital}
 
 \label{chapter:social-capital}
@@ -1720,6 +1861,9 @@ Hence one of the differences in the utility of tweeting. Celebrities, those most
 \pagebreak \chapter{Success is Earned}
 \label{successisearned}
 
+\label{chapter:success-is-earned}
+
+
 \section{Accidental Influentials, or Not?}
 \label{accidentalinfluentialsornot}
 
@@ -1771,6 +1915,9 @@ Thus, we only rearrange the sinks of some edges in the simulation, after a certa
 In each simulated world, we mix these strategies via jump probabilities, creating a composite behavior, hopefully capturing some subset of the real world.  We see who wins in the simulated world, and compare the winners in each position, or rather class, to the real ones for that day and class.  We seed the simulated world with the real one, hence establishing communication balances, friends-of-friends networks, and social capital distributions in advance, in different proportions.  If starting conditions are key, and simulation strategies are reasonable, we'd see the original winners keep their place in large numbers.  By varying the degree of randomness in the simulated strategies, we can see how quickly the winners dissipate from either the real or the simulated world.  If the simulated world is governed by it own rules which are self-consistent, we'd see the same winners across days, even though different world might have different sets of winners; when, once emerging, the winners will persist for the duration of the world, it will mean their behavior is consistent with the rules of that world.
 
 
+Additionally, we can alter only a specified subset of users, such as those in a given set of buckets.  Using this fine-grained filter on top of a given strategy, we can see which classes fit the strategy better, and if they don't, does it make a difference.
+
+
 The remainder of this chapter is structured as follows.
 
 
@@ -1785,7 +1932,7 @@ The remainder of this chapter is structured as follows.
 
 \item Actual Simulations -- the simulations we ran, composed of the strategies above
 
-\item Simulation Tables -- a cross-linked hierarchy of 3 levels of tables, referring to and summarizing 457 primary and 30 summary tables with key results.
+\item Simulation Tables -- a cross-linked hierarchy of three levels of tables with key results
 \end{itemize}
 
 \pagebreak \section{Methodology of Influence Studies}
@@ -1883,7 +2030,7 @@ Given a {\itshape fromUser} and a new edge to issue from him, the {\itshape toUs
 \subsection{GlobalMentions}
 \label{globalmentions}
 
-Here, we consider how many mentions all of the eligible {\itshape toUsers} had already received prior to this cycle, and generate an attachment with a probability proportional to the toUser's total number of edges received so far. We call this total edge count {\itshape byMass}, as opposed to a distinct mentioner count {\itshape byUser} (see \ref {sec:extra-strategy-features}).
+Here, we consider how many mentions all of the eligible {\itshape toUsers} had already received prior to this cycle, and generate an attachment with a probability proportional to the toUser's total number of edges received so far. We call this total edge count {\itshape byMass}, as opposed to a distinct mentioner count {\itshape byUser} (see \ref {section:extra-strategy-features}).
 
 
 \subsection{GlobalConstants}
@@ -1940,7 +2087,7 @@ Separating individual buckets and their groups allows us to analyze the effects 
 \subsection{Extra Strategy Features}
 \label{extrastrategyfeatures}
 
-\label{sec:extra-strategy-features}
+\label{section:extra-strategy-features}
 Extra strategy features can aid in generating more simulations.  Those listed here were considered but did not add much diversity.
 
 
@@ -1974,13 +2121,13 @@ Using the above strategies as basic elements, we combine them, possibly with one
 \subsection{Global Constants --- creps}
 \label{globalconstantscreps}
 
-{\itshape Creps} are generated using the {\itshape GlobalConstants} strategy only.  We use the actual social capitals from {\itshape dreps} as expected values.  Despite an artificial character of this setup --- attachment is proportional to a prescribed, not earned, social capital --- the fact is that we obtain a distribution with a similar ranking and bucketing, which leads to a remarkable result of reproducible middle and upper middle classes, as discussed in Results, \ref{sec:simulation-results}.
+{\itshape Creps} are generated using the {\itshape GlobalConstants} strategy only.  We use the actual social capitals from {\itshape dreps} as expected values.  Despite an artificial character of this setup --- attachment is proportional to a prescribed, not earned, social capital --- the fact is that we obtain a distribution with a similar ranking and bucketing, which leads to a remarkable result of reproducible middle and upper middle classes, as discussed in Results, \ref{section:simulation-results}.
 
 
 \subsection{Global Real Values --- rreps}
 \label{globalrealvaluesrreps}
 
-{\itshape Rreps} are generated with the {\itshape GlobalRealValues} strategy only, using the actual social capital as computed on the fly --- but there are two parameters related to the way the capital is computed in comparisons at different time points.  Our Social Capital, defined in \ref{chapter:SocialCapital}, uses exponential decay, currently multiplying the previous value by $0.1$ each day.  Every day there's always a wave of newcomers who are interesting only because they are new.  When comparing capitals, we usually downgrade any user with less than $7$ days of history to the minimum possible capital in our study, $1e-35$ (across $35$ days).  However, when used as an interval, determining the proportionality of attachment probability, this makes attachment to a new user highly unlikely.  Thus we also experiment with a higher minimum-capital value, such as $1e-7$.  Generally, the parameters for mature social capital comparisons are {\itshape minDays} and {\itshape minCap}, applied as follows:
+{\itshape Rreps} are generated with the {\itshape GlobalRealValues} strategy only, using the actual social capital as computed on the fly --- but there are two parameters related to the way the capital is computed in comparisons at different time points.  Our Social Capital, defined in \ref{chapter:social-capital}, uses exponential decay, currently multiplying the previous value by $0.1$ each day.  Every day there's always a wave of newcomers who are interesting only because they are new.  When comparing capitals, we usually downgrade any user with less than $7$ days of history to the minimum possible capital in our study, $1e-35$ (across $35$ days).  However, when used as an interval, determining the proportionality of attachment probability, this makes attachment to a new user highly unlikely.  Thus we also experiment with a higher minimum-capital value, such as $1e-7$.  Generally, the parameters for mature social capital comparisons are {\itshape minDays} and {\itshape minCap}, applied as follows:
 
 
 \begin{itemize}
@@ -2025,7 +2172,7 @@ will try to do local utility attachment with probability $0.8$ --- unless it jum
 \section{Simulation Tables}
 \label{simulationtables}
 
-The full list of all simulations and links to their result tables follows.  Each simulation is first analyzed for interday bucket stability, {\itshape srates} (\ref{sec:staying-power}), and then overlaps with reality, {\itshape overx-dreps} (\ref{sec:overx-dreps}), its own week-shifted instances, {\itshape overx-self} (\ref{sec:overx-self}), or differently randomized runs, {\itshape overx-xreps} (\ref{sec:overx-xreps}).
+The full list of all simulations and links to their result tables follows.  Each simulation is first analyzed for interday bucket stability, {\itshape srates} (Figures~\ref{figure:heatmap-srates-medians-0wk}--\ref{figure:heatmap-srates-medians-3wk}), and then overlaps with reality, {\itshape overx-dreps} (Figures~\ref{figure:heatmap-overx-dreps-medians-0wk}--\ref{figure:heatmap-overx-dreps-medians-3wk}), its own week-shifted instances, {\itshape overx-self} (Figures~\ref{figure:heatmap-overx-self-medians-0wk}--\ref{figure:heatmap-overx-self-medians-3wk}), or differently randomized runs.  We look at volumes per bucket, both outgoing replies (Figure~\ref{figure:vols4-re-norm-medians-med}) and incoming mentions (Figures~\ref{figure:heatmap-vols4-me-norm-medians-0wk}--\ref{figure:heatmap-vols4-me-norm-medians-3wk}).  Starranks by mentions (Figures~\ref{figure:heatmap-sbucks-ments-star-med-medians-0wk}--\ref{figure:heatmap-sbucks-ments-star-med-medians-3wk} tell us about the relationship of a user and his mentioners, per bucket, while starrank by replies (Figures~\ref{figure:heatmap-sbucks-reps-star-med-medians-0wk}--\ref{figure:heatmap-sbucks-reps-star-med-medians-3wk}) shows how they associates themselves actively with others.  Bucket to bucket communication, by replies, tracks how people in one class talk to those above, below, or on their own level (Figures~\ref{figure:heatmap-b2br-befr-rel-medians-0wk}--\ref{figure:heatmap-b2br-self-rel-medians-3wk}), and mentions between buckets are segmented by class relationship as well (Figures~\ref{figure:heatmap-b2bm-befr-rel-medians-0wk}--\ref{figure:heatmap-b2bm-self-rel-medians-3wk}).  Finally, we look how our Reciprocal Social Capital correlates with our own Skew metric, or how ``politician-like'' a user is when returning his base's contributions proportionally, using Kendall's $\tau$ (Figures~\ref{figure:heatmap-cstau-0wk}--\ref{figure:heatmap-cstau-3wk}). 
 
 
 Each of the {\itshape srates} and {\itshape overx} comparison is done across all buckets and days, producing a $35 \times 7$ (days $\times$ buckets) table.  We show the first 4 instances of each type, the first simulated from scratch, and three others seeded with one, two, and three weeks of {\itshape dreps}, respectively.  Due to the reciprocal social capital break-in period of one week and edge effects of the cutoff, we drop the first week and the last two days of study, showing 27 days of each.
@@ -2084,28 +2231,6 @@ From now on, we'll show only the roots of the simulation groups, like this:
 \item {\itshape urepsC}
 \end{itemize}
 
-Their original tables are cross-linked in Table~\ref{table:ureps-tables}.
-
-
-
-\begin{table}
-\begin{tabular}{|ccccc|}
-\toprule
-run & srates & overx-dreps & overx-ureps-self & overx-ureps-xrun \\
-\midrule
-ureps & \ref{table:srates-ureps4wk}—\ref{table:srates-ureps3wk} & \ref{table:overx-dreps-ureps0}—\ref{table:overx-dreps-ureps3wk} & \ref{table:overx-ureps0-ureps1wk}—\ref{table:overx-ureps3wk-ureps4wk} & \ref{table:overx-ureps0-urepsB0}—\ref{table:overx-ureps3wk-urepsC3wk} \\
-$\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, lines 2-6 & \ref{table:ereps-overx-dreps-averages}—\ref{table:ereps-overx-dreps-medians}, line 1-4 & \ref{table:ereps-overx-ereps-averages}—\ref{table:ereps-overx-ereps-medians}, lines 1-4 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 9-16 \\
-\hline
-urepsB & \ref{table:srates-urepsB0}—\ref{table:srates-urepsB3wk} & \ref{table:overx-dreps-urepsB0}—\ref{table:overx-dreps-urepsB3wk} & \ref{table:overx-urepsB0-urepsB1wk}—\ref{table:overx-urepsB3wk-urepsB4wk} & \ref{table:overx-ureps0-urepsB0}—\ref{table:overx-ureps3wk-urepsB3wk}, \ref{table:overx-urepsB0-urepsC0}—\ref{table:overx-urepsB3wk-urepsC3wk} \\
-$\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-medians}, lines 1-4 & \ref{table:ureps-deux-overx-dreps-averages}—\ref{table:ureps-deux-overx-dreps-medians}, lines 1-4 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 1-4 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 9-12, 17-20 \\
-\hline
-urepsC & \ref{table:srates-urepsC0}—\ref{table:srates-urepsC3wk} & \ref{table:overx-dreps-urepsC0}—\ref{table:overx-dreps-urepsC3wk} & \ref{table:overx-urepsC0-urepsC1wk}—\ref{table:overx-urepsC3wk-urepsC4wk} & \ref{table:overx-ureps0-urepsC0}—\ref{table:overx-urepsB3wk-urepsC3wk} \\
-$\sum$ & \ref{table:ureps-deux-srates-averages}—\ref{table:ureps-deux-srates-medians}, lines 5-8 & \ref{table:ureps-deux-overx-dreps-averages}—\ref{table:ureps-deux-overx-dreps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 5-8 & \ref{table:ureps-deux-overx-ureps-averages}—\ref{table:ureps-deux-overx-ureps-medians}, lines 13-20 \\
-\bottomrule
-\end{tabular}
-\caption{ureps tables and their summaries}
-\label{table:ureps-tables}
-\end{table}
 \pagebreak \subsection{ereps list}
 \label{erepslist}
 
@@ -2126,32 +2251,6 @@ Here we list the roots of other global-only simulation groups:
 \item {\itshape rreps0d} --- global capital-based attachment only, no capital maturity
 \end{itemize}
 
-Their original tables are cross-linked in Table~\ref{table:ereps-tables}.
-
-
-
-\begin{table}
-\begin{tabular}{|cccc|}
-\toprule
-run & srates & overx-dreps & overx-ureps-self  \\
-\midrule
-ereps & \ref{table:srates-ereps0}—\ref{table:srates-ereps3wk} & \ref{table:overx-dreps-ereps0}—\ref{table:overx-dreps-ereps3wk} & \ref{table:overx-ereps0-ereps1wk}—\ref{table:overx-ereps3wk-ereps4wk} \\
-$\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, lines 7-11 & \ref{table:ereps-overx-dreps-averages}—\ref{table:ereps-overx-dreps-medians}, line 5-8 & \ref{table:ereps-overx-ereps-averages}—\ref{table:ereps-overx-ereps-medians}, lines 5-8  \\
-\hline
-creps & \ref{table:srates-creps0}—\ref{table:srates-creps3wk} & \ref{table:overx-dreps-creps0}—\ref{table:overx-dreps-creps3wk} & \ref{table:overx-creps0-creps1wk}—\ref{table:overx-creps3wk-creps4wk} \\
-$\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, lines 12-16 & \ref{table:ereps-overx-dreps-averages}—\ref{table:ereps-overx-dreps-medians}, line 9-12 & \ref{table:ereps-overx-ereps-averages}—\ref{table:ereps-overx-ereps-medians}, lines 9-12  \\
-\hline
-rreps & \ref{table:srates-rreps0}—\ref{table:srates-rreps3wk} & \ref{table:overx-dreps-rreps0}—\ref{table:overx-dreps-rreps3wk} & \ref{table:overx-rreps0-rreps1wk}—\ref{table:overx-rreps3wk-rreps4wk} \\
-$\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, lines 17-21 & \ref{table:ereps-overx-dreps-averages}—\ref{table:ereps-overx-dreps-medians}, line 13-16 & \ref{table:ereps-overx-ereps-averages}—\ref{table:ereps-overx-ereps-medians}, lines 13-16  \\
-\hline
-rreps7m & \ref{table:srates-rreps7m0}—\ref{table:srates-rreps7m3wk} & \ref{table:overx-dreps-rreps7m0}—\ref{table:overx-dreps-rreps7m3wk} & \ref{table:overx-rreps7m0-rreps7m1wk}—\ref{table:overx-rreps7m3wk-rreps7m4wk} \\
-$\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, lines 22-26 & \ref{table:ereps-overx-dreps-averages}—\ref{table:ereps-overx-dreps-medians}, line 17-20 & \ref{table:ereps-overx-ereps-averages}—\ref{table:ereps-overx-ereps-medians}, lines 17-20  \\
-\hline
-\bottomrule
-\end{tabular}
-\caption{ereps tables and their summaries}
-\label{table:ereps-tables}
-\end{table}
 \pagebreak \subsection{lreps list}
 \label{lrepslist}
 
@@ -2171,37 +2270,6 @@ $\sum$ & \ref{table:ereps-srates-averages}—\ref{table:ereps-srates-medians}, l
 \item {\itshape lj5u} --- local utility attachment with probability 0.5, otherwise (0.5) jump to global uniform attachment
 \end{itemize}
 
-Their original tables are cross-linked in Table~\ref{table:lreps-tables}.
-
-
-
-\begin{table}
-\begin{tabular}{|cccc|}
-\toprule
-run & srates & overx-dreps & overx-ureps-self  \\
-\midrule
-lj1m & \ref{table:srates-lj1m0}—\ref{table:srates-lj1m3wk} & \ref{table:overx-dreps-lj1m0}—\ref{table:overx-dreps-lj1m3wk} & \ref{table:overx-lj1m0-lj1m1wk}—\ref{table:overx-lj1m3wk-lj1m4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 1-4 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 1-4 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 1-4  \\
-\hline
-lj1u & \ref{table:srates-lj1u0}—\ref{table:srates-lj1u3wk} & \ref{table:overx-dreps-lj1u0}—\ref{table:overx-dreps-lj1u3wk} & \ref{table:overx-lj1u0-lj1u1wk}—\ref{table:overx-lj1u3wk-lj1u4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 5-8 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 5-8 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 5-8  \\
-\hline
-lj2m & \ref{table:srates-lj2m0}—\ref{table:srates-lj2m3wk} & \ref{table:overx-dreps-lj2m0}—\ref{table:overx-dreps-lj2m3wk} & \ref{table:overx-lj2m0-lj2m1wk}—\ref{table:overx-lj2m3wk-lj2m4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 9-12 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 9-12 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 9-12  \\
-\hline
-lj2u & \ref{table:srates-lj2u0}—\ref{table:srates-lj2u3wk} & \ref{table:overx-dreps-lj2u0}—\ref{table:overx-dreps-lj2u3wk} & \ref{table:overx-lj2u0-lj2u1wk}—\ref{table:overx-lj2u3wk-lj2u4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 13-16 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 13-16 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 13-16  \\
-\hline
-lj5m & \ref{table:srates-lj5m0}—\ref{table:srates-lj5m3wk} & \ref{table:overx-dreps-lj5m0}—\ref{table:overx-dreps-lj5m3wk} & \ref{table:overx-lj5m0-lj5m1wk}—\ref{table:overx-lj5m3wk-lj5m4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 17-20 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 17-20 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 17-20  \\
-\hline
-lj5u & \ref{table:srates-lj5u0}—\ref{table:srates-lj5u3wk} & \ref{table:overx-dreps-lj5u0}—\ref{table:overx-dreps-lj5u3wk} & \ref{table:overx-lj5u0-lj5u1wk}—\ref{table:overx-lj5u3wk-lj5u4wk} \\
-$\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, lines 21-24 & \ref{table:lreps-overx-dreps-averages}—\ref{table:lreps-overx-dreps-medians}, line 21-24 & \ref{table:lreps-overx-lreps-averages}—\ref{table:lreps-overx-lreps-medians}, lines 21-24  \\
-\bottomrule
-\end{tabular}
-\caption{lreps tables and their summaries}
-\label{table:lreps-tables}
-\end{table}
 \pagebreak \subsection{freps list}
 \label{frepslist}
 
@@ -2246,9 +2314,6 @@ $\sum$ & \ref{table:lreps-srates-averages}—\ref{table:lreps-srates-medians}, l
 
 \item {\itshape fg5cf1cC} --- local utility with probability 0.5, jump to FOF with 0.5, then capital-based FOF with probability 0.9 or jump to global, then capital-based global attachment with probability 0.1, standard capital maturity, run C
 \end{itemize}
-
-Their original tables are cross-linked in Table~\ref{table:freps-tables}.
-
 
 Bucketed simulations are even more expensive to compute than the most involved, three-stage composite {\itshape freps}.  Hence we perform a whole set of bucketed simulations based on the same underlying {\itshape freps} simulation, namely 
 
@@ -2310,8 +2375,6 @@ The following bucketing is performed:
 \item {\itshape fg5cf1c{\itshape {\itshape b567t}}} -- keep buckets 5-7, preserve buckets 1-4
 \end{itemize}
 
-
-\input{in-freps-tables}
 \pagebreak \section{Evaluation}
 \label{evaluation}
 
@@ -2353,7 +2416,7 @@ Once the buckets are computed, they establish the classes of influence.  The fir
 \subsection{Staying Power}
 \label{stayingpower}
 
-\label{sec:staying-power}
+\label{section:staying-power}
 For every kind of a dynamic graph, real, synthetic, or mixed with social capital computed daily, we now have daily buckets, reflecting classes of capital ranks.  If our metric is continuous and people's behavior is meaningful with regard to our metrics, we should see the membership of those buckets to rotate at a reasonable low rate.  The staying power metric compares the set membership of each bucket and finds the intersection of today's and yesterday's sets.  Given that the $i$th bucket for $d$th day is $B_i^d$, the staying power in that bucket from day $d$ to day $d+1$ is
 
 \[ \frac{|B_i^{d+1} \cap B_i^d|}{|B_i^d|} \]
@@ -2366,11 +2429,11 @@ For every kind of a dynamic graph, real, synthetic, or mixed with social capital
 For two different simulations, we can compare how similar the buckets are by computing the bucket overlap between respective buckets for respective days, using the same formula as for staying power --- except here, bucket1 and bucket2 are not buckets in the same positions from consecutive days of the same simulation,  but from same day and position in two different simulations.  This is the primary way to see how well the original $dreps$ classes are reproduced by a simulation, and also to check whether the same simulation, shifted by weeks, is consistent with itself.
 
 
-\label{sec:overx-dreps}
+\label{section:overx-dreps}
 Overlaps with {\itshape dreps} shows how well we reproduce the actual social capital distribution.  Overlap between {\itshape dreps} and {\itshape ureps} is a baseline of what we can expect in a random case.  The majority of users are in the poor bucket, where the most overlap does occur.
 
 
-\label{sec:overx-self}
+\label{section:overx-self}
 We also compute overlap between simulations from the same class, but mixed at different weeks --- e.g., for class $X$, we compute overlaps
 
 
@@ -2386,7 +2449,7 @@ $X1wk$ and $X2wk$
 These simulations differ only by the starting conditions, --- how much of the original {\itshape dreps} was used to seed them.  The week-shifted overlap will show how much the buckets resulting depend on the starting conditions, as opposed to the simulation-specific ones.
 
 
-\label{sec:overx-xreps}
+\label{section:overx-xreps}
 Overlaps with different runs of the same class are computed in the same way as overlaps with different simulations -- buckets in the same positions for the same days are intersected, and the ratio of cardinality of the intersection to the left bucket size is taken.  This overlap shows how stable each simulation class is.
 
 
@@ -2407,7 +2470,7 @@ A very important characteristic of classes in discourse is how much of it is act
 \item Relative: what fraction of all replies had originated in this bucket?
 \end{itemize}
 
-We compute volumes for replies and mentions separately.  This is how we see that our middle class carries the bulk of the communication, in proportion to its own size.  In the original {\itshape dreps}, the 1 million-strong middle class is responsible for about 40\% of all replies, about the same as the 3 million+ of the poor, combined.  Table~\ref{table:vols4-re-norm-medians.tex} contains median number of replies issued from each bucket, as a fraction of the total, for all of our simulations.  We further summarize the results in the following figures.
+We compute volumes for replies and mentions separately.  This is how we see that our middle class carries the bulk of the communication, in proportion to its own size.  In the original {\itshape dreps}, the 1 million-strong middle class is responsible for about 40\% of all replies, about the same as the 3 million+ of the poor, combined.  Figure~\ref{figure:vols4-re-norm-medians-med} contains median number of replies issued from each bucket, as a fraction of the total, for all of our simulations.  We further summarize the results in the following figures.
 
 
 \subsection{Bucket to bucket}
@@ -2433,6 +2496,9 @@ Finally, starrank of $x$ with respect to $A(x)$ is
 \[ Sr(x) = \frac{S(x)}{Ar(x)} \]
 In our starrank tables, we show all three components --- per bucket per day --- average social capital, average audience rank, and their ratio, the starrank.
 
+
+\subsection{Longevity and Mobility}
+\label{longevityandmobility}
 
 Longevity
 For any given number of days $d$, and a bucket $B$, we define users of {\itshape longevity} $L\_B^d$ as the set of users who stayed in $B$ for $d$ or more days overall.  We than define $|L\_B^d|$ as the cardinality of that set.  Note that the residency days in the bucket need not be contiguous.
@@ -2483,7 +2549,7 @@ We define the original skew,
 \[
 \left\lbrace
 \begin{array}{l}
-    S_0 = \frac{R_{A_0}}{R_{B_0}} \quad\mbox{if} R_{B_0} > 0 \\
+    S_0 = \frac{R_{A_0}}{R_{B_0}} \quad\mbox{if}\quad R_{B_0} > 0 \\
     \infty \quad\mbox{otherwise} 
 \end{array}
 \right.
@@ -2496,19 +2562,21 @@ We repeat diving the top half until either a given fixed skew vector size, e.g.\
 We now collect {\itshape skew} vectors for all users in a time slice, e.g.\ considering their daily contributions and responses, and sort the skew list by first preferring longer vectors to shorter ones -- meaning more action at the top, even if not always preferring the top half at each step -- and then component-wise comparisons for vectors of equal length, with two $\inf$s being equal and ties at a position broken by (recursively) comparing the rest.  Listing~\ref{listing:compare-skew} shows the comparison rules verbatim as implemented in OCaml.
 
 
-\begin{verbatim}
+
+\lstset{language=ML,caption={Comparing two skew vectors accounts for variable length, and distinguishes $\infty = -1$}}
+\begin{lstlisting}
 let rec compareSkew ?(length=true) xs ys =
     let rec aux xs ys =
         match xs,ys with
-        | x::xs,y::ys when x = -1. \&\& y = -1. ->
+        | x::xs,y::ys when x = -1. && y = -1. ->
             compare xs ys
         | x::xs,y::ys when x = -1.            ->  1
         | x::xs,y::ys when            y = -1. -> -1
         | x::xs,y::ys                         -> 
             let c = compare x y in if c = 0 then compare xs ys else c
-        | x::xs,\_                             ->  1
-        | \_,y::ys                             -> -1
-        | \_                                   ->  0
+        | x::xs,_                             ->  1
+        | _,y::ys                             -> -1
+        | _                                   ->  0
     in
     if lengthFirst then begin
         let c = compare (L.length xs) (L.length ys) in
@@ -2517,20 +2585,15 @@ let rec compareSkew ?(length=true) xs ys =
     else
         aux xs ys
 
-
-\end{verbatim}
-
-
+\end{lstlisting}
 \label{listing:compare-skew}
-
-
 In order to evaluate our skew findings, we use the skew ordering above to sort all users in a cycle by skew, and then compare that ordering with the reciprocal social capital ordering.  We use Kendall's $\tau$ as a well-established non-parametric measure of alignment between two sorted lists of the same length.
 
 
 Kendall's $\tau$ is a computationally expensive non-parametric metric, with most implementations readily available running in $O(n^2)$ time in the length of the input arrays, which works for many hand-made examples, but fails quickly when going into the millions of points, such as Twitter user ranks on a given day.
 
 
-Despite the fact that at least two papers report $O(n \log n)$ algorithms, from 1966 and 2005 --- Knight~\cite{knight1966computer}, Christensen~\cite{christensen2005fast-kendall} respectively --- some folks still compute it on a cluster using the $O(n^2)$ method.  We implemented efficient bindings to a fast C version of the Knight's algorithm, and solved several interesting problems on the way.  Since skews are not numbers, but vectors of varying length, they have to be sorted using their own comparator, shown above.  However, keeping those vectors around would not allow for many efficient comparisons we need to make this computation feasible.
+There are at least two papers reporting $O(n \log n)$ algorithms, from 1966 and 2005 --- Knight~\cite{knight1966computer}, Christensen~\cite{christensen2005fast-kendall} respectively.  We implemented efficient bindings to a fast C version of the Knight's algorithm, and solved several interesting problems on the way.  Since skews are not numbers, but vectors of varying length, they have to be sorted using their own comparator, shown above.  However, keeping those vectors around would not allow for many efficient comparisons we need to make this computation feasible.
 
 
 Our implementation proceeded as follows:
@@ -2551,29 +2614,7 @@ Our implementation proceeded as follows:
 \pagebreak \section{Results}
 \label{results}
 
-\label{sec:simulation-results}
-So, are the influentials accidental, or not, after all?
-
-
-The staying rate within the same simulation shows how stable the winners are within their own classes -- if the churn in buckets is not too great, especially among the higher classes, we have our influentials which keep their positions for long periods of time, as they do in the real world.
-
-
-What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of $fg2uf05m$, $fg2uf05c$, and $fg2cf05c$ (Table~\ref{table:freps-srates-averages}, lines 17-20, 9-12, 1-4, respectively) -- capital-based global attachment significantly increases stability of the top buckets.
-
-
-The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  (Table~\ref{table:ereps-srates-averages}, lines 2-6.)  However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning.  Then, they will be likely to stay there, especially if they activity was high.
-
-
-The capital-based attachments achieve a staying rate which is even higher than the real ones.  The uniform-based FOF and global ones rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
-
-
-The overlap among the simulated winners and the real ones, while minimal, is not random.  It gets closer to 10\% per bucket of the upper middle classes for our most elaborate, utility/FOF-capital/global-capital simulations, $fgXcfYc$ (Table~\ref{table:freps-overx-dreps-averages}, lines 1-4, 61-64).  It means that in a world with slightly different rules, other people will win -- if everybody attaches according to slightly different rules, those who were in a good starting position (seeded with dreps, show up on the same day), and are active enough (outdegree preserved), will fit better.
-
-
-Among the same type of simulation, generated with different initializations of the random number generator, we get much higher overlap than with any other simulation.  Tables \ref{table:overx-fg5cf1cA0-fg5cf1cB0}---\ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk} show the overlap for three distinct groups of the same kind of simulation, $fg5f1c$ -- $fg5f1cA$, $fg5f1cB$, and $fg5f1cC$.  The corresponding summaries are in lines 13-27 of the tables \ref{table:freps-deux-overx-freps-averages}---\ref{table:freps-deux-overx-freps-medians}.
-
-
-Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  The more intelligent they are, the better they stay on top, and grab a better share of the real-world winners in overlaps.  However, the top celebrities can be persistent even in a version of a stochastic world, and a slight change of rules will lead to a new and distinct persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to continue, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
+\label{section:simulation-results}
 
 
 \subsection{Overlaps with Reality}
@@ -2668,10 +2709,10 @@ For all simulations with several runs differing only by the amount of reality se
 Capital-capital FOF-based simulations show pretty good stability right away --- Figure~\ref{figure:heatmap-overx-self-medians-0wk}, --- with especially strong showing in the 1,000 elite bucket and the middle class.
 
 
-{\itshape Rrreps} and {\itshape creps} do well in the upper-middle classm while FOF-based, uniform global strategies capture the celebrity bucket.
+{\itshape Rrreps} and {\itshape creps} do well in the upper-middle class while FOF-based, uniform global strategies capture the celebrity bucket.
 
 
-The pattern continues into the first-second week pair --- Figure~\ref{figure:heatmap-overx-self-medians-1wk}, --- where non-bucketed capital-based simulations, both FOF and non-FOF utility based, bring up the middle considerably.  The newly arrived bucketed simulations do especially well, of course.  This continues into the secon-third week --- Figure~\ref{figure:heatmap-overx-self-medians-2wk} --- and third-fourth --- Figure~\ref{figure:heatmap-overx-self-medians-3wk} --- pairs as well.
+The pattern continues into the first $\rightarrow$ second week pair --- Figure~\ref{figure:heatmap-overx-self-medians-1wk}, --- where non-bucketed capital-based simulations, both FOF and non-FOF utility based, bring up the middle considerably.  The newly arrived bucketed simulations do especially well, of course.  This continues into the second $\rightarrow$ third week --- Figure~\ref{figure:heatmap-overx-self-medians-2wk} --- and third $\rightarrow$ fourth --- Figure~\ref{figure:heatmap-overx-self-medians-3wk} --- pairs as well.
 
 
 
@@ -2703,7 +2744,7 @@ The pattern continues into the first-second week pair --- Figure~\ref{figure:hea
 \begin{center}
     \includegraphics{figures/heatmap-overx-self-medians-3wk}
     \caption{Overlap with the same strategy seeded by one more week of reality, 3 vs 4 weeks.}
-    \label{figure:heatmap-overx-self-medians-4wk}
+    \label{figure:heatmap-overx-self-medians-3wk}
 \end{center}
 \end{figure}
 \pagebreak \subsection{Staying Rates}
@@ -2780,21 +2821,13 @@ The bucketed are now bracketing reality, with the middle class {\itshape 6f} one
 \begin{itemize}
 
 
-\item fg5cf1cC 
+\item {\itshape fg5cf1cC}
 
-\item rreps7m 
+\item {\itshape rreps7m}
 
-\item ereps
+\item {\itshape ereps}
 \end{itemize}
 
-
-\begin{figure}
-\begin{center}
-    \includegraphics{figures/heatmap-srates-medians-3wk}
-    \caption{Staying power clustering of all simulations seeded by 3 weeks of reality.}
-    \label{figure:heatmap-srates-medians-3wk}
-\end{center}
-\end{figure}
 \pagebreak \subsection{Volumes per Bucket}
 \label{volumesperbucket}
 
@@ -2807,7 +2840,7 @@ Volume of replies per bucket follows mostly the same pattern, shown here as a ba
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/vols4-re-norm-medians-med}
+    \includegraphics[width=4in]{figures/vols4-re-norm-medians-med}
     \caption{Medians of all bucket reply shares, for all simulations, per bucket.}
     \label{figure:vols4-re-norm-medians-med}
 \end{center}
@@ -3473,7 +3506,7 @@ The pattern is really uniform here, every bucket is mentioned by its predecessor
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/b2bm-aftr-rel-medians-med}
+    \includegraphics[width=4in]{figures/b2bm-aftr-rel-medians-med}
     \caption{Medians of all bucket to bucket mentions, from lower ones than each one, for all simulations seeded by 3 weeks of reality, per bucket.}
     \label{figure:b2bm-aftr-rel-medians-med}
 \end{center}
@@ -3589,50 +3622,215 @@ For most of our strategies, we observe a Kendall's $\tau$ correlation between so
 The fact that the global $\tau$ generally is around 0.2, as it is for {\itshape dreps}, shows that politician-like behavior, with more communication activity toward the top contributors, corresponds to the social capital hierarchy.
 
 
+From scratch, --- Figure~\ref{figure:heatmap-cstau-0wk} we observe a significant amount of low correlations among the global-only simulations, and a progressive drops for capital-capital ones.  FOF-based simulations with 0.05 jumpFOF probability and global uniform strategy stay nearest the reality.
+
+
+One week of reality seeding --- Figure~\ref{figure:heatmap-cstau-1wk} --- brings about the bucketed simulations, which cluster around {\itshape dreps}, as expected, starting with small elite buckets.  Interesting early neighbors are
+
+
+\begin{itemize}
+
+
+\item lj1u
+
+\item fg5mf1c
+\end{itemize}
+
+-- followed by a block of the original capital-uniform ones with large FOF probability (i.e.\ low 0.05 jumpFOF probability of going global away from FOF).
+
+
+Capital-capital simulations, together with {\itshape rreps} and {\itshape creps}, are in a more distant cluster, falling rapidly with time.
+
+
+The simulated middle class, {\itshape fg5cf1cb6f}, ends up in a separate cluster with
+* lj{2,5}u
+* lj{1,2,5}m
+* fg5uf1{m,u}
+* fg5mf1{c0d,u}
+
+
+They fall a bit slower than {\itshape dreps}, as opposed to capital-capital ones.
+
+
+The picture consolidates after two weeks of reality --- Figure~\ref{figure:heatmap-cstau-2wk} --- with a large cluster around {\itshape dreps}.  Now we see simulated middle classes and elites, {\itshape fg5cf1cb7t}, as well as the simulated poor, {\itshape fg5cf1cb7f}, next to each other and near {\itshape dreps} -- meaning that the middle class is approximated quite well by the capital-capital strategy in relation to the poor.  
+
+
+The middle class, simulated by itself, {\itshape fg5cf1cb6f}, is between the previous favorites:
+
+
+\begin{itemize}
+
+
+\item fg5mf{1c0d,c}
+
+\item lj{1,2}u
+
+\item fg2uf05m
+
+\item fg5uf1m
+
+\item fg5cf1cb6f
+\end{itemize}
+
+Finally, after three weeks of reality, --- Figure~\ref{figure:heatmap-cstau-3wk} --- all but one non-bucketed capital-capital simuations get out of the distant cluster, now left to globals only --- {\itshape ureps}, {\itshape ereps}, {\itshape creps}, {\itshape rreps}, and {\itshape fg8cf05c}.
+
+
+The preserved middle class by itself, {\itshape fg5cf1cb6t}, is closer to reality than simulated-only, {\itshape fg5cf1cb6f}, which is near the edge of the adjacent cluster, next to {\itshape fg5mf1u}.  FOF-based strategies with high probability of FOF attachment, 0.95,  and high probability of jumping away from the initial utility, 0.8, are the closest to reality after the bucketed elites, namely
+
+
+\begin{itemize}
+
+
+\item fg8uf05{m,c7m,c0d,c}
+\end{itemize}
+
+Among the bucketed simulations, nearest non-elite ones are
+
+
+\begin{itemize}
+
+
+\item fg5cf1cb15f
+
+\item fg5cf1cb7t
+
+\item fg5cf1cb56f
+\end{itemize}
+
+Simulating the middle and upper middle class, just two or with all the elites, with our capital-capital strategies turns out to be a good approximation of politician-like behavior, by skew.
+
+
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/kendall-tau-fg5mf1u0-fg5cf1c0}
+    \includegraphics[width=4in]{figures/kendall-tau-fg5mf1u0-fg5cf1c0}
     \caption{Global correlation of social capital and skew by Kendall $\tau$.  While generally staying around 0.2-0.3, it can also decrease for some strategies, like the all-capital one.}
     \label{figure:kendall-tau-fg5mf1u0-fg5cf1c0}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstau-0wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations started from scratch.}
+    \label{figure:heatmap-cstau-0wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstau-1wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with one week of reality.}
+    \label{figure:heatmap-cstau-1wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstau-2wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with two weeks of reality.}
+    \label{figure:heatmap-cstau-2wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstau-3wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with three weeks of reality.}
+    \label{figure:heatmap-cstau-3wk}
 \end{center}
 \end{figure}
 \pagebreak \subsection{Discussion}
 \label{discussion}
 
-\label{sec:simulation-results}
+\label{section:discussion}
 So, are the influentials accidental, or not, after all?
 
 
 The staying rate within the same simulation shows how stable the winners are within their own classes -- if the churn in buckets is not too great, especially among the higher classes, we have our influentials which keep their positions for long periods of time, as they do in the real world.
 
 
-What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of $fg2uf05m$, $fg2uf05c$, and $fg2cf05c$ (Table~\ref{table:freps-srates-averages}, lines 17-20, 9-12, 1-4, respectively) -- capital-based global attachment significantly increases stability of the top buckets.
+What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of {\itshape fg2uf05m}, {\itshape fg2uf05c}, and {\itshape fg2cf05c} or {\itshape fg5cf1c} in Figure~ref{figure:heatmap-srates-medians-2wk} -- capital-based global attachment significantly increases stability of the top buckets.
 
 
-The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\%.  (Table~\ref{table:ereps-srates-averages}, lines 2-6.)  However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning.  Then, they will be likely to stay there, especially if they activity was high.
+The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\% --- see  Figures~ref{figure:heatmap-srates-medians-1wk}--ref{figure:heatmap-srates-medians-2wk}.   However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning, and return a reply, achieving a reward.  Then, they will be likely to stay there, especially if they activity was high.
 
 
-The capital-based attachments achieve a staying rate which is even higher than the real ones.  The uniform-based FOF and global ones rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
+The capital-based attachments achieve a staying rate which is in some cases even higher than the real ones.  The uniform-based FOF and global simulations rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
 
 
-The overlap among the simulated winners and the real ones, while minimal, is not random.  It gets closer to 10\% per bucket of the upper middle classes for our most elaborate, utility/FOF-capital/global-capital simulations, $fgXcfYc$ (Table~\ref{table:freps-overx-dreps-averages}, lines 1-4, 61-64).  It means that in a world with slightly different rules, other people will win -- if everybody attaches according to slightly different rules, those who were in a good starting position (seeded with dreps, show up on the same day), and are active enough (outdegree preserved), will fit better.
+The overlap among the simulated winners and the real ones, while minimal, is not random.  It gets closer to 10\% per bucket of the upper middle classes for some of the elaborate, utility/FOF-capitalmention global-capital/mention simulations, such as {\itshape fg5mf1{m,c,c0d}} in Figure~\ref{figure:heatmap-overx-dreps-medians-3wk}.  Among the non-bucketed simulations, {\itshape lj1c} is doing quite well, capturing some of the 10K class winners.   It means that in a world with slightly different rules, other people will win -- if everybody attaches according to slightly different rules, those who were in a good starting position (seeded with {\itshape dreps}, show up on the same day), and are active enough (outdegree preserved), will fit better.
 
 
-Among the same type of simulation, generated with different initializations of the random number generator, we get much higher overlap than with any other simulation.  Tables \ref{table:overx-fg5cf1cA0-fg5cf1cB0}---\ref{table:overx-fg5cf1cB4wk-fg5cf1cC4wk} show the overlap for three distinct groups of the same kind of simulation, $fg5f1c$ -- $fg5f1cA$, $fg5f1cB$, and $fg5f1cC$.  The corresponding summaries are in lines 13-27 of the tables \ref{table:freps-deux-overx-freps-averages}---\ref{table:freps-deux-overx-freps-medians}.
+Among the same type of simulation, generated with different initializations of the random number generator, we get much higher overlap than with any other simulation.  It means that the classes we define are mostly held for the same type of strategy, i.e., the combination of the reciprocal social capital metric and class segmentation depends mostly on the behaviors themselves.
 
 
 Thus our conclusion is that the influentials, defined with all the assumptions and ramifications of the underlying metric and class bucketing, are not accidental in their own worlds -- and hence probably the ones in our own world deserve the places they work hard to occupy, by most accounts.  The more intelligent they are, the better they stay on top, and grab a better share of the real-world winners in overlaps.  However, the top celebrities can be persistent even in a version of a stochastic world, and a slight change of rules will lead to a new and distinct persistent hierarchy which stays around under the same conditions, even though all of the edges are rearranged.  Seeding with the starting conditions from the real world doesn't lead to the real world hierarchy to continue, except for a few days immediately after the hand-off; but the new hierarchy is stable enough in smart simulations.
+
+
 The fact that simulating elites does not change things as much as altering the upper middle class and on down tells us the elites do not define the communication structure as much as those primary classes.
 
 
 Simulating the middle class or not is often not very different because it is in fact a fairly faithful simulation.  When fitting a linear model against all the buckets, determining the euclidian distance from reality --- 0 for reality itself --- we get buckets 4, 5 and 7, keeping which preserves it the most.  The top 3 elite buckets don't figure; the poor 7 dominates by its sheer bulk, while the upper middle class and the following ``upper crust'' bucket probably use strategies quite different from the capital-capital one we used.
 
 
+We plotted distance of a function of preserving or simulating several bottom classes in Figures~\ref{figure:boxplot-x4}, \ref{figure:boxplot-x5}, \ref{figure:boxplot-x6}, \ref{figure:boxplot-x7}.  All but the middle class (bucket 6) figure as significant in a linear model on all features.  While preserving most classes brings the distance lower, the middle class is simulated well enough to make its preservation not significant, distance-wise.
+
+
+
+\begin{figure}[ht]
+\minipage[b]{0.5\linewidth}
+\centering
+\includegraphics[scale=0.4]{figures/boxplot-x4-cb}
+\label{figure:boxplot-x4}
+\caption{distance by the top 10K}
+\endminipage\hfill%
+%
+\minipage[b]{0.5\linewidth}
+\centering
+\includegraphics[scale=0.4]{figures/boxplot-x5-cb}
+\label{figure:boxplot-x5}
+\caption{distance by the upper middle class}
+\endminipage
+
+\bigskip
+
+\minipage[b]{0.5\linewidth}
+\centering
+\includegraphics[scale=0.4]{figures/boxplot-x6-cb}
+\label{figure:boxplot-x6}
+\caption{distance by middle class}
+\endminipage\hfill%
+%
+\minipage[b]{0.5\linewidth}
+\centering
+\includegraphics[scale=0.4]{figures/boxplot-x7-cb}
+\label{figure:boxplot-x7}
+\caption{distance by the poor}
+\endminipage
+\end{figure}
+
+Figure~\ref{figure:decision-tree-overx-dreps} shows a decision tree, fitting the distance for the overlap with reality (overx-dreps) from the ideal.  We use Euclidian distance for a 7-component vector corresponding to the class buckets.  We intentionally treat each bucket equally in this distance throughout our metrics, since preserving the actual hierarchy is important for the role of the elites, while any weighting by the bucket size would overwhelm them.
+
+
+We see that the poor dominate by their volume, but then capital strategies work better, as well as using utility-based atatchment
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/decision-tree-overx-dreps}
+    \caption{Decision tree on all features, fitting distance from reality.}
+    \label{figure:decision-tree-overx-dreps}
+\end{center}
+\end{figure}
+Bucket 4, the top 10K users by social capital after the preceding 1110, show the highest Kendall $\tau$ correlation with the skew measure of politician-like behavior we devised.  It means they are most attentive to the difference in input between their highest and lowest contributors, and most consistent in repaying those proportionally.  They, together with the upper middle class, bucket 5, also figure as significant in linear models and decision trees regressing the overlap with reality on preserving or simulating individual buckets.
+
+
 The most important finding in our work is a persistent middle class, which is both defined and captured quite well by our reciprocal social capital.  As defined, the 1 M bucket above the poor, in the hierarchy segmented by that capital, the middle class is responsible for about 40\% of all outgoing replies overall (Figure~\ref{figure:vols4-re-norm-medians-med}).  It clusters near reality in most of the metrics, notably overlap with it, when replacing ``just'' the whole middle class with its simulation via {\itshape fg5cf1c} simulation -- attaching to FOFs and globally proportionally to social capital in the previous cycle, and using local utility optimization against the same capital.  
 
 
-The fact that the middle class behaves consistently near reality it both true and capital-simulated form in most of our evaluations means that
+The fact that the middle class behaves consistently near reality in both true and capital-simulated form in most of our evaluations means that
 
 
 \begin{itemize}
@@ -3653,6 +3851,9 @@ The fact that the middle class behaves consistently near reality it both true an
 
 \pagebreak \chapter{Data Mining Infrastructure}
 \label{datamininginfrastructure}
+
+\label{chapter:datamining-infrastructure}
+
 
 \section{Importance of Social Programs}
 \label{importanceofsocialprograms}
@@ -3700,7 +3901,7 @@ When we started our studies, we computed the top pairs of repliers, chosen as fo
 \pagebreak \section{Storage for Analysis}
 \label{storageforanalysis}
 
-Storing billions of tweets poses unique challenges.  The data comprises both a text corpus and a social graph, and both aspects need to be accessible and cross-linked.  We tested several types of storage, and ended up with several versions of the data suitable for better access and specific purposes.  For the text part, we employed \href{http://lucene.apache.org/}{Lucene}\footnote{\href{http://lucene.apache.org/}{http://lucene.apache.org/}}, the state of the art information retrieval engine.  The original \href{http://dev.twitter.com/pages/streaming_api}{Streaming API}\footnote{\href{http://dev.twitter.com/pages/streaming_api}{http://dev.twitter.com/pages/streaming\_api}} is pushed as either XML or JSON, the latter being the most compact and efficient representation of heterogeneous data.  \href{http://mongodb.org/}{MongoDB}\footnote{\href{http://mongodb.org/}{http://mongodb.org/}} allows for direct storage and indexing of \href{http://json.org/}{JSON}\footnote{\href{http://json.org/}{http://json.org/}}, and goes well with dynamic languages such as Clojure.  Clojure's Mongo interface, \href{http://github.com/somnium/congomongo}{congomongo}\footnote{\href{http://github.com/somnium/congomongo}{http://github.com/somnium/congomongo}} can open Mongo collections as lazy sequences, to be consumed on a when-needed basis.  We also use \href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{Berkeley DB JE}\footnote{\href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}} for parallel serialization, and \href{http://www.1978th.net/tokyocabinet/}{Tokyo Cabinet}\footnote{\href{http://www.1978th.net/tokyocabinet/}{http://www.1978th.net/tokyocabinet/}} with \href{http://code.google.com/apis/protocolbuffers/}{Google Protocol Buffers}\footnote{\href{http://code.google.com/apis/protocolbuffers/}{http://code.google.com/apis/protocolbuffers/}} as values for very fast adjacency list representation of the graph.  The dynamic aspect of our graph has to be taken into account every step of the way; we store exact time stamps of all tweets in the comprehensive representation, and discretize to the daily snapshots in our evolutionary modeling with {\itshape reciprocal social capital} \ref{chapter:SocialCapital}.
+Storing billions of tweets poses unique challenges.  The data comprises both a text corpus and a social graph, and both aspects need to be accessible and cross-linked.  We tested several types of storage, and ended up with several versions of the data suitable for better access and specific purposes.  For the text part, we employed \href{http://lucene.apache.org/}{Lucene}\footnote{\href{http://lucene.apache.org/}{http://lucene.apache.org/}}, the state of the art information retrieval engine.  The original \href{http://dev.twitter.com/pages/streaming_api}{Streaming API}\footnote{\href{http://dev.twitter.com/pages/streaming_api}{http://dev.twitter.com/pages/streaming\_api}} is pushed as either XML or JSON, the latter being the most compact and efficient representation of heterogeneous data.  \href{http://mongodb.org/}{MongoDB}\footnote{\href{http://mongodb.org/}{http://mongodb.org/}} allows for direct storage and indexing of \href{http://json.org/}{JSON}\footnote{\href{http://json.org/}{http://json.org/}}, and goes well with dynamic languages such as Clojure.  Clojure's Mongo interface, \href{http://github.com/somnium/congomongo}{congomongo}\footnote{\href{http://github.com/somnium/congomongo}{http://github.com/somnium/congomongo}} can open Mongo collections as lazy sequences, to be consumed on a when-needed basis.  We also use \href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{Berkeley DB JE}\footnote{\href{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}{http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html}} for parallel serialization, and \href{http://www.1978th.net/tokyocabinet/}{Tokyo Cabinet}\footnote{\href{http://www.1978th.net/tokyocabinet/}{http://www.1978th.net/tokyocabinet/}} with \href{http://code.google.com/apis/protocolbuffers/}{Google Protocol Buffers}\footnote{\href{http://code.google.com/apis/protocolbuffers/}{http://code.google.com/apis/protocolbuffers/}} as values for very fast adjacency list representation of the graph.  The dynamic aspect of our graph has to be taken into account every step of the way; we store exact time stamps of all tweets in the comprehensive representation, and discretize to the daily snapshots in our evolutionary modeling with {\itshape reciprocal social capital} \ref{chapter:social-capital}.
 
 
 \pagebreak \section{Platform}
@@ -3752,7 +3953,22 @@ A graph with decorated edges is represented as a Clojure map, which, along with 
 Such maps are subject to Clojure destructuring and functional map/reduce/filter transforms, expressive and concise.  The code for our project is open source and available on github \cite{code:mongol}.  Visualization and model fitting is smoothly handled by Incanter, an R-like statistical environment in Clojure \cite{code:incanter}.
 
 
-\pagebreak \section{Open Source Contributions}
+\pagebreak \section{Accidental Influentials}
+\label{accidentalinfluentials}
+
+The ``accidental influentials'' required a powerful network for simulations.  Local utility optimization and friend of friends attachment required time and memory efficient representations.  We settled on the OCaml implementation as the fastest to serialize and deserialize vast graph data, and on par with Haskell in computation times, while taking a bit less memory -- 40GB vs 50GB RAM on basic simulations.  With the composite strategies, we hover on the edge of the 64GB RAM we have, and the execution time extends from 30 minutes to 3 hours, bit not more, making simulating full bucket sets and some combinations feasible.
+
+
+Another challenge of applying dozens of metrics to hundreds of simulations is the set of results.  Our  table output can reach up to 40,000 files going into a finished {\TeX}  product, data inputs, and graphs.  Many of the analyses have to be done in sequence, and the intermediate steps may need to be compressed, as they take gigabytes each.  We implemented a GNU Make-based pipeline, defined as 2,000 lines of modular makefiles, which govern the whole process in a functional way.  Based on a target, the pipeline assembles and produces every necessary step, depositing results where required.  The pipeline factors out most of the reusable steps, making it easy to add new metrics.
+
+
+Our methodology requires dynamic analysis of correspondence between buckets across days and simulations.  We output thousands of tables, 4 per page, in a format convenient to review.  Medians and averages for each bucket class are output as a single row for each table and assembled into summary tables.  These tables can in turn be either viewed as readable {\TeX}, or produced as text input for R.  We format the high-level results as an R dataframe for further statistical analysis automatically as a part of the pipeline.  The OCaml system and Makefile code, as well as R scripts used to produce the graphs, are open-sourced at
+
+
+\url{http://github.com/alexy/katz}
+
+
+\section{Open Source Contributions}
 \label{opensourcecontributions}
 
 The code for this paper is open source and available on github as a series of projects.
@@ -3772,9 +3988,11 @@ The code for this paper is open source and available on github as a series of pr
 \item \href{http://github.com/alexy/clams}{Clams}\footnote{\href{http://github.com/alexy/clams}{http://github.com/alexy/clams}} -- Reciprocal Social Capital in OCaml
 
 \item \href{http://github.com/alexy/husky}{Husky}\footnote{\href{http://github.com/alexy/husky}{http://github.com/alexy/husky}} -- Reciprocal Social Capital in Haskell
+
+\item \href{http://github.com/alexy/clams}{Katz}\footnote{\href{http://github.com/alexy/clams}{http://github.com/alexy/clams}} -- Non-accidental Influentials in OCaml
 \end{itemize}
 
-Computing Reciprocal Social Capital turned out to be the most computationally demanding process.  We iterate through all of the original Twitter interactions and apply the update rules to the capital values to advance them.  For the working set, it means replaying 100 million tweets over 35 days, one full cycle per day.  Even serializing and deserializing the graphs may take hours, so much effort went into proper storage and retrieval of tweets.  We wrote OCaml and Haskell implementations of the Reciprocal Social Capital, originally developed in Clojure, to verify the complex iterative computation, enable fast loading and storing of the data and results, and bring the computation and result lookup up to natively compiled speeds.  With Twitter's permission, we prepared our communication graph in a portable format, and documented our Reciprocal Social Capital computation thoroughly to create a benchmark our of it, \href{http://fundata1.functional.tv}{FunData1}\footnote{\href{http://fundata1.functional.tv}{http://fundata1.functional.tv}}.  We hope that creating an open-source social networking shootout for functional and other programming languages will advance progress of both the languages and the algorithms, including better data structures.
+Computing Reciprocal Social Capital turned out to be the most computationally demanding process.  We iterate through all of the original Twitter interactions and apply the update rules to the capital values to advance them.  For the working set, it means replaying 100 million tweets over 35 days, one full cycle per day.  Even serializing and deserializing the graphs may take hours, so much effort went into proper storage and retrieval of tweets.  We wrote OCaml and Haskell implementations of the Reciprocal Social Capital, originally developed in Clojure, to verify the complex iterative computation, enable fast loading and storing of the data and results, and bring the computation and result lookup up to natively compiled speeds.  The ``Accidental Influentials'' problem was solved in OCaml, at an even larger scale.  With Twitter's permission, we prepared our communication graph in a portable format, and documented our Reciprocal Social Capital computation thoroughly to create a benchmark our of it, \href{http://fundata1.functional.tv}{FunData1}\footnote{\href{http://fundata1.functional.tv}{http://fundata1.functional.tv}}.  We hope that creating an open-source social networking shootout for functional and other programming languages will advance progress of both the languages and the algorithms, including better data structures.
 
 
 Already {\itshape FunData1} benchmark had lead to the biggest RAM-consuming implementation in Haskell ever, which allowed Microsoft Research, Cambridge, UK to discover an integer overflow bug in Haskell runtime's garbage collector.  We thank Simon Marlow of Haskell core team for finding the bug, with the aid of the largest Amazon Elastic Cloud image available at the moment, with 68 GB of RAM (since the GHC team had no suitable server in MSR Cambridge).
@@ -3810,16 +4028,35 @@ In our study we applied dynamic graph analysis to the communication graph of Twi
 We considered metrics of importance and the fundamental questions they should answer. We introduced Reciprocal Social Capital, a currency-like measure which decays with time and rewards socially beneficial behavior. Using this metric, we discovered the ``middle class'' of Twitter -- those whose conversations carry most of the steady discourse.  
 
 
-Our main conclusions regarding the accidental influentials question is that while celebrities may be accidental to the same degree as the mix of people's replying behaviors, they are not accidental when this mix is is more intelligent than random and the rules are fixed.  Most importantly, the middle class is not accidental, and its hard work defines the majority of the effects we care about.
+Our main conclusions regarding the accidental influentials question is conditional.  While celebrities may be accidental to the same degree as a mix of people's replying strategies is itself random, they are not accidental when the behaviors are moderately intelligent and the rules are fixed.  
+
+
+Most importantly, while randomness of elites is still subject to interpretation, the middle class is not accidental, and its hard work defines the majority of the effects we care about.
 
 
 Our iterative Mind Economy provides a powerful platform for discovering individual and group utilities and quantitative modeling of values of individuals, groups, and actions according to any such utility functions, which can be further parameterized as desired.  Our accidental influentials methodology is the first large-scale combination of reality and simulation taking apart communicative behaviors, and can be used to further classify and rank the participants and their activities.   The foundation built here will lead to promising research and industrial applications.
 
 
+Several well-known Internet companies and startups expressed interest in implementing our methodology, which will be our focus in the Silicon Valley.  Research and development progress of our Mind Economy framework can be tracked at
+
+
+\url{http://mindeconomy.com/}
+
+
+The code is open source and available at
+
+
+\url{http://github.com/alexy}
+
+
+Our Twitter graph is also linked from there, with permission.
+Everybody is welcome to collaborate!
+
+
 
 \bibliography{/Users/alexyk/Documents/Thesis/bib/bibdesk/khrabrov-mindeconomy-thesis}
-\pagebreak \appendixpage*
-\appendix
+\end{Spacing}
+
 
 %
 % Back Matter
