@@ -22,11 +22,11 @@
 #  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t2wk   ../ereps/ereps/dreps.mlb 14
 #  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t3wk   ../ereps/ereps/dreps.mlb 21
 
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f1wk ../ereps/ereps/dreps.mlb 7
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f2wk ../ereps/ereps/dreps.mlb 14
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f3wk ../ereps/ereps/dreps.mlb 21
-
- ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t1wk ../ereps/ereps/dreps.mlb 7
+#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f1wk ../ereps/ereps/dreps.mlb 7
+#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f2wk ../ereps/ereps/dreps.mlb 14
+#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f3wk ../ereps/ereps/dreps.mlb 21
+# 
+#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t1wk ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t2wk ../ereps/ereps/dreps.mlb 14
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t3wk ../ereps/ereps/dreps.mlb 21
 
