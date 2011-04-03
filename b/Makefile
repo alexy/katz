@@ -6,7 +6,6 @@ SRATES_NAME_1=$(SRATES_NAME)-medians
 SRATES_LIST=$(foreach reps,$(REPS),$(reps)/$(SRATES_NAME)/txt/$(reps)-$(SRATES_NAME_1).txt)
 SRATES=$(RDIR)/$(SRATES_NAME_1).txt
 
-
 ODREPS_NAME=overx-dreps
 ODREPS_NAME_1=$(ODREPS_NAME)-medians
 ODREPS_LIST=$(foreach reps,$(REPS),$(reps)/$(ODREPS_NAME)/txt/$(reps)-$(ODREPS_NAME_1).txt)
@@ -28,20 +27,20 @@ SBUCKS_KIND_2=sbucks-reps
 SBUCKS_NAME_2=$(SBUCKS_KIND_2)-star-med-medians
 SBUCKS_LIST_2=$(foreach reps,$(REPS),$(reps)/$(SBUCKS_KIND_2)/txt/$(reps)-$(SBUCKS_NAME_2).txt)
 SBUCKS_2=$(RDIR)/$(SBUCKS_NAME_2).txt
-
 SBUCKS=$(SBUCKS_1) $(SBUCKS_2)
-
 
 VOLS_KIND_1=re-norm-medians
 VOLS_LIST_1=$(foreach reps,$(REPS),$(reps)/vols4/txt/$(reps)-$(VOLS_KIND_1).txt)
 VOLS_1=$(RDIR)/vols4-$(VOLS_KIND_1).txt
-
 VOLS_KIND_2=me-norm-medians
 VOLS_LIST_2=$(foreach reps,$(REPS),$(reps)/vols4/txt/$(reps)-$(VOLS_KIND_2).txt)
 VOLS_2=$(RDIR)/vols4-$(VOLS_KIND_2).txt
-
 VOLS=$(VOLS_1) $(VOLS_2)
 
+CSTAUBS_NAME=cstaubs
+CSTAUBS_NAME_1=$(CSTAUBS_NAME)-medians
+CSTAUBS_LIST=$(foreach reps,$(REPS),$(reps)/$(CSTAUBS_NAME)/txt/$(reps)-$(CSTAUBS_NAME_1).txt)
+CSTAUBS=$(RDIR)/$(CSTAUBS_NAME_1).txt
 
 B2B_KIND_1=b2br
 B2B_MEASURES=medians
@@ -138,14 +137,18 @@ $(B2B_6): $(B2B_LIST_6)
 $(CSTAU): $(CSTAU_LIST)
 	cat $^ > $@
 
+$(CSTAUBS): $(CSTAUBS_LIST)
+	cat $^ > $@
+
 	
-odreps: $(ODREPS)
-oself:  $(OSELF)
-srates: $(SRATES)
-sbucks: $(SBUCKS)
-vols:   $(VOLS)
-b2b:    $(B2B)
-cstau:  $(CSTAU)
+odreps:  $(ODREPS)
+oself:   $(OSELF)
+srates:  $(SRATES)
+sbucks:  $(SBUCKS)
+vols:    $(VOLS)
+b2b:     $(B2B)
+cstau:   $(CSTAU)
+cstaubs: $(CSTAUBS)
 
 clean-odreps:
 	rm -f $(ODREPS)
