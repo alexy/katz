@@ -22,11 +22,11 @@ let fileSuffix ?(dot=false) tex =
   
 (* Float.print would do, but it doesn't control for precision *)
 
-let floatPrint          oc x = fprintf oc "%5.2f" x
-let sciencePrint        oc x = fprintf oc "%5.2e" x
-let roundedPrint        oc x = fprintf oc "%5.0f" x
-let preciseFloatPrint   oc x = fprintf oc "%18.15f" x
-let preciseSciencePrint oc x = fprintf oc "%22.15e" x
+let floatPrint          oc x = fprintf oc "%6.2f" x
+let sciencePrint        oc x = fprintf oc "%6.2e" x
+let roundedPrint        oc x = fprintf oc "%6.0f" x
+let preciseFloatPrint   oc x = fprintf oc "%19.15f" x
+let preciseSciencePrint oc x = fprintf oc "%23.15e" x
 
 let pickFloatPrint scientific precise =
   match scientific,precise with
@@ -293,7 +293,7 @@ let dayRanges ?(takeDays=None) ?(dropDays=None) tables =
   
 
   (* this works for floating-point tables only;
-     first convert an integer to flot one *)
+     first convert an integer to a float one *)
 let tableAveragesAndMedians ?(filter1=false) t =
   let mayFilter1 l =
     if filter1 then L.filter (fun x -> x < 1.0) l
@@ -349,3 +349,7 @@ let tableSummaries tex ~verbose ~outDir printOne ?(filter1=false) ?(drop=None) t
 let intTableSummaries tex ~verbose ~outDir printOne ?(filter1=false) ?(drop=None) tables tableNames =
   let floatTables = L.map floatOfIntTable tables in
   tableSummaries tex ~verbose ~outDir printOne ~filter1 ~drop floatTables tableNames
+  
+let loadTable ?(fromArray=false) fileName =
+	if fromArray then loadData fileName |> A.to_list
+							 else loadData fileName	

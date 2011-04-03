@@ -244,7 +244,10 @@ $(TEXSB).opt: lib.cmxa teX.cmx $(TEXSB).ml
   
 $(TEX4).opt: lib.cmxa teX.cmx $(TEX4).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-  
+
+$(TEX4).byte: lib.cma teX.cmo $(TEX4).ml
+	ocamlfind ocamlc $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
+
 $(TEXLB).opt: lib.cmxa teX.cmx $(TEXLB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   

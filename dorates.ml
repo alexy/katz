@@ -34,7 +34,7 @@ let () =
 
   let bucks: day_buckets = loadData bucksName in
 
-  let rates = Topsets.bucketDynamics bucks in
+  let rates: rates = Topsets.bucketDynamics bucks in
   le_newline;
   
   Topsets.show_rates rates;

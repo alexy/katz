@@ -4,6 +4,7 @@ open TeX
 
 (* tabulate a b2b data as 4 tables *)
 
+let fromArray' = ref false
 let takeDays'  = ref (Some 33)
 let dropDays'  = ref (Some 7)
 let latex'     = ref false
@@ -30,6 +31,7 @@ let specs =
   (noshort,"notakedays",(set takeDays' None),None);
   (noshort,"dropdays",None,Some (fun x -> dropDays' := Some (int_of_string x)));
   (noshort,"nodropdays",(set dropDays' None),None);
+  ('a',"array",       (set fromArray'   (not !fromArray')),   None);
   ('t',"tex",         (set latex'       (not !latex')),       None);
   ('T',"tdoc",        (set tableDoc'    (not !tableDoc')),    None);
   ('m',"matrix",      (set matrix'      (not !matrix')),      None);
@@ -66,8 +68,8 @@ let _ =
   let takeDays,   dropDays,   summary,   showTables,   scientific =
       !takeDays', !dropDays', !summary', !showTables', !scientific' in
       
-  let filter1,   dropRow,   precise = 
-      !filter1', !dropRow', !precise' in
+  let filter1,   dropRow,   precise,   fromArray = 
+      !filter1', !dropRow', !precise', !fromArray' in
 
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
@@ -87,7 +89,7 @@ let _ =
   
   if areInts then 
   begin
-    let tables: int_rates list = L.map loadData dataFileNames in
+    let tables: int_rates list = L.map (loadTable ~fromArray) dataFileNames in
     let startRow,tables = dayRanges ~takeDays ~dropDays tables in
     if normalize then begin
       let normalTables = L.map normalizeIntTable tables in
@@ -100,7 +102,7 @@ let _ =
     end
   end
   else begin
-    let tables: rates list = L.map loadData dataFileNames in
+    let tables: rates list = L.map (loadTable ~fromArray) dataFileNames in
     let startRow,tables = dayRanges ~takeDays ~dropDays tables in
     if showTables then printShowTables tex ~verbose floatPrint tables ~startRow outDir tableNames else ();
     if summary then tableSummaries tex ~verbose ~outDir floatPrint ~filter1 ~drop:dropRow tables tableNames else ()  
