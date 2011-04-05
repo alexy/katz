@@ -178,7 +178,7 @@ $(DIRS):
 # $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
 #   $(DOARANKS) $^ $(ARANKS_DIR)
 
-$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
+$(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb.xz
 	$(DOARANKS) $^ $(ARANKS_DIR)
 
 # ARANKS are intermediate, we don't compress them
