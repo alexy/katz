@@ -170,7 +170,7 @@ $(DIRS):
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
 
-.SECONDARY:    $(CAPS) $(RBUCKS)
+#.SECONDARY:    $(CAPS) $(RBUCKS)
 .INTERMEDIATE: $(ARANKS) $(DENUMS) $(STARS_REPS) $(STARS_MENTS)
 
 # $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
