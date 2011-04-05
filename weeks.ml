@@ -9,6 +9,7 @@ let outdir'    = ref (Some "weeks")
 let addDreps'  = ref false
 let addVals'   = ref 1.0
 let showJumps' = ref false
+let infix'     = ref None
 
 let specs =
 [
@@ -19,15 +20,25 @@ let specs =
   (noshort,"nodreps", (set addDreps' false),  None);
   ('x',"val",         None, Some (fun x -> addVals' := float_of_string x));
   ('j',"jumps",       (set showJumps' true),  None);
-  (noshort,"nojumps", (set showJumps' false), None)
+  (noshort,"nojumps", (set showJumps' false), None);
+  ('i',"infix", None, Some (fun x -> infix' := Some x));
+  ('i',"noinfix",     (set infix' None),      None)
 ]
+
+
+let makeSuffix infix showJumps =
+  let infix = match infix with
+  | Some i -> i
+  | None when showJumps -> "j"
+  | _ -> "r" in
+  sprintf ".%s.txt" infix
 
   
 let () =
 	let args = getOptArgs specs in
 	
-	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
-			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
+	let tostdout,   outdir,   addDreps,   addVals,   showJumps,   infix =
+			!tostdout', !outdir', !addDreps', !addVals', !showJumps', !infix' in
 
 	let outdir = if tostdout then None else outdir in
 
@@ -41,8 +52,9 @@ let () =
 
 	let oc = if tostdout then stdout
 	else begin
+	  let suffix = makeSuffix infix showJumps in
 		let saveName = dropText ".txt" dataFileName |> 
-			flip (^) ".r.txt" |> mayPrependDir outdir in
+			flip (^) suffix |> mayPrependDir outdir in
 		leprintfln "saving result in %s\n" saveName;
 		open_out saveName
 	end in
