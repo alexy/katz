@@ -47,6 +47,7 @@ SKABS=doskabs
 USKA=uberdoska
 TEXT=textau
 DFCB=dataframe
+WKS=weeks
 
 KENDALL_C_OBJ=kendall/tau.o kendall_tau.o 
 
@@ -55,7 +56,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
     $(RBUCKS) $(VOLS) $(VOLS2) $(SAVE_REME) $(OVERLAPS) $(OVERSETS) $(STAY) \
     $(TEXR) $(B2B) $(STARS) $(SBUCKS) $(STOV) $(TEXV) $(TEXB2B) $(TEXSB) \
     $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
-    $(USKA) $(TEXT) $(DFCB)
+    $(USKA) $(TEXT) $(DFCB) $(WKS)
 
 all: $(ALL:%=%.opt) lib
 
@@ -289,4 +290,10 @@ $(DFCB).opt: lib.cmxa teX.cmx $(DFCB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(DFCB).byte: lib.cma teX.cmo $(DFCB).ml
-	ocamlfind ocamlc $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -o $@
+	ocamlfind ocamlc $(DEBUG) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(WKS).opt: lib.cmxa $(WKS).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(WKS).byte: lib.cma $(WKS).ml
+	ocamlfind ocamlc $(DEBUG) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
