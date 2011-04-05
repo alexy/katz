@@ -133,7 +133,7 @@ ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_RE
      
 all: $(ALL)
 
-all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
+# all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 
 %.xz: %
 	xz $^
@@ -141,14 +141,16 @@ all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
 XZABLE = $(CAPS) $(RBUCKS) $(SKEW)
 XZED   = $(XZABLE:%=%.xz)
 
-RBUCKS_XZ=$(RBUCKS:%=%.xz)
-CAPS_XZ=$(CAPS:%=%.xz)
+DREPS_XZ  =$(DREPS:%=%.xz)
+RBUCKS_XZ =$(RBUCKS:%=%.xz)
+CAPS_XZ   =$(CAPS:%=%.xz)
 
+dreps_xz:  $(DREPS_XZ)
 rbucks_xz: $(RBUCKS_XZ)
 caps_xz:   $(CAPS_XZ)
 
-denums1:
-	for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
+# denums1:
+#   for i in $(BASES); do $(SAVE_DAYS) $(DREPS_DIR)/dreps-$$i.mlb; done
 
 $(DIRS):
 	mkdir -p $@
@@ -168,7 +170,7 @@ $(DIRS):
 #for i in caps-*; do ../../doaranks.opt $i; done
 #for i in aranks-*; do ../../save_rbucks.opt $i; done
 
-.SECONDARY: $(CAPS) $(RBUCKS) $(RBUCKS_XZ) 
+.SECONDARY:    $(CAPS) $(RBUCKS)
 .INTERMEDIATE: $(ARANKS) $(DENUMS) $(STARS_REPS) $(STARS_MENTS)
 
 # $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb
