@@ -1,32 +1,32 @@
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f3wk   ../ereps/ereps/dreps.mlb 21
-#  
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t3wk   ../ereps/ereps/dreps.mlb 21
-# 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f3wk   ../ereps/ereps/dreps.mlb 21
-# 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t3wk   ../ereps/ereps/dreps.mlb 21
-# 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f3wk   ../ereps/ereps/dreps.mlb 21
-# 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t1wk   ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t2wk   ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t3wk   ../ereps/ereps/dreps.mlb 21
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6                     fg5mf1ub6f3wk   ../ereps/ereps/dreps.mlb 21
+ 
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=6       --keepbuckets fg5mf1ub6t3wk   ../ereps/ereps/dreps.mlb 21
 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f1wk ../ereps/ereps/dreps.mlb 7
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f2wk ../ereps/ereps/dreps.mlb 14
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f3wk ../ereps/ereps/dreps.mlb 21
-# 
-#  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t1wk ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7                     fg5mf1ub7f3wk   ../ereps/ereps/dreps.mlb 21
+
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=7       --keepbuckets fg5mf1ub7t3wk   ../ereps/ereps/dreps.mlb 21
+
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5                     fg5mf1ub5f3wk   ../ereps/ereps/dreps.mlb 21
+
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t1wk   ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t2wk   ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets=5       --keepbuckets fg5mf1ub5t3wk   ../ereps/ereps/dreps.mlb 21
+
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f1wk ../ereps/ereps/dreps.mlb 7
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f2wk ../ereps/ereps/dreps.mlb 14
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7"               fg5mf1ub567f3wk ../ereps/ereps/dreps.mlb 21
+
+ ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t1wk ../ereps/ereps/dreps.mlb 7
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t2wk ../ereps/ereps/dreps.mlb 14
  ../../sf.opt ../ereps/dstarts.mlb ../ereps/denums/denums-dreps.mlb -j 0.5 -J 0.1 --glomen --fofuni --buckets="5;6;7" --keepbuckets fg5mf1ub567t3wk ../ereps/ereps/dreps.mlb 21
 

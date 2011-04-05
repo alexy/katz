@@ -252,6 +252,9 @@ I thank Professor Emeritus Noah Prywes, one of the founders of the CIS, who gave
 My committee is an amazing group of experts in social networks, data mining, and computational linguistics.  Mark Liberman was supportive of my research at Dartmouth and had asked the key question --- are these Accidental Influentials, by any chance? --- which employed our Reciprocal Social Capital metrics to the fullest.  Jonathan Smith, the chair, grounds it in all-encompassing computer networking expertise, and Shawndra Hill adds an operational and business perspective which, as you can see, is the most welcome pattern here.
 
 
+The Human Terrain group at Thayer School as well as friends in Computer Science department provided a stimulating intellectual environment.  Vincent Berk, John Murphy, Ian Gregorio-De Souza, David Twardowski, Nils Sandell, Gabe Stocco and Robert Savell were the best colleagues and officemates, and Sergey Bratus, my classmate since the 57th math high school in Moscow was always there for idea checking and support.  Andrew Campbell does cool, and beautifully managed,  pervasive computing research,  while Lorenzo Torresani was a neighbor dad, with his great and friendly family,  and a top machine learning guy.  We inherited our Dartmouth apartment, and many great things and ideas,  form Bob Hearn, a legendary figure with interests and contributions to Apple, Bach, and games for the mind.
+
+
 Professor Rajiv Alur, the former graduate chair, has outlined the graduation plan for me to execute at Dartmouth, which I followed.  Professor Jianbo Shi, the current graduate chair, guided it through completion and took the time to listen to the whole presentation in advance, providing insightful feedback.
 
 
@@ -282,7 +285,7 @@ The teams at Google, Microsoft, Efficient Frontier, and TopProspect had all show
 I have to mention those whom I always remember --- my grandfathers who fought in the World War II and defended our lives.  My paternal grandfather, Alexander Khrabrov, was lost in action in 1941, defending Moscow.  My maternal grandfather, Semion Drabkin, had become a war hero, delivering the ultimatum at Stalingrad, personally capturing Nazi criminals who testified at Nuremberg, liberating cities, and working together with the Allies in the denazification of Germany.  He went on to become a chief missile designer, --- but it were his grandsons, not his missiles, which ended up in the US.  His perseverance at Stalingrad had inspired my own through the Ph.D. process.
 
 
-Last, but not least, I appreciate the world-wide coffee shops which made writing this thesis so enjoyable.  Le Colombo in Philadelphia, Small World in Princeton, Joe Bar in Seattle, Dirt Cowboy and Rosie Jekes in Hanover, New Hampshire --- I love the people, the coffee, the ideas, and it all comes together there!
+Last, but not least, I appreciate the world-wide coffee shops which made writing this thesis so enjoyable.  Le Colombo in Philadelphia, Small World in Princeton, Joe Bar in Seattle, Tucker Box in White River Junction, Boston Dreams in Windsor, Vermont, and Dirt Cowboy and Rosie Jekes in Hanover, New Hampshire --- I love the people, the coffee, the ideas, and it all comes together there!
 
 
 \pagebreak 
@@ -3628,6 +3631,9 @@ The third week --- Figure~\ref{figure:heatmap-b2bm-self-rel-medians-3wk}, --- th
 \pagebreak \subsection{Skew Correlation}
 \label{skewcorrelation}
 
+\subsubsection{Global Skew Correlation}
+\label{globalskewcorrelation}
+
 We look at $\tau$ alignment for the full lists of all users and their capitals and skews for each day, and also do it per bucket. 
 For most of our strategies, we observe a Kendall's $\tau$ correlation between social capial and skew of about 0.2.  It reaches 0.3 for {\itshape fg5m1u}, and is lower for {\itshape fg5c1cA} (and B,C) seeded with two or less weeks.
 The fact that the global $\tau$ generally is around 0.2, as it is for {\itshape dreps}, shows that politician-like behavior, with more communication activity toward the top contributors, corresponds to the social capital hierarchy.
@@ -3749,6 +3755,85 @@ Simulating the middle and upper middle class, just two or with all the elites, w
     \includegraphics{figures/heatmap-cstau-3wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with three weeks of reality.}
     \label{figure:heatmap-cstau-3wk}
+\end{center}
+\end{figure}
+\pagebreak \subsubsection{Bucketed Skew Correlation}
+\label{bucketedskewcorrelation}
+
+The skew-capital correlation is interesting as it can be computed both on global, non-bucketed, and also bucketed scale.  For the bucketed version, we recompute the buckets after each simulation step, and then correlate the social capital in each bucket with the resulting skew for every user in the bucket.  The resulting measure is similar to the other rates, except that it takes values in the range [-1,1], not [0,1] as do the rates, which are bucket fractions.
+
+
+The dynamics of the bucketed skew-capital correlation is presented in Figures~\ref{figure:heatmap-cstaubs-0wk}---\ref{figure:heatmap-cstaubs-3wk}.  As in the global case, we don't see very high Kendall $\tau$ values, with the typical strong correlations hovering around 0.2.  
+
+
+When starting from scratch, we get a wide range of $\tau$s, with {\itshape rreps0d} and {\itshape creps} showing strong anti-correlation in the top 10 and 1K buckets, while {\itshape fg8uf05c{,7m}} and {\itshape fg5mf1{m,c}} are the nearest neighbors.  The 10K bucket, or the upper-upper middle class, is showing the best correlation for capital-based simulations -- the pattern which will continue throughout the weeks of reality.
+
+
+The extremes shrink on the first week of reality seeding, when the bucketed simulations arrive, but they don't crowd {\itshape dreps} en masse right away, as the rates did -- we see, as neighbors, besides the elite buckets, 
+
+
+\begin{itemize}
+
+
+\item rreps{0d,7m,}
+
+\item fg8uf05c7m
+
+\item fg5cf1cb6f
+\end{itemize}
+
+-- i.e.\ the capital-simulated middle class has a good showing.  The 10K and 100K buckets correlate highly for the capital-based simulations.
+
+
+The second week of reality groups more bucketed simulations together with {\itshape dreps}, and our middle class {\itshape 6f} is again near by.  The 10K bucket still correlates well, while the 100K one is less so, for the capital-based simulations.
+
+
+Finally, with the third week, we see many non-bucketed neighbors again, and the upper middle class, such as 
+
+
+\begin{itemize}
+
+
+\item lj{5,2}m
+
+\item fg5mf1c
+
+\item fg5cf1cb5f
+\end{itemize}
+
+The range shrinks more to roughly [-0.2, 0.2], and the many other bucketed simulations group separately.  The poor show surprisingly homogeneous and high positive correlation, while the top is mostly negative.
+
+
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstaubs-medians-0wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations started from scratch.}
+    \label{figure:heatmap-cstaubs-0wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstaubs-medians-1wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with one week of reality.}
+    \label{figure:heatmap-cstaubs-1wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstaubs-medians-2wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with two weeks of reality.}
+    \label{figure:heatmap-cstaubs-2wk}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics{figures/heatmap-cstaubs-medians-3wk}
+    \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with three weeks of reality.}
+    \label{figure:heatmap-cstaubs-3wk}
 \end{center}
 \end{figure}
 \pagebreak \subsection{Discussion}
