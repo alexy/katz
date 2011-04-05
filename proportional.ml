@@ -7,7 +7,7 @@ let rangeLists: ('a -> 'a -> 'a) -> 'a -> 'a -> (user * 'a) E.t -> 'a proportion
   fun add smooth zero uvals ->
   (* first, I wanted to work with enums, but then decided to keep lists inside...
      otherwise, here's how I'd prepend a 0 valued pair to the input stream:
-     let uvals0 = E.append (L.enum [("zeroKatzLazarsfeldWattsDodds",0)]) uvals 
+     let uvals0 = E.append (E.singleton ("zeroKatzLazarsfeldWattsDodds",0)) uvals 
      E.push xs x <=> x::xs
      E.empty <=> []
      Array.of_enum

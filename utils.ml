@@ -450,3 +450,14 @@ let list_delta = function
 	| x::y::[] -> y - x
 	| x::y::xs -> L.last xs - x
 	| _ -> 0
+	
+let list_diffs ?(right=false) xs =
+	let xs = if right then L.rev xs 
+	                  else xs in
+	let diffs =
+	match xs with
+	| h::t -> L.fold_left (fun (r,prev) e -> (e-prev)::r,e) ([],h) t |> fst
+	| _ -> [] in
+	
+	if right then L.rev diffs
+	         else diffs
