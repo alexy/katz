@@ -179,7 +179,7 @@ $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb: $(CAPS_DIR)/$CAPS_PREFIX)-%.mlb.xz
 
 # ARANKS are intermediate, we don't compress them
 $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb
-  $(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
+	$(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
 
 # $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb: $(ARANKS_DIR)/$(ARANKS_PREFIX)-%.mlb.xz
 #   $(SAVE_RBUCKS) $^ $(RBUCKS_DIR)
