@@ -1,23 +1,30 @@
 open Common
 open Getopt
 
-let simsN = 250
+let simsN     = 250
+let bucketsN  = 7
 
 let tostdout' = ref false
 let outdir'   = ref (Some "weeks")
+let addDreps' = ref false
+let addVals'  = ref 1.0
+
 let specs =
 [
-	('c',"stdout", (set tostdout' (not !tostdout')),None);
-  (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
-  (noshort,"nodir", (set outdir' None), None)
+	('c',"stdout",     (set tostdout' (not !tostdout')), None);
+  (noshort,"outdir", None,Some (fun x -> outdir' := Some x));
+  (noshort,"nodir",  (set outdir' None),    None);
+  ('d',"dreps",      (set addDreps' true),  None);
+  (noshort,"nodreps",(set addDreps' false), None);
+  ('x',"val",        None, Some (fun x -> addVals' := float_of_string x))
 ]
 
   
 let () =
 	let args = getOptArgs specs in
 	
-	let tostdout,   outdir =
-			!tostdout', !outdir' in
+	let tostdout,   outdir,   addDreps,   addVals =
+			!tostdout', !outdir', !addDreps', !addVals' in
 
 	let outdir = if tostdout then None else outdir in
 
@@ -46,7 +53,7 @@ let () =
   			let vs = L.map float_of_string t in
   		  match h with  
   		  | "dreps" -> (h,0,vs)
-  		  | RE ( _* as base ) ( [ '0' - '4' ] as week' ) "wk"? Lazy eol ->
+  		  | RE ( _* Lazy as base ) ("-" [ '0' - '3' ])? ( [ '0' - '4' ] as week' ) "wk"? Lazy eol ->
   		    let week = int_of_string week' in (* how do we create week as int? *)
     			if week < !minWeek then minWeek := week;
     			if week > !minWeek then maxWeek := week;
@@ -59,6 +66,13 @@ let () =
   (* E.clone rows |> E.map (fun (x,y,z) -> (x,y)) |> 
   E.print (Pair.print String.print Int.print) stderr; *)
   E.force rows;
+  let rows = 
+  if addDreps then
+    let drepsVals = L.make bucketsN addVals in
+    let drepsRow = ("dreps",0,drepsVals) in
+    E.append (L.enum [drepsRow]) rows
+  else
+    rows in
   
   let minWeek = !minWeek
   and maxWeek = !maxWeek in

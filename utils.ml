@@ -448,5 +448,5 @@ let string_of_boolean ?(short=true) x =
 	
 let list_delta = function
 	| x::y::[] -> y - x
-	| x::xs -> L.last xs - x
+	| x::y::xs -> L.last xs - x
 	| _ -> 0
