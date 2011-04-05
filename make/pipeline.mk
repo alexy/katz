@@ -130,7 +130,8 @@ CSTAUBS=$(BASES:%=$(CSTAUBS_DIR)/$(CSTAUBS_PREFIX)-%.mlb)
 # took out $(RBUCKS) from ALL as they are now compressed, took out $(DREPS) as it's done by simulations preceding the pipeline
 ALL= $(SRATES) $(OVERX_DREPS) $(OVERX_SELF) $(VOLS4) $(B2BR) $(B2BM) $(SBUCKS_REPS) $(SBUCKS_MENTS) \
      $(LBLENS) $(RBLENS) $(CSTAU) $(CSTAUBS)
-     
+  
+.PHONY: all   
 all: $(ALL)
 
 # all1: denums1 vols1 b2br1 b2bm1 sbucks1 lblens1 rblens1 show
@@ -145,6 +146,7 @@ DREPS_XZ  =$(DREPS:%=%.xz)
 RBUCKS_XZ =$(RBUCKS:%=%.xz)
 CAPS_XZ   =$(CAPS:%=%.xz)
 
+.PHONY: dreps_xz rbucks_xz caps_xz
 dreps_xz:  $(DREPS_XZ)
 rbucks_xz: $(RBUCKS_XZ)
 caps_xz:   $(CAPS_XZ)
@@ -194,6 +196,7 @@ rbucks2: $(RBUCKS)
 $(SRATES_DIR)/$(SRATES_PREFIX)-%.mlb: $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb.xz
 	$(DOSRATES) $^ $(SRATES_DIR)
 
+.PHONY: srates2
 srates2: $(SRATES)
 
 # $(OVERX_DREPS_DIR)/$(OVERX_DREPS_PREFIX)-%.mlb:  ../ereps/$(RBUCKS_DIR)/$(RBUCKS_PREFIX)-dreps.mlb    $(RBUCKS_DIR)/$(RBUCKS_PREFIX)-%.mlb
