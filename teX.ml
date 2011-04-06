@@ -100,7 +100,7 @@ let tableTail oc tex label caption =
 \\end{tabular}}
 \\caption{\\small %s}
 \\label{table:%s}
-" label caption
+" caption label
   | _ -> ()
 
   

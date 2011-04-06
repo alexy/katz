@@ -11,6 +11,8 @@ let addVals'   = ref 1.0
 let showJumps' = ref false
 let infix'     = ref None
 let tex'       = ref false
+let head'      = ref None
+let table'     = ref false
 
 let specs =
 [
@@ -25,11 +27,15 @@ let specs =
   ('i',"infix", None, Some (fun x -> infix' := Some x));
   ('i',"noinfix",     (set infix' None),      None);
   ('t',"tex",         (set tex' true),        None);
-  (noshort,"tex",     (set tex' false),       None)
+  (noshort,"tex",     (set tex' false),       None);
+  ('h',"head", None, Some (fun x -> head' := Some (int_of_string x)));
+  (noshort,"nohead",  (set head' None),       None);
+  ('a',"table",       (set table' true),      None);
+  (noshort,"notable", (set table' false),     None)
 ]
 
 
-let makeSuffix infix showJumps tex =
+let makeSuffix infix showJumps head table tex =
   let ext = 
     match tex with
       | true  -> "tex"
@@ -39,7 +45,33 @@ let makeSuffix infix showJumps tex =
       | Some i -> i
       | None when showJumps -> "j"
       | _ -> "r" in
-  sprintf ".%s.%s" infix ext
+  let h = 
+    match head with
+      | Some n -> string_of_int n
+      | _ -> "" in
+  let t =
+    match table with
+      | true -> "t"
+      | _    -> "" in
+  sprintf ".%s%s%s.%s" infix h t ext
+
+
+let tableHead oc =
+  String.print oc "
+\\begin{table}
+\\begin{tabular}{|lrrl|}
+\\toprule
+\\emph{simulation} & \\emph{rank} & \\emph{rise} & \\emph{jumps} \\\\
+\\midrule
+"
+
+let tableTail oc caption label =
+    fprintf oc "
+\\bottomrule
+\\end{tabular}
+\\caption{\\small %s}
+\\label{table:%s}
+" caption label
 
   
 let () =
@@ -48,8 +80,8 @@ let () =
 	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
 			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
 
-  let tex,   infix =
-      !tex', !infix' in
+  let tex,   infix,   head,   table =
+      !tex', !infix', !head', !table' in
       
 	let outdir = if tostdout then None else outdir in
 
@@ -61,11 +93,12 @@ let () =
 
 	mayMkDir outdir;
 
+  let tableName = dropText ".txt" dataFileName in
+  
 	let oc = if tostdout then stdout
 	else begin
-	  let suffix = makeSuffix infix showJumps tex in
-		let saveName = dropText ".txt" dataFileName |> 
-			flip (^) suffix |> mayPrependDir outdir in
+	  let suffix = makeSuffix infix showJumps head table tex in
+		let saveName = tableName ^ suffix |> mayPrependDir outdir in
 		leprintfln "saving result in %s\n" saveName;
 		open_out saveName
 	end in
@@ -172,4 +205,7 @@ let () =
   
   let row_print = if showJumps then quadro_print else triple_print in
   
-  A.print ~first:"" ~sep:"\n" ~last:"\n" row_print oc rankd
+  if table then tableHead oc else ();
+  let a = mayApply (fun n a -> A.sub a 0 n) head rankd in
+  A.print ~first:"" ~sep:"\n" ~last:"\n" row_print oc a;
+  if table then tableTail oc tableName tableName else ()
