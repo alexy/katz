@@ -10,6 +10,7 @@ let addDreps'  = ref false
 let addVals'   = ref 1.0
 let showJumps' = ref false
 let infix'     = ref None
+let tex'       = ref false
 
 let specs =
 [
@@ -22,24 +23,34 @@ let specs =
   ('j',"jumps",       (set showJumps' true),  None);
   (noshort,"nojumps", (set showJumps' false), None);
   ('i',"infix", None, Some (fun x -> infix' := Some x));
-  ('i',"noinfix",     (set infix' None),      None)
+  ('i',"noinfix",     (set infix' None),      None);
+  ('t',"tex",         (set tex' true),        None);
+  (noshort,"tex",     (set tex' false),       None)
 ]
 
 
-let makeSuffix infix showJumps =
-  let infix = match infix with
-  | Some i -> i
-  | None when showJumps -> "j"
-  | _ -> "r" in
-  sprintf ".%s.txt" infix
+let makeSuffix infix showJumps tex =
+  let ext = 
+    match tex with
+      | true  -> "tex"
+      | false -> "txt" in
+  let infix = 
+    match infix with
+      | Some i -> i
+      | None when showJumps -> "j"
+      | _ -> "r" in
+  sprintf ".%s.%s" infix ext
 
   
 let () =
 	let args = getOptArgs specs in
 	
-	let tostdout,   outdir,   addDreps,   addVals,   showJumps,   infix =
-			!tostdout', !outdir', !addDreps', !addVals', !showJumps', !infix' in
+	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
+			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
 
+  let tex,   infix =
+      !tex', !infix' in
+      
 	let outdir = if tostdout then None else outdir in
 
 	let dataFileName =
@@ -52,7 +63,7 @@ let () =
 
 	let oc = if tostdout then stdout
 	else begin
-	  let suffix = makeSuffix infix showJumps in
+	  let suffix = makeSuffix infix showJumps tex in
 		let saveName = dropText ".txt" dataFileName |> 
 			flip (^) suffix |> mayPrependDir outdir in
 		leprintfln "saving result in %s\n" saveName;
@@ -146,11 +157,18 @@ let () =
     | x -> x 
   end rankd;
   
-  let triple_print oc (x,y,z,_) = fprintf oc "%s %d %d" x y z in
+  let sep,eol =
+  match tex with
+  | true ->  "& ", " \\\\"
+  | false -> "",   "" in
+  
+  let triple_print oc (x,y,z,_) = fprintf oc "%s %s%d %s%d%s" 
+    x sep y sep z eol in
   (* thelema: If you want to print a bunch of things to a single string, 
      use IO.output_string () to create your output; 
      to_string used for a single call here: *)
-  let quadro_print oc (x,y,z,w) = fprintf oc "%s %d %d %s" x y z (((L.print Int.print) |> IO.to_string) w) in
+  let quadro_print oc (x,y,z,w) = fprintf oc "%s %s%d %s%d %s%s%s" 
+    x sep y sep z sep (((L.print Int.print) |> IO.to_string) w) eol in
   
   let row_print = if showJumps then quadro_print else triple_print in
   
