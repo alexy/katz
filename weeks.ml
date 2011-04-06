@@ -4,6 +4,7 @@ open Getopt
 let simsN     = 250
 let bucketsN  = 7
 
+let byDist'    = ref false      
 let tostdout'  = ref false
 let outdir'    = ref (Some "weeks")
 let addDreps'  = ref false
@@ -13,13 +14,14 @@ let infix'     = ref None
 let tex'       = ref false
 let head'      = ref None
 let table'     = ref false
+let doc'       = ref false
 
 let specs =
 [
 	('c',"stdout",      (set tostdout' (not !tostdout')), None);
   (noshort,"outdir",  None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir",   (set outdir' None),     None);
-  ('d',"dreps",       (set addDreps' true),   None);
+  ('r',"dreps",       (set addDreps' true),   None);
   (noshort,"nodreps", (set addDreps' false),  None);
   ('x',"val",         None, Some (fun x -> addVals' := float_of_string x));
   ('j',"jumps",       (set showJumps' true),  None);
@@ -30,12 +32,20 @@ let specs =
   (noshort,"tex",     (set tex' false),       None);
   ('h',"head", None, Some (fun x -> head' := Some (int_of_string x)));
   (noshort,"nohead",  (set head' None),       None);
-  ('a',"table",       (set table' true),      None);
-  (noshort,"notable", (set table' false),     None)
+  ('e',"table",       (set table' true),      None);
+  (noshort,"notable", (set table' false),     None);
+  ('a',"doc",         (set doc' true),        None);
+  (noshort,"nodoc",   (set doc' false),       None);
+  ('d',"distance",    (set byDist' true),     None);
+  (noshort,"nodistance", (set byDist' false), None);
 ]
 
 
-let makeSuffix infix showJumps head table tex =
+let makeSuffix infix byDist showJumps head table doc tex =
+  let letter x cond = 
+    match cond with
+      | true -> x
+      | false -> "" in
   let ext = 
     match tex with
       | true  -> "tex"
@@ -43,27 +53,43 @@ let makeSuffix infix showJumps head table tex =
   let infix = 
     match infix with
       | Some i -> i
-      | None when showJumps -> "j"
-      | _ -> "r" in
+      | None when byDist -> "d"
+      | _ -> "a" in
+  let j = letter "j" showJumps in
   let h = 
     match head with
       | Some n -> string_of_int n
       | _ -> "" in
-  let t =
-    match table with
-      | true -> "t"
-      | _    -> "" in
-  sprintf ".%s%s%s.%s" infix h t ext
+  let t = letter "t" table in
+  let d = letter "d" doc in
+      
+  sprintf ".%s%s%s%s%s.%s" infix j h t d ext
 
 
-let tableHead oc =
+let docHead oc =
   String.print oc "
-\\begin{table}
-\\begin{tabular}{|lrrl|}
-\\toprule
-\\emph{simulation} & \\emph{rank} & \\emph{rise} & \\emph{jumps} \\\\
-\\midrule
+\\documentclass{article}
+\\usepackage{booktabs}
+\\begin{document}
+\\pagenumbering{gobble} 
 "
+
+let docTail oc =
+  String.print oc "
+\\end{document}
+"
+  
+let tableHead oc jumps =
+  let jcolspec,jheading = 
+    if jumps then "l"," & \\emph{jumps}" else "","" in
+  fprintf oc "
+\\begin{table}
+\\centering
+\\begin{tabular}{|lrr%s|}
+\\toprule
+\\emph{simulation} & \\emph{rank} & \\emph{rise} %s \\\\
+\\midrule
+" jcolspec jheading
 
 let tableTail oc caption label =
     fprintf oc "
@@ -71,6 +97,7 @@ let tableTail oc caption label =
 \\end{tabular}
 \\caption{\\small %s}
 \\label{table:%s}
+\\end{table}
 " caption label
 
   
@@ -79,10 +106,13 @@ let () =
 	
 	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
 			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
-
-  let tex,   infix,   head,   table =
-      !tex', !infix', !head', !table' in
+			
+  let infix,   head,   doc,   byDist =
+      !infix', !head', !doc', !byDist' in
       
+  let table = if doc then true else !table' in
+  let tex = if doc || table then true else !tex' in
+  
 	let outdir = if tostdout then None else outdir in
 
 	let dataFileName =
@@ -97,7 +127,7 @@ let () =
   
 	let oc = if tostdout then stdout
 	else begin
-	  let suffix = makeSuffix infix showJumps head table tex in
+	  let suffix = makeSuffix infix byDist showJumps head table doc tex in
 		let saveName = tableName ^ suffix |> mayPrependDir outdir in
 		leprintfln "saving result in %s\n" saveName;
 		open_out saveName
@@ -184,11 +214,20 @@ let () =
     base,d,delta,diffs
   end |> Array.of_list in
   
-  A.sort begin fun (_,d1,delta1,_) (_,d2,delta2,_) ->
+  
+  let sort32 (_,d1,delta1,_) (_,d2,delta2,_) =
     match compare delta1 delta2 with
     | 0 -> compare d1 d2
-    | x -> x 
-  end rankd;
+    | x -> x in
+
+  let sort23 (_,d1,delta1,_) (_,d2,delta2,_) =
+    match compare d1 d2 with
+    | 0 -> compare delta1 delta2
+    | x -> x in
+  
+  
+  A.sort (if byDist then sort23 else sort32) rankd;
+  
   
   let sep,eol =
   match tex with
@@ -205,7 +244,9 @@ let () =
   
   let row_print = if showJumps then quadro_print else triple_print in
   
-  if table then tableHead oc else ();
+  if doc   then docHead   oc           else ();
+  if table then tableHead oc showJumps else ();
   let a = mayApply (fun n a -> A.sub a 0 n) head rankd in
   A.print ~first:"" ~sep:"\n" ~last:"\n" row_print oc a;
-  if table then tableTail oc tableName tableName else ()
+  if table then tableTail oc tableName tableName else ();
+  if doc   then docTail oc                       else ()

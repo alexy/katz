@@ -58,7 +58,7 @@ ALL=$(SAVE_GRAPH) $(INVERT_GRAPH) $(SC) $(LOOK) $(BYDAY) $(STARTS) $(SIM1) \
     $(TEX4) $(TEXLB) $(SKEW) $(SGEN) $(SU) $(SF) $(MOVE) $(SKA) $(SKABS) \
     $(USKA) $(TEXT) $(DFCB) $(WKS)
 
-all: $(ALL:%=%.opt) lib
+all: $(ALL:%=%.opt) lib weeks.byte
 
 common.cmx: binary_graph.cmx h.cmx utils.cmx t.cmx
 load_graph.ml tokyo_graph.ml json_graph.ml: common.ml
