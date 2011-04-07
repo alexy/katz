@@ -47,6 +47,12 @@ let specs =
 ]
 
 
+let makeWeek ?(dash="") week =
+  match week with
+    | Some wk -> sprintf "%s%dwk" dash wk
+    | _ -> ""
+    
+
 let makeSuffix infix week byDist showJumps head table doc tex =
   let letter x cond = 
     match cond with
@@ -66,14 +72,14 @@ let makeSuffix infix week byDist showJumps head table doc tex =
     match head with
       | Some n -> string_of_int n
       | _ -> "" in
-  let w =
-    match week with
-      | Some wk -> sprintf "%dwk" wk
-      | _ -> "" in
-  let t = letter "t" table in
-  let d = letter "d" doc in
-      
-  sprintf ".%s%s%s%s%s%s.%s" infix j h t d w ext
+  let w  = makeWeek week in
+  let t  = letter "t" table in
+  let d  = letter "d" doc in
+  let td = 
+    match t,d with
+    | "t","d" -> "d"
+    | _ -> t^d in
+  sprintf ".%s%s%s%s%s.%s" infix j h td w ext
 
 
 let docHead oc =
@@ -133,7 +139,8 @@ let () =
 
 	mayMkDir outdir;
 
-  let tableName = dropText ".txt" dataFileName in
+  let baseName  = dropText ".txt" dataFileName in
+  let tableName = sprintf "%s%s" baseName (makeWeek ~dash:"-" week) in
   
 	let oc = if tostdout then stdout
 	else begin
@@ -193,7 +200,7 @@ let () =
   
   if debug then begin
     printf "dreps's weeks length = %d\n" (L.length (weeks --> "dreps"));
-    L.print ~first:"dreps: " ~last:"]\n" Float.print stderr drepsV
+    L.print ~first:"dreps: [" ~last:"]\n" Float.print stderr drepsV
   end;
   
   let distances =
@@ -221,7 +228,9 @@ let () =
   end distances;
   
   if debug then
-    L.print ~first:"rreps0d ranksH:" ~last:"]\n" (Pair.print Int.print Int.print) stderr (ranksH --> "rreps0d")
+    let key = "rreps" in
+    let first = sprintf "%s ranksH: [" key in
+    L.print ~first ~last:"]\n" (Pair.print Int.print Int.print) stderr (ranksH --> key)
   else ();
   
   let rankd = list_of_hash ranksH |>

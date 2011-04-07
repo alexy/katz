@@ -1,0 +1,14 @@
+TEX = $(shell ls *.tex)
+PDF = $(TEX:%.tex=%.pdf)
+CROP_DIR=crop
+
+XARGS   = xargs -n1 -P2
+XELATEX = xelatex
+PDFCROP = pdfcrop
+
+all:
+	ls $(TEX) | $(XARGS) $(XELATEX)
+	ls $(PDF) | $(XARGS) $(PDFCROP)
+	mkdir -p $(CROP_DIR)
+	mv *-crop.pdf $(CROP_DIR)
+	rm *.aux *.log
