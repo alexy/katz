@@ -4,6 +4,7 @@ open Getopt
 let simsN     = 250
 let bucketsN  = 7
 
+let week'      = ref None
 let byDist'    = ref false      
 let tostdout'  = ref false
 let outdir'    = ref (Some "weeks")
@@ -15,11 +16,12 @@ let tex'       = ref false
 let head'      = ref None
 let table'     = ref false
 let doc'       = ref false
+let debug'     = ref false
 
 let specs =
 [
 	('c',"stdout",      (set tostdout' (not !tostdout')), None);
-  (noshort,"outdir",  None,Some (fun x -> outdir' := Some x));
+  ('o',"outdir",  None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir",   (set outdir' None),     None);
   ('r',"dreps",       (set addDreps' true),   None);
   (noshort,"nodreps", (set addDreps' false),  None);
@@ -38,10 +40,14 @@ let specs =
   (noshort,"nodoc",   (set doc' false),       None);
   ('d',"distance",    (set byDist' true),     None);
   (noshort,"nodistance", (set byDist' false), None);
+  ('D',"debug",       (set debug' true),      None);
+  (noshort,"nodebug", (set debug' false),     None);
+  ('w',"week", None, Some (fun x -> week' :=  Some (int_of_string x)));
+  (noshort,"noweek",  (set week' None),       None)
 ]
 
 
-let makeSuffix infix byDist showJumps head table doc tex =
+let makeSuffix infix week byDist showJumps head table doc tex =
   let letter x cond = 
     match cond with
       | true -> x
@@ -60,10 +66,14 @@ let makeSuffix infix byDist showJumps head table doc tex =
     match head with
       | Some n -> string_of_int n
       | _ -> "" in
+  let w =
+    match week with
+      | Some wk -> sprintf "%dwk" wk
+      | _ -> "" in
   let t = letter "t" table in
   let d = letter "d" doc in
       
-  sprintf ".%s%s%s%s%s.%s" infix j h t d ext
+  sprintf ".%s%s%s%s%s%s.%s" infix j h t d w ext
 
 
 let docHead oc =
@@ -107,8 +117,8 @@ let () =
 	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
 			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
 			
-  let infix,   head,   doc,   byDist =
-      !infix', !head', !doc', !byDist' in
+  let infix,   head,   doc,   byDist,   debug,   week =
+      !infix', !head', !doc', !byDist', !debug', !week' in
       
   let table = if doc then true else !table' in
   let tex = if doc || table then true else !tex' in
@@ -127,7 +137,7 @@ let () =
   
 	let oc = if tostdout then stdout
 	else begin
-	  let suffix = makeSuffix infix byDist showJumps head table doc tex in
+	  let suffix = makeSuffix infix week byDist showJumps head table doc tex in
 		let saveName = tableName ^ suffix |> mayPrependDir outdir in
 		leprintfln "saving result in %s\n" saveName;
 		open_out saveName
@@ -179,9 +189,13 @@ let () =
       H.replace weeks base ((week,vs)::ws)
   end rows;
   
-  printf "dreps's weeks length = %d\n" (L.length (weeks --> "dreps"));
   let drepsV = weeks --> "dreps" |> L.hd |> snd in
-
+  
+  if debug then begin
+    printf "dreps's weeks length = %d\n" (L.length (weeks --> "dreps"));
+    L.print ~first:"dreps: " ~last:"]\n" Float.print stderr drepsV
+  end;
+  
   let distances =
   L.map begin fun wk ->
     H.map (fun base ws -> L.Exceptionless.assoc wk ws) weeks |> 
@@ -189,7 +203,8 @@ let () =
     L.filter_map begin function 
       | (base,Some v) -> 
         let d = Mathy.euclidian_distance_list v drepsV in
-        Some (base,d)
+        if d = nan then None
+                   else Some (base,d)
       | _ -> None
     end |>
     Array.of_list
@@ -205,13 +220,23 @@ let () =
     end a
   end distances;
   
+  if debug then
+    L.print ~first:"rreps0d ranksH:" ~last:"]\n" (Pair.print Int.print Int.print) stderr (ranksH --> "rreps0d")
+  else ();
+  
   let rankd = list_of_hash ranksH |>
-  L.map begin fun (base,wrs) ->
-    let rs    = L.map snd wrs in
-    let delta = list_delta rs in
-    let diffs = list_diffs rs in
-    let d = try L.last rs with Invalid_argument("Empty List") -> 1000 in
-    base,d,delta,diffs
+  L.filter_map begin fun (base,wrs) ->
+    try
+      let rs = L.map snd wrs in
+      let last = L.last rs in
+      let d = 
+        match week with
+          | Some wk -> L.assoc wk wrs
+          | _ -> L.hd rs in
+      let delta = d - last in
+      let diffs = list_diffs rs in
+      Some (base,d,delta,diffs)
+    with _ -> None
   end |> Array.of_list in
   
   
@@ -228,6 +253,12 @@ let () =
   
   A.sort (if byDist then sort23 else sort32) rankd;
   
+  if debug then begin
+    let base_rankd_0,_,_,_ = rankd.(0) in
+    let base_d0, d0 =  (L.last distances).(0) in
+    leprintfln "rankd 0: base %s, distances 0 for week %d: base %s, distance %f" 
+      base_rankd_0 maxWeek base_d0 d0
+  end;
   
   let sep,eol =
   match tex with

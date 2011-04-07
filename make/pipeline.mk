@@ -338,7 +338,7 @@ sbucks:       sbucks_reps2 sbucks_ments2
 #   for i in $(BASES); do $(DOCBUCKS) $(JCAPS_DIR)/$(JCAPS_PREFIX)-$$i.mlb; done
 #   for i in $(BASES); do $(DOLBLENS) $(LBUCKS_DIR)/$(LBUCKS_PREFIX)-$$i.mlb; done
 
-.INTERMEDIATE: $(JCAPS)
+.SECONDARY: $(JCAPS)
 # $(JCAPS_DIR)/$(JCAPS_PREFIX)-%.mlb: $(CAPS_DIR)/$(CAPS_PREFIX)-%.mlb
 #   $(SAVE_CAPS) $^ $(JCAPS_DIR)
 
