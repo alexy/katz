@@ -3,7 +3,6 @@ open Getopt
 
 let simsN     = 250
 let bucketsN  = 7
-
 let week'      = ref None
 let byDist'    = ref false      
 let tostdout'  = ref false
@@ -17,6 +16,10 @@ let head'      = ref None
 let table'     = ref false
 let doc'       = ref false
 let debug'     = ref false
+
+let showNB'    = ref true
+let showMC'    = ref true
+let afterN'    = ref 10
 
 let specs =
 [
@@ -43,9 +46,29 @@ let specs =
   ('D',"debug",       (set debug' true),      None);
   (noshort,"nodebug", (set debug' false),     None);
   ('w',"week", None, Some (fun x -> week' :=  Some (int_of_string x)));
-  (noshort,"noweek",  (set week' None),       None)
+  (noshort,"noweek",  (set week' None),       None);
+  ('N',"nb",          (set showNB' true),     None);
+  (noshort,"nonb",    (set showNB' false),    None);
+  ('M',"mc",          (set showMC' true),     None);
+  (noshort,"mc",      (set showMC' false),    None);
+  ('A',"after", None, Some (fun x -> afterN' := int_of_string x))
 ]
 
+
+let findAppendIf cond len pred a l =
+  if cond then
+    let i = A.findi pred a in
+    if i < len then l
+    else i::l
+  else l
+  
+
+let makeRowNumber ?(afterN=10) ?(showNs=true) ?(sep="") n =
+  match showNs with 
+    | true when n >= afterN -> sprintf "%d %s" (succ n) sep
+    | true -> sep
+    | _ -> ""
+   
 
 let makeWeek ?(dash="") week =
   match week with
@@ -95,17 +118,20 @@ let docTail oc =
 \\end{document}
 "
   
-let tableHead oc jumps =
-  let jcolspec,jheading = 
-    if jumps then "l"," & \\emph{jumps}" else "","" in
+let tableHead oc ns jumps =
+  let nada =  "","" in
+  let n_colspec,n_heading =
+    if ns then "r","\\emph{\\#} & " else nada in
+  let j_colspec,j_heading = 
+    if jumps then "l"," & \\emph{jumps}" else nada in
   fprintf oc "
 \\begin{table}
 \\centering
-\\begin{tabular}{|lrr%s|}
+\\begin{tabular}{|%slrr%s|}
 \\toprule
-\\emph{simulation} & \\emph{rank} & \\emph{rise} %s \\\\
+%s\\emph{simulation} & \\emph{rank} & \\emph{rise} %s \\\\
 \\midrule
-" jcolspec jheading
+" n_colspec j_colspec n_heading j_heading
 
 let tableTail oc caption label =
     fprintf oc "
@@ -123,8 +149,11 @@ let () =
 	let tostdout,   outdir,   addDreps,   addVals,   showJumps =
 			!tostdout', !outdir', !addDreps', !addVals', !showJumps' in
 			
-  let infix,   head,   doc,   byDist,   debug,   week =
-      !infix', !head', !doc', !byDist', !debug', !week' in
+  let infix,   head,   doc,   byDist,   debug =
+      !infix', !head', !doc', !byDist', !debug' in
+      
+  let week,   afterN,   showNB,   showMC =
+      !week', !afterN', !showNB', !showMC' in
       
   let table = if doc then true else !table' in
   let tex = if doc || table then true else !tex' in
@@ -140,7 +169,11 @@ let () =
 	mayMkDir outdir;
 
   let baseName  = dropText ".txt" dataFileName in
+
+  (* for self, we search on the basis of the first week of the pair,
+     but name on the last week for consistency with the rest! *)
   let tableName = sprintf "%s%s" baseName (makeWeek ~dash:"-" week) in
+  let week = if addDreps then Option.map pred week else week in
   
 	let oc = if tostdout then stdout
 	else begin
@@ -273,20 +306,32 @@ let () =
   match tex with
   | true ->  "& ", " \\\\"
   | false -> "",   "" in
+
+  let a = mayApply (fun n a -> A.sub a 0 n) head rankd in
+  let l = A.to_list a |> L.mapi (fun i x -> i,x) in
+  let len = L.length l in
   
-  let triple_print oc (x,y,z,_) = fprintf oc "%s %s%d %s%d%s" 
-    x sep y sep z eol in
+  let z = [] in
+  let rankd1 = A.map (fun (x,_,_,_) -> x) rankd in
+  let z = findAppendIf showNB len ((FILTER (_* "cb" | "dreps")) |- not) rankd1 z in
+  let z = findAppendIf showMC len (FILTER _* "cb6f")        rankd1 z in
+  let z = L.sort z |> L.map (fun i -> i, rankd.(i)) in
+  let l = l @ z in
+  let showNs = L.length l > len in
+  let l = L.map (fun (i,x) -> makeRowNumber ~showNs ~afterN ~sep i,x) l in
+  
+  let print_jumpless oc (i,(x,y,z,_)) = fprintf oc "%s%s %s%d %s%d%s" 
+    i x sep y sep z eol in
   (* thelema: If you want to print a bunch of things to a single string, 
      use IO.output_string () to create your output; 
      to_string used for a single call here: *)
-  let quadro_print oc (x,y,z,w) = fprintf oc "%s %s%d %s%d %s%s%s" 
-    x sep y sep z sep (((L.print Int.print) |> IO.to_string) w) eol in
+  let print_jumps oc (i,(x,y,z,w)) = fprintf oc "%s%s %s%d %s%d %s%s%s" 
+    i x sep y sep z sep (((L.print Int.print) |> IO.to_string) w) eol in
   
-  let row_print = if showJumps then quadro_print else triple_print in
+  let row_print = if showJumps then print_jumps else print_jumpless in
   
-  if doc   then docHead   oc           else ();
-  if table then tableHead oc showJumps else ();
-  let a = mayApply (fun n a -> A.sub a 0 n) head rankd in
-  A.print ~first:"" ~sep:"\n" ~last:"\n" row_print oc a;
+  if doc   then docHead   oc                  else ();
+  if table then tableHead oc showNs showJumps else ();
+  L.print ~first:"" ~sep:"\n" ~last:"\n" row_print oc l;
   if table then tableTail oc tableName tableName else ();
   if doc   then docTail oc                       else ()

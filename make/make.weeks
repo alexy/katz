@@ -1,6 +1,7 @@
 TEX = $(shell ls *.tex)
 PDF = $(TEX:%.tex=%.pdf)
 CROP_DIR=crop
+FULL_DIR=full
 
 XARGS   = xargs -n1 -P2
 XELATEX = xelatex
