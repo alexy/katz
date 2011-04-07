@@ -11,4 +11,6 @@ all:
 	ls $(PDF) | $(XARGS) $(PDFCROP)
 	mkdir -p $(CROP_DIR)
 	mv *-crop.pdf $(CROP_DIR)
+	mkdir -p $(FULL_DIR)
+	mv *.pdf $(FULL_DIR)
 	rm *.aux *.log
