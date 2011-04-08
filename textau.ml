@@ -3,7 +3,7 @@ open Getopt
 
 let take'    = ref (Some 33)
 let drop'    = ref (Some 7)
-let precise' = ref true
+let precise' = ref false
 let tostdout'= ref false
 let outdir'  = ref (Some "txt")
 let tex'     = ref false
@@ -15,12 +15,13 @@ let specs =
   (noshort,"notakedays",(set take' None),None);
   ('d',      "dropdays",None,Some (fun x -> drop' := Some (int_of_string x)));
   (noshort,"nodropdays",(set drop' None),None);
-	('p',"precise",(set precise'  (not !precise')), None);
+	('p',"precise",(set precise' true), None);
+	(noshort,"imprecise",(set precise' false), None);
 	('c',"stdout", (set tostdout' (not !tostdout')),None);
-  (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
+  ('o',"outdir",None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir", (set outdir' None), None);
   ('t',"tex",(set tex' (not !tex')),None);
-  ('1',"line",(set oneLine' (not !oneLine')), None) 
+  ('1',"line",(set oneLine' (not !oneLine')), None);
 ]
 
 let () =

@@ -6,6 +6,9 @@ TXT_DIR   ?= txt
 O_TEX_DIR ?= $(if $(TEX_DIR), -o $(TEX_DIR),)
 O_TXT_DIR ?= $(if $(TXT_DIR), -o $(TXT_DIR),)
 
+NOMATRIX ?= --nomatrix
+NOMATRIX := $(NOMATRIX:NONE=)
+
 .PHONY: tex txt
 tex:
 	mkdir -p $(TEX_DIR)
@@ -14,5 +17,5 @@ tex:
 
 txt:
 	mkdir -p $(TXT_DIR)
-	                    echo $(LIST) | xargs -n$(XARGS_N) $(TEXIT) $(O_TXT_DIR)         --nomatrix --precise
-	[ -z "$(RUN2)" ] || echo $(LIST) | xargs -n$(XARGS_N) $(TEXIT) $(O_TXT_DIR) $(RUN2) --nomatrix --precise
+	                    echo $(LIST) | xargs -n$(XARGS_N) $(TEXIT) $(O_TXT_DIR)         $(NOMATRIX) --precise
+	[ -z "$(RUN2)" ] || echo $(LIST) | xargs -n$(XARGS_N) $(TEXIT) $(O_TXT_DIR) $(RUN2) $(NOMATRIX) --precise

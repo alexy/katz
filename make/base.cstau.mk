@@ -1,0 +1,15 @@
+WHATS_UP=cstau
+DROP=skew-
+
+BASE=$(REPS)
+
+FROM_QUAD_SUFFIX=-suffix
+
+include $(MK_DIR)/base.mk
+
+TEXIT=$(TEXTAU)
+NOMATRIX=NONE
+XARGS_N=1
+CUTPOS=1
+HLINE=$(HLINE_DREPS)
+
