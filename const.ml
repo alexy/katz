@@ -9,3 +9,4 @@ let usersDaily = 1000000
 (* moving *)
 
 let movingRanksN = 10
+let bucketsN  = 7

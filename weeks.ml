@@ -1,8 +1,9 @@
 open Common
 open Getopt
 
-let simsN     = 250
-let bucketsN  = 7
+let simsN      = 300
+let drepsName  = "dreps"
+
 let week'      = ref None
 let byDist'    = ref false      
 let tostdout'  = ref false
@@ -191,7 +192,7 @@ let () =
   		| h::t -> begin
   			let vs = L.map float_of_string t in
   		  match h with  
-  		  | "dreps" -> (h,0,vs)
+  		  | RE "dreps" -> (h,0,vs)
   		  | RE ( _* Lazy as base ) ("-" [ '0' - '3' ])? ( [ '0' - '4' ] as week' ) "wk"? Lazy eol ->
   		    let week = int_of_string week' in (* how do we create week as int? *)
     			if week < !minWeek then minWeek := week;
@@ -209,8 +210,8 @@ let () =
   
   let rows = 
   if addDreps then
-    let drepsVals = L.make bucketsN addVals in
-    let drepsRow = ("dreps",0,drepsVals) in
+    let drepsVals = L.make Const.bucketsN addVals in
+    let drepsRow = (drepsName,0,drepsVals) in
     E.append (E.singleton drepsRow) rows
   else
     rows in
@@ -222,17 +223,17 @@ let () =
   
   let weeks = H.create simsN in
   E.iter begin fun (base,week,vs) ->
-    if base = "dreps" then
+    if base = drepsName then
       weeksRange |> L.map (fun wk -> (wk, vs)) |> H.add weeks base
     else
       let ws = H.find_default weeks base [] in
       H.replace weeks base ((week,vs)::ws)
   end rows;
   
-  let drepsV = weeks --> "dreps" |> L.hd |> snd in
+  let drepsV = weeks --> drepsName |> L.hd |> snd in
   
   if debug then begin
-    printf "dreps's weeks length = %d\n" (L.length (weeks --> "dreps"));
+    printf "dreps's weeks length = %d\n" (L.length (weeks --> drepsName));
     L.print ~first:"dreps: [" ~last:"]\n" Float.print stderr drepsV
   end;
   

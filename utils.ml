@@ -461,3 +461,5 @@ let list_diffs ?(right=false) xs =
 	
 	if right then L.rev diffs
 	         else diffs
+	         
+let fabs x = if x < 0. then -.x else x

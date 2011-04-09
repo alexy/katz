@@ -1,24 +1,33 @@
 open Common
 open Getopt
 
+let drepsName  = "dreps"
+
 let tab = "\t"
 let jumpPrint oc x = if x >= 0.1 then fprintf oc "%3.1f" x else fprintf oc "%4.2f" x
 let preciseFloatPrint oc x = fprintf oc "%17.15f" x
 let nBuckets = 7
 
-let tostdout'= ref false
-let outdir'  = ref (Some "df")
+let addDreps'  = ref false
+let addVals'   = ref 1.0
+let buckDists' = ref true
+let tostdout'  = ref false
+let outdir'    = ref (Some "df")
 let specs =
 [
+  ('r',"dreps",       (set addDreps' true),   None);
+  (noshort,"nodreps", (set addDreps' false),  None);
+  ('x',"val",         None, Some (fun x -> addVals' := float_of_string x));
+	('b',"buckdists",(set buckDists' (not !buckDists')),None);
 	('c',"stdout", (set tostdout' (not !tostdout')),None);
   (noshort,"outdir",None,Some (fun x -> outdir' := Some x));
   (noshort,"nodir", (set outdir' None), None)
 ]
 
-let fullBucketRange = E.range 1 ~until:nBuckets
-let fullBucketSet   = E.clone fullBucketRange |> IS.of_enum
+let fullBucketRange = E.range 1 ~until:nBuckets |> L.of_enum
+let fullBucketSet   = fullBucketRange |> L.enum |> IS.of_enum
 
-let dreps = A.create nBuckets 1.0
+(* let dreps = A.create nBuckets 1.0 *)
 
 let string_array_of_buckets bs =
 	let a = A.init nBuckets (fun i -> "F") in
@@ -32,7 +41,7 @@ let string_array_of_buckets bs =
 
 let get_buckets s =
 	match s with
-	 | RE _* "cb" (digit+ as ds) ([ 't' 'f' ] as keep) ->
+	 | RE _* "b" (digit+ as ds) ([ 't' 'f' ] as keep) ->
 			let bs = String.enum ds |> E.map ord in
 			let bs = 
 			begin match keep with
@@ -103,7 +112,7 @@ let string_of_strategy strat =
 	
 let get_strategy s =
 	match s with
-	| RE "dreps" -> (Nothing,    Nothing, false)
+	| RE "dreps"   -> (Nothing,    Nothing, false)
 	| RE "ureps" -> (Uniform,    Nothing, false)
 	| RE "ereps" -> (Mentions,   Nothing, false)
 	| RE "creps" -> (Predefined, Nothing, false)
@@ -134,10 +143,12 @@ type row = {
 	maturityROW       : maturity;
 	weekROW           : int;
 	bucketsROW        : int list option;
-	distanceROW       : float
+	vectorROW         : float list;
+	distanceROW       : float;
+	buckDistsROW      : float list
 	}
 	
-let make_row name distance =
+let make_row name ?(buckDists=[]) ?(distance=nan) vs =
 	let globalStrategy,fofStrategy,utility = get_strategy name in
 	{ nameROW=           name;
 	  globalStrategyROW= globalStrategy;
@@ -147,10 +158,12 @@ let make_row name distance =
 	  jumpsROW=          get_jumps name;
 	  weekROW=           get_week name;
 	  bucketsROW=        get_buckets name;
+	  vectorROW=         vs;
+	  buckDistsROW=      buckDists;
 	  distanceROW=       distance
 	}
 	
-let print_row oc r =
+let print_row oc ?(buckDists=false) r =
 	let
 	{ nameROW=           name;
 	  globalStrategyROW= globalStrategy;
@@ -160,6 +173,7 @@ let print_row oc r =
 	  jumpsROW=          jumps;
 	  weekROW=           week;
 	  bucketsROW=        buckets;
+	  buckDistsROW=      bds;
 	  distanceROW=       distance
 	} = r in
 		let sprint x = String.print oc x in
@@ -182,8 +196,10 @@ let print_row oc r =
 		Int.print oc week;
 		A.print ~first:tab ~sep:tab ~last:tab String.print oc 
 			(string_array_of_buckets buckets);
-		tab'();
-		(*TeX.*)
+		if buckDists then
+			L.print ~first:"" ~sep:tab ~last:tab 
+				preciseFloatPrint oc bds 	
+		else ();
 		preciseFloatPrint oc distance;
 		newline oc
 	
@@ -194,6 +210,9 @@ let () =
 	let tostdout,   outdir =
 			!tostdout', !outdir' in
 
+	let addDreps,   addVals,   buckDists =
+	 		!addDreps', !addVals', !buckDists' in
+	
 	let outdir = if tostdout then None else outdir in
 
 	let dataFileName =
@@ -217,23 +236,38 @@ let () =
 	let rows = E.map begin fun line ->
 		match Pcre.split ~pat:" +" line with
 		| h::t -> 
-			let v = L.map float_of_string t |> A.of_list in
-			let d = Mathy.euclidian_distance_array v dreps in
-			make_row h d
+			let v   = L.map float_of_string t in
+			make_row h v
 		| _ -> failwith 
 			(sprintf "ERROR: malformed line in %s: %s" dataFileName line)
-	end lines in
+	end lines |> L.of_enum in
+	
+	let dreps = if addDreps then	
+		 L.make Const.bucketsN addVals 
+	else
+		let r = L.find (fun r -> r.nameROW = drepsName) rows in
+		r.vectorROW in
+		
+	let rows = L.map begin fun ({vectorROW=v} as r) ->
+			let bds = L.map2 (-.) v dreps |> L.map fabs in
+			let d   = Mathy.euclidian_distance_list v dreps in
+			{ r with buckDistsROW=bds;distanceROW=d }
+	end rows in
+
 
 	L.print ~first:"" ~sep:tab ~last:"" String.print oc 
 	["global";"fof";"utility";"maturity";"jumpUtil";"jumpFOF";"week"];
-	IS.print ~first:tab ~sep:tab ~last:tab Int.print oc fullBucketSet;
+	L.print ~first:tab ~sep:tab ~last:tab (fun oc x -> fprintf oc "b%d" x) oc fullBucketRange;
+	if buckDists then
+		L.print ~first:"" ~sep:tab ~last:tab (fun oc x -> fprintf oc "d%d" x) oc fullBucketRange
+	else ();
 	String.print oc "distance";
 	newline oc;
 
-	leprintfln "has %d rows!" (E.count rows);
+	leprintfln "has %d rows!" (L.length rows);
 	
 	(* E.take 5 *)
-	rows |> E.iter (print_row oc);
+	rows |> L.iter (print_row ~buckDists oc);
 	
 	if tostdout then () else close_out oc
 	

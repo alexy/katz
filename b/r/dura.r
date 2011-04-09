@@ -30,17 +30,30 @@ heatmaps <- function(m,infix,shift=0) {
 some.reps <- c(
 "dreps","ureps","rreps","creps","lj1u","lj1m","lj1c",
 "fg5uf1u","fg5mf1u[0-3](wk)?","fg5mf1c","fg5cf1cA",
-"fg2uf05c","fg2cf05c"
-#,"fg8uf05c","fg8cf05c"
-,"fg5cf1cb1f","fg5cf1cb1t","fg5cf1cb6f","fg5cf1cb6t"
+"fg2uf05c","fg2cf05c",
+#"fg8uf05c","fg8cf05c",
+"fg5cf1cb1f",
+"fg5cf1cb2f",
+"fg5cf1cb3f",
+"fg5cf1cb4f",
+"fg5cf1cb5f",
+"fg5cf1cb6f",
+"fg5cf1cb7f"
 #,"fg5cf1cb567f","fg5cf1cb567t"
 #,"fg5mf1ub1f","fg5mf1ub1t","fg5mf1ub6f","fg5mf1ub6t","fg5mf1ub567f","fg5mf1ub567t"
 )
 
 bucket.names <- c("sim","10","100","1000","10K","100K","1M","10M")
 
-vashu.mat <- function(name,oself=F) {
-	m <- read.table(name,row.names=1,col.names=bucket.names)
+no.nan.df <- function(df) df[apply(df,1,function(row) !any(is.nan(row))),]
+no.inf.df <- function(df) df[apply(df,1,function(row) !any(is.infinite(row))),]
+
+good.ments <- function(d,a,b) { dd <- no.nan.df(d[,a:b]); no.inf.df(log10(dd)) }
+
+my.table <- function(name) read.table(name,row.names=1,col.names=bucket.names)
+
+vashu.mat <- function(name,oself=F,bylog=F,from.col=1,upto.col=7) {
+	m <- my.table(name)
 	m.sims <- rownames(m)
 	
 	m.sims.exclude <- m.sims[Reduce(function(r,x) c(r,grep(x,m.sims)),init=c(),c("0d","7m","B","C"))]
@@ -48,10 +61,17 @@ vashu.mat <- function(name,oself=F) {
   m.sims.some    <- m.sims.include[!(m.sims.include %in% m.sims.exclude)]
   
   m1 <- m[m.sims.some,]
+  if (bylog) m1 <- good.ments(m1,from.col,upto.col)
   
   infix <- gsub(".txt$","",name)
   
-  if (oself) heatmaps(m1,infix,shift=1) else heatmaps(m1,infix)
+  if (oself) 
+  {
+    m1 <- rbind(m1,dreps=rep(1.0,7))
+    heatmaps(m1,infix,shift=1) 
+  } else {
+    heatmaps(m1,infix)
+  }
 }
   
   
