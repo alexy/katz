@@ -81,11 +81,12 @@ CSTAU_TXT=
 CSTAU_LIST=$(foreach root,$(REPS),$(root)/$(CSTAU_NAME)/$(CSTAU_TXT)/$(root)-$(CSTAU_NAME).txt)
 CSTAU=$(RDIR)/$(CSTAU_NAME).txt
 
-ALL=$(SRATES) $(OVERX)
+JOBS=$(SRATES) $(ODREPS) $(OSELF) $(VOLS) $(SBUCKS) $(B2B) $(CSTAU) $(CSTAUBS)
 
-.PHONY: all $(REPS)
+.PHONY: all jobs $(REPS) $(JOBS)
 
-all: $(REPS)
+all:  $(REPS)
+jobs: $(JOBS)
     
 $(REPS):
 	$(MAKE) --directory=$@ $(TARGET)
