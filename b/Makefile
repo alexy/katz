@@ -76,8 +76,7 @@ B2B_6=$(RDIR)/$(B2B_NAME_6).txt
 B2B=$(B2B_1) $(B2B_2) $(B2B_3) $(B2B_4) $(B2B_5) $(B2B_6)
 
 CSTAU_NAME=cstau
-# this can be set to "txt" if used like that in the pipeline:
-CSTAU_TXT=
+CSTAU_TXT=txt
 CSTAU_LIST=$(foreach root,$(REPS),$(root)/$(CSTAU_NAME)/$(CSTAU_TXT)/$(root)-$(CSTAU_NAME).txt)
 CSTAU=$(RDIR)/$(CSTAU_NAME).txt
 

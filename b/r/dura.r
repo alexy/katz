@@ -28,7 +28,7 @@ heatmaps <- function(m,infix,shift=0) {
 
 
 some.reps <- c(
-"dreps","ureps","rreps","creps","lj1u","lj1m","lj1c",
+"dreps","ureps","ereps","rreps","creps","lj1u","lj1m","lj1c",
 "fg5uf1u","fg5mf1u[0-3](wk)?","fg5mf1c","fg5cf1cA",
 "fg2uf05c","fg2cf05c",
 #"fg8uf05c","fg8cf05c",
@@ -52,8 +52,9 @@ good.ments <- function(d,a,b) { dd <- no.nan.df(d[,a:b]); no.inf.df(log10(dd)) }
 
 my.table <- function(name) read.table(name,row.names=1,col.names=bucket.names)
 
-vashu.mat <- function(name,oself=F,bylog=F,from.col=1,upto.col=7) {
-	m <- my.table(name)
+vashu.mat <- function(name,oself=F,bylog=F,from.col=1,upto.col=7,m=NA) {
+	if (!is.data.frame(m)) m <- my.table(name)
+	
 	m.sims <- rownames(m)
 	
 	m.sims.exclude <- m.sims[Reduce(function(r,x) c(r,grep(x,m.sims)),init=c(),c("0d","7m","B","C"))]
@@ -74,5 +75,43 @@ vashu.mat <- function(name,oself=F,bylog=F,from.col=1,upto.col=7) {
   }
 }
   
-  
-  
+# srates-medians.txt
+# overx-dreps-medians.txt
+# overx-self-medians.txt
+# vols4-me-norm-medians.txt
+# vols4-re-norm-medians.txt
+# sbucks-ments-star-med-medians.txt
+# sbucks-reps-star-med-medians.txt
+# b2bm-aftr-rel-medians.txt
+# b2bm-befr-rel-medians.txt
+# b2bm-self-rel-medians.txt
+# b2br-aftr-rel-medians.txt
+# b2br-befr-rel-medians.txt
+# b2br-self-rel-medians.txt
+# cstau.txt
+# cstaubs-medians.txt
+
+file.of <- function(base) paste(base,"-medians.txt",sep="")
+
+simple.bases <- c(
+  "srates","overx-dreps",
+  "vols4-re-norm","vols4-me-norm",
+  "b2br-self-rel",
+  "cstaubs"
+  )
+
+log10.bases <- c(
+  "sbucks-ments-star-med","sbucks-reps-star-med",
+  "b2bm-self-rel"
+  )
+
+for (base in simple.bases) vashu.mat(file.of(base))
+for (base in log10.bases)  vashu.mat(file.of(base),bylog=T)
+vashu.mat(file.of("overx-self"),oself=T)
+vashu.mat(file.of("b2br-befr-rel"),from.col=2)
+vashu.mat(file.of("b2br-aftr-rel"),upto.col=6)
+vashu.mat(file.of("b2bm-befr-rel"),from.col=2,bylog=T)
+vashu.mat(file.of("b2bm-aftr-rel"),upto.col=6,bylog=T)
+
+cstau <- read.table("cstau.txt",row.names=1,col.names=c("sim",paste("d",7:32,sep="")))
+vashu.mat("cstau",m=cstau)

@@ -10,9 +10,13 @@ $(if $(FROM_QUAD_SUFFIX),\
 		$(if $(findstring $(FROM_QUAD_SUFFIX),$(base)),\
 			$(QUAD_PREFIX)$(base:%$(FROM_QUAD_SUFFIX)=%$(QUAD_SUFFIX)),\
 			$(TABLE_PREFIX)$(base).mlb)),\
-  $(BASE_LIST:%=$(TABLE_PREFIX)%$(MLB)))
+	$(BASE_LIST:%=$(TABLE_PREFIX)%$(MLB)))
 
 
 MLB_LIST  =$(filter %.mlb, $(LIST))
 LINE_LIST =$(if $(DROP),$(subst $(DROP),,$(MLB_LIST)),$(MLB_LIST))
 DIR_LIST  =$(filter-out %.mlb,$(LIST))
+
+.PHONY: show-mlb-list
+show-mlb-list:
+	@echo MLB_LIST: $(MLB_LIST)

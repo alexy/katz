@@ -1,3 +1,8 @@
+# this is a runnung transcript of the R
+# used in the katz project;
+# the batch heatmap generation is in dura.r,
+# the versions here are superceded there
+
 library(RColorBrewer)
 library(gplots)
 heatclust <- function(m) {
