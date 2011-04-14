@@ -1,6 +1,7 @@
 open Common
 open Sgraph
 
+
 let socDay socUserDaySum sgraph params day =
   let (alpha, beta, gamma, by_mass, skew_times) = params in
   let {ustatsSG =ustats} = sgraph in

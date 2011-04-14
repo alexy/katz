@@ -396,12 +396,12 @@ let nonneg x = if x < 0 then 0 else x
 
 let make_step_counter init =
 	let counter = ref (pred init) in
-	((fun () -> incr counter),
+	((fun () -> ignore (incr counter)),
 	 (fun () -> !counter))
 	
 let make_counter init =
 	let counter = ref (pred init) in
-	(fun () -> incr counter; !counter)
+	(fun () -> begin ignore (incr counter); !counter end)
 
 let arrayRange ?(take=None) ?(drop=None) a =
 	let lena   = A.length a in

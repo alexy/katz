@@ -338,9 +338,9 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
                jumpProbFOF = 0. will always skip globalStrategy, hence must have valid backup in 
                justJump fofStrategy! *)
               if jumpProbFOF <> 0.0 && begin
-                 jumpProbFOF =  1.0 ||
+                 jumpProbFOF =  1.0 || fofStrategy = NoAttachment ||
                  (* no friends -- no friends of friends, no? *)
-                 (fofStrategy <> NoAttachment && let fnums = degrFnums degr in fnums --> fromUser = 0) ||
+                 (let fnums = degrFnums degr in fnums --> fromUser = 0) ||
                  (fofStrategy = FOFUniformAttachment  && not (H.mem (degrFnofs     degr) fromUser)) ||
                  (fofStrategy = FOFMentionsAttachment && not (H.mem (degrFnofMents degr) fromUser)) ||                
                  (fofStrategy = FOFSocCapAttachment   && not (H.mem (degrFscofs    degr) fromUser)) ||                

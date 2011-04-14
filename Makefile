@@ -252,10 +252,16 @@ $(TEX4).byte: lib.cma teX.cmo $(TEX4).ml
 $(TEXLB).opt: lib.cmxa teX.cmx $(TEXLB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
   
-$(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_local.cmx simulate_utility_local.cmx soc_run_local.cmx $(SU).ml
+$(SU).opt: lib.cmxa invert.cmx sgraph.cmxa suds_local.cmx suds.cmx socday.cmx attachment_local.cmx simulate_utility_local.cmx soc_run_local.cmx $(SU).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
-$(SF).opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa suds_local.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
+$(SF).opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa suds_local.cmx suds.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SF).nega.opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa capital_negative/suds_local.cmx suds.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(SF).neg.opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa suds_local.cmx suds.cmx socday.cmx attachment_fof.cmx simulate_utility_fof.cmx soc_run_fof.cmx $(SF).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml

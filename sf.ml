@@ -54,6 +54,7 @@ let specs =
   (noshort,"nomindays",(set minDays' 0),None);
   ('d',"mindays",None,Some (fun n -> minDays' := int_of_string n));
   ('j',"jumpUtil",None,Some (fun x -> jumpProbUtil' := float_of_string x));
+  (noshort,"noutil", (set jumpProbUtil' 1.0),                    None); 
   ('J',"jumpFOF", None,Some (fun x -> jumpProbFOF'  := float_of_string x));
   (noshort,"glouni", (set globalStrat' GlobalUniformAttachment), None);
   (noshort,"glomen", (set globalStrat' GlobalMentionsAttachment),None);
