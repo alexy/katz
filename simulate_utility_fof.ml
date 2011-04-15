@@ -1,6 +1,5 @@
 open Common
 open Sgraph
-open Suds_local
 include Attachment_fof
 
 
@@ -355,7 +354,7 @@ let growUtility genOpts degr sgraph day newUsers userNEdges =
                also, can pick not a max but some with a fuzz *)
                
             let toUser,_ = H.keys outs |> L.of_enum |> 
-                        L.map (fun to' -> to', stepOut ustats fromUser to' 1 0.) |> 
+                        L.map (fun to' -> to', Suds_local.stepOut ustats fromUser to' 1 0.) |> 
                         listMax2 in
             addEdge sgraph degr edgeCount day fromUser toUser;
             hashInc edgeCount stayEC

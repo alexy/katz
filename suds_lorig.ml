@@ -1,8 +1,7 @@
 (* the original reciprocal social capital *)
 
 open Common
-open Soc_run_common
-open Sgraph
+open Ustats
 
 let stepOut ustats from to' num res = 
   let {outsUS =outs; totUS =tot; balUS =bal} = ustats --> from in
