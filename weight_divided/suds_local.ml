@@ -11,8 +11,9 @@ let stepOut ustats from to' num res =
     let toSoc = getSocCap ustats to' in
       if toSoc = 0. then res
       else
-        let toOut = H.find_default outs to' 1 in
+        (* let toOut = H.find_default outs to' 1 in *)
         let toTot = H.find_default tot  to' 1 in
+        (* was: float (num * toBal * toOut) *)
         let term = float (num * toBal) *. toSoc /. float toTot in
         res -. term (* the term is negative, so we sum positive *)
   end
@@ -24,8 +25,9 @@ let stepIn ustats from to' num ((backSum,allSum) as res) =
   let toSoc = getSocCap ustats to' in
   if toSoc = 0. then res
   else begin
-    let toIn  = H.find_default ins to' 1 in
+    (* let toIn  = H.find_default ins to' 1 in *)
     let toTot = H.find_default tot to' 1 in
+    (* was: float (num * toIn) *)
     let allTerm  = float num *. toSoc /. float toTot in
     let toBal = H.find_default bal to' 0 in
     let backTerm = if toBal <= 0 then 0. else float toBal *. allTerm in
