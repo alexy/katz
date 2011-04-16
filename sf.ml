@@ -2,6 +2,9 @@ open Common
 open Soc_run_fof
 open Getopt
 
+let alpha'        = ref 0.1
+let beta'         = ref 0.5
+let gamma'        = ref 0.5
 let byMass'       = ref true
 let minDays'      = ref 7
 let minCap'       = ref 1e-35
@@ -48,6 +51,9 @@ let specs =
   (noshort,"prefixJump",None,  Some (fun x -> prefixJump' := x));
   (noshort,"outdirJump",None,  Some (fun x -> outdirJump' := Some x));
   (noshort,"nodir",                      (set outdirJump' None), None);
+  (noshort,"alpha",None,       Some (fun x -> alpha' := float_of_string x));
+  (noshort,"beta", None,       Some (fun x -> beta'  := float_of_string x));
+  (noshort,"gamma",None,       Some (fun x -> gamma' := float_of_string x));
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
@@ -72,6 +78,9 @@ let specs =
   
 let () = 
   let args = getOptArgs specs in
+  
+  let alpha,   beta,   gamma =
+      !alpha', !beta', !gamma' in
   
   let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
       !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
@@ -147,6 +156,7 @@ let () =
   ~sep:", " ~last:"\n" String.print stderr strategyFeatures;
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) 
+  													 alphaSR= alpha; betaSR= beta; gammaSR= gamma;
                              byMassSR= byMass;
                              initDrepsSR= initDrepsOpt; initDaySR= initDayOpt;
                              minCapSR= minCap;
