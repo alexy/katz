@@ -112,6 +112,5 @@ vashu.mat(file.of("b2br-befr-rel"),from.col=2)
 vashu.mat(file.of("b2br-aftr-rel"),upto.col=6)
 vashu.mat(file.of("b2bm-befr-rel"),from.col=2,bylog=T)
 vashu.mat(file.of("b2bm-aftr-rel"),upto.col=6,bylog=T)
-
 cstau <- read.table("cstau.txt",row.names=1,col.names=c("sim",paste("d",7:32,sep="")))
 vashu.mat("cstau",m=cstau)

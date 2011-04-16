@@ -1,7 +1,7 @@
 open Common
 include Sgraph
 include Simulate_utility_fof
-let socDay = Socday.socDay Suds.socUserDaySum
+let socDay = Socday.socDay Suds_steps.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 socInitSR : float; byMassSR : bool; skewTimesSR : int;
