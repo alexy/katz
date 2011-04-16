@@ -162,7 +162,7 @@ let () =
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) 
   													 alphaSR= alpha; betaSR= beta; gammaSR= gamma;
-                             byMassSR= byMass;
+                             allDownSR= allDown; byMassSR= byMass;
                              initDrepsSR= initDrepsOpt; initDaySR= initDayOpt;
                              minCapSR= minCap;
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 
