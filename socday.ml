@@ -3,7 +3,7 @@ open Sgraph
 
 
 let socDay socUserDaySum sgraph params day =
-  let (alpha, beta, gamma, by_mass, skew_times) = params in
+  let (alpha, beta, gamma, all_down, by_mass, skew_times) = params in
   let {ustatsSG =ustats} = sgraph in
 
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
@@ -11,6 +11,9 @@ let socDay socUserDaySum sgraph params day =
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
   let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
                         (0.,0.,0.) sumTerms in
+                        
+  let inSumAll = if all_down then inSumBack /. inSumAll else inSumAll in
+  
   leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
   
   let skews = usersHash () in

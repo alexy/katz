@@ -4,7 +4,8 @@ open Getopt
 
 let alpha'        = ref 0.1
 let beta'         = ref 0.5
-let gamma'        = ref 0.0001
+let gamma'        = ref 0.5
+let allDown'      = ref false
 let byMass'       = ref true
 let minDays'      = ref 7
 let minCap'       = ref 1e-35
@@ -54,6 +55,8 @@ let specs =
   (noshort,"alpha",None,       Some (fun x -> alpha' := float_of_string x));
   (noshort,"beta", None,       Some (fun x -> beta'  := float_of_string x));
   (noshort,"gamma",None,       Some (fun x -> gamma' := float_of_string x));
+  (noshort,"alldown",  (set allDown' true), None);
+  (noshort,"noalldown",(set allDown' false),None);
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
@@ -79,8 +82,8 @@ let specs =
 let () = 
   let args = getOptArgs specs in
   
-  let alpha,   beta,   gamma =
-      !alpha', !beta', !gamma' in
+  let alpha,   beta,   gamma,   allDown =
+      !alpha', !beta', !gamma', !allDown' in
   
   let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
       !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
@@ -118,10 +121,12 @@ let () =
   let globalStrategyName = showStrategy globalStrat in
   let fofStrategyName    = showStrategy fofStrat in
   
-  leprintf begin "options: byMass %b, minDays %d, minCap %e\n"^^
-             "jumpProbUtil %e, jumpProbFOF %e\n"^^
-             "globalStrategy %s, fofStrategy %s\n" end
-    byMass minDays minCap jumpProbUtil jumpProbFOF globalStrategyName fofStrategyName;
+  leprintf begin "options: " ^^
+             "  alpha %f, beta %f, gamma %f, allDown %b\n" ^^ 
+  	         "  byMass %b, minDays %d, minCap %e\n" ^^
+             "  jumpProbUtil %e, jumpProbFOF %e\n" ^^
+             "  globalStrategy %s, fofStrategy %s\n" end
+    alpha beta gamma allDown byMass minDays minCap jumpProbUtil jumpProbFOF globalStrategyName fofStrategyName;
     
   Option.may begin L.print ~first:"buckets: [" 
                            ~last:(sprintf "], keepBuckets %b\n" keepBuckets) 
