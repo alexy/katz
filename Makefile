@@ -75,6 +75,15 @@ skew_c.cmo: kendall_c.cmo skew.cmo
 %.cmx: %.ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c $^ -o $@
 
+%.cmi: %.mli
+	ocamlfind ocamlc $^
+
+suds_local.cmi: lib.cma
+
+suds_local.cmx: lib.cma suds_local.cmi suds_local.ml
+	ocamlfind ocamlc suds_local.mli
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c suds_local.ml -o $@
+
 #%.cmi: %.mli
 #ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -c $^ -o $@
 #simulate_utility_fof.cmi: attachment_fof.ml simulate_utility_fof.mli 
