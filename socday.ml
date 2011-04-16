@@ -12,7 +12,9 @@ let socDay socUserDaySum sgraph params day =
   let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
                         (0.,0.,0.) sumTerms in
                         
-  let inSumAll = if all_down then inSumBack /. inSumAll else inSumAll in
+  (* instead of inSumAll *. inSumAll /. inSumBack, we divide first, then multiply, to limit range *)
+  
+  let inSumAll = if all_down then inSumAll /. inSumBack *. inSumAll else inSumAll in
   
   leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
   
