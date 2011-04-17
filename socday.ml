@@ -14,7 +14,7 @@ let socDay socUserDaySum sgraph params day =
                         
   (* instead of inSumAll *. inSumAll /. inSumBack, we divide first, then multiply, to limit range *)
   
-  let inSumAll = if all_down then inSumAll /. inSumBack *. inSumAll else inSumAll in
+  let inSumAll = if all_down then inSumAll /. (fabs inSumBack) *. inSumAll else inSumAll in
   
   leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
   
