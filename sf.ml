@@ -5,7 +5,7 @@ open Getopt
 let alpha'        = ref 0.1
 let beta'         = ref 0.5
 let gamma'        = ref 0.5
-let allDown'      = ref true
+let allDown'      = ref false
 let byMass'       = ref true
 let minDays'      = ref 7
 let minCap'       = ref 1e-35
