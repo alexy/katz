@@ -5,7 +5,8 @@ open Getopt
 let alpha'        = ref 0.1
 let beta'         = ref 0.5
 let gamma'        = ref 0.5
-let allDown'      = ref true
+let useInAll'     = ref true
+let inAllDown'    = ref true
 let byMass'       = ref true
 let minDays'      = ref 7
 let minCap'       = ref 1e-35
@@ -55,8 +56,10 @@ let specs =
   (noshort,"alpha",None,       Some (fun x -> alpha' := float_of_string x));
   (noshort,"beta", None,       Some (fun x -> beta'  := float_of_string x));
   (noshort,"gamma",None,       Some (fun x -> gamma' := float_of_string x));
-  (noshort,"alldown",  (set allDown' true), None);
-  (noshort,"noalldown",(set allDown' false),None);
+  (noshort,"useinall",    (set useInAll'  true),  None);
+  (noshort,"nouseinall",  (set useInAll'  false), None);
+  (noshort,"inalldown",   (set inAllDown' true),  None);
+  (noshort,"noinalldown", (set inAllDown' false), None);
   ('c',"mincap",None,Some (fun x -> minCap' := float_of_string x));
   ('k',"mark",  None,Some (fun x -> mark' := x));
   ('u',"byusers",(set byMass' false),None);
@@ -82,8 +85,8 @@ let specs =
 let () = 
   let args = getOptArgs specs in
   
-  let alpha,   beta,   gamma,   allDown =
-      !alpha', !beta', !gamma', !allDown' in
+  let alpha,   beta,   gamma,   useInAll,   inAllDown =
+      !alpha', !beta', !gamma', !useInAll', !inAllDown' in
   
   let byMass,   minDays,   minCap,   denums2,   saveMents,   mark =
       !byMass', !minDays', !minCap', !denums2', !saveMents', !mark' in
@@ -104,7 +107,7 @@ let () =
       (dstartsName,denumsName,saveBase,Some dreps',Some day')
   | dstartsName::denumsName::saveBase::[] -> 
       (dstartsName,denumsName,saveBase,None,None)
-  | _ -> failwith "usage: sg dtartsName denumsName saveBase [drepsName initDay]"
+  | _ -> failwith "usage: sf dtartsName denumsName saveBase [drepsName initDay]"
   in
   let saveSuffix = saveBase ^ ".mlb" in
   let drepsName  = sprintf "%s-%s" prefixDreps  saveSuffix |> mayPrependDir outdirDreps  in
@@ -115,7 +118,7 @@ let () =
   let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
   
   let capital_version = Suds_local.version in
-  leprintf "+ running social capital version: %s" capital_version;
+  leprintfln "+ running social capital version: %s" capital_version;
   
   leprintfln begin "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\n"^^
              "caps in %s, skews in %s, norms in %s, jumps in %s\n" end
@@ -125,11 +128,16 @@ let () =
   let fofStrategyName    = showStrategy fofStrat in
   
   leprintf begin "options: " ^^
-             "  alpha %f, beta %f, gamma %f, allDown %b\n" ^^ 
+             "  alpha %f, beta %f, gamma %f\n" ^^
+             "  useInAll %b, inAllDown %b\n" ^^ 
   	         "  byMass %b, minDays %d, minCap %e\n" ^^
              "  jumpProbUtil %e, jumpProbFOF %e\n" ^^
              "  globalStrategy %s, fofStrategy %s\n" end
-    alpha beta gamma allDown byMass minDays minCap jumpProbUtil jumpProbFOF globalStrategyName fofStrategyName;
+    alpha beta gamma 
+    useInAll inAllDown 
+    byMass minDays minCap 
+    jumpProbUtil jumpProbFOF 
+    globalStrategyName fofStrategyName;
     
   Option.may begin L.print ~first:"buckets: [" 
                            ~last:(sprintf "], keepBuckets %b\n" keepBuckets) 
@@ -165,7 +173,8 @@ let () =
   
   let opts = {optSocRun with (* maxDaysSR= maxDays; *) 
   													 alphaSR= alpha; betaSR= beta; gammaSR= gamma;
-                             allDownSR= allDown; byMassSR= byMass;
+                             useInAllSR= useInAll; inAllDownSR= inAllDown; 
+                             byMassSR= byMass;
                              initDrepsSR= initDrepsOpt; initDaySR= initDayOpt;
                              minCapSR= minCap;
  (* minCapDaysSR=0 means raw 1 capital for attachment, no maturity at all! *) 

@@ -3,7 +3,7 @@ open Sgraph
 
 
 let socDay socUserDaySum sgraph params day =
-  let (alpha, beta, gamma, all_down, by_mass, skew_times) = params in
+  let (alpha, beta, gamma, use_in_all, in_all_down, by_mass, skew_times) = params in
   let {ustatsSG =ustats} = sgraph in
 
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
@@ -12,9 +12,10 @@ let socDay socUserDaySum sgraph params day =
   let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
                         (0.,0.,0.) sumTerms in
                         
-  (* instead of inSumAll *. inSumAll /. inSumBack, we divide first, then multiply, to limit range *)
+  (* instead of inSumAll *. inSumAll /. inSumBack, we divide first, then multiply, to limit range;
+     NB: when playing with negative capital, in order to preserve the final sign, don't use fabs! *)
   
-  let inSumAll = if all_down then inSumAll /. (fabs inSumBack) *. inSumAll else inSumAll in
+  let inSumAll = if in_all_down then inSumAll /. inSumBack *. inSumAll else inSumAll in
   
   leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
   

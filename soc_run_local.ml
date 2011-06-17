@@ -5,7 +5,8 @@ let socDay = Socday.socDay Suds.socUserDaySum
 
 type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
                 socInitSR : float; 
-                allDownSR : bool; byMassSR : bool; skewTimesSR : int;
+                useInAllSR : bool; inAllDownSR : bool; 
+                byMassSR : bool; skewTimesSR : int;
                 minCapDaysSR : int; minCapSR : float;
                 initDrepsSR : graph option; initDaySR : int option;
                 maxDaysSR : int option;
@@ -15,7 +16,8 @@ type socRun = { alphaSR : float; betaSR : float; gammaSR : float;
 let optSocRun : socRun = 
   { alphaSR = 0.1; betaSR = 0.5; gammaSR = 0.5; 
     socInitSR = 1.0; 
-    allDownSR = false; byMassSR = false; skewTimesSR = 8;
+    useInAllSR = true; inAllDownSR = false; 
+    byMassSR = false; skewTimesSR = 8;
     minCapDaysSR = 7; minCapSR = 1e-35;
     initDrepsSR = None; initDaySR = None; 
     maxDaysSR = None;
@@ -23,8 +25,9 @@ let optSocRun : socRun =
 
 
 let paramSC {alphaSR =a; betaSR =b; gammaSR =g; 
-    allDownSR =all_down; byMassSR =by_mass; skewTimesSR =skew_times} = 
-    (a, b, g, all_down, by_mass, skew_times)
+    useInAllSR =use_in_all; inAllDownSR =in_all_down; 
+    byMassSR =by_mass; skewTimesSR =skew_times} = 
+    (a, b, g, use_in_all, in_all_down, by_mass, skew_times)
 
 
 let genOptsSC {jumpProbSR= jumpProb; attachmentStrategySR= attachmentStrategy} = 
