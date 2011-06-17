@@ -8,7 +8,7 @@ heatclust <- function(m) {
   clstrs <- cutree(hc, k=clrno)
   ccols <- cols[as.vector(clstrs)]
 #  heatcol<-colorRampPalette(c(3,1,2), bias = 1.0)(32)
-  heatmap.2(as.matrix(m),dendrogram="row",Colv=F,col="heat.colors",trace="none",RowSideColors=ccols)
+  heatmap.2(as.matrix(m),dendrogram="row",Colv=F,col="heat.colors",trace="none",RowSideColors=ccols,margins=c(10,10))
 }
 
 
@@ -20,8 +20,9 @@ heatmaps <- function(m,infix,shift=0) {
 	for (i in c(0,1,2,3)) { 
 		sims <- m.sims[grep(week.suffix[i+shift+1],m.sims)]
 		w <- m[c("dreps",sims),]
-		pdf(paste("heatmap-",infix,"-",i,"wk.pdf",sep="")); 
-		heatclust(w); 
+		file <- paste("heatmap-",infix,"-",i,"wk.pdf",sep="")
+		pdf(file,width=10)
+		heatclust(w)
 		dev.off() 
 	}
 }

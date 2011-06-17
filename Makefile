@@ -272,10 +272,10 @@ $(SF).neg.opt: lib.cmxa invert.cmx topsets.cmx cranks.cmx sgraph.cmxa capital_ne
 
 $(MOVE).opt: lib.cmxa bucket_power.cmx $(MOVE).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
-	
+
 $(SKA).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKA).ml
 	ocamlfind ocamlopt -verbose $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
-	
+
 $(SKABS).opt: kendall.a lib.cmxa kendall_c.cmxa skew_c.cmx skew_c.cmx $(SKABS).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -ccopt '-L.' -o $@
 
@@ -294,7 +294,7 @@ kendall.a: $(KENDALL_C_OBJ)
 
 clean-c:
 	rm -f $(KENDALL_C_OBJ)
-	
+
 $(TEXT).opt: lib.cmxa teX.cmx $(TEXT).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
 

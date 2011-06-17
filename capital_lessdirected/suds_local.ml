@@ -1,7 +1,11 @@
-(* the original reciprocal social capital *)
+(* the weight-directionless reciprocal social capital:
+   we do not multiply by the number of one-way links,
+   only by the total balance *)
 
 open Common
 open Ustats
+
+let version = "lessdirected capital"
 
 let stepOut ustats from to' num res = 
   let {outsUS =outs; totUS =tot; balUS =bal} = ustats --> from in

@@ -114,6 +114,9 @@ let () =
   let normsName  = sprintf "%s-%s" prefixNorms  saveSuffix |> mayPrependDir outdirNorms  in
   let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
   
+  let capital_version = Suds_local.version in
+  leprintf "+ running social capital version: %s" capital_version;
+  
   leprintfln begin "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\n"^^
              "caps in %s, skews in %s, norms in %s, jumps in %s\n" end
     dstartsName denumsName drepsName dmentsName capsName skewName normsName jumpName;
