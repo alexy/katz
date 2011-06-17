@@ -31,9 +31,15 @@ let socDay socUserDaySum sgraph params day =
               let (outs', insBack', insAll') =
                    safeDivide3 numers norms 
               in
-              alpha *. soc +. (1. -. alpha) *.
-                (beta *. outs' +. (1. -. beta) *.
-                  (gamma *. insBack' +. (1. -. gamma) *. insAll'))
+              let ins' =
+								if use_in_all then
+									gamma *. insBack' +. (1. -. gamma) *. insAll'
+								else
+									insBack'
+							in
+							alpha *. soc +. (1. -. alpha) *.
+								(beta *. outs' +. (1. -. beta) *.
+									ins')
             | None -> alpha *. soc in
     let stats' = {stats with socUS = soc'} in
     

@@ -3,6 +3,8 @@
 open Common
 open Ustats
 
+let version = "original capital"
+
 let stepOut ustats from to' num res = 
   let {outsUS =outs; totUS =tot; balUS =bal} = ustats --> from in
   let toBal = H.find_default bal to' 0 in
