@@ -76,12 +76,12 @@ let _ =
   let tex,suffix,asWhat = texParams latex tableDoc in  
   let outDir = if String.is_empty outDir then suffix else outDir in
   
-  let dataFileNames,tt = 
+  let dataFileNames,ttOpt = 
   match args with
-  | t1::t2::t3::t4::tt::[]  -> [t1;t2;t3;t4],tt
-  | t1::t2::t3::tt::[]      -> [t1;t2;t3],tt
-  | t1::tt::[] when justOne -> [t1],tt
-  | _ -> failwith "usage: tex4rates [-tdmvL [-i inputPath] [-o outDir] [-x drop]] t1 t2 t3 [t4] tt"
+  | t1::t2::t3::t4::tt::[]  -> [t1;t2;t3;t4],Some tt
+  | t1::t2::t3::tt::[]      -> [t1;t2;t3],Some tt
+  | t1::[] when justOne     -> [t1],None
+  | _ -> failwith "usage: tex4rates [-tdmvL [-i inputPath] [-o outDir] [-x drop]] t1 [t2 t3 [t4] tt]"
   in
     
   let tableNames = L.map (tableFileName suffix drop) dataFileNames in
@@ -111,7 +111,7 @@ let _ =
   end;
 
   if matrix then begin
-    let matrixName   = sprintf "4x%d-%s.tex" (L.length tableNames) tt in  
+    let matrixName   = sprintf "4x%d-%s.tex" (L.length tableNames) (Option.get ttOpt) in  
     printShowMatrix matrixDoc ~verbose outDir ~inputPath matrixName tableNames;
     
     if masterLine then

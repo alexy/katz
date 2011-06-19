@@ -1,4 +1,3 @@
-include $(MK_DIR)/list1.mk
 TXT_DIR=txt
 
 AVG_LIST_TXT=$(LINE_LIST:%.mlb=$(TXT_DIR)/averages-%.txt)

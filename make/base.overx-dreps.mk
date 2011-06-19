@@ -1,6 +1,6 @@
 WHATS_UP=overx-dreps
 
-BASE=$(REPS)-4
+BASE=$(REPS)
 
 FROM_QUAD_SUFFIX=-suffix
 

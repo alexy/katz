@@ -38,6 +38,7 @@ TEXV=texvols
 TEXB2B=texb2bs
 TEXSB=texstarbucks
 TEX4=tex4rates
+TEX1=tex1rates
 TEXLB=texlblens
 SU=su
 SF=sf
@@ -257,6 +258,9 @@ $(TEX4).opt: lib.cmxa teX.cmx $(TEX4).ml
 
 $(TEX4).byte: lib.cma teX.cmo $(TEX4).ml
 	ocamlfind ocamlc $(DEBUG) -package $(PACKAGES) -linkpkg $^ -o $@
+
+$(TEX1).opt: lib.cmxa teX.cmx $(TEX1).ml
+	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
 
 $(TEXLB).opt: lib.cmxa teX.cmx $(TEXLB).ml
 	ocamlfind ocamlopt $(DEBUG) $(OPTFLAGS) -package $(PACKAGES) -linkpkg $^ -o $@
