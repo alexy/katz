@@ -1,6 +1,7 @@
 open Common
 open Sgraph
 
+let version = "normalizing"
 
 let socDay socUserDaySum sgraph params day =
   let (alpha, beta, gamma, use_in_all, in_all_down, by_mass, skew_times) = params in

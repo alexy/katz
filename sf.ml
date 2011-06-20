@@ -118,7 +118,9 @@ let () =
   let jumpName   = sprintf "%s-%s" prefixJump   saveSuffix |> mayPrependDir outdirJump   in
   
   let capital_version = Suds_local.version in
-  leprintfln "+ running social capital version: %s" capital_version;
+  leprintfln "+1 running social capital version: %s 1+" capital_version;
+  let socday_version = Socday.version in
+  leprintfln "+2 running socday version:         %s 1+" socday_version;
   
   leprintfln begin "reading dstarts from %s and denums from %s, saving dreps in %s, dments in %s,\n"^^
              "caps in %s, skews in %s, norms in %s, jumps in %s\n" end

@@ -313,3 +313,27 @@ $(WKS).opt: lib.cmxa $(WKS).ml
 
 $(WKS).byte: lib.cma $(WKS).ml
 	ocamlfind ocamlc $(DEBUG) -syntax camlp4o -package $(PACKAGES) -linkpkg $^ -o $@
+
+SL=suds_local.ml
+sf.neg:
+	$(MAKE) clean
+	rm $(SL)
+	ln -s capital_negative/$(SL)
+	$(MAKE) sf.opt
+	mv sf.opt sf.neg
+
+sf.wundir:
+	$(MAKE) clean
+	rm $(SL)
+	ln -s capital_lessdirected/$(SL)
+	$(MAKE) sf.opt
+	mv sf.opt $@
+
+sf.orig:
+	$(MAKE) clean
+	rm $(SL)
+	ln -s capital_original/$(SL)
+	$(MAKE) sf.opt
+	mv sf.opt $@
+
+sf3: sf.orig sf.neg sf.wundir
