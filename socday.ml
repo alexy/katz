@@ -9,7 +9,7 @@ let socDay socUserDaySum sgraph params day =
   (* TODO how do we employ const |_ ... instead of the lambda below? *)
   let termsStats = H.map (socUserDaySum sgraph day) ustats in
   let sumTerms   = termsStats |> H.values |> enumCatMaybes in
-  let (outSum,inSumBack,inSumAll) as norms = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
+  let outSum,inSumBack,inSumAll = Enum.fold (fun (x,y,z) (x',y',z') -> (x+.x',y+.y',z+.z')) 
                         (0.,0.,0.) sumTerms in
                         
   (* instead of inSumAll *. inSumAll /. inSumBack, we divide first, then multiply, to limit range;
@@ -17,8 +17,10 @@ let socDay socUserDaySum sgraph params day =
   
   let inSumAll = if in_all_down then inSumAll /. inSumBack *. inSumAll else inSumAll in
   
-  leprintfln "day %d norms: [%F %F %F]" day outSum inSumBack inSumAll;
+  let norms = outSum,inSumBack,inSumAll in
   
+  leprintfln "day %d norms: [%F %F %F]" day (fst3 norms) (snd3 norms) (trd3 norms);
+
   let skews = usersHash () in
 
   (* : user -> ((float * float * float) option * ustats) -> ustats *)
