@@ -252,10 +252,10 @@ I thank Professor Emeritus Noah Prywes, one of the founders of the CIS, who gave
 My committee is an amazing group of experts in social networks, data mining, and computational linguistics.  Mark Liberman was supportive of my research at Dartmouth and had asked the key question --- are these Accidental Influentials, by any chance? --- which employed our Reciprocal Social Capital metrics to the fullest.  Jonathan Smith, the chair, grounds it in all-encompassing computer networking expertise, and Shawndra Hill adds an operational and business perspective which, as you can see, is the most welcome pattern here.
 
 
-The Human Terrain group at Thayer School as well as friends in Computer Science department provided a stimulating intellectual environment.  Vincent Berk, John Murphy, Ian Gregorio-De Souza, David Twardowski, Nils Sandell, Gabe Stocco and Robert Savell were the best colleagues and officemates, and Sergey Bratus, my classmate since the 57th math high school in Moscow was always there for idea checking and support.  Andrew Campbell does cool, and beautifully managed,  pervasive computing research,  while Lorenzo Torresani was a neighbor dad, with his great and friendly family,  and a top machine learning guy.  We inherited our Dartmouth apartment, and many great things and ideas,  form Bob Hearn, a legendary figure with interests and contributions to Apple, Bach, and games for the mind.
+The Human Terrain group at Thayer School, as well as friends in Computer Science department provided a stimulating intellectual environment.  Vincent Berk, John Murphy, Ian Gregorio-De Souza, David Twardowski, Nils Sandell, Gabe Stocco and Robert Savell were the best colleagues and officemates.  Sergey Bratus, my classmate since the math high school \#57 in Moscow, is always a great friend and idea checker.  Paul Thompson, Sergey, and Anna Rumshisky collaborated on an applied ontology research for GM, which kept me in Dartmouth's gravity field even form Moscow and St Petersburg.   Mikhail Gronas, although a professor of Russian, can well fill a Valley startup incubator with ideas.  Andrew Campbell does cool, and beautifully managed,  pervasive computing research,  while Lorenzo Torresani, a top machine learning guy whose courses I audited and enjoyed, was a neighbor dad, his great family becoming friends with ours.  We inherited our Dartmouth apartment, and many great things and even ideas,  form Bob Hearn, a legendary figure with interests and contributions to Apple, Bach, games and theories of the mind.
 
 
-Professor Rajiv Alur, the former graduate chair, has outlined the graduation plan for me to execute at Dartmouth, which I followed.  Professor Jianbo Shi, the current graduate chair, guided it through completion and took the time to listen to the whole presentation in advance, providing insightful feedback.
+Professor Rajiv Alur, the former graduate chair, has outlined the graduation plan for me to execute at Dartmouth, which I followed.  Professor Jianbo Shi, the current graduate chair, guided it through completion and took the time to listen to the whole presentation in advance, providing insightful feedback.  Mark Steedman and Mitch Marcus gave important Computational Linguistics courses, with complimentary approaches, and years worth of direction.
 
 
 Alexandrin Popescul and Andrew Schein are steadfast friends and colleagues since the Ph.D. program under Lyle, and now future neighbors, --- with Alex also a colleague again, --- in the Bay Area.  Alex and Andrew provided numerous hours of discussion of the technologies and also their purposes and applications.  Their successful application of data mining in industry is the best use of what Lyle and others had taught us and an example to follow, again.
@@ -285,7 +285,7 @@ The teams at Google, Microsoft, Efficient Frontier, and TopProspect had all show
 I have to mention those whom I always remember --- my grandfathers who fought in the World War II and defended our lives.  My paternal grandfather, Alexander Khrabrov, was lost in action in 1941, defending Moscow.  My maternal grandfather, Semion Drabkin, had become a war hero, delivering the ultimatum at Stalingrad, personally capturing Nazi criminals who testified at Nuremberg, liberating cities, and working together with the Allies in the denazification of Germany.  He went on to become a chief missile designer, --- but it were his grandsons, not his missiles, which ended up in the US.  His perseverance at Stalingrad had inspired my own through the Ph.D. process.
 
 
-Last, but not least, I appreciate the world-wide coffee shops which made writing this thesis so enjoyable.  Le Colombo in Philadelphia, Small World in Princeton, Joe Bar in Seattle, Tucker Box in White River Junction, Boston Dreams in Windsor, Vermont, and Dirt Cowboy and Rosie Jekes in Hanover, New Hampshire --- I love the people, the coffee, the ideas, and it all comes together there!
+Last, but not least, I appreciate the world-wide coffee shops which made writing this thesis so enjoyable.  {\itshape La Colombe} in Philadelphia, {\itshape Small World} in Princeton, {\itshape Joe Bar} in Seattle, {\itshape Tucker Box} in White River Junction, {\itshape Boston Dreams} in Windsor, Vermont, and {\itshape Dirt Cowboy} and {\itshape Rosie Jekes} in Hanover, New Hampshire --- I love the people, the coffee, the ideas, and it all comes together there!
 
 
 \pagebreak 
@@ -302,11 +302,69 @@ Last, but not least, I appreciate the world-wide coffee shops which made writing
 \mainmatter
 
 
-\chapter{Introduction}
-\label{introduction}
+\chapter{Summary}
+\label{summary}
 
 \begin{Spacing}{2}
 
+
+The main contributions of this thesis are the ideas of reciprocity in defining social capital computationally in social networks, and the class hierarchy resulting from it, which reveals different behavior of different classes and patterns of their interactions.
+
+
+We define reciprocal social capital as a process placing a single real value on each user at each time cycle.  The values are recomputed transactionally every cycle based on their previous values and the actions of the individuals in the last cycle.  Each user keeps a balance of communications with any other user where a directed tweet exists between the two.  If you tweeted more to somebody than he tweeted to you, he owes you the difference.  In this model, people who are cognizant of such an imbalance and pay attention to keep it even are motivated to keep the threads of conversations going.  We reward those who ``repay'' their ``debts'' in each cycle.  We similarly reward the users who were able to get some of the replies ``owed'' to them.  We also reward users for getting ``unsolicited'' mentions, but we do not reward outgoing tweets which are not replies -- reflecting the Internet dynamics where it doesn't cost much to send out a lot of tweets to all kinds of people (e.g.\ from spambots).  Previous capital is decayed each cycle and the rewards from the current one are added, hence one must keep going at a pace high enough to stay high in the rankings.
+
+
+Once we have the value of the metric computed for each user, we can rank them by their social capital.  We observe that the rankings follow a power law distribution, which leads to a hierarchy.  Such hierarchy is common in any kind of financial wealth distribution in an economy.  We define classes of exponentially increasing sizes and investigate how various communication behaviors help users to stay in higher or lower classes.  
+
+
+In order to understand human communication behavior, we try to decompose it into simpler, well-defined, strategies.  We preserve the number of users and their order of appearance in the network, as well as their out-degrees in each cycle, and alter only the attachment points.  We try three kinds of  attachment strategies -- proportionally to in-degree or to social capital, or random; and we follow it in three distinct target scopes -- finding attachment targets globally, among the friends of friends, replicating a common friends discovery mechanism on Twitter, and also using a strategy which optimizes reciprocal social capital of a user directly, based on the reply reward in his control.  Each simulation is a probabilistic mixture of these three kinds and three scopes.  When both friends-of-friends and global attachments are considered, either can be of any of the three kinds.
+
+
+We also allow for a given length of reality to be followed verbatim before starting a simulation, while seeding the communication balances and other parameters we use to compute the reciprocal social capital.  We compare sensitivity of various behaviors to the length of such a reality prefix, to see how the starting conditions affect the results.
+
+
+Finally, we have both overall and selective simulations, where we change everybody's behavior, or only for the people in a selected set of classes, respectively.  It allows us to see when a certain class matches a proposed model of communication better than others.  The selective, or bucketed, simulations recompute the class hierarchy before every cycle, and simulate only the users in the classes specified, while replicating the behaviors of others verbatim, from reality.
+
+
+For each of the simulations, we end up with a class distribution for each day of the study.  We then compare each class, for each day, with the reality, and see how well each mix of behaviors captures that class.
+
+
+We find that the simulations based on our social capital capture the middle class, the one million people between the ``poor'' and the ``elites,'' most effectively, and are less sensitive to the starting conditions than simulations based on in-degree.  Friends of friends and local utility optimization model group dynamics and achieve a good match for many ``smarter'' simulations, even the overall ones (changing everybody).  (Such modeling is missing in the work of Watts and Dodds.)  
+
+
+Our middle class is producing 40\% of all communications, almost as much as all of the ``poor'' and twice as much as all the ``elite'' classes combined.  
+
+
+We develop several novel metrics for our class structure --
+
+
+\begin{itemize}
+
+
+\item starrank relates a user to his audience, either mentioners or repliers
+
+\item interclass communication finds whether users in some class prefer talking to the higher, lower, or same class users as themselves
+
+\item ``skew'' is a non-parametric characteristic of a ``politician-like'' behavior, checking whether a user rewards his higher contributors (giving him more tweets) by proportionally more replies
+\end{itemize}
+
+Applying these metrics to our hierarchies, we found distinct differences in behavior patterns, e.g.\ where the ``upper middle class,'' the 100,000 users above the middle class, have the highest starrank by mentions, commanding the highest gap between their rank and the average rank of their mentioners.  Skew correlates fairly well overall with the social capital, but differently by class, confirming that the behavior of classes is different.
+
+
+The classes in the hierarchies of the smarter simulations show consistency from day to day, with low churn in most classes, and also no significant changes when fed with more and more reality for starting conditions.  
+
+
+We also fitted regression tree models to see which behaviors in the simulations match various classes better, and found significant difference in these models.  For instance, the top bucket is only affected by the starting conditions length and then whether local utility optimization is used, while the middle class favors social-capital based global and then friends of friends attachment.
+
+
+Observing the behavior of different classes as matched by appropriate simulations, we conclude that our hierarchy reflects a real segmentation of user behaviors, where influencers aggregate in certain higher classes.  Our reciprocal social capital metric defines a middle class which consistently matches the behavior of the real middle class, producing 40\% of all communications.
+
+
+We believe our models show a real hierarchy of effectiveness in conversation with distinct behaviors to achieve and retain it, confirming Katz-Lazarsfeld rather than Watts-Dodds models.  We also suggest that the middle class is the ``real influencer'' in terms of the effects it has on the overall communication dynamics, and propose increasing one's standing with the middle class as a way to get reliable and stable influence on Twitter.
+
+
+\pagebreak \chapter{Introduction}
+\label{introduction}
 
 On March 25th, 2011, ``The Fifth Down,'' an NFL blog of the New York Times, opened as follows \cite{tanier2011ochocinco}.
 
@@ -415,6 +473,13 @@ Having built the dynamic hierarchy of influencers, changing daily within its own
 We observe that the more intelligent a simulation is, the higher is its staying power, showing that the influencers -- those in the higher classes -- are not random in their own worlds.  The overlap of the simulated influencers with the real-world ones is minimal, but also increases with more intelligent attachment strategies.
 
 
+We tested our assumptions by altering the formula of our reciprocal social capital in several ways.  First, instead of rewarding reciprocity, we reversed the sign on its rewards, and observed that the precision falls for all classes when the capital is computed universally (for all classes at the same time, i.e.\ unbucketed).  We call this social capital version NSC -- negative social capital.  Note that the precision is comparing how well we capture the class hierarchy of the original Twitter graph, where the links are unaltered -- yet the hierarchy itself is computed for a certain version of the social capital, here it is the original reciprocal social capital (RSC).
+When we compute NSC in a bucketed way and model only the original middle class bucket (the 1,000,000 people), we get an interesting effect that the precision of the four elite classes drops significantly, while we get a slightly better capture of the three lower classes, including the middle class.  This holds only when we use the original version of RSC/NSC where we count all incoming mentions separately and sum them as their own norm.  Hence the incoming-only (non-reciprocal) mentions may dominate in such a setting, since generally the reciprocal component is much lower than the non-reciprocal one, especially for lower classes, less attentive to keeping the balances even.
+For these cases, we considered another alteration of the RSC formula, whereby we normalize the nonreciprocal component of the return, to make it have the same normalized scale as the reciprocal component, RSC-IN (In-Normalized).  We also compute a version where we ignore the nonreciprocal inputs altogether, RSC-NO. We observe that a bucketed computation for NRSC-IN-B delivers a uniformly poorer precision against the normalized NRSC-B, as opposed to the split in the unnormalized case, while RSC-NO-B fares uniformly poorer, often significantly so, than RSC.  It confirms that negating reciprocity itself disturbs the hierarchy significantly up to and including the middle class, where reciprocity really matters.  Interestingly, RSC-IN-B does worse than RSC-B in all classes when only the middle class is modeled, showing that capturing the general mentions is still important for it.
+We also considered another, slighter variation of the original formula, where we take out the directed multiplier of the rewards, leaving only the total balance.  For the original RSC, we get slightly better capture when computed across all classes, while we lose precision for all classes, and the first 5 significantly so, when doing the middle class alone.  Similarly, for IN-normalized general mentions equalized to return mentions, we get a better capture of all classes when modeled together, yet a general loss when modeling the middle class separately, significantly so for all but the poorest classes.
+From these variations, we conclude that both reciprocity and directionality are used with the expected effect in the original reciprocal social capital.  While the exact weighting and normalization of the components can be tuned to serve specific ranking goals depending on the behaviors of interest, the overall model reflects these behaviors quite reliably.
+
+
 Our conclusions are as follows.
 
 
@@ -458,7 +523,7 @@ Figure~\ref{figure:heatmap-srates-medians-3wk} shows how several groups of simul
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-dreps-medians-3wk}
+    \includegraphics{figures/crop/heatmap-overx-dreps-medians-3wk}
     \caption{Clustering of all simulations seeded by 3 weeks of reality, by overlap with reality.  \emph{Dreps}, the reality itself, ends up closer to our most intelligent capital-based worlds (red), including the simulated middle class.  Simpler networks, including those using only global attachment strategies, end up in a more distant cluster.}
     \label{figure:heatmap-srates-medians-3wk}
 \end{center}
@@ -757,7 +822,7 @@ In the rest of this thesis we elaborate all of the above points, along the follo
 
 \item Chapter~\ref{chapter:influence} shows our dynamic graph analysis, new metrics, resulting influence models, and showcases the results we find -- the whole purpose of this thesis; and they don't disappoint, we hope
 
-\item Chapter~\ref{chapter:social-capital} describes our taking back the notion of social capital from the soft scienses, with a robust, time sensitive, economic definition, and introduces a mind economy built on it.  We close with the discovery of the middle class of social networks.
+\item Chapter~\ref{chapter:social-capital} describes our taking back the notion of social capital from the soft sciences, with a robust, time sensitive, economic definition, and introduces a mind economy built on it.  We close with the discovery of the middle class of social networks.
 
 \item Chapter~\ref{chapter:success-is-earned} contains a detailed methodology of simulating social networks mixed with reality and segmenting various attachment strategies contributing to one's position in the social capital hierarchy, allowing one to compare their effects in various parallel futures.  The overlap of such simulations with reality can be specifically attributed to the starting conditions, well-defined behaviors, and helps answer the question of ``accidental influentials''
 
@@ -1825,6 +1890,7 @@ $B_{uv}^{@t}$ & incoming mentions in this cycle repaying previous replies (balan
 $\alpha,\beta,\gamma$ & model parameters\tabularnewline
 \hline
 \end{tabular}
+
 \begin{eqnarray}
 O_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}O^{@t-1}}\sum_{v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|B_{uv}^{t-1}<0}|B_{uv}^{t-1}|w_{uv}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
 B_{u}^{@t} & = & \frac{1}{\sum_{V^{t-1}}B^{@t}}\sum_{v\in M_{u}^{@t-1}|B_{uv}^{t-1}>0}B_{uv}^{t-1}w_{vu}^{@t-1}W_{uv}^{t-1}S_{v}^{t-1}\\
@@ -2579,7 +2645,7 @@ We now collect {\itshape skew} vectors for all users in a time slice, e.g.\ cons
 
 \lstset{language=ML,caption={Comparing two skew vectors accounts for variable length, and distinguishes $\infty = -1$}}
 \begin{lstlisting}
-let rec compareSkew ?(length=true) xs ys =
+let rec compareSkew ?(lengthFirst=true) xs ys =
     let rec aux xs ys =
         match xs,ys with
         | x::xs,y::ys when x = -1. && y = -1. ->
@@ -2649,7 +2715,7 @@ There's no buclketed simulations here, as buckets kick in after a week for the r
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-dreps-medians-0wk}
+    \includegraphics{figures/crop/heatmap-overx-dreps-medians-0wk}
     \caption{Reality overlap clustering of all simulations started from scratch.}
     \label{figure:heatmap-overx-dreps-medians-0wk}
 \end{center}
@@ -2663,7 +2729,7 @@ The bucketed simulations join in, and while those modifying only small elice buc
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-dreps-medians-1wk}
+    \includegraphics{figures/crop/heatmap-overx-dreps-medians-1wk}
     \caption{Reality overlap clustering of all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-overx-dreps-medians-1wk}
 \end{center}
@@ -2688,7 +2754,7 @@ We also see increasing capture of the celebrity class, top ten, by both bucketed
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-dreps-medians-2wk}
+    \includegraphics{figures/crop/heatmap-overx-dreps-medians-2wk}
     \caption{Reality overlap clustering of all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-overx-dreps-medians-2wk}
 \end{center}
@@ -2709,7 +2775,7 @@ Notably, the mentions-mentions strategy with 0.5 utility probability does well:
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-dreps-medians-3wk}
+    \includegraphics{figures/crop/heatmap-overx-dreps-medians-3wk}
     \caption{Reality overlap clustering of all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-overx-dreps-medians-3wk}
 \end{center}
@@ -2732,7 +2798,7 @@ The pattern continues into the first $\rightarrow$ second week pair --- Figure~\
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-self-medians-0wk}
+    \includegraphics{figures/crop/heatmap-overx-self-medians-0wk}
     \caption{Overlap with the same strategy seeded by one more week of reality, 0 vs 1 week.}
     \label{figure:heatmap-overx-self-medians-0wk}
 \end{center}
@@ -2740,7 +2806,7 @@ The pattern continues into the first $\rightarrow$ second week pair --- Figure~\
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-self-medians-1wk}
+    \includegraphics{figures/crop/heatmap-overx-self-medians-1wk}
     \caption{Overlap with the same strategy seeded by one more week of reality, 1 vs 2 weeks.}
     \label{figure:heatmap-overx-self-medians-1wk}
 \end{center}
@@ -2748,7 +2814,7 @@ The pattern continues into the first $\rightarrow$ second week pair --- Figure~\
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-self-medians-2wk}
+    \includegraphics{figures/crop/heatmap-overx-self-medians-2wk}
     \caption{Overlap with the same strategy seeded by one more week of reality, 2 vs 3 weeks.}
     \label{figure:heatmap-overx-self-medians-2wk}
 \end{center}
@@ -2756,7 +2822,7 @@ The pattern continues into the first $\rightarrow$ second week pair --- Figure~\
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-overx-self-medians-3wk}
+    \includegraphics{figures/crop/heatmap-overx-self-medians-3wk}
     \caption{Overlap with the same strategy seeded by one more week of reality, 3 vs 4 weeks.}
     \label{figure:heatmap-overx-self-medians-3wk}
 \end{center}
@@ -2779,7 +2845,7 @@ Several {\itshape freps} simulations are near {\itshape dreps}, notably fg8uf05m
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-srates-medians-0wk}
+    \includegraphics{figures/crop/heatmap-srates-medians-0wk}
     \caption{Staying power clustering of all simulations started from scratch.}
     \label{figure:heatmap-srates-medians-0wk}
 \end{center}
@@ -2793,7 +2859,7 @@ Bucketed middle class simulation, {\itshape 6f}, is close, and {\itshape ereps}\
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-srates-medians-1wk}
+    \includegraphics{figures/crop/heatmap-srates-medians-1wk}
     \caption{Staying power clustering of all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-srates-medians-1wk}
 \end{center}
@@ -2821,7 +2887,7 @@ The bucketed ones are the closest as usual -- {\itshape 2f}, {\itshape 15f}.  Th
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-srates-medians-2wk}
+    \includegraphics{figures/crop/heatmap-srates-medians-2wk}
     \caption{Staying power clustering of all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-srates-medians-2wk}
 \end{center}
@@ -2871,7 +2937,7 @@ Initially, strategies with a smaller utility probability are closer to reality, 
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-vols4-me-norm-medians-0wk}
+    \includegraphics{figures/crop/heatmap-vols4-me-norm-medians-0wk}
     \caption{Per-bucket mentions volume for all simulations started from scratch.}
     \label{figure:heatmap-vols4-me-norm-medians-0wk}
 \end{center}
@@ -2895,7 +2961,7 @@ Once the bucketed kick in, we have the usual elite-changing ones clustering arou
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-vols4-me-norm-medians-1wk}
+    \includegraphics{figures/crop/heatmap-vols4-me-norm-medians-1wk}
     \caption{Per-bucket mentions volume for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-vols4-me-norm-medians-1wk}
 \end{center}
@@ -2928,7 +2994,7 @@ The simulated middle class is near the opposite combination, global uniform afte
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-vols4-me-norm-medians-2wk}
+    \includegraphics{figures/crop/heatmap-vols4-me-norm-medians-2wk}
     \caption{Per-bucket mentions volume for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-vols4-me-norm-medians-2wk}
 \end{center}
@@ -2953,7 +3019,7 @@ The simulated middle class is in a separate cluster since it underestimates the 
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-vols4-me-norm-medians-3wk}
+    \includegraphics{figures/crop/heatmap-vols4-me-norm-medians-3wk}
     \caption{Per-bucket mentions volume for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-vols4-me-norm-medians-3wk}
 \end{center}
@@ -2979,7 +3045,7 @@ Capital-capital simulations are a majority in the {\itshape dreps} cluster.
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-ments-star-med-medians-0wk}
+    \includegraphics{figures/crop/heatmap-sbucks-ments-star-med-medians-0wk}
     \caption{Starranks by mentions for all simulations started from scratch.}
     \label{figure:heatmap-sbucks-ments-star-med-medians-0wk}
 \end{center}
@@ -2999,7 +3065,7 @@ We have a block of high starrank in upper middle class, for many simulations con
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-ments-star-med-medians-1wk}
+    \includegraphics{figures/crop/heatmap-sbucks-ments-star-med-medians-1wk}
     \caption{Starranks by mentions for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-sbucks-ments-star-med-medians-1wk}
 \end{center}
@@ -3016,7 +3082,7 @@ We have a similar block of high starrank in upper middle class, for many simulat
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-ments-star-med-medians-2wk}
+    \includegraphics{figures/crop/heatmap-sbucks-ments-star-med-medians-2wk}
     \caption{Starranks by mentions for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-sbucks-ments-star-med-medians-2wk}
 \end{center}
@@ -3033,7 +3099,7 @@ We have an even bigger block of simulations with extremely high starrank in the 
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-ments-star-med-medians-3wk}
+    \includegraphics{figures/crop/heatmap-sbucks-ments-star-med-medians-3wk}
     \caption{Starranks by mentions for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-sbucks-ments-star-med-medians-3wk}
 \end{center}
@@ -3058,7 +3124,7 @@ The initial generation places two non-bucketed simulations around {\itshape drep
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-reps-star-med-medians-0wk}
+    \includegraphics{figures/crop/heatmap-sbucks-reps-star-med-medians-0wk}
     \caption{Starranks by replies for all simulations started from scratch.}
     \label{figure:heatmap-sbucks-reps-star-med-medians-0wk}
 \end{center}
@@ -3080,7 +3146,7 @@ Notable non-bucketed in the reality cluster are
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-reps-star-med-medians-1wk}
+    \includegraphics{figures/crop/heatmap-sbucks-reps-star-med-medians-1wk}
     \caption{Starranks by replies for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-sbucks-reps-star-med-medians-1wk}
 \end{center}
@@ -3105,7 +3171,7 @@ The same picture, and the same wide range, of starranks by mentions persists aft
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-reps-star-med-medians-2wk}
+    \includegraphics{figures/crop/heatmap-sbucks-reps-star-med-medians-2wk}
     \caption{Starranks by replies for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-sbucks-reps-star-med-medians-2wk}
 \end{center}
@@ -3133,7 +3199,7 @@ Zero-maturity capital-uniform non-bucketed simulations surround {\itshape dreps}
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-sbucks-reps-star-med-medians-3wk}
+    \includegraphics{figures/crop/heatmap-sbucks-reps-star-med-medians-3wk}
     \caption{Starranks by replies for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-sbucks-reps-star-med-medians-3wk}
 \end{center}
@@ -3224,7 +3290,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-befr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-befr-rel-medians-0wk}
+    \includegraphics{figures/crop/heatmap-b2br-befr-rel-medians-0wk}
     \caption{The fraction of all replies to higher buckets for all simulations started from scratch.}
     \label{figure:heatmap-b2br-befr-rel-medians-0wk}
 \end{center}
@@ -3232,7 +3298,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-befr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-befr-rel-medians-1wk}
+    \includegraphics{figures/crop/heatmap-b2br-befr-rel-medians-1wk}
     \caption{The fraction of all replies to higher buckets for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-b2br-befr-rel-medians-1wk}
 \end{center}
@@ -3240,7 +3306,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-befr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-befr-rel-medians-2wk}
+    \includegraphics{figures/crop/heatmap-b2br-befr-rel-medians-2wk}
     \caption{The fraction of all replies to higher buckets for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-b2br-befr-rel-medians-2wk}
 \end{center}
@@ -3248,7 +3314,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-befr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-befr-rel-medians-3wk}
+    \includegraphics{figures/crop/heatmap-b2br-befr-rel-medians-3wk}
     \caption{The fraction of all replies to higher buckets for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-b2br-befr-rel-medians-3wk}
 \end{center}
@@ -3307,7 +3373,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-aftr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-aftr-rel-medians-0wk}
+    \includegraphics{figures/crop/heatmap-b2br-aftr-rel-medians-0wk}
     \caption{The fraction of all replies to lower buckets for all simulations started from scratch.}
     \label{figure:heatmap-b2br-aftr-rel-medians-0wk}
 \end{center}
@@ -3315,7 +3381,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-aftr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-aftr-rel-medians-1wk}
+    \includegraphics{figures/crop/heatmap-b2br-aftr-rel-medians-1wk}
     \caption{The fraction of all replies to lower buckets for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-b2br-aftr-rel-medians-1wk}
 \end{center}
@@ -3323,7 +3389,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-aftr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-aftr-rel-medians-2wk}
+    \includegraphics{figures/crop/heatmap-b2br-aftr-rel-medians-2wk}
     \caption{The fraction of all replies to lower buckets for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-b2br-aftr-rel-medians-2wk}
 \end{center}
@@ -3331,7 +3397,7 @@ Finally, the third week --- Figure~\ref{figure:heatmap-b2br-aftr-rel-medians-3wk
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-aftr-rel-medians-3wk}
+    \includegraphics{figures/crop/heatmap-b2br-aftr-rel-medians-3wk}
     \caption{The fraction of all replies to lower buckets for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-b2br-aftr-rel-medians-3wk}
 \end{center}
@@ -3391,7 +3457,7 @@ The same winners persist through the second week --- Figure~\ref{figure:heatmap-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-self-rel-medians-0wk}
+    \includegraphics{figures/crop/heatmap-b2br-self-rel-medians-0wk}
     \caption{The fraction of all replies to the same bucket for all simulations started from scratch.}
     \label{figure:heatmap-b2br-self-rel-medians-0wk}
 \end{center}
@@ -3399,7 +3465,7 @@ The same winners persist through the second week --- Figure~\ref{figure:heatmap-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-self-rel-medians-1wk}
+    \includegraphics{figures/crop/heatmap-b2br-self-rel-medians-1wk}
     \caption{The fraction of all replies to the same bucket for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-b2br-self-rel-medians-1wk}
 \end{center}
@@ -3407,7 +3473,7 @@ The same winners persist through the second week --- Figure~\ref{figure:heatmap-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-self-rel-medians-2wk}
+    \includegraphics{figures/crop/heatmap-b2br-self-rel-medians-2wk}
     \caption{The fraction of all replies to the same bucket for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-b2br-self-rel-medians-2wk}
 \end{center}
@@ -3415,7 +3481,7 @@ The same winners persist through the second week --- Figure~\ref{figure:heatmap-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2br-self-rel-medians-3wk}
+    \includegraphics{figures/crop/heatmap-b2br-self-rel-medians-3wk}
     \caption{The fraction of all replies to the same bucket for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-b2br-self-rel-medians-3wk}
 \end{center}
@@ -3485,7 +3551,7 @@ Finally, by the third week --- Figure~\ref{figure:heatmap-b2bm-befr-rel-medians-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-befr-rel-medians-log10-0wk}
+    \includegraphics{figures/crop/heatmap-b2bm-befr-rel-medians-log10-0wk}
     \caption{The fraction of all mentions from higher buckets for all simulations started from scratch.}
     \label{figure:heatmap-b2bm-befr-rel-medians-0wk}
 \end{center}
@@ -3493,7 +3559,7 @@ Finally, by the third week --- Figure~\ref{figure:heatmap-b2bm-befr-rel-medians-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-befr-rel-medians-log10-1wk}
+    \includegraphics{figures/crop/heatmap-b2bm-befr-rel-medians-log10-1wk}
     \caption{The fraction of all mentions from higher buckets for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-b2bm-befr-rel-medians-1wk}
 \end{center}
@@ -3501,7 +3567,7 @@ Finally, by the third week --- Figure~\ref{figure:heatmap-b2bm-befr-rel-medians-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-befr-rel-medians-log10-2wk}
+    \includegraphics{figures/crop/heatmap-b2bm-befr-rel-medians-log10-2wk}
     \caption{The fraction of all mentions from higher buckets for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-b2bm-befr-rel-medians-2wk}
 \end{center}
@@ -3509,7 +3575,7 @@ Finally, by the third week --- Figure~\ref{figure:heatmap-b2bm-befr-rel-medians-
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-befr-rel-medians-log10-3wk}
+    \includegraphics{figures/crop/heatmap-b2bm-befr-rel-medians-log10-3wk}
     \caption{The fraction of all mentions from higher buckets for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-b2bm-befr-rel-medians-3wk}
 \end{center}
@@ -3599,7 +3665,7 @@ The third week --- Figure~\ref{figure:heatmap-b2bm-self-rel-medians-3wk}, --- th
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-self-rel-medians-log10-0wk}
+    \includegraphics{figures/crop/heatmap-b2bm-self-rel-medians-log10-0wk}
     \caption{The fraction of all mentions from the same bucket for all simulations started from scratch.}
     \label{figure:heatmap-b2bm-self-rel-medians-0wk}
 \end{center}
@@ -3607,7 +3673,7 @@ The third week --- Figure~\ref{figure:heatmap-b2bm-self-rel-medians-3wk}, --- th
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-self-rel-medians-log10-1wk}
+    \includegraphics{figures/crop/heatmap-b2bm-self-rel-medians-log10-1wk}
     \caption{The fraction of all mentions from the same bucket for all simulations seeded by 1 week of reality.}
     \label{figure:heatmap-b2bm-self-rel-medians-1wk}
 \end{center}
@@ -3615,7 +3681,7 @@ The third week --- Figure~\ref{figure:heatmap-b2bm-self-rel-medians-3wk}, --- th
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-self-rel-medians-log10-2wk}
+    \includegraphics{figures/crop/heatmap-b2bm-self-rel-medians-log10-2wk}
     \caption{The fraction of all mentions from the same bucket for all simulations seeded by 2 weeks of reality.}
     \label{figure:heatmap-b2bm-self-rel-medians-2wk}
 \end{center}
@@ -3623,7 +3689,7 @@ The third week --- Figure~\ref{figure:heatmap-b2bm-self-rel-medians-3wk}, --- th
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-b2bm-self-rel-medians-log10-3wk}
+    \includegraphics{figures/crop/heatmap-b2bm-self-rel-medians-log10-3wk}
     \caption{The fraction of all mentions from the same bucket for all simulations seeded by 3 weeks of reality.}
     \label{figure:heatmap-b2bm-self-rel-medians-3wk}
 \end{center}
@@ -3728,7 +3794,7 @@ Simulating the middle and upper middle class, just two or with all the elites, w
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstau-0wk}
+    \includegraphics{figures/crop/heatmap-cstau-0wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations started from scratch.}
     \label{figure:heatmap-cstau-0wk}
 \end{center}
@@ -3736,7 +3802,7 @@ Simulating the middle and upper middle class, just two or with all the elites, w
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstau-1wk}
+    \includegraphics{figures/crop/heatmap-cstau-1wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with one week of reality.}
     \label{figure:heatmap-cstau-1wk}
 \end{center}
@@ -3744,7 +3810,7 @@ Simulating the middle and upper middle class, just two or with all the elites, w
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstau-2wk}
+    \includegraphics{figures/crop/heatmap-cstau-2wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with two weeks of reality.}
     \label{figure:heatmap-cstau-2wk}
 \end{center}
@@ -3752,7 +3818,7 @@ Simulating the middle and upper middle class, just two or with all the elites, w
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstau-3wk}
+    \includegraphics{figures/crop/heatmap-cstau-3wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, all simulations seeded with three weeks of reality.}
     \label{figure:heatmap-cstau-3wk}
 \end{center}
@@ -3807,7 +3873,7 @@ The range shrinks more to roughly [-0.2, 0.2], and the many other bucketed simul
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstaubs-medians-0wk}
+    \includegraphics{figures/crop/heatmap-cstaubs-medians-0wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations started from scratch.}
     \label{figure:heatmap-cstaubs-0wk}
 \end{center}
@@ -3815,7 +3881,7 @@ The range shrinks more to roughly [-0.2, 0.2], and the many other bucketed simul
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstaubs-medians-1wk}
+    \includegraphics{figures/crop/heatmap-cstaubs-medians-1wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with one week of reality.}
     \label{figure:heatmap-cstaubs-1wk}
 \end{center}
@@ -3823,7 +3889,7 @@ The range shrinks more to roughly [-0.2, 0.2], and the many other bucketed simul
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstaubs-medians-2wk}
+    \includegraphics{figures/crop/heatmap-cstaubs-medians-2wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with two weeks of reality.}
     \label{figure:heatmap-cstaubs-2wk}
 \end{center}
@@ -3831,11 +3897,50 @@ The range shrinks more to roughly [-0.2, 0.2], and the many other bucketed simul
 
 \begin{figure}
 \begin{center}
-    \includegraphics{figures/heatmap-cstaubs-medians-3wk}
+    \includegraphics{figures/crop/heatmap-cstaubs-medians-3wk}
     \caption{Kendall’s $\tau$ correlation between social capital and skew, medians per bucket, all simulations seeded with three weeks of reality.}
     \label{figure:heatmap-cstaubs-3wk}
 \end{center}
 \end{figure}
+\pagebreak \subsection{Significance}
+\label{significance}
+
+One question worth exploring is a seemingly circular evaluation of the class hierarchy capturing precision for different models above.  First, we define the capital with our own assumptions as we see fit, rank everybody, and segment into classes.  Then we alter some links at each time step, compute the new social capital values using the same formulas, and compare the overlap between each pair of the positionally corresponding buckets.  We change the topology but preserve the formula, and it begs the question of how sensitive it is to a change in the formula.
+
+
+Two of the major properties of our Reciprocal Social Capital are {\itshape reciprocity} and weightedness of connections, the latter taking into account directionality (also figuring in reciprocity).  We change both of these properties in several ways and run the resulting new formulæ, comparing new capital hierarchies with the original ones.  A noticeable deviation would mean that our model is sensitive to the behaviors which is strives to capture.
+
+
+First, we invert the reciprocity rewards, penalizing instead of rewarding those who return the tweets addressed to them.  In order to highlight reciprocity or its negation  effect, we may additionally reduce or eliminate the term rewarding unsolicited (non-reciprocal) mentions.
+
+
+
+Equations \ref{eq:c2:o-norm}—\ref{eq:c2:s-neg-noinall} define these capital variations.  A simple fully negative version $S’$ (Eq. \ref{eq:c2:s-neg}) subtracts all of the awards which were added originally.  Version $S’\dagger$ (Eq. \ref{eq:c2:s-noinall}) drops the non-reciprocal mentions altogether, while version \ref{eq:c2:s-neg-byb} reduces them so that their norm is the same as that of the reciprocal rewards, and also subtracts the reduced ones.  The reason to increase the non-reciprocal norm to the magnitude of the reciprocal one is to equalize the impact of both types of the rewards for the incoming traffic, since unequalized non-reciprocal rewards dominate the reciprocal ones by orders of magnitude.  While dropping nonreciprocals is one option, computed as $S’\dagger$ above, equalization of norms preserves them and their bootstrapping contribution to our iterative computation — when some amount of individual capital is seeded from non-reciprocals, it starts propagating faster via the reciprocal rewards, based on the pre-existing capital of the parties.
+Table \ref{table:social-capital-variations} contains the overlaps of the new social capital hierarchies with the original one.  The first row shows the original overlap, which is the baseline.  Odd blocks of 5 rows (rows 1---5 and 11---15) simulate all classes together --- we call them ``all classes'' or ``non-bucketed'' simulations, --- while even ones simulate only the middle class (bucket $10^6$, or \emph{b6}) --- those are referred to as ``bucketed'' ones.  The first half (rows 1---10) uses non-normalized unsolicited mentions, while the second half (rows 11-20) normalizes them by equalizing their norm to the reciprocal mentions norm.  The second column refers to the equation defining the corresponding social capital version, also referred to in the third column by the same name as in its definition in the equation.  The fourth column shows the generative simulation name abbreviating the simulation process used to generate each appropriate data set.
+
+
+We observe that for negative variations, those whose simulation name starts with \emph{n}, elites in the first four classes always fare worse than in the original version of the reciprocal social capital.  A negative version dropping general mentions altogether (row 3) does just a bit better for classes 5 and 6 in the original definition --- but when we drop general mentions in the original definition as well, row 2, we outperform the negative one across the board.  It shows that general mentions may obscure reciprocity, while reflecting general popularity.
+
+
+When we equalize the mentions and compare our original, now equalized, definition (row 12) with the equalized negative ones (rows 13---14), the negatives uniformly lose in the non-bucketed case.  In the bucketed one, every equalized version, both positive and negative, does worse than the original one --- hence reflecting the importance of the general mentions for the middle class.  In fact, the middle class derives a lot of its capital from the unsolicited mentions of the poor, just as the elites do.  When comparing the original equalized version in row 17 to the negatives in rows 18---19, we notice an interesting inverse effect --- the elites fare better with the negatives, while the middle class and the poor are still captured better by the positive version.  The reason for this again is the negation and diminishing the reward for general (unsolicited) mentions, which is key to the elites.  The middle class is affected a bit, but not as much, showing that most of its capital is still coming from the positive reciprocal components.
+
+
+Our positive variations include two classes of simulations.  First, described above, drops the general mentions by zeroing out their reward in Equation \ref{eq:c2:i}.  We notice that this can lead to better capture of either elites or the poor, depending on the equalization of the general mentions.  Additionally, we change the formula of the weights, originally taking into account the number of daily tweets in a given direction.  Thus the original composite weight from Equation \ref{eq:c2:omega} becomes an undirected one in Equation \ref{eq:c2:omega-justw}.  The change in dimensionality is evened out by the corresponding change in the norms (Equations \ref{eq:c2:o}, \ref{eq:c2:a}, \ref{eq:c2:b} and their variations) --- normalization allows us to use any formulæ reflecting proportionality, where component-wise normalization means summing up relative contributions across the population.
+
+
+In Table \ref{table:social-capital-variations}, the names of our weight-altering simulations start with letter \emph{w}.  When we compare this variation in the original formula alone, we notice a slight improvement in capturing most of the classes (except the top and the bottom).  This shows that the fact of a reply is more important than the volume of that very reply, across all classes (in a global view).  When we apply this variation to the original bucketed version for the middle class, we do worse for the first four elite classes --- hence showing that when comparing to the middle class, the top classes derive a lot of their relative capital from those admirers who tweet back at them several times a day (confirmed by inspections of selected ecosystems of the top twitterers such as Justin Bieber).  
+
+
+The weight variations combined with mention equalizations do similarly, --- doing just slightly better than the equalized original for classes 5 and 6 when non-bucketed, and capturing classes 1-3 a bit worse when bucketed.  This is the same effect as in case of qualization only, only in this case reducing multiple daily tweets to single ones already performs the normalization of its own, hence dampening the scale of the effect.
+
+
+In conclusion of this section, we see that varying components of our reciprocal social capital definition yields confirms the original assumptions, rewarding reciprocity, directionality, and effort.  Disturbing reciprocity, when adjusting the non-reciprocal mentions, does worse for all classes, in both bucketed and non-bucketed simulations.  Comparing non-equalized vs. equalized general mentions, as well as dropping them altogether, and making weights undirected by reducing multiple daily tweets in each direction to one, leads to expected loss of capturing precision of the original hierarchy.  These changes show that our terms reflect the intended behaviors appropriately, and allow us to further fine-tune their parameters, normalization, and reduction as needed in a specific study.  Overall, we see that our original formula is appropriate for the original general study of reciprocity and hierarchy.
+
+
+
+\include{capital/capital}
+
+\include{capital/tablify2}
 \pagebreak \subsection{Discussion}
 \label{discussion}
 
@@ -3846,10 +3951,10 @@ So, are the influentials accidental, or not, after all?
 The staying rate within the same simulation shows how stable the winners are within their own classes -- if the churn in buckets is not too great, especially among the higher classes, we have our influentials which keep their positions for long periods of time, as they do in the real world.
 
 
-What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of {\itshape fg2uf05m}, {\itshape fg2uf05c}, and {\itshape fg2cf05c} or {\itshape fg5cf1c} in Figure~ref{figure:heatmap-srates-medians-2wk} -- capital-based global attachment significantly increases stability of the top buckets.
+What we see with the staying rates in simulations is this: the more elaborate a simulation is, the higher the staying rates are -- that is, the winners in a given world are not random, they persist from day to day.  Global uniform attachment doesn't achieve any staying power below celebrity level, and any combination with uniform attachment loses to those with mentions- or capital-based ones.  E.g., compare the staying power of {\itshape fg2uf05m}, {\itshape fg2uf05c}, and {\itshape fg2cf05c} or {\itshape fg5cf1c} in Figure~\ref{figure:heatmap-srates-medians-2wk} -- capital-based global attachment significantly increases stability of the top buckets.
 
 
-The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\% --- see  Figures~ref{figure:heatmap-srates-medians-1wk}--ref{figure:heatmap-srates-medians-2wk}.   However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning, and return a reply, achieving a reward.  Then, they will be likely to stay there, especially if they activity was high.
+The uniform simulations, {\itshape ureps}, are very telling about what may be the nature of this -- they have almost no staying rate in any higher-class buckets, except for the very top -- where the celebrities are surprisingly persistent, with a staying rate of 60-70\% --- see  Figures~\ref{figure:heatmap-srates-medians-1wk}--\ref{figure:heatmap-srates-medians-2wk}.   However, a comparison between different runs of {\itshape ureps}, -- {\itshape ureps}, {\itshape urepsA}, and {\itshape urepsB} groups, -- shows that there's almost no overlap among the celebrities across the groups.  What happens in the uniform case is that almost everybody is dirt poor, with meaningless connections not rewarding them with any social capital.  However, somebody will get lucky merely by chance, in the beginning, and return a reply, achieving a reward.  Then, they will be likely to stay there, especially if they activity was high.
 
 
 The capital-based attachments achieve a staying rate which is in some cases even higher than the real ones.  The uniform-based FOF and global simulations rank lower than the mention-based ones, and indeed, mentions are the key component of social capital.  The increase of the staying rates with increase in the intelligence of the behaviors used to attain them confirms that ``doing the right thing'' keeps the winners on top, proving they are not accidental under given conditions.
@@ -3877,14 +3982,14 @@ We plotted distance of a function of preserving or simulating several bottom cla
 \begin{figure}[ht]
 \minipage[b]{0.5\linewidth}
 \centering
-\includegraphics[scale=0.4]{figures/boxplot-x4-cb}
+\includegraphics[scale=0.4]{figures/boxplots/boxplot-x4-cb}
 \label{figure:boxplot-x4}
 \caption{distance by the top 10K}
 \endminipage\hfill%
 %
 \minipage[b]{0.5\linewidth}
 \centering
-\includegraphics[scale=0.4]{figures/boxplot-x5-cb}
+\includegraphics[scale=0.4]{figures/boxplots/boxplot-x5-cb}
 \label{figure:boxplot-x5}
 \caption{distance by the upper middle class}
 \endminipage
@@ -3893,14 +3998,14 @@ We plotted distance of a function of preserving or simulating several bottom cla
 
 \minipage[b]{0.5\linewidth}
 \centering
-\includegraphics[scale=0.4]{figures/boxplot-x6-cb}
+\includegraphics[scale=0.4]{figures/boxplots/boxplot-x6-cb}
 \label{figure:boxplot-x6}
 \caption{distance by middle class}
 \endminipage\hfill%
 %
 \minipage[b]{0.5\linewidth}
 \centering
-\includegraphics[scale=0.4]{figures/boxplot-x7-cb}
+\includegraphics[scale=0.4]{figures/boxplots/boxplot-x7-cb}
 \label{figure:boxplot-x7}
 \caption{distance by the poor}
 \endminipage
@@ -4097,8 +4202,8 @@ Already {\itshape FunData1} benchmark had lead to the biggest RAM-consuming impl
 {\itshape FunData1} was presented at the first \href{http://clojure-conj.org/}{Clojure Conj}\footnote{\href{http://clojure-conj.org/}{http://clojure-conj.org/}} conference and has caused significant interest already, including thanks from Google researchers who want to use Haskell for similar tasks.  We hope it will lead to improving the infrastructure for processing large volumes of social networking data in all of the languages involved, as it did in Haskell.
 
 
-\pagebreak \chapter{Summary}
-\label{summary}
+\pagebreak \chapter{Conclusions}
+\label{conclusions}
 
 In this thesis we considered various components which animate a modern online social networks so that the users keep talking.  Inevitably, some users talk more, and/or more effectively, than others.  We look at effective communication as a foundation of influence, and treat the links established by effective communicators as the backbone of the communication network.  
 
@@ -4121,10 +4226,12 @@ We presented methods to explore a social network communication graph by topic an
 In our study we applied dynamic graph analysis to the communication graph of Twitter repliers.  We developed metrics for individual users and also their communities which measure the growth of influence over days, by finding the longest runs of growth in mentions, ranks, \emph{StarRank}, and their accelerations.  We found that the \emph{StarRank} is a good indication of influence, and uncovered a whole segment of the Twitter population naturally engaged in rank promotion by increasing the density of the dynamic communication graph, creating multiple accounts, raising the number of followers and repliers, etc.  We also found actively growing national communities, namely in Brazil, and identified types of online personæ -- journalists and musicians -- which quantifiably generate the most engagement from the audience in the social network.  All those metrics are based purely on the graph and temporal structure of the communications.  In our future work, we will use the actual text context of the messages exchanged and $n$-gram modeling to further quantify the dynamics of influence in communication over social networks.
 
 
-We considered metrics of importance and the fundamental questions they should answer. We introduced Reciprocal Social Capital, a currency-like measure which decays with time and rewards socially beneficial behavior. Using this metric, we discovered the ``middle class'' of Twitter -- those whose conversations carry most of the steady discourse.  
+We considered metrics of communication network importance and the fundamental questions they should answer. We introduced Reciprocal Social Capital, a currency-like measure which decays with time and rewards socially beneficial behavior. Using this metric, we discovered the ``middle class'' of Twitter -- those whose conversations carry most of the steady discourse. \\
+The key features of our capital is its reciprocity and hierarchy.  Reciprocity rewards actions which balance the social network and reflect a fundamental dynamics in human relations.  We find that ordering based on rewarding reciprocity and effort in maintaining one's social network contributions leads to a natural hierarchy, segmenting various behaviors into different classes. \\
+When varying the components and parameters of the reciprocal social capital, the hierarchy changes in an expected way, e.g.\ the elites are sensitive to reciprocity and general mentions, and reducing the weights of those would capture less of the top classes.  The assumptions we make are thus quite reasonable, and positive variations would lead to the same qualitative conclusions about reciprocity and hierarchy.
 
 
-Our main conclusions regarding the accidental influentials question is conditional.  While celebrities may be accidental to the same degree as a mix of people's replying strategies is itself random, they are not accidental when the behaviors are moderately intelligent and the rules are fixed.  
+Our conclusions regarding the accidental influentials question are conditional.  While celebrities may be accidental to the same degree as the established  social norms governing replying are themselves random, they are not accidental when the norms are fixed and the behaviors are moderately intelligent.  In the same families of simulations seeded by different random sequences, the same winners emerge in the social capital hierarchy.  When simulations are based on vastly different principles, the winners are different between them, but similar principles lead to more overlap.  The same winners persist when the simulations are seeded with varying lengths of reality, showing that our capital captures a significant part of their behavior coherent with the actual one.
 
 
 Most importantly, while randomness of elites is still subject to interpretation, the middle class is not accidental, and its hard work defines the majority of the effects we care about.

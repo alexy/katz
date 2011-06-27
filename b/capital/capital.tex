@@ -1,0 +1,55 @@
+\begin{eqnarray}
+\label{eq:c2:o-norm}
+\|O_{u}^{@t-1}\| & = & \sum_{V^{t-1}}O^{@t-1} \\
+\label{eq:c2:omega}
+\omega_{uv}^{@t-1} & = & w_{uv}^{@t-1}W_{uv}^{t-1} \\
+\label{eq:c2:o}
+O_{u}^{@t} & = & \frac{1}{\|O_{u}^{@t-1}\|}\sum_{v\in M_{u}^{t-1}\cap R_{u}^{@t-1}|
+B_{uv}^{t-1}<0}|B_{uv}^{t-1}|\omega_{uv}^{@t-1}S_{v}^{t-1} \\
+\label{eq:c2:b-norm}
+\|B_{u}^{@t-1}\| & = & \sum_{V^{t-1}}B^{@t-1} \\
+\label{eq:c2:b}
+B_{u}^{@t} & = & \frac{1}{\|B_{u}^{@t-1}\|}\sum_{v\in M_{u}^{@t-1}|B_{uv}^{t-1}>0}B_{uv}^{t-1}\omega_{uv}^{@t-1}S_{v}^{t-1} \\
+\label{eq:c2:a-norm}
+\|A_{u}^{@t-1}\| & = & \sum_{V^{t-1}}A^{@t} \\
+\label{eq:c2:a}
+A_{u}^{@t} & = & \frac{1}{\|A_{u}^{@t-1}\|}\sum_{v\in M_{u}^{@t-1}}\omega_{uv}^{@t-1}S_{v}^{t-1} \\
+\label{eq:c2:i}
+I_{u}^{@t} & = & \gamma B_{u}^{@t}+(1-\gamma)A_{u}^{@t} \\
+\label{eq:c2:t}
+T_{u}^{@t} & = &\beta O_{u}^{@t}+(1-\beta)I_{u}^{@t} \\
+\label{eq:c2:s}
+S_{u}^{t} & = & \alpha S_{u}^{t-1}+(1-\alpha)T_{u}^{@t} \\
+\label{eq:c2:s-neg}
+{S'}_{u}^{t} & = & \alpha {S'}_{u}^{t-1}-(1-\alpha)T_{u}^{@t} \\
+\label{eq:c2:i-noinall}
+I\dagger_{u}^{@t} & = & B_{u}^{@t} \\
+\label{eq:c2:t-noinall}
+T\dagger_{u}^{@t} & = &\beta O_{u}^{@t}+(1-\beta)I\dagger_{u}^{@t} \\
+\label{eq:c2:s-noinall}
+S\dagger_{u}^{t} & = & \alpha S\dagger_{u}^{t-1}+(1-\alpha)T\dagger_{u}^{@t} \\
+\label{eq:c2:s-neg-noinall}
+S'\dagger_{u}^{t} & = & \alpha S'\dagger_{u}^{t-1}-(1-\alpha)T\dagger_{u}^{@t} \\
+\label{eq:c2:a-norm-byb}
+\|\bar{A}_{u}^{@t-1}\| & = & \|A_{u}^{@t-1}\| \frac{\|A_{u}^{@t-1}\|}{\|B_{u}^{@t-1}\|} \\
+\label{eq:c2:a-byb}
+\bar{A}_{u}^{@t} & = & \frac{1}{\|\bar{A}_{u}^{@t-1}\|}\sum_{v\in M_{u}^{@t-1}}\omega_{uv}^{@t-1}S_{v}^{t-1} \\
+\label{eq:c2:i-byb}
+\bar{I}_{u}^{@t} & = & \gamma B_{u}^{@t}+(1-\gamma)\bar{A}_{u}^{@t} \\
+\label{eq:c2:t-byb}
+\bar{T}_{u}^{@t} & = &\beta O_{u}^{@t}+(1-\beta)\bar{I}_{u}^{@t} \\
+\label{eq:c2:s-byb}
+\bar{S}_{u}^{t} & = & \alpha \bar{S}_{u}^{t-1}+(1-\alpha)\bar{T}_{u}^{@t} \\
+\label{eq:c2:s-neg-byb}
+\bar{S'}_{u}^{t} & = & \alpha \bar{S'}_{u}^{t-1}-(1-\alpha)\bar{T'}_{u}^{@t} \\
+\label{eq:c2:s-neg-noinall}
+S’\dagger_{u}^{t} & = & \alpha S’\dagger_{u}^{t-1}-(1-\alpha)T’\dagger_{u}^{@t} \\
+\label{eq:c2:omega-justw}
+{\omega^*}_{uv}^{@t-1} & = & W_{uv}^{t-1} \\
+\label{eq:c2:s-justw}
+{S^*}_{u}^{t} & = & \alpha {S^*}_{u}^{t-1}-(1-\alpha){T^*}_{u}^{@t} \\
+\label{eq:c2:s-justw-byb}
+\bar{S^*}_{u}^{t} & = & \alpha \bar{S^*}_{u}^{t-1}-(1-\alpha){T^*}_{u}^{@t}
+\end{eqnarray}
+
+As we show in the definition of $T\dagger$ (\ref{eq:c2:t-noinall}), it has an awesome dagger.  On the other hand, \ref{eq:c2:o-norm} shows a strong norm.
